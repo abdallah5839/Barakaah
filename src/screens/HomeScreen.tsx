@@ -239,6 +239,10 @@ const styles = StyleSheet.create({
   },
   themeButton: {
     padding: Spacing.sm,
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   dateCard: {
     marginHorizontal: Spacing.screenHorizontal,

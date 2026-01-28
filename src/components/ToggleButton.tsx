@@ -47,10 +47,13 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
+    minHeight: 44, // Zone tactile minimum recommandée pour mobile
     borderRadius: Spacing.radiusFull,
     borderWidth: 1,
     marginHorizontal: Spacing.xs,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   label: {
     fontSize: Typography.sizes.sm,

@@ -163,6 +163,10 @@ const styles = StyleSheet.create({
   },
   locationButton: {
     padding: Spacing.sm,
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   dateRow: {
     flexDirection: 'row',

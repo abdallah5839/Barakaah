@@ -1,12 +1,14 @@
 /**
  * Navigation principale de l'application
  * Bottom Tab Navigator avec 5 onglets
+ * Optimisé pour mobile avec gestion SafeArea
  */
 
 import React from 'react';
 import { StyleSheet, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../contexts';
 import { Spacing, Typography } from '../constants';
 import {
@@ -55,15 +57,20 @@ const tabLabels: Record<keyof RootTabParamList, string> = {
 
 export const AppNavigator: React.FC = () => {
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
+
+  // Hauteur de la TabBar avec safe area (minimum 60px + safe area bottom)
+  const tabBarHeight = Math.max(60, 50 + insets.bottom);
 
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused, color }) => {
           const iconConfig = tabIcons[route.name];
           const iconName = focused ? iconConfig.focused : iconConfig.unfocused;
-          return <Ionicons name={iconName} size={size} color={color} />;
+          // Icônes de 24px pour une meilleure lisibilité mobile
+          return <Ionicons name={iconName} size={24} color={color} />;
         },
         tabBarLabel: tabLabels[route.name],
         tabBarActiveTintColor: colors.primary,
@@ -73,6 +80,8 @@ export const AppNavigator: React.FC = () => {
           {
             backgroundColor: colors.surface,
             borderTopColor: colors.border,
+            height: tabBarHeight,
+            paddingBottom: insets.bottom > 0 ? insets.bottom : Spacing.xs,
           },
         ],
         tabBarLabelStyle: styles.tabBarLabel,
@@ -90,18 +99,19 @@ export const AppNavigator: React.FC = () => {
 
 const styles = StyleSheet.create({
   tabBar: {
-    height: 60,
-    paddingBottom: Platform.OS === 'ios' ? Spacing.sm : Spacing.xs,
-    paddingTop: Spacing.xs,
     borderTopWidth: 1,
+    paddingTop: Spacing.xs,
+    // La hauteur et paddingBottom sont gérés dynamiquement avec useSafeAreaInsets
   },
   tabBarLabel: {
     fontSize: Typography.sizes.xs,
     fontWeight: Typography.weights.medium,
-    marginBottom: Platform.OS === 'ios' ? 0 : Spacing.xs,
+    marginTop: -2,
+    marginBottom: Platform.OS === 'ios' ? 0 : 2,
   },
   tabBarItem: {
     paddingVertical: Spacing.xs,
+    minHeight: 44, // Zone tactile minimum recommandée
   },
 });
 

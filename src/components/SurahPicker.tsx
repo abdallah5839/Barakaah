@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: Spacing.lg,
+    minHeight: 56, // Zone tactile confortable
     borderRadius: Spacing.radiusMd,
     borderWidth: 1,
     marginHorizontal: Spacing.screenHorizontal,
@@ -179,6 +180,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: Spacing.lg,
+    minHeight: 64, // Zone tactile confortable pour chaque item
     marginHorizontal: Spacing.md,
     marginVertical: Spacing.xs,
     borderRadius: Spacing.radiusMd,
