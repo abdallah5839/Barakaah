@@ -443,22 +443,23 @@ const styles = StyleSheet.create({
   },
   togglesContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: Spacing.screenHorizontal,
     paddingVertical: Spacing.sm,
-    gap: Spacing.sm,
+    gap: 8, // Espacement égal
   },
   toggleButton: {
-    flex: 1,
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.md,
-    borderRadius: Spacing.radiusMd,
+    flex: 1, // Largeur égale pour tous
+    height: 44, // Hauteur fixe identique
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 44, // Zone tactile minimum recommandée
   },
   toggleText: {
-    fontSize: Typography.sizes.sm,
-    fontWeight: Typography.weights.medium,
+    fontSize: 14, // Taille IDENTIQUE pour tous
+    fontWeight: '600', // Poids IDENTIQUE
+    textAlign: 'center',
   },
   scrollView: {
     flex: 1,

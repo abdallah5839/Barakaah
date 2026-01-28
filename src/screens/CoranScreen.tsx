@@ -146,9 +146,11 @@ const styles = StyleSheet.create({
   },
   togglesContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between', // Répartition égale
+    alignItems: 'center',
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.screenHorizontal,
+    gap: 8, // Espacement égal entre les boutons
   },
   scrollView: {
     flex: 1,

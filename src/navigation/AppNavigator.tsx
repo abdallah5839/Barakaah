@@ -1,11 +1,11 @@
 /**
  * Navigation principale de l'application
  * Bottom Tab Navigator avec 5 onglets
- * Optimisé pour mobile avec gestion SafeArea
+ * Optimisé pour mobile avec gestion SafeArea et centrage parfait
  */
 
 import React from 'react';
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -59,8 +59,8 @@ export const AppNavigator: React.FC = () => {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
-  // Hauteur de la TabBar avec safe area (minimum 60px + safe area bottom)
-  const tabBarHeight = Math.max(60, 50 + insets.bottom);
+  // Hauteur de la TabBar avec safe area
+  const tabBarHeight = Math.max(56, 48 + insets.bottom);
 
   return (
     <Tab.Navigator
@@ -69,23 +69,39 @@ export const AppNavigator: React.FC = () => {
         tabBarIcon: ({ focused, color }) => {
           const iconConfig = tabIcons[route.name];
           const iconName = focused ? iconConfig.focused : iconConfig.unfocused;
-          // Icônes de 24px pour une meilleure lisibilité mobile
-          return <Ionicons name={iconName} size={24} color={color} />;
+          return (
+            <View style={styles.iconContainer}>
+              <Ionicons name={iconName} size={24} color={color} />
+            </View>
+          );
         },
         tabBarLabel: tabLabels[route.name],
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textSecondary,
-        tabBarStyle: [
-          styles.tabBar,
-          {
-            backgroundColor: colors.surface,
-            borderTopColor: colors.border,
-            height: tabBarHeight,
-            paddingBottom: insets.bottom > 0 ? insets.bottom : Spacing.xs,
-          },
-        ],
-        tabBarLabelStyle: styles.tabBarLabel,
-        tabBarItemStyle: styles.tabBarItem,
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
+          borderTopWidth: 1,
+          height: tabBarHeight,
+          paddingBottom: insets.bottom > 0 ? insets.bottom : 4,
+          paddingTop: 4,
+          // Pas de paddingHorizontal pour laisser les items se répartir
+        },
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: '500',
+          marginTop: 2,
+          textAlign: 'center',
+        },
+        tabBarItemStyle: {
+          flex: 1, // Répartition égale des 5 onglets
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingVertical: 4,
+        },
+        tabBarIconStyle: {
+          alignSelf: 'center',
+        },
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
@@ -98,20 +114,11 @@ export const AppNavigator: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  tabBar: {
-    borderTopWidth: 1,
-    paddingTop: Spacing.xs,
-    // La hauteur et paddingBottom sont gérés dynamiquement avec useSafeAreaInsets
-  },
-  tabBarLabel: {
-    fontSize: Typography.sizes.xs,
-    fontWeight: Typography.weights.medium,
-    marginTop: -2,
-    marginBottom: Platform.OS === 'ios' ? 0 : 2,
-  },
-  tabBarItem: {
-    paddingVertical: Spacing.xs,
-    minHeight: 44, // Zone tactile minimum recommandée
+  iconContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 32,
+    height: 28,
   },
 });
 

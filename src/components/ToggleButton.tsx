@@ -1,6 +1,7 @@
 /**
  * Composant ToggleButton
  * Bouton toggle pour activer/désactiver une option
+ * Tous les boutons ont la même taille grâce à flex: 1
  */
 
 import React from 'react';
@@ -37,6 +38,7 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
           styles.label,
           { color: isActive ? '#FFFFFF' : colors.textSecondary },
         ]}
+        numberOfLines={1}
       >
         {label}
       </Text>
@@ -46,18 +48,17 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    minHeight: 44, // Zone tactile minimum recommandée pour mobile
-    borderRadius: Spacing.radiusFull,
+    flex: 1, // IMPORTANT: tous les boutons ont la même largeur
+    height: 44, // Hauteur fixe identique pour tous
+    borderRadius: 8, // Border radius uniforme
     borderWidth: 1,
-    marginHorizontal: Spacing.xs,
     justifyContent: 'center',
     alignItems: 'center',
   },
   label: {
-    fontSize: Typography.sizes.sm,
-    fontWeight: Typography.weights.medium,
+    fontSize: 14, // Taille de police IDENTIQUE pour tous
+    fontWeight: '600', // Poids IDENTIQUE pour tous
+    textAlign: 'center',
   },
 });
 
