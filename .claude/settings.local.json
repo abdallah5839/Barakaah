@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(dir \"C:\\\\Users\\\\abdal\\\\Desktop\\\\BARAKAAH\\\\node_modules\")",
+      "Bash(npx expo install:*)",
+      "Bash(node scripts/generate-assets.js:*)",
+      "Bash(npx expo start:*)",
+      "Bash(npm install:*)",
+      "Bash(npx create-expo-app@latest Barakaah54 --template blank-typescript)",
+      "Bash(npx tsc:*)",
+      "Bash(timeout:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(ping:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(taskkill /F /PID 16336 /T)",
+      "Bash(dir \"C:\\\\Users\\\\abdal\\\\Desktop\\\\BARAKAAH\" /s /b)",
+      "Bash(npx expo doctor)",
+      "Bash(git init:*)",
+      "Bash(git branch:*)",
+      "Bash(gh repo create:*)",
+      "Bash(git add:*)",
+      "Bash(dir:*)"
+    ]
+  }
+}
