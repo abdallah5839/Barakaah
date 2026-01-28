@@ -1560,12 +1560,12 @@ const CoranScreen = () => {
   }, [isPlaying, sound, navigation]);
 
   const Toggle = ({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) => (
-    <PressableScale onPress={onPress} style={{ flex: 1 }}>
+    <PressableScale onPress={onPress}>
       <LinearGradient
         colors={active ? [colors.primary, colors.primaryDark] : [colors.surface, colors.surface]}
-        style={[styles.toggleBtn, { borderColor: active ? colors.primary : colors.border }]}
+        style={[styles.toggleBtn, { borderColor: active ? colors.primary : colors.border, minWidth: 100 }]}
       >
-        <Text style={{ color: active ? '#FFF' : colors.text, fontSize: 14, fontWeight: '600', textAlign: 'center' }}>{label}</Text>
+        <Text style={{ color: active ? '#FFF' : colors.text, fontSize: 13, fontWeight: '600', textAlign: 'center' }}>{label}</Text>
       </LinearGradient>
     </PressableScale>
   );
@@ -1599,9 +1599,9 @@ const CoranScreen = () => {
           </FadeInView>
 
           <FadeInView delay={200} style={styles.toggleRow}>
-            <Toggle label="عربي" active={settings.showTranslation || true} onPress={() => {}} />
-            <Toggle label="FR" active={settings.showTranslation} onPress={() => {}} />
-            <Toggle label="Phonetique" active={settings.showPhonetic} onPress={() => {}} />
+            <Toggle label="Arabe" active={settings.showTranslation || true} onPress={() => {}} />
+            <Toggle label="Français" active={settings.showTranslation} onPress={() => {}} />
+            <Toggle label="Phonétique" active={settings.showPhonetic} onPress={() => {}} />
           </FadeInView>
 
           {FATIHA_VERSES.map((v, i) => {
@@ -3714,8 +3714,8 @@ const styles = StyleSheet.create({
   surahName: { fontSize: 24, fontWeight: '700' },
   surahNameAr: { fontSize: 20, marginTop: 2 },
   surahInfo: { textAlign: 'center', fontSize: 14, marginBottom: 20 },
-  toggleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 24, paddingHorizontal: 0 },
-  toggleBtn: { height: 44, borderRadius: 8, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  toggleRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 12, marginBottom: 24, paddingHorizontal: 16 },
+  toggleBtn: { height: 44, paddingHorizontal: 20, borderRadius: 10, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   verseItemCard: { paddingVertical: 20, marginBottom: 8 },
   verseHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
   verseBadge: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
