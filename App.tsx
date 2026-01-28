@@ -2032,13 +2032,14 @@ const SettingsScreen = () => {
             value={settings.notificationsEnabled}
             onToggle={() => updateSettings({ notificationsEnabled: !settings.notificationsEnabled })}
           />
-          <View style={[styles.settingRow, { borderBottomColor: colors.border }]}>
-            <Text style={[styles.settingLabel, { color: colors.text }]}>Rappel avant priere</Text>
+          <View style={[styles.settingRow, { borderBottomColor: colors.border, flexDirection: 'column', alignItems: 'stretch' }]}>
+            <Text style={[styles.settingLabel, { color: colors.text, marginBottom: 10 }]}>Rappel avant prière</Text>
             <View style={styles.minutesSelector}>
               {[5, 10, 15].map(min => (
                 <PressableScale
                   key={min}
                   onPress={() => updateSettings({ notificationMinutes: min })}
+                  style={{ flex: 1 }}
                 >
                   <View style={[
                     styles.minuteBtn,
@@ -2047,8 +2048,8 @@ const SettingsScreen = () => {
                       borderColor: colors.border
                     }
                   ]}>
-                    <Text style={{ color: settings.notificationMinutes === min ? '#FFF' : colors.text }}>
-                      {min}min
+                    <Text style={{ color: settings.notificationMinutes === min ? '#FFF' : colors.text, fontSize: 13, fontWeight: '600' }}>
+                      {min} min
                     </Text>
                   </View>
                 </PressableScale>
@@ -2141,34 +2142,36 @@ const SettingsScreen = () => {
               <Text style={[styles.settingLabel, { color: colors.text }]}>Objectif quotidien (versets)</Text>
               <Text style={[styles.settingValue, { color: colors.primary }]}>{settings.ramadanDailyGoal}</Text>
             </View>
-            <View style={styles.goalSelector}>
-              {[5, 10, 20, 30, 50, 100, 200].map(goal => (
-                <PressableScale key={goal} onPress={() => updateSettings({ ramadanDailyGoal: goal })}>
-                  <View style={[
-                    styles.goalBtn,
-                    {
-                      backgroundColor: settings.ramadanDailyGoal === goal ? colors.primary : colors.background,
-                      borderColor: colors.border
-                    }
-                  ]}>
-                    <Text style={{ color: settings.ramadanDailyGoal === goal ? '#FFF' : colors.text, fontSize: 12 }}>
-                      {goal}
-                    </Text>
-                  </View>
-                </PressableScale>
-              ))}
-            </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: -4 }}>
+              <View style={{ flexDirection: 'row', gap: 8, paddingHorizontal: 4 }}>
+                {[5, 10, 20, 30, 50, 100, 200].map(goal => (
+                  <PressableScale key={goal} onPress={() => updateSettings({ ramadanDailyGoal: goal })}>
+                    <View style={[
+                      styles.goalBtn,
+                      {
+                        backgroundColor: settings.ramadanDailyGoal === goal ? colors.primary : colors.background,
+                        borderColor: colors.border
+                      }
+                    ]}>
+                      <Text style={{ color: settings.ramadanDailyGoal === goal ? '#FFF' : colors.text, fontSize: 13, fontWeight: '600' }}>
+                        {goal}
+                      </Text>
+                    </View>
+                  </PressableScale>
+                ))}
+              </View>
+            </ScrollView>
           </View>
           <SettingToggle
             label="Notifications Ramadan"
             value={settings.ramadanNotifications}
             onToggle={() => updateSettings({ ramadanNotifications: !settings.ramadanNotifications })}
           />
-          <View style={[styles.settingRow, { borderBottomColor: colors.border }]}>
-            <Text style={[styles.settingLabel, { color: colors.text }]}>Rappel avant Iftar</Text>
+          <View style={[styles.settingRow, { borderBottomColor: colors.border, flexDirection: 'column', alignItems: 'stretch' }]}>
+            <Text style={[styles.settingLabel, { color: colors.text, marginBottom: 10 }]}>Rappel avant Iftar</Text>
             <View style={styles.minutesSelector}>
               {[5, 10, 15, 30].map(min => (
-                <PressableScale key={min} onPress={() => updateSettings({ ramadanIftarReminder: min })}>
+                <PressableScale key={min} onPress={() => updateSettings({ ramadanIftarReminder: min })} style={{ flex: 1 }}>
                   <View style={[
                     styles.minuteBtn,
                     {
@@ -2176,8 +2179,8 @@ const SettingsScreen = () => {
                       borderColor: colors.border
                     }
                   ]}>
-                    <Text style={{ color: settings.ramadanIftarReminder === min ? '#FFF' : colors.text }}>
-                      {min}min
+                    <Text style={{ color: settings.ramadanIftarReminder === min ? '#FFF' : colors.text, fontSize: 12, fontWeight: '600' }}>
+                      {min} min
                     </Text>
                   </View>
                 </PressableScale>
@@ -3784,10 +3787,10 @@ const styles = StyleSheet.create({
   adjustmentLabel: { fontSize: 14, width: 70 },
   adjustmentBtns: { flexDirection: 'row', gap: 8 },
   adjustBtn: { width: 44, height: 32, borderRadius: 8, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-  minutesSelector: { flexDirection: 'row', gap: 8 },
-  minuteBtn: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8, borderWidth: 1 },
-  goalSelector: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  goalBtn: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 8, borderWidth: 1 },
+  minutesSelector: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
+  minuteBtn: { flex: 1, minWidth: 55, height: 36, borderRadius: 8, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  goalSelector: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
+  goalBtn: { width: 44, height: 36, borderRadius: 8, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   themePicker: { flexDirection: 'row', gap: 8 },
   themeModeBtn: { width: 40, height: 40, borderRadius: 12, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   sliderRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
