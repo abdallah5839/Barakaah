@@ -1560,10 +1560,10 @@ const CoranScreen = () => {
   }, [isPlaying, sound, navigation]);
 
   const Toggle = ({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) => (
-    <PressableScale onPress={onPress}>
+    <PressableScale onPress={onPress} style={{ width: 105 }}>
       <LinearGradient
         colors={active ? [colors.primary, colors.primaryDark] : [colors.surface, colors.surface]}
-        style={[styles.toggleBtn, { borderColor: active ? colors.primary : colors.border, minWidth: 100 }]}
+        style={[styles.toggleBtn, { borderColor: active ? colors.primary : colors.border, width: '100%' }]}
       >
         <Text style={{ color: active ? '#FFF' : colors.text, fontSize: 13, fontWeight: '600', textAlign: 'center' }}>{label}</Text>
       </LinearGradient>
