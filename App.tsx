@@ -1565,7 +1565,7 @@ const CoranScreen = () => {
         colors={active ? [colors.primary, colors.primaryDark] : [colors.surface, colors.surface]}
         style={[styles.toggleBtn, { borderColor: active ? colors.primary : colors.border }]}
       >
-        <Text style={{ color: active ? '#FFF' : colors.text, fontWeight: '600' }}>{label}</Text>
+        <Text style={{ color: active ? '#FFF' : colors.text, fontSize: 14, fontWeight: '600', textAlign: 'center' }}>{label}</Text>
       </LinearGradient>
     </PressableScale>
   );
@@ -3596,25 +3596,25 @@ export default function App() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   content: { flex: 1 },
-  screenContent: { padding: 20, paddingTop: Platform.OS === 'android' ? 50 : 20 },
-  screenContentWithHeader: { padding: 20, paddingTop: 16 },
+  screenContent: { padding: 16, paddingTop: Platform.OS === 'android' ? 40 : 16 },
+  screenContentWithHeader: { padding: 16, paddingTop: 12 },
 
   // Header
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 },
-  appTitle: { fontSize: 32, fontWeight: '800' },
-  appSubtitle: { fontSize: 14, marginTop: 2 },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
+  appTitle: { fontSize: 24, fontWeight: '800' },
+  appSubtitle: { fontSize: 13, marginTop: 2 },
   themeBtn: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 },
 
   // Prayer Card
-  prayerCard: { borderRadius: 24, padding: 24, marginBottom: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.15, shadowRadius: 16, elevation: 8 },
+  prayerCard: { borderRadius: 16, padding: 16, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.12, shadowRadius: 8, elevation: 6 },
   prayerCardContent: { alignItems: 'center' },
-  prayerCardHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  prayerIconCircle: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center', marginRight: 10 },
-  prayerLabel: { color: 'rgba(255,255,255,0.9)', fontSize: 12, fontWeight: '600', letterSpacing: 1 },
-  prayerName: { color: '#FFF', fontSize: 36, fontWeight: '800' },
-  prayerNameAr: { color: 'rgba(255,255,255,0.8)', fontSize: 18, marginTop: 4 },
-  prayerTime: { color: '#FFF', fontSize: 56, fontWeight: '800', marginVertical: 8 },
-  countdown: { color: 'rgba(255,255,255,0.9)', fontSize: 14 },
+  prayerCardHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
+  prayerIconCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center', marginRight: 8 },
+  prayerLabel: { color: 'rgba(255,255,255,0.9)', fontSize: 11, fontWeight: '600', letterSpacing: 1 },
+  prayerName: { color: '#FFF', fontSize: 24, fontWeight: '800' },
+  prayerNameAr: { color: 'rgba(255,255,255,0.8)', fontSize: 16, marginTop: 2 },
+  prayerTime: { color: '#FFF', fontSize: 40, fontWeight: '800', marginVertical: 6 },
+  countdown: { color: 'rgba(255,255,255,0.9)', fontSize: 13 },
 
   // Streak Card
   streakCard: { marginBottom: 12 },
@@ -3701,11 +3701,11 @@ const styles = StyleSheet.create({
   quickCard: { height: 100, borderRadius: 20, alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 8, elevation: 5 },
   quickLabel: { color: '#FFF', marginTop: 8, fontSize: 14, fontWeight: '600' },
 
-  // Tab Bar
-  tabBar: { flexDirection: 'row', borderTopWidth: 1, height: Platform.OS === 'ios' ? 85 : 70, minHeight: Platform.OS === 'ios' ? 85 : 70, paddingBottom: Platform.OS === 'ios' ? 20 : 10, paddingTop: 10, flexShrink: 0 },
-  tabBtn: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 4, minHeight: 50 },
-  tabLabel: { fontSize: 11, marginTop: 4, fontWeight: '600', textAlign: 'center' },
-  tabIndicator: { position: 'absolute', bottom: Platform.OS === 'ios' ? 2 : 0, width: 6, height: 6, borderRadius: 3 },
+  // Tab Bar - centrage parfait
+  tabBar: { flexDirection: 'row', justifyContent: 'space-around', borderTopWidth: 1, height: Platform.OS === 'ios' ? 85 : 65, paddingBottom: Platform.OS === 'ios' ? 20 : 8, paddingTop: 8, paddingHorizontal: 0 },
+  tabBtn: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 4 },
+  tabLabel: { fontSize: 10, marginTop: 4, fontWeight: '500', textAlign: 'center' },
+  tabIndicator: { position: 'absolute', bottom: Platform.OS === 'ios' ? 4 : 2, width: 4, height: 4, borderRadius: 2 },
 
   // Coran Screen
   screenTitle: { fontSize: 14, fontWeight: '600', textAlign: 'center', marginTop: Platform.OS === 'android' ? 0 : 40, letterSpacing: 1, textTransform: 'uppercase' },
@@ -3714,8 +3714,8 @@ const styles = StyleSheet.create({
   surahName: { fontSize: 24, fontWeight: '700' },
   surahNameAr: { fontSize: 20, marginTop: 2 },
   surahInfo: { textAlign: 'center', fontSize: 14, marginBottom: 20 },
-  toggleRow: { flexDirection: 'row', gap: 10, marginBottom: 24 },
-  toggleBtn: { paddingVertical: 12, borderRadius: 12, borderWidth: 1, alignItems: 'center' },
+  toggleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 24, paddingHorizontal: 0 },
+  toggleBtn: { height: 44, borderRadius: 8, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   verseItemCard: { paddingVertical: 20, marginBottom: 8 },
   verseHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
   verseBadge: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
