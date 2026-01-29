@@ -265,6 +265,7 @@ interface Settings {
   arabicFontSize: number;
   arabicFont: string;
   // Reading
+  showArabic: boolean;
   showTranslation: boolean;
   showPhonetic: boolean;
   fullScreenMode: boolean;
@@ -305,6 +306,7 @@ const DEFAULT_SETTINGS: Settings = {
   themeMode: 'light',
   arabicFontSize: 24,
   arabicFont: 'Uthmani',
+  showArabic: true,
   showTranslation: true,
   showPhonetic: true,
   fullScreenMode: false,
@@ -1599,9 +1601,19 @@ const CoranScreen = () => {
           </FadeInView>
 
           <FadeInView delay={200} style={styles.toggleRow}>
-            <Toggle label="Arabe" active={settings.showTranslation || true} onPress={() => {}} />
-            <Toggle label="Français" active={settings.showTranslation} onPress={() => {}} />
-            <Toggle label="Phonétique" active={settings.showPhonetic} onPress={() => {}} />
+            <Toggle label="Arabe" active={settings.showArabic} onPress={() => {
+              // Empêcher de tout désactiver
+              if (settings.showArabic && !settings.showTranslation && !settings.showPhonetic) return;
+              updateSettings({ showArabic: !settings.showArabic });
+            }} />
+            <Toggle label="Français" active={settings.showTranslation} onPress={() => {
+              if (!settings.showArabic && settings.showTranslation && !settings.showPhonetic) return;
+              updateSettings({ showTranslation: !settings.showTranslation });
+            }} />
+            <Toggle label="Phonétique" active={settings.showPhonetic} onPress={() => {
+              if (!settings.showArabic && !settings.showTranslation && settings.showPhonetic) return;
+              updateSettings({ showPhonetic: !settings.showPhonetic });
+            }} />
           </FadeInView>
 
           {FATIHA_VERSES.map((v, i) => {
@@ -1630,9 +1642,11 @@ const CoranScreen = () => {
                     </PressableScale>
                   </View>
 
-                  <Text style={[styles.verseArabicText, { color: colors.text, fontSize: settings.arabicFontSize }]}>
-                    {v.ar}
-                  </Text>
+                  {settings.showArabic && (
+                    <Text style={[styles.verseArabicText, { color: colors.text, fontSize: settings.arabicFontSize }]}>
+                      {v.ar}
+                    </Text>
+                  )}
                   {settings.showTranslation && (
                     <Text style={[styles.verseFrenchText, { color: colors.textSecondary }]}>{v.fr}</Text>
                   )}
@@ -2117,14 +2131,28 @@ const SettingsScreen = () => {
 
         <Section title="LECTURE DU CORAN" icon="book-outline">
           <SettingToggle
-            label="Afficher traduction francaise"
-            value={settings.showTranslation}
-            onToggle={() => updateSettings({ showTranslation: !settings.showTranslation })}
+            label="Afficher texte arabe"
+            value={settings.showArabic}
+            onToggle={() => {
+              if (settings.showArabic && !settings.showTranslation && !settings.showPhonetic) return;
+              updateSettings({ showArabic: !settings.showArabic });
+            }}
           />
           <SettingToggle
-            label="Afficher phonetique"
+            label="Afficher traduction française"
+            value={settings.showTranslation}
+            onToggle={() => {
+              if (!settings.showArabic && settings.showTranslation && !settings.showPhonetic) return;
+              updateSettings({ showTranslation: !settings.showTranslation });
+            }}
+          />
+          <SettingToggle
+            label="Afficher phonétique"
             value={settings.showPhonetic}
-            onToggle={() => updateSettings({ showPhonetic: !settings.showPhonetic })}
+            onToggle={() => {
+              if (!settings.showArabic && !settings.showTranslation && settings.showPhonetic) return;
+              updateSettings({ showPhonetic: !settings.showPhonetic });
+            }}
           />
           <SettingRow
             label="Recitateur par defaut"
