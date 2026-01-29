@@ -1560,12 +1560,12 @@ const CoranScreen = () => {
   }, [isPlaying, sound, navigation]);
 
   const Toggle = ({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) => (
-    <PressableScale onPress={onPress} style={{ flex: 1 }}>
+    <PressableScale onPress={onPress} style={{ width: 105 }}>
       <LinearGradient
         colors={active ? [colors.primary, colors.primaryDark] : [colors.surface, colors.surface]}
-        style={[styles.toggleBtn, { borderColor: active ? colors.primary : colors.border }]}
+        style={[styles.toggleBtn, { borderColor: active ? colors.primary : colors.border, width: '100%' }]}
       >
-        <Text style={{ color: active ? '#FFF' : colors.text, fontWeight: '600' }}>{label}</Text>
+        <Text style={{ color: active ? '#FFF' : colors.text, fontSize: 13, fontWeight: '600', textAlign: 'center' }}>{label}</Text>
       </LinearGradient>
     </PressableScale>
   );
@@ -1599,9 +1599,9 @@ const CoranScreen = () => {
           </FadeInView>
 
           <FadeInView delay={200} style={styles.toggleRow}>
-            <Toggle label="عربي" active={settings.showTranslation || true} onPress={() => {}} />
-            <Toggle label="FR" active={settings.showTranslation} onPress={() => {}} />
-            <Toggle label="Phonetique" active={settings.showPhonetic} onPress={() => {}} />
+            <Toggle label="Arabe" active={settings.showTranslation || true} onPress={() => {}} />
+            <Toggle label="Français" active={settings.showTranslation} onPress={() => {}} />
+            <Toggle label="Phonétique" active={settings.showPhonetic} onPress={() => {}} />
           </FadeInView>
 
           {FATIHA_VERSES.map((v, i) => {
@@ -1950,9 +1950,11 @@ const SettingsScreen = () => {
   const SettingRow = ({ label, value, onPress }: { label: string; value?: string; onPress?: () => void }) => (
     <PressableScale onPress={onPress} disabled={!onPress}>
       <View style={[styles.settingRow, { borderBottomColor: colors.border }]}>
-        <Text style={[styles.settingLabel, { color: colors.text }]}>{label}</Text>
-        {value && <Text style={[styles.settingValue, { color: colors.textSecondary }]}>{value}</Text>}
-        {onPress && <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />}
+        <Text style={[styles.settingLabel, { color: colors.text }]} numberOfLines={1}>{label}</Text>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginLeft: 12 }}>
+          {value && <Text style={[styles.settingValue, { color: colors.textSecondary }]} numberOfLines={1} ellipsizeMode="tail">{value}</Text>}
+          {onPress && <Ionicons name="chevron-forward" size={18} color={colors.textMuted} style={{ marginLeft: 6, flexShrink: 0 }} />}
+        </View>
       </View>
     </PressableScale>
   );
@@ -2032,13 +2034,14 @@ const SettingsScreen = () => {
             value={settings.notificationsEnabled}
             onToggle={() => updateSettings({ notificationsEnabled: !settings.notificationsEnabled })}
           />
-          <View style={[styles.settingRow, { borderBottomColor: colors.border }]}>
-            <Text style={[styles.settingLabel, { color: colors.text }]}>Rappel avant priere</Text>
+          <View style={[styles.settingRow, { borderBottomColor: colors.border, flexDirection: 'column', alignItems: 'stretch' }]}>
+            <Text style={[styles.settingLabel, { color: colors.text, marginBottom: 10 }]}>Rappel avant prière</Text>
             <View style={styles.minutesSelector}>
               {[5, 10, 15].map(min => (
                 <PressableScale
                   key={min}
                   onPress={() => updateSettings({ notificationMinutes: min })}
+                  style={{ flex: 1 }}
                 >
                   <View style={[
                     styles.minuteBtn,
@@ -2047,8 +2050,8 @@ const SettingsScreen = () => {
                       borderColor: colors.border
                     }
                   ]}>
-                    <Text style={{ color: settings.notificationMinutes === min ? '#FFF' : colors.text }}>
-                      {min}min
+                    <Text style={{ color: settings.notificationMinutes === min ? '#FFF' : colors.text, fontSize: 13, fontWeight: '600' }}>
+                      {min} min
                     </Text>
                   </View>
                 </PressableScale>
@@ -2141,34 +2144,36 @@ const SettingsScreen = () => {
               <Text style={[styles.settingLabel, { color: colors.text }]}>Objectif quotidien (versets)</Text>
               <Text style={[styles.settingValue, { color: colors.primary }]}>{settings.ramadanDailyGoal}</Text>
             </View>
-            <View style={styles.goalSelector}>
-              {[5, 10, 20, 30, 50, 100, 200].map(goal => (
-                <PressableScale key={goal} onPress={() => updateSettings({ ramadanDailyGoal: goal })}>
-                  <View style={[
-                    styles.goalBtn,
-                    {
-                      backgroundColor: settings.ramadanDailyGoal === goal ? colors.primary : colors.background,
-                      borderColor: colors.border
-                    }
-                  ]}>
-                    <Text style={{ color: settings.ramadanDailyGoal === goal ? '#FFF' : colors.text, fontSize: 12 }}>
-                      {goal}
-                    </Text>
-                  </View>
-                </PressableScale>
-              ))}
-            </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: -4 }}>
+              <View style={{ flexDirection: 'row', gap: 8, paddingHorizontal: 4 }}>
+                {[5, 10, 20, 30, 50, 100, 200].map(goal => (
+                  <PressableScale key={goal} onPress={() => updateSettings({ ramadanDailyGoal: goal })}>
+                    <View style={[
+                      styles.goalBtn,
+                      {
+                        backgroundColor: settings.ramadanDailyGoal === goal ? colors.primary : colors.background,
+                        borderColor: colors.border
+                      }
+                    ]}>
+                      <Text style={{ color: settings.ramadanDailyGoal === goal ? '#FFF' : colors.text, fontSize: 13, fontWeight: '600' }}>
+                        {goal}
+                      </Text>
+                    </View>
+                  </PressableScale>
+                ))}
+              </View>
+            </ScrollView>
           </View>
           <SettingToggle
             label="Notifications Ramadan"
             value={settings.ramadanNotifications}
             onToggle={() => updateSettings({ ramadanNotifications: !settings.ramadanNotifications })}
           />
-          <View style={[styles.settingRow, { borderBottomColor: colors.border }]}>
-            <Text style={[styles.settingLabel, { color: colors.text }]}>Rappel avant Iftar</Text>
+          <View style={[styles.settingRow, { borderBottomColor: colors.border, flexDirection: 'column', alignItems: 'stretch' }]}>
+            <Text style={[styles.settingLabel, { color: colors.text, marginBottom: 10 }]}>Rappel avant Iftar</Text>
             <View style={styles.minutesSelector}>
               {[5, 10, 15, 30].map(min => (
-                <PressableScale key={min} onPress={() => updateSettings({ ramadanIftarReminder: min })}>
+                <PressableScale key={min} onPress={() => updateSettings({ ramadanIftarReminder: min })} style={{ flex: 1 }}>
                   <View style={[
                     styles.minuteBtn,
                     {
@@ -2176,8 +2181,8 @@ const SettingsScreen = () => {
                       borderColor: colors.border
                     }
                   ]}>
-                    <Text style={{ color: settings.ramadanIftarReminder === min ? '#FFF' : colors.text }}>
-                      {min}min
+                    <Text style={{ color: settings.ramadanIftarReminder === min ? '#FFF' : colors.text, fontSize: 12, fontWeight: '600' }}>
+                      {min} min
                     </Text>
                   </View>
                 </PressableScale>
@@ -3596,25 +3601,25 @@ export default function App() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   content: { flex: 1 },
-  screenContent: { padding: 20, paddingTop: Platform.OS === 'android' ? 50 : 20 },
-  screenContentWithHeader: { padding: 20, paddingTop: 16 },
+  screenContent: { padding: 16, paddingTop: Platform.OS === 'android' ? 40 : 16 },
+  screenContentWithHeader: { padding: 16, paddingTop: 12 },
 
   // Header
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 },
-  appTitle: { fontSize: 32, fontWeight: '800' },
-  appSubtitle: { fontSize: 14, marginTop: 2 },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
+  appTitle: { fontSize: 24, fontWeight: '800' },
+  appSubtitle: { fontSize: 13, marginTop: 2 },
   themeBtn: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 },
 
   // Prayer Card
-  prayerCard: { borderRadius: 24, padding: 24, marginBottom: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.15, shadowRadius: 16, elevation: 8 },
+  prayerCard: { borderRadius: 16, padding: 16, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.12, shadowRadius: 8, elevation: 6 },
   prayerCardContent: { alignItems: 'center' },
-  prayerCardHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  prayerIconCircle: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center', marginRight: 10 },
-  prayerLabel: { color: 'rgba(255,255,255,0.9)', fontSize: 12, fontWeight: '600', letterSpacing: 1 },
-  prayerName: { color: '#FFF', fontSize: 36, fontWeight: '800' },
-  prayerNameAr: { color: 'rgba(255,255,255,0.8)', fontSize: 18, marginTop: 4 },
-  prayerTime: { color: '#FFF', fontSize: 56, fontWeight: '800', marginVertical: 8 },
-  countdown: { color: 'rgba(255,255,255,0.9)', fontSize: 14 },
+  prayerCardHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
+  prayerIconCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center', marginRight: 8 },
+  prayerLabel: { color: 'rgba(255,255,255,0.9)', fontSize: 11, fontWeight: '600', letterSpacing: 1 },
+  prayerName: { color: '#FFF', fontSize: 24, fontWeight: '800' },
+  prayerNameAr: { color: 'rgba(255,255,255,0.8)', fontSize: 16, marginTop: 2 },
+  prayerTime: { color: '#FFF', fontSize: 40, fontWeight: '800', marginVertical: 6 },
+  countdown: { color: 'rgba(255,255,255,0.9)', fontSize: 13 },
 
   // Streak Card
   streakCard: { marginBottom: 12 },
@@ -3701,11 +3706,11 @@ const styles = StyleSheet.create({
   quickCard: { height: 100, borderRadius: 20, alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 8, elevation: 5 },
   quickLabel: { color: '#FFF', marginTop: 8, fontSize: 14, fontWeight: '600' },
 
-  // Tab Bar
-  tabBar: { flexDirection: 'row', borderTopWidth: 1, height: Platform.OS === 'ios' ? 85 : 70, minHeight: Platform.OS === 'ios' ? 85 : 70, paddingBottom: Platform.OS === 'ios' ? 20 : 10, paddingTop: 10, flexShrink: 0 },
-  tabBtn: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 4, minHeight: 50 },
-  tabLabel: { fontSize: 11, marginTop: 4, fontWeight: '600', textAlign: 'center' },
-  tabIndicator: { position: 'absolute', bottom: Platform.OS === 'ios' ? 2 : 0, width: 6, height: 6, borderRadius: 3 },
+  // Tab Bar - centrage parfait
+  tabBar: { flexDirection: 'row', justifyContent: 'space-around', borderTopWidth: 1, height: Platform.OS === 'ios' ? 85 : 65, paddingBottom: Platform.OS === 'ios' ? 20 : 8, paddingTop: 8, paddingHorizontal: 0 },
+  tabBtn: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 4 },
+  tabLabel: { fontSize: 10, marginTop: 4, fontWeight: '500', textAlign: 'center' },
+  tabIndicator: { position: 'absolute', bottom: Platform.OS === 'ios' ? 4 : 2, width: 4, height: 4, borderRadius: 2 },
 
   // Coran Screen
   screenTitle: { fontSize: 14, fontWeight: '600', textAlign: 'center', marginTop: Platform.OS === 'android' ? 0 : 40, letterSpacing: 1, textTransform: 'uppercase' },
@@ -3714,8 +3719,8 @@ const styles = StyleSheet.create({
   surahName: { fontSize: 24, fontWeight: '700' },
   surahNameAr: { fontSize: 20, marginTop: 2 },
   surahInfo: { textAlign: 'center', fontSize: 14, marginBottom: 20 },
-  toggleRow: { flexDirection: 'row', gap: 10, marginBottom: 24 },
-  toggleBtn: { paddingVertical: 12, borderRadius: 12, borderWidth: 1, alignItems: 'center' },
+  toggleRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 12, marginBottom: 24, paddingHorizontal: 16 },
+  toggleBtn: { height: 44, paddingHorizontal: 20, borderRadius: 10, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   verseItemCard: { paddingVertical: 20, marginBottom: 8 },
   verseHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
   verseBadge: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
@@ -3777,17 +3782,17 @@ const styles = StyleSheet.create({
   sectionHeaderText: { fontSize: 13, fontWeight: '700', marginLeft: 8, letterSpacing: 1 },
   sectionContent: { padding: 0 },
   settingRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 14, paddingHorizontal: 16, borderBottomWidth: 1 },
-  settingLabel: { fontSize: 15 },
-  settingValue: { fontSize: 14 },
+  settingLabel: { fontSize: 15, flexShrink: 0 },
+  settingValue: { fontSize: 14, flex: 1, textAlign: 'right' },
   adjustmentsGrid: { padding: 16 },
   adjustmentRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 },
   adjustmentLabel: { fontSize: 14, width: 70 },
   adjustmentBtns: { flexDirection: 'row', gap: 8 },
   adjustBtn: { width: 44, height: 32, borderRadius: 8, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-  minutesSelector: { flexDirection: 'row', gap: 8 },
-  minuteBtn: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8, borderWidth: 1 },
-  goalSelector: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  goalBtn: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 8, borderWidth: 1 },
+  minutesSelector: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
+  minuteBtn: { flex: 1, minWidth: 55, height: 36, borderRadius: 8, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  goalSelector: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
+  goalBtn: { width: 44, height: 36, borderRadius: 8, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   themePicker: { flexDirection: 'row', gap: 8 },
   themeModeBtn: { width: 40, height: 40, borderRadius: 12, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   sliderRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },

@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: Spacing.lg,
+    minHeight: 72, // Hauteur minimum pour une bonne lisibilité
     borderRadius: Spacing.radiusMd,
     marginBottom: Spacing.sm,
   },

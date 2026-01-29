@@ -424,7 +424,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   backButton: {
-    padding: Spacing.xs,
+    padding: Spacing.sm,
+    minWidth: 44,
+    minHeight: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerTitle: {
     flex: 1,
@@ -585,6 +589,7 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.screenHorizontal,
     marginTop: Spacing.xl,
     paddingVertical: Spacing.md,
+    minHeight: 52, // Zone tactile confortable
     borderRadius: Spacing.radiusMd,
     borderWidth: 1,
     gap: Spacing.sm,

@@ -11,12 +11,19 @@ import {
   SafeAreaView,
   ScrollView,
   Pressable,
+  Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { useTheme } from '../contexts';
 import { Spacing, Typography, Shadows } from '../constants';
+
+// Calcul de la largeur des cards en grille (2 colonnes avec gap)
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const CARD_GAP = Spacing.md;
+const SCREEN_PADDING = Spacing.screenHorizontal;
+const FEATURE_CARD_WIDTH = (SCREEN_WIDTH - (SCREEN_PADDING * 2) - CARD_GAP) / 2;
 import { Card } from '../components';
 import { duas, getDuasByCategory } from '../data';
 
@@ -278,13 +285,14 @@ const styles = StyleSheet.create({
   featuresGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: Spacing.md,
+    gap: CARD_GAP,
   },
   featureCard: {
-    width: '47%',
+    width: FEATURE_CARD_WIDTH,
     padding: Spacing.lg,
     borderRadius: Spacing.radiusLg,
     alignItems: 'center',
+    minHeight: 110, // Hauteur minimale pour uniformité
     ...Shadows.small,
   },
   featureTitle: {

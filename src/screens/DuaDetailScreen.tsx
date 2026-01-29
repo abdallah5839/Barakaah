@@ -15,6 +15,7 @@ import {
   Modal,
   Alert,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme, useDua } from '../contexts';
 import { Spacing, Typography, Shadows } from '../constants';
@@ -37,6 +38,7 @@ export const DuaDetailScreen: React.FC<DuaDetailScreenProps> = ({
 }) => {
   const { colors } = useTheme();
   const { isFavorite, toggleFavorite, displayPrefs, updateDisplayPrefs } = useDua();
+  const insets = useSafeAreaInsets();
 
   const duaId = route?.params?.duaId || 'kumayl';
   const dua = useMemo(() => getDuaById(duaId), [duaId]);
@@ -303,8 +305,11 @@ export const DuaDetailScreen: React.FC<DuaDetailScreenProps> = ({
         <View style={styles.playerSpacer} />
       </ScrollView>
 
-      {/* Player audio fixé en bas */}
-      <View style={styles.playerContainer}>
+      {/* Player audio fixé en bas avec safe area */}
+      <View style={[
+        styles.playerContainer,
+        { paddingBottom: Math.max(Spacing.lg, insets.bottom) }
+      ]}>
         <AudioPlayer
           audioUrl={dua.audioUrl || ''}
           duaId={dua.id}
@@ -386,8 +391,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   backButton: {
-    padding: Spacing.xs,
+    padding: Spacing.sm,
     marginRight: Spacing.sm,
+    minWidth: 44,
+    minHeight: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerTitleContainer: {
     flex: 1,
@@ -400,8 +409,12 @@ const styles = StyleSheet.create({
     fontSize: Typography.sizes.sm,
   },
   menuButton: {
-    padding: Spacing.xs,
+    padding: Spacing.sm,
     marginLeft: Spacing.sm,
+    minWidth: 44,
+    minHeight: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   infoBar: {
     flexDirection: 'row',
@@ -430,20 +443,23 @@ const styles = StyleSheet.create({
   },
   togglesContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: Spacing.screenHorizontal,
     paddingVertical: Spacing.sm,
-    gap: Spacing.sm,
+    gap: 8, // Espacement égal
   },
   toggleButton: {
-    flex: 1,
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.md,
-    borderRadius: Spacing.radiusMd,
+    flex: 1, // Largeur égale pour tous
+    height: 44, // Hauteur fixe identique
+    borderRadius: 8,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   toggleText: {
-    fontSize: Typography.sizes.sm,
-    fontWeight: Typography.weights.medium,
+    fontSize: 14, // Taille IDENTIQUE pour tous
+    fontWeight: '600', // Poids IDENTIQUE
+    textAlign: 'center',
   },
   scrollView: {
     flex: 1,
@@ -503,7 +519,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     paddingHorizontal: Spacing.screenHorizontal,
-    paddingBottom: Spacing.lg,
+    // paddingBottom géré dynamiquement avec useSafeAreaInsets
   },
   modalOverlay: {
     flex: 1,

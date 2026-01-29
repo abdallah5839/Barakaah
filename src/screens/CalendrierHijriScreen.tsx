@@ -501,7 +501,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   backButton: {
-    padding: Spacing.xs,
+    padding: Spacing.sm,
+    minWidth: 44,
+    minHeight: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerTitle: {
     flex: 1,
@@ -510,7 +514,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   todayButton: {
-    padding: Spacing.xs,
+    padding: Spacing.sm,
+    minWidth: 44,
+    minHeight: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   monthNavigation: {
     flexDirection: 'row',
@@ -521,6 +529,10 @@ const styles = StyleSheet.create({
   },
   navButton: {
     padding: Spacing.sm,
+    minWidth: 44,
+    minHeight: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   monthInfo: {
     alignItems: 'center',
@@ -699,8 +711,10 @@ const styles = StyleSheet.create({
   modalCloseButton: {
     marginTop: Spacing.xl,
     paddingVertical: Spacing.md,
+    minHeight: 48, // Zone tactile confortable
     borderRadius: Spacing.radiusMd,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   modalCloseText: {
     color: '#FFF',

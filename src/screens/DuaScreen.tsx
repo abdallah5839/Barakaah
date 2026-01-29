@@ -13,10 +13,17 @@ import {
   TextInput,
   Pressable,
   Animated,
+  Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme, useDua } from '../contexts';
 import { Spacing, Typography, Shadows } from '../constants';
+
+// Calcul de la largeur des cards en grille (2 colonnes avec gap)
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const CARD_GAP = Spacing.md;
+const SCREEN_PADDING = Spacing.screenHorizontal;
+const CARD_WIDTH = (SCREEN_WIDTH - (SCREEN_PADDING * 2) - CARD_GAP) / 2;
 import { Card } from '../components';
 import {
   duas,
@@ -445,13 +452,14 @@ const styles = StyleSheet.create({
   categoriesGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: Spacing.md,
+    gap: CARD_GAP,
   },
   categoryCard: {
-    width: '47%',
+    width: CARD_WIDTH,
     padding: Spacing.lg,
     borderRadius: Spacing.radiusLg,
     alignItems: 'center',
+    minHeight: 120, // Hauteur minimale pour uniformité
   },
   categoryIcon: {
     width: 48,

@@ -470,10 +470,16 @@ const styles = StyleSheet.create({
     gap: Spacing.lg,
   },
   controlButton: {
-    padding: Spacing.sm,
+    padding: Spacing.md,
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   smallButton: {
-    padding: Spacing.xs,
+    padding: Spacing.sm,
+    minWidth: 44,
+    minHeight: 44,
   },
   playButton: {
     width: 56,
@@ -488,9 +494,13 @@ const styles = StyleSheet.create({
   },
   volumeToggle: {
     position: 'absolute',
-    right: Spacing.md,
-    top: Spacing.md,
-    padding: Spacing.xs,
+    right: Spacing.sm,
+    top: Spacing.sm,
+    padding: Spacing.sm,
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   volumeContainer: {
     marginTop: Spacing.md,
@@ -505,7 +515,11 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   volumeButton: {
-    padding: Spacing.xs,
+    padding: Spacing.sm,
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   volumeValue: {
     fontSize: Typography.sizes.sm,
