@@ -1950,9 +1950,11 @@ const SettingsScreen = () => {
   const SettingRow = ({ label, value, onPress }: { label: string; value?: string; onPress?: () => void }) => (
     <PressableScale onPress={onPress} disabled={!onPress}>
       <View style={[styles.settingRow, { borderBottomColor: colors.border }]}>
-        <Text style={[styles.settingLabel, { color: colors.text }]}>{label}</Text>
-        {value && <Text style={[styles.settingValue, { color: colors.textSecondary }]}>{value}</Text>}
-        {onPress && <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />}
+        <Text style={[styles.settingLabel, { color: colors.text }]} numberOfLines={1}>{label}</Text>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginLeft: 12 }}>
+          {value && <Text style={[styles.settingValue, { color: colors.textSecondary }]} numberOfLines={1} ellipsizeMode="tail">{value}</Text>}
+          {onPress && <Ionicons name="chevron-forward" size={18} color={colors.textMuted} style={{ marginLeft: 6, flexShrink: 0 }} />}
+        </View>
       </View>
     </PressableScale>
   );
@@ -3780,8 +3782,8 @@ const styles = StyleSheet.create({
   sectionHeaderText: { fontSize: 13, fontWeight: '700', marginLeft: 8, letterSpacing: 1 },
   sectionContent: { padding: 0 },
   settingRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 14, paddingHorizontal: 16, borderBottomWidth: 1 },
-  settingLabel: { fontSize: 15 },
-  settingValue: { fontSize: 14 },
+  settingLabel: { fontSize: 15, flexShrink: 0 },
+  settingValue: { fontSize: 14, flex: 1, textAlign: 'right' },
   adjustmentsGrid: { padding: 16 },
   adjustmentRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 },
   adjustmentLabel: { fontSize: 14, width: 70 },
