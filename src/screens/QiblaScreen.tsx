@@ -1,6 +1,10 @@
 /**
  * QiblaScreen - Boussole de direction vers la Qibla (Mecque)
- * N/S/E/W fixes, seule la flèche Qibla tourne
+ * Le disque entier (N/S/E/W + graduations) tourne avec le magnétomètre
+ * pour que N pointe toujours vers le nord magnétique réel.
+ * La flèche Qibla est sur le disque et pointe dans la bonne direction absolue.
+ * Quand l'utilisateur tourne, tout le disque tourne, donc la flèche
+ * pointe toujours physiquement vers la Mecque.
  */
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -14,6 +18,7 @@ import {
   Alert,
   Platform,
   Dimensions,
+  ScrollView,
 } from 'react-native';
 import { Magnetometer } from 'expo-sensors';
 import * as Location from 'expo-location';
@@ -21,7 +26,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Spacing, Typography, Shadows } from '../constants';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const COMPASS_SIZE = Math.min(SCREEN_WIDTH * 0.75, 320);
+const COMPASS_SIZE = Math.min(SCREEN_WIDTH * 0.78, 320);
 
 // Coordonnées de la Kaaba (Mecque)
 const KAABA_COORDS = {
@@ -56,7 +61,7 @@ interface QiblaScreenProps {
   isDark?: boolean;
 }
 
-// Calcul de l'angle Qibla (formule sphérique)
+// Calcul de l'angle Qibla (formule sphérique) - bearing depuis la position vers la Kaaba
 const calculateQiblaAngle = (userLat: number, userLon: number): number => {
   const lat1 = (userLat * Math.PI) / 180;
   const lon1 = (userLon * Math.PI) / 180;
@@ -110,10 +115,11 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
   const [distance, setDistance] = useState(0);
   const [locationName, setLocationName] = useState('Chargement...');
   const [isCalibrating, setIsCalibrating] = useState(false);
+  const [facingQibla, setFacingQibla] = useState(false);
 
-  // Animation : seule la flèche Qibla tourne
-  const arrowRotationAnim = useRef(new Animated.Value(0)).current;
-  const prevRotation = useRef(0);
+  // Animation : le disque entier tourne avec -heading
+  const compassRotationAnim = useRef(new Animated.Value(0)).current;
+  const prevCompassRotation = useRef(0);
 
   // Subscriptions
   const magnetometerSubscription = useRef<any>(null);
@@ -160,7 +166,7 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
     setup();
   }, []);
 
-  // Magnétomètre
+  // Magnétomètre - calcul du heading (cap magnétique)
   useEffect(() => {
     const startMagnetometer = async () => {
       const isAvailable = await Magnetometer.isAvailableAsync();
@@ -172,13 +178,13 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
       Magnetometer.setUpdateInterval(100);
 
       magnetometerSubscription.current = Magnetometer.addListener((data) => {
-        let angle = Math.atan2(data.y, data.x);
+        // Calcul du heading magnétique
+        // expo-sensors Magnetometer : x pointe vers la droite, y vers le haut de l'écran
+        // atan2(x, y) donne l'angle depuis le haut (Nord) dans le sens horaire
+        let angle = Math.atan2(data.x, data.y);
         angle = (angle * 180) / Math.PI;
+        // Normaliser à 0-360
         angle = (angle + 360) % 360;
-
-        if (Platform.OS === 'ios') {
-          angle = (angle + 90) % 360;
-        }
 
         setHeading(angle);
       });
@@ -193,23 +199,26 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
     };
   }, []);
 
-  // Animation de la flèche Qibla
+  // Animation du disque boussole : tourne de -heading pour que N pointe toujours vers le nord
   useEffect(() => {
-    // La flèche pointe vers la Qibla par rapport à l'orientation du téléphone
-    const targetRotation = qiblaAngle - heading;
+    const targetRotation = -heading;
 
-    // Gestion du passage 360° → 0° pour éviter les rotations complètes
-    let diff = targetRotation - prevRotation.current;
+    // Gestion du passage 360° → 0° pour éviter les rotations brusques
+    let diff = targetRotation - prevCompassRotation.current;
     if (diff > 180) diff -= 360;
     if (diff < -180) diff += 360;
-    const smoothTarget = prevRotation.current + diff;
-    prevRotation.current = smoothTarget;
+    const smoothTarget = prevCompassRotation.current + diff;
+    prevCompassRotation.current = smoothTarget;
 
-    Animated.timing(arrowRotationAnim, {
+    Animated.timing(compassRotationAnim, {
       toValue: smoothTarget,
-      duration: 150,
+      duration: 200,
       useNativeDriver: true,
     }).start();
+
+    // Détection si on fait face à la Qibla (±15°)
+    const relativeQibla = ((qiblaAngle - heading) % 360 + 360) % 360;
+    setFacingQibla(relativeQibla < 15 || relativeQibla > 345);
   }, [heading, qiblaAngle]);
 
   // Calibration
@@ -229,17 +238,14 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
     if (navigation?.goBack) navigation.goBack();
   };
 
-  // Interpolation rotation flèche
-  const arrowRotation = arrowRotationAnim.interpolate({
+  // Interpolation rotation du disque
+  const compassRotation = compassRotationAnim.interpolate({
     inputRange: [-720, 0, 720],
     outputRange: ['-720deg', '0deg', '720deg'],
   });
 
-  // Position du repère Qibla sur le cercle (angle fixe par rapport au Nord)
-  const qiblaMarkerAngle = qiblaAngle;
-  const MARKER_RADIUS = COMPASS_SIZE / 2 - 8;
-  const markerX = Math.sin((qiblaMarkerAngle * Math.PI) / 180) * MARKER_RADIUS;
-  const markerY = -Math.cos((qiblaMarkerAngle * Math.PI) / 180) * MARKER_RADIUS;
+  // La flèche Qibla est à l'angle absolu sur le disque (le disque tourne, donc la flèche suit)
+  const ARROW_RADIUS = COMPASS_SIZE / 2 - 40;
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -252,125 +258,182 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
         <View style={styles.headerSpacer} />
       </View>
 
-      {/* Localisation */}
-      <View style={styles.locationContainer}>
-        <Ionicons name="location" size={20} color={colors.primary} />
-        <Text style={[styles.locationText, { color: colors.text }]}>{locationName}</Text>
-      </View>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+        {/* Localisation */}
+        <View style={styles.locationContainer}>
+          <Ionicons name="location" size={20} color={colors.primary} />
+          <Text style={[styles.locationText, { color: colors.text }]}>{locationName}</Text>
+        </View>
 
-      {/* Boussole */}
-      <View style={styles.compassContainer}>
-        <View style={[styles.compassOuter, { borderColor: colors.border, backgroundColor: colors.surface }]}>
+        {/* Indicateur fixe en haut - triangle qui pointe vers le bas */}
+        <View style={styles.topIndicatorContainer}>
+          <View style={[styles.topIndicator, { borderTopColor: facingQibla ? colors.secondary : colors.primary }]} />
+        </View>
 
-          {/* Graduations FIXES */}
-          {[...Array(72)].map((_, i) => {
-            const deg = i * 5;
-            const isMajor = deg % 90 === 0;
-            const isMinor = deg % 45 === 0 && !isMajor;
-            const tickHeight = isMajor ? 16 : isMinor ? 10 : 6;
-            const radius = COMPASS_SIZE / 2 - 12;
-            const rad = (deg * Math.PI) / 180;
-            const x = Math.sin(rad) * radius;
-            const y = -Math.cos(rad) * radius;
-
-            return (
-              <View
-                key={i}
-                style={{
-                  position: 'absolute',
-                  width: isMajor ? 3 : 1.5,
-                  height: tickHeight,
-                  backgroundColor: isMajor ? colors.text : colors.border,
-                  borderRadius: 1,
-                  left: COMPASS_SIZE / 2 - (isMajor ? 1.5 : 0.75) + x,
-                  top: COMPASS_SIZE / 2 - tickHeight / 2 + y,
-                  transform: [{ rotate: `${deg}deg` }],
-                }}
-              />
-            );
-          })}
-
-          {/* Points cardinaux FIXES */}
-          <Text style={[styles.cardinalN, { color: colors.secondary }]}>N</Text>
-          <Text style={[styles.cardinalE, { color: colors.textSecondary }]}>E</Text>
-          <Text style={[styles.cardinalS, { color: colors.textSecondary }]}>S</Text>
-          <Text style={[styles.cardinalW, { color: colors.textSecondary }]}>W</Text>
-
-          {/* Repère Qibla FIXE sur le cercle */}
-          <View style={[styles.qiblaMarker, {
-            left: COMPASS_SIZE / 2 - 14 + markerX,
-            top: COMPASS_SIZE / 2 - 14 + markerY,
-          }]}>
-            <Text style={styles.qiblaMarkerText}>🕋</Text>
-          </View>
-
-          {/* Flèche Qibla qui TOURNE */}
+        {/* Boussole */}
+        <View style={styles.compassContainer}>
+          {/* Disque tournant : tout tourne ensemble (N/S/E/W + graduations + flèche Qibla) */}
           <Animated.View
             style={[
-              styles.arrowContainer,
-              { transform: [{ rotate: arrowRotation }] },
+              styles.compassOuter,
+              {
+                borderColor: facingQibla ? colors.secondary : colors.border,
+                backgroundColor: colors.surface,
+                transform: [{ rotate: compassRotation }],
+              },
             ]}
           >
-            {/* Pointe de la flèche */}
-            <View style={[styles.arrowHead, { borderBottomColor: colors.secondary }]} />
-            <View style={[styles.arrowBody, { backgroundColor: colors.secondary }]} />
-            {/* Queue */}
-            <View style={{ flex: 1 }} />
-            <View style={[styles.arrowTail, { backgroundColor: colors.secondary + '40' }]} />
+            {/* Graduations */}
+            {[...Array(72)].map((_, i) => {
+              const deg = i * 5;
+              const isMajor = deg % 90 === 0;
+              const isMinor = deg % 45 === 0 && !isMajor;
+              const tickHeight = isMajor ? 16 : isMinor ? 10 : 6;
+              const radius = COMPASS_SIZE / 2 - 14;
+              const rad = (deg * Math.PI) / 180;
+              const x = Math.sin(rad) * radius;
+              const y = -Math.cos(rad) * radius;
+
+              return (
+                <View
+                  key={i}
+                  style={{
+                    position: 'absolute',
+                    width: isMajor ? 3 : 1.5,
+                    height: tickHeight,
+                    backgroundColor: isMajor ? colors.text : colors.border,
+                    borderRadius: 1,
+                    left: COMPASS_SIZE / 2 - (isMajor ? 1.5 : 0.75) + x,
+                    top: COMPASS_SIZE / 2 - tickHeight / 2 + y,
+                    transform: [{ rotate: `${deg}deg` }],
+                  }}
+                />
+              );
+            })}
+
+            {/* Points cardinaux - sur le disque, tournent avec */}
+            <Text style={[styles.cardinalN, { color: '#E53E3E' }]}>N</Text>
+            <Text style={[styles.cardinalE, { color: colors.textSecondary }]}>E</Text>
+            <Text style={[styles.cardinalS, { color: colors.textSecondary }]}>S</Text>
+            <Text style={[styles.cardinalW, { color: colors.textSecondary }]}>W</Text>
+
+            {/* Flèche Qibla - wrapper centré, tourne depuis le centre du disque */}
+            <View
+              style={[
+                styles.qiblaArrowWrapper,
+                {
+                  transform: [{ rotate: `${qiblaAngle}deg` }],
+                },
+              ]}
+            >
+              {/* Partie haute : flèche qui pointe vers le bord */}
+              <View style={styles.qiblaArrowTop}>
+                <View style={[styles.qiblaArrowHead, { borderBottomColor: colors.secondary }]} />
+                <View style={[styles.qiblaArrowBody, { backgroundColor: colors.secondary }]} />
+              </View>
+              {/* Partie basse : queue transparente */}
+              <View style={styles.qiblaArrowBottom}>
+                <View style={[styles.qiblaArrowTail, { backgroundColor: colors.secondary + '30' }]} />
+              </View>
+            </View>
+
+            {/* 🕋 Kaaba sur le cercle à l'angle Qibla */}
+            {(() => {
+              const markerRadius = COMPASS_SIZE / 2 - 22;
+              const rad = (qiblaAngle * Math.PI) / 180;
+              const mx = Math.sin(rad) * markerRadius;
+              const my = -Math.cos(rad) * markerRadius;
+              // Contre-rotation pour que le texte reste lisible
+              return (
+                <View
+                  style={[
+                    styles.qiblaMarker,
+                    {
+                      left: COMPASS_SIZE / 2 - 14 + mx,
+                      top: COMPASS_SIZE / 2 - 14 + my,
+                    },
+                  ]}
+                >
+                  <Text style={styles.qiblaMarkerText}>🕋</Text>
+                </View>
+              );
+            })()}
+
+            {/* Centre du disque */}
+            <View style={[styles.compassCenter, { backgroundColor: colors.primary }]}>
+              {/* Contre-rotation du texte pour qu'il reste lisible */}
+              <Animated.View
+                style={{
+                  alignItems: 'center',
+                  transform: [{
+                    rotate: compassRotationAnim.interpolate({
+                      inputRange: [-720, 0, 720],
+                      outputRange: ['720deg', '0deg', '-720deg'],
+                    }),
+                  }],
+                }}
+              >
+                <Text style={styles.compassCenterAngle}>{Math.round(qiblaAngle)}°</Text>
+                <Text style={styles.compassCenterLabel}>Qibla</Text>
+              </Animated.View>
+            </View>
           </Animated.View>
 
-          {/* Centre avec angle */}
-          <View style={[styles.compassCenter, { backgroundColor: colors.primary }]}>
-            <Text style={styles.compassCenterAngle}>{Math.round(qiblaAngle)}°</Text>
-            <Text style={styles.compassCenterLabel}>Qibla</Text>
+          {/* Badge "Face à la Qibla" */}
+          {facingQibla && (
+            <View style={[styles.facingBadge, { backgroundColor: colors.secondary }]}>
+              <Text style={styles.facingBadgeText}>Face à la Qibla</Text>
+            </View>
+          )}
+
+          {/* Calibration badge */}
+          {isCalibrating && (
+            <View style={[styles.calibratingBadge, { backgroundColor: colors.secondary }]}>
+              <Text style={styles.calibratingText}>Calibration en cours...</Text>
+            </View>
+          )}
+        </View>
+
+        {/* Informations */}
+        <View style={styles.infoContainer}>
+          <View style={[styles.infoCard, { backgroundColor: colors.surface }, Shadows.small]}>
+            <View style={[styles.infoIconContainer, { backgroundColor: colors.primary + '15' }]}>
+              <Ionicons name="navigate" size={24} color={colors.primary} />
+            </View>
+            <View style={styles.infoContent}>
+              <Text style={[styles.infoLabel, { color: colors.textSecondary }]}>Distance</Text>
+              <Text style={[styles.infoValue, { color: colors.text }]}>{distance.toLocaleString()} km</Text>
+            </View>
+          </View>
+
+          <View style={[styles.infoCard, { backgroundColor: colors.surface }, Shadows.small]}>
+            <View style={[styles.infoIconContainer, { backgroundColor: colors.secondary + '15' }]}>
+              <Ionicons name="compass" size={24} color={colors.secondary} />
+            </View>
+            <View style={styles.infoContent}>
+              <Text style={[styles.infoLabel, { color: colors.textSecondary }]}>Direction</Text>
+              <Text style={[styles.infoValue, { color: colors.text }]}>
+                {getCardinalDirection(qiblaAngle)} ({Math.round(qiblaAngle)}°)
+              </Text>
+            </View>
           </View>
         </View>
 
-        {/* Calibration badge */}
-        {isCalibrating && (
-          <View style={[styles.calibratingBadge, { backgroundColor: colors.secondary }]}>
-            <Text style={styles.calibratingText}>Calibration en cours...</Text>
-          </View>
-        )}
-      </View>
+        {/* Bouton calibration */}
+        <Pressable
+          style={[styles.calibrateButton, { backgroundColor: colors.surface, borderColor: colors.border }]}
+          onPress={handleCalibrate}
+        >
+          <Ionicons name="sync" size={20} color={colors.primary} />
+          <Text style={[styles.calibrateText, { color: colors.text }]}>Calibrer la boussole</Text>
+        </Pressable>
 
-      {/* Informations */}
-      <View style={styles.infoContainer}>
-        <View style={[styles.infoCard, { backgroundColor: colors.surface }, Shadows.small]}>
-          <View style={[styles.infoIconContainer, { backgroundColor: colors.primary + '15' }]}>
-            <Ionicons name="navigate" size={24} color={colors.primary} />
-          </View>
-          <View style={styles.infoContent}>
-            <Text style={[styles.infoLabel, { color: colors.textSecondary }]}>Distance</Text>
-            <Text style={[styles.infoValue, { color: colors.text }]}>{distance.toLocaleString()} km</Text>
-          </View>
-        </View>
+        <Text style={[styles.instructions, { color: colors.textSecondary }]}>
+          Tenez votre téléphone à plat. Tournez-vous jusqu'à ce que la flèche dorée pointe vers le haut.
+        </Text>
 
-        <View style={[styles.infoCard, { backgroundColor: colors.surface }, Shadows.small]}>
-          <View style={[styles.infoIconContainer, { backgroundColor: colors.secondary + '15' }]}>
-            <Ionicons name="compass" size={24} color={colors.secondary} />
-          </View>
-          <View style={styles.infoContent}>
-            <Text style={[styles.infoLabel, { color: colors.textSecondary }]}>Direction</Text>
-            <Text style={[styles.infoValue, { color: colors.text }]}>
-              {getCardinalDirection(qiblaAngle)} ({Math.round(qiblaAngle)}°)
-            </Text>
-          </View>
-        </View>
-      </View>
-
-      {/* Bouton calibration */}
-      <Pressable
-        style={[styles.calibrateButton, { backgroundColor: colors.surface, borderColor: colors.border }]}
-        onPress={handleCalibrate}
-      >
-        <Ionicons name="sync" size={20} color={colors.primary} />
-        <Text style={[styles.calibrateText, { color: colors.text }]}>Calibrer la boussole</Text>
-      </Pressable>
-
-      <Text style={[styles.instructions, { color: colors.textSecondary }]}>
-        Tenez votre téléphone à plat. Alignez la flèche dorée vers le haut pour faire face à la Qibla.
-      </Text>
+        <View style={{ height: 40 }} />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -413,10 +476,24 @@ const styles = StyleSheet.create({
     fontSize: Typography.sizes.md,
     fontWeight: Typography.weights.medium,
   },
+  topIndicatorContainer: {
+    alignItems: 'center',
+    marginBottom: -8,
+    zIndex: 10,
+  },
+  topIndicator: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 10,
+    borderRightWidth: 10,
+    borderTopWidth: 14,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+  },
   compassContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: Spacing.lg,
+    paddingVertical: Spacing.md,
   },
   compassOuter: {
     width: COMPASS_SIZE,
@@ -425,34 +502,73 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     alignItems: 'center',
     justifyContent: 'center',
-    overflow: 'hidden',
   },
-  // Points cardinaux FIXES
+  // Points cardinaux - sur le disque tournant
   cardinalN: {
     position: 'absolute',
-    top: 22,
+    top: 24,
     fontSize: 22,
     fontWeight: '800',
   },
   cardinalE: {
     position: 'absolute',
-    right: 22,
+    right: 24,
     fontSize: 18,
     fontWeight: '600',
   },
   cardinalS: {
     position: 'absolute',
-    bottom: 22,
+    bottom: 24,
     fontSize: 18,
     fontWeight: '600',
   },
   cardinalW: {
     position: 'absolute',
-    left: 22,
+    left: 24,
     fontSize: 18,
     fontWeight: '600',
   },
-  // Repère Qibla fixe sur le cercle
+  // Wrapper centré dans le disque, taille = disque entier, rotation depuis le centre
+  qiblaArrowWrapper: {
+    position: 'absolute',
+    width: COMPASS_SIZE,
+    height: COMPASS_SIZE,
+    alignItems: 'center',
+  },
+  // Partie haute : contient la flèche (pointe vers le haut = vers le bord)
+  qiblaArrowTop: {
+    height: COMPASS_SIZE / 2 - 34,
+    width: 30,
+    alignItems: 'center',
+  },
+  // Partie basse : queue
+  qiblaArrowBottom: {
+    height: COMPASS_SIZE / 2 - 34,
+    width: 30,
+    alignItems: 'center',
+  },
+  qiblaArrowTail: {
+    width: 3,
+    height: COMPASS_SIZE / 2 - 60,
+    borderRadius: 2,
+    marginTop: 4,
+  },
+  qiblaArrowHead: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 12,
+    borderRightWidth: 12,
+    borderBottomWidth: 20,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+  },
+  qiblaArrowBody: {
+    width: 5,
+    flex: 1,
+    marginTop: -2,
+    borderRadius: 3,
+  },
+  // Repère Qibla (🕋) sur le cercle
   qiblaMarker: {
     position: 'absolute',
     width: 28,
@@ -463,54 +579,38 @@ const styles = StyleSheet.create({
     zIndex: 5,
   },
   qiblaMarkerText: {
-    fontSize: 20,
-  },
-  // Flèche Qibla tournante
-  arrowContainer: {
-    position: 'absolute',
-    width: 30,
-    height: COMPASS_SIZE - 80,
-    alignItems: 'center',
-  },
-  arrowHead: {
-    width: 0,
-    height: 0,
-    borderLeftWidth: 14,
-    borderRightWidth: 14,
-    borderBottomWidth: 24,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-  },
-  arrowBody: {
-    width: 6,
-    height: COMPASS_SIZE / 2 - 70,
-    marginTop: -2,
-    borderRadius: 3,
-  },
-  arrowTail: {
-    width: 4,
-    height: COMPASS_SIZE / 2 - 70,
-    borderRadius: 2,
+    fontSize: 18,
   },
   // Centre
   compassCenter: {
     position: 'absolute',
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 10,
   },
   compassCenterAngle: {
     color: '#FFF',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '800',
   },
   compassCenterLabel: {
     color: 'rgba(255,255,255,0.8)',
-    fontSize: 10,
+    fontSize: 9,
     fontWeight: '600',
+  },
+  facingBadge: {
+    marginTop: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 20,
+  },
+  facingBadgeText: {
+    color: '#FFF',
+    fontSize: 14,
+    fontWeight: '700',
   },
   calibratingBadge: {
     position: 'absolute',

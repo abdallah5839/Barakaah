@@ -1417,7 +1417,7 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
 // ===== CORAN SCREEN =====
 const CoranScreen = () => {
   const { colors } = useTheme();
-  const { settings, bookmarks, addBookmark, removeBookmark, updateStreak, updateLastRead } = useSettings();
+  const { settings, updateSettings, bookmarks, addBookmark, removeBookmark, updateStreak, updateLastRead } = useSettings();
   const navigation = useNavigation();
 
   const [currentSurah, setCurrentSurah] = useState(SURAHS[0]);
