@@ -16,7 +16,6 @@ import {
   Pressable,
   Animated,
   Alert,
-  Platform,
   Dimensions,
   ScrollView,
 } from 'react-native';
@@ -121,20 +120,87 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
   const compassRotationAnim = useRef(new Animated.Value(0)).current;
   const prevCompassRotation = useRef(0);
 
-  // Subscriptions
-  const magnetometerSubscription = useRef<any>(null);
+  // Lissage du cap : filtre les micro-variations pour fluidité
+  const lastHeadingRef = useRef(0);
 
-  // Setup localisation
+  // Subscription heading (cap)
+  const headingSubscription = useRef<any>(null);
+  const mounted = useRef(true);
+
+  // Setup unique : permissions → heading (rapide) → GPS position (lent)
   useEffect(() => {
     const setup = async () => {
+      // 1. Permissions (une seule fois)
+      let permissionGranted = false;
       try {
         const { status } = await Location.requestForegroundPermissionsAsync();
+        permissionGranted = status === 'granted';
+      } catch {
+        // Permission refusée, on utilise les valeurs par défaut
+      }
 
-        let lat = 5.3600;
-        let lon = -4.0083;
-        let city = 'Abidjan, Côte d\'Ivoire';
+      // 2. Démarrer le cap IMMÉDIATEMENT (avant le GPS qui est lent)
+      let headingStarted = false;
 
-        if (status === 'granted') {
+      // Essai A : Location.watchHeadingAsync (fusion capteurs, vrai nord)
+      if (permissionGranted) {
+        try {
+          const sub = await Location.watchHeadingAsync((data) => {
+            if (!mounted.current) return;
+            const h = data.trueHeading >= 0 ? data.trueHeading : data.magHeading;
+
+            // Filtre anti-jitter : ignorer les variations < 1°
+            let diff = h - lastHeadingRef.current;
+            if (diff > 180) diff -= 360;
+            if (diff < -180) diff += 360;
+            if (Math.abs(diff) < 1) return;
+            lastHeadingRef.current = h;
+
+            setHeading(h);
+          });
+          headingSubscription.current = sub;
+          headingStarted = true;
+        } catch {
+          // Fallback vers magnétomètre brut
+        }
+      }
+
+      // Essai B : Magnétomètre brut (fallback)
+      if (!headingStarted) {
+        try {
+          const isAvailable = await Magnetometer.isAvailableAsync();
+          if (isAvailable) {
+            Magnetometer.setUpdateInterval(100);
+            headingSubscription.current = Magnetometer.addListener((data) => {
+              if (!mounted.current) return;
+              let fieldAngle = Math.atan2(data.x, data.y);
+              fieldAngle = (fieldAngle * 180) / Math.PI;
+              fieldAngle = (fieldAngle + 360) % 360;
+              const angle = (360 - fieldAngle) % 360;
+
+              // Filtre anti-jitter : ignorer les variations < 1°
+              let diff = angle - lastHeadingRef.current;
+              if (diff > 180) diff -= 360;
+              if (diff < -180) diff += 360;
+              if (Math.abs(diff) < 1) return;
+              lastHeadingRef.current = angle;
+
+              setHeading(angle);
+            });
+            headingStarted = true;
+          }
+        } catch {
+          // Pas de capteur disponible
+        }
+      }
+
+      // 3. Position GPS (peut prendre plusieurs secondes)
+      let lat = 5.3600;
+      let lon = -4.0083;
+      let city = 'Abidjan, Côte d\'Ivoire';
+
+      if (permissionGranted) {
+        try {
           const loc = await Location.getCurrentPositionAsync({
             accuracy: Location.Accuracy.High,
           });
@@ -149,57 +215,29 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
           } catch {
             city = 'Position actuelle';
           }
+        } catch {
+          // Utiliser coordonnées par défaut
         }
+      }
 
+      if (mounted.current) {
         setLocationName(city);
-        setQiblaAngle(calculateQiblaAngle(lat, lon));
-        setDistance(calculateDistance(lat, lon));
-      } catch (error) {
-        const lat = 5.3600;
-        const lon = -4.0083;
-        setLocationName('Abidjan, Côte d\'Ivoire');
         setQiblaAngle(calculateQiblaAngle(lat, lon));
         setDistance(calculateDistance(lat, lon));
       }
     };
 
     setup();
-  }, []);
-
-  // Magnétomètre - calcul du heading (cap magnétique)
-  useEffect(() => {
-    const startMagnetometer = async () => {
-      const isAvailable = await Magnetometer.isAvailableAsync();
-      if (!isAvailable) {
-        Alert.alert('Capteur non disponible', 'Le magnétomètre n\'est pas disponible sur cet appareil.');
-        return;
-      }
-
-      Magnetometer.setUpdateInterval(100);
-
-      magnetometerSubscription.current = Magnetometer.addListener((data) => {
-        // Calcul du heading magnétique
-        // expo-sensors Magnetometer : x pointe vers la droite, y vers le haut de l'écran
-        // atan2(x, y) donne l'angle depuis le haut (Nord) dans le sens horaire
-        let angle = Math.atan2(data.x, data.y);
-        angle = (angle * 180) / Math.PI;
-        // Normaliser à 0-360
-        angle = (angle + 360) % 360;
-
-        setHeading(angle);
-      });
-    };
-
-    startMagnetometer();
 
     return () => {
-      if (magnetometerSubscription.current) {
-        magnetometerSubscription.current.remove();
+      mounted.current = false;
+      if (headingSubscription.current) {
+        headingSubscription.current.remove();
       }
     };
   }, []);
 
-  // Animation du disque boussole : tourne de -heading pour que N pointe toujours vers le nord
+  // Animation du disque boussole
   useEffect(() => {
     const targetRotation = -heading;
 
@@ -212,7 +250,7 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
 
     Animated.timing(compassRotationAnim, {
       toValue: smoothTarget,
-      duration: 200,
+      duration: 300,
       useNativeDriver: true,
     }).start();
 
