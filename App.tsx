@@ -21,6 +21,7 @@ import {
   Alert,
   ActivityIndicator,
   InteractionManager,
+  Share,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -222,6 +223,16 @@ interface Bookmark {
   timestamp: number;
 }
 
+interface FavoriteVerse {
+  id: string;
+  surahNumber: number;
+  verseNumber: number;
+  surahName: string;
+  arabic: string;
+  french: string;
+  timestamp: number;
+}
+
 interface ReadingHistory {
   date: string;
   versesRead: number;
@@ -290,6 +301,7 @@ const STORAGE_KEYS = {
   LAST_READ: 'barakaah_lastread',
   RAMADAN_PROGRESS: 'barakaah_ramadan_progress',
   RAMADAN_JOURNAL: 'barakaah_ramadan_journal',
+  FAVORITES: 'barakaah_favorites',
 };
 
 const DEFAULT_SETTINGS: Settings = {
@@ -547,6 +559,9 @@ interface SettingsContextType {
   bookmarks: Bookmark[];
   addBookmark: (bookmark: Omit<Bookmark, 'id' | 'timestamp'>) => void;
   removeBookmark: (id: string) => void;
+  favorites: FavoriteVerse[];
+  addFavorite: (fav: Omit<FavoriteVerse, 'id' | 'timestamp'>) => void;
+  removeFavorite: (id: string) => void;
   streak: StreakData;
   updateStreak: (versesRead: number) => void;
   updateDailyGoal: (goal: number) => void;
@@ -580,6 +595,7 @@ const useTheme = () => {
 const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const [favorites, setFavorites] = useState<FavoriteVerse[]>([]);
   const [streak, setStreak] = useState<StreakData>(DEFAULT_STREAK);
   const [lastRead, setLastRead] = useState<LastReadPosition | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -590,15 +606,17 @@ const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
   const loadAllData = async () => {
     try {
-      const [settingsData, bookmarksData, streakData, lastReadData] = await Promise.all([
+      const [settingsData, bookmarksData, streakData, lastReadData, favoritesData] = await Promise.all([
         AsyncStorage.getItem(STORAGE_KEYS.SETTINGS),
         AsyncStorage.getItem(STORAGE_KEYS.BOOKMARKS),
         AsyncStorage.getItem(STORAGE_KEYS.STREAK),
         AsyncStorage.getItem(STORAGE_KEYS.LAST_READ),
+        AsyncStorage.getItem(STORAGE_KEYS.FAVORITES),
       ]);
 
       if (settingsData) setSettings({ ...DEFAULT_SETTINGS, ...JSON.parse(settingsData) });
       if (bookmarksData) setBookmarks(JSON.parse(bookmarksData));
+      if (favoritesData) setFavorites(JSON.parse(favoritesData));
       if (streakData) {
         const loaded: StreakData = { ...DEFAULT_STREAK, ...JSON.parse(streakData) };
         const today = new Date().toISOString().split('T')[0];
@@ -645,6 +663,23 @@ const SettingsProvider = ({ children }: { children: ReactNode }) => {
     const updated = bookmarks.filter(b => b.id !== id);
     setBookmarks(updated);
     await AsyncStorage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify(updated));
+  };
+
+  const addFavorite = async (fav: Omit<FavoriteVerse, 'id' | 'timestamp'>) => {
+    const newFav: FavoriteVerse = {
+      ...fav,
+      id: Date.now().toString(),
+      timestamp: Date.now(),
+    };
+    const updated = [...favorites, newFav];
+    setFavorites(updated);
+    await AsyncStorage.setItem(STORAGE_KEYS.FAVORITES, JSON.stringify(updated));
+  };
+
+  const removeFavorite = async (id: string) => {
+    const updated = favorites.filter(f => f.id !== id);
+    setFavorites(updated);
+    await AsyncStorage.setItem(STORAGE_KEYS.FAVORITES, JSON.stringify(updated));
   };
 
   const updateStreak = async (versesRead: number) => {
@@ -724,6 +759,7 @@ const SettingsProvider = ({ children }: { children: ReactNode }) => {
   return (
     <SettingsContext.Provider value={{
       settings, updateSettings, bookmarks, addBookmark, removeBookmark,
+      favorites, addFavorite, removeFavorite,
       streak, updateStreak, updateDailyGoal, lastRead, updateLastRead,
     }}>
       {children}
@@ -1598,7 +1634,7 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
 // ===== CORAN SCREEN =====
 const CoranScreen = () => {
   const { colors } = useTheme();
-  const { settings, updateSettings, bookmarks, addBookmark, removeBookmark, updateStreak, updateLastRead, lastRead } = useSettings();
+  const { settings, updateSettings, bookmarks, addBookmark, removeBookmark, favorites, addFavorite, removeFavorite, updateStreak, updateLastRead, lastRead } = useSettings();
   const navigation = useNavigation();
 
   const [currentSurah, setCurrentSurah] = useState(SURAHS[0]);
@@ -1877,6 +1913,39 @@ const CoranScreen = () => {
     }
   };
 
+  // Favoris
+  const isFavorite = (verseNum: number) => {
+    return favorites.some(f => f.surahNumber === currentSurah.number && f.verseNumber === verseNum);
+  };
+
+  const getFavorite = (verseNum: number) => {
+    return favorites.find(f => f.surahNumber === currentSurah.number && f.verseNumber === verseNum);
+  };
+
+  const toggleFavorite = (verse: { num: number; ar: string; fr: string }) => {
+    const existing = getFavorite(verse.num);
+    if (existing) {
+      removeFavorite(existing.id);
+    } else {
+      addFavorite({
+        surahNumber: currentSurah.number,
+        verseNumber: verse.num,
+        surahName: currentSurah.name,
+        arabic: verse.ar,
+        french: verse.fr,
+      });
+    }
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  };
+
+  // Partage
+  const shareVerse = async (verse: { num: number; ar: string; fr: string }) => {
+    const text = `Sourate ${currentSurah.name}, Verset ${verse.num}\n\n${verse.ar}\n\n"${verse.fr}"\n\n- Partagé via l'app Barakaah`;
+    try {
+      await Share.share({ message: text });
+    } catch (_) {}
+  };
+
   const handleGoBack = useCallback(() => {
     if (isPlaying) {
       Alert.alert(
@@ -2029,10 +2098,14 @@ const CoranScreen = () => {
                           />
                         </View>
                       </PressableScale>
-                      <PressableScale>
-                        <Ionicons name="heart-outline" size={22} color={colors.textMuted} />
+                      <PressableScale onPress={() => toggleFavorite(v)}>
+                        <Ionicons
+                          name={isFavorite(v.num) ? 'heart' : 'heart-outline'}
+                          size={22}
+                          color={isFavorite(v.num) ? '#EF4444' : colors.textMuted}
+                        />
                       </PressableScale>
-                      <PressableScale>
+                      <PressableScale onPress={() => shareVerse(v)}>
                         <Ionicons name="share-outline" size={22} color={colors.textMuted} />
                       </PressableScale>
                     </View>
@@ -2268,10 +2341,11 @@ const PrieresScreen = () => {
 // ===== SETTINGS SCREEN =====
 const SettingsScreen = () => {
   const { colors } = useTheme();
-  const { settings, updateSettings, bookmarks, streak, updateDailyGoal } = useSettings();
+  const { settings, updateSettings, bookmarks, favorites, removeFavorite, streak, updateDailyGoal } = useSettings();
   const navigation = useNavigation();
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [showBookmarksModal, setShowBookmarksModal] = useState(false);
+  const [showFavoritesModal, setShowFavoritesModal] = useState(false);
   const [searchCity, setSearchCity] = useState('');
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
@@ -2556,6 +2630,11 @@ const SettingsScreen = () => {
             value={`${bookmarks.length} marque-pages`}
             onPress={() => setShowBookmarksModal(true)}
           />
+          <SettingRow
+            label="Mes favoris"
+            value={`${favorites.length} favoris`}
+            onPress={() => setShowFavoritesModal(true)}
+          />
         </Section>
 
         <Section title="RAMADAN" icon="moon-outline">
@@ -2735,6 +2814,56 @@ const SettingsScreen = () => {
                     <Text style={[styles.bookmarkDate, { color: colors.textMuted }]}>
                       {new Date(item.timestamp).toLocaleDateString('fr-FR')}
                     </Text>
+                  </View>
+                )}
+              />
+            )}
+          </View>
+        </View>
+      </Modal>
+
+      {/* Favorites Modal */}
+      <Modal visible={showFavoritesModal} transparent animationType="slide">
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: colors.surface }]}>
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>Mes favoris</Text>
+              <PressableScale onPress={() => setShowFavoritesModal(false)}>
+                <Ionicons name="close" size={28} color={colors.text} />
+              </PressableScale>
+            </View>
+
+            {favorites.length === 0 ? (
+              <View style={styles.emptyBookmarks}>
+                <Ionicons name="heart-outline" size={48} color={colors.textMuted} />
+                <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+                  Aucun favori
+                </Text>
+                <Text style={[{ color: colors.textMuted, fontSize: 13, marginTop: 8, textAlign: 'center' }]}>
+                  Appuyez sur le coeur d'un verset pour l'ajouter
+                </Text>
+              </View>
+            ) : (
+              <FlatList
+                data={favorites}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => (
+                  <View style={[styles.bookmarkItem, { borderLeftColor: '#EF4444', borderBottomColor: colors.border }]}>
+                    <View style={{ flex: 1 }}>
+                      <Text style={[styles.bookmarkSurah, { color: colors.text }]}>{item.surahName}</Text>
+                      <Text style={[styles.bookmarkVerse, { color: colors.textSecondary }]}>
+                        Verset {item.verseNumber}
+                      </Text>
+                      <Text style={[{ color: colors.text, fontSize: 18, fontFamily: Platform.OS === 'ios' ? 'Geeza Pro' : 'serif', textAlign: 'right', marginTop: 8 }]} numberOfLines={2}>
+                        {item.arabic}
+                      </Text>
+                      <Text style={[{ color: colors.textSecondary, fontSize: 13, marginTop: 4 }]} numberOfLines={2}>
+                        {item.french}
+                      </Text>
+                    </View>
+                    <PressableScale onPress={() => removeFavorite(item.id)} style={{ padding: 8 }}>
+                      <Ionicons name="heart-dislike-outline" size={22} color="#EF4444" />
+                    </PressableScale>
                   </View>
                 )}
               />
