@@ -1,0 +1,55 @@
+{
+  "id": 97,
+  "nameArabic": "القدر",
+  "nameTransliteration": "Al-Qadr",
+  "nameFrench": "La destinée",
+  "revelationType": "meccan",
+  "totalVerses": 5,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "إِنَّآ أَنزَلۡنَٰهُ فِي لَيۡلَةِ ٱلۡقَدۡرِ",
+      "french": "Nous l'avons certes, fait descendre (le Coran) pendant la nuit d'Al-Qadr",
+      "phonetic": "Inna anzalnahu fee laylati alqadri",
+      "juz": 30,
+      "hizb": 60,
+      "page": 598
+    },
+    {
+      "number": 2,
+      "arabic": "وَمَآ أَدۡرَىٰكَ مَا لَيۡلَةُ ٱلۡقَدۡرِ",
+      "french": "Et qui te dira ce qu'est la nuit d'Al-Qadr",
+      "phonetic": "Wama adraka ma laylatu alqadri",
+      "juz": 30,
+      "hizb": 60,
+      "page": 598
+    },
+    {
+      "number": 3,
+      "arabic": "لَيۡلَةُ ٱلۡقَدۡرِ خَيۡرٞ مِّنۡ أَلۡفِ شَهۡرٖ",
+      "french": "La nuit d'Al-Qadr est meilleure que mille mois",
+      "phonetic": "Laylatu alqadri khayrun min alfi shahrin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 598
+    },
+    {
+      "number": 4,
+      "arabic": "تَنَزَّلُ ٱلۡمَلَـٰٓئِكَةُ وَٱلرُّوحُ فِيهَا بِإِذۡنِ رَبِّهِم مِّن كُلِّ أَمۡرٖ",
+      "french": "Durant celle-ci descendent les Anges ainsi que l'Esprit, par permission de leur Seigneur pour tout ordre",
+      "phonetic": "Tanazzalu almalaikatu waalrroohu feeha biithni rabbihim min kulli amrin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 598
+    },
+    {
+      "number": 5,
+      "arabic": "سَلَٰمٌ هِيَ حَتَّىٰ مَطۡلَعِ ٱلۡفَجۡرِ",
+      "french": "Elle est paix et salut jusqu'à l'apparition de l'aube",
+      "phonetic": "Salamun hiya hatta matlaAAi alfajri",
+      "juz": 30,
+      "hizb": 60,
+      "page": 598
+    }
+  ]
+}

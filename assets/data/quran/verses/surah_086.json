@@ -1,0 +1,163 @@
+{
+  "id": 86,
+  "nameArabic": "الطارق",
+  "nameTransliteration": "At-Tariq",
+  "nameFrench": "L'astre nocturne",
+  "revelationType": "meccan",
+  "totalVerses": 17,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "وَٱلسَّمَآءِ وَٱلطَّارِقِ",
+      "french": "Par le ciel et par l'astre nocturne",
+      "phonetic": "Waalssamai waalttariqi",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 2,
+      "arabic": "وَمَآ أَدۡرَىٰكَ مَا ٱلطَّارِقُ",
+      "french": "Et qui te dira ce qu'est l'astre nocturne",
+      "phonetic": "Wama adraka ma alttariqu",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 3,
+      "arabic": "ٱلنَّجۡمُ ٱلثَّاقِبُ",
+      "french": "C'est l'étoile vivement brillante",
+      "phonetic": "Alnnajmu alththaqibu",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 4,
+      "arabic": "إِن كُلُّ نَفۡسٖ لَّمَّا عَلَيۡهَا حَافِظٞ",
+      "french": "Il n'est pas d'âme qui n'ait sur elle un gardien",
+      "phonetic": "In kullu nafsin lamma AAalayha hafithun",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 5,
+      "arabic": "فَلۡيَنظُرِ ٱلۡإِنسَٰنُ مِمَّ خُلِقَ",
+      "french": "Que l'homme considère donc de quoi il a été créé",
+      "phonetic": "Falyanthuri alinsanu mimma khuliqa",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 6,
+      "arabic": "خُلِقَ مِن مَّآءٖ دَافِقٖ",
+      "french": "Il a été créé d'une giclée d'eau",
+      "phonetic": "Khuliqa min main dafiqin",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 7,
+      "arabic": "يَخۡرُجُ مِنۢ بَيۡنِ ٱلصُّلۡبِ وَٱلتَّرَآئِبِ",
+      "french": "sortie d'entre les lombes et les côtes",
+      "phonetic": "Yakhruju min bayni alssulbi waalttaraibi",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 8,
+      "arabic": "إِنَّهُۥ عَلَىٰ رَجۡعِهِۦ لَقَادِرٞ",
+      "french": "Allah est certes capable de le ressusciter",
+      "phonetic": "Innahu AAala rajAAihi laqadirun",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 9,
+      "arabic": "يَوۡمَ تُبۡلَى ٱلسَّرَآئِرُ",
+      "french": "Le jour où les cœurs dévoileront leurs secrets",
+      "phonetic": "Yawma tubla alssarairu",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 10,
+      "arabic": "فَمَا لَهُۥ مِن قُوَّةٖ وَلَا نَاصِرٖ",
+      "french": "Il n'aura alors ni force ni secoureur",
+      "phonetic": "Fama lahu min quwwatin wala nasirin",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 11,
+      "arabic": "وَٱلسَّمَآءِ ذَاتِ ٱلرَّجۡعِ",
+      "french": "Par le ciel qui fait revenir la pluie",
+      "phonetic": "Waalssamai thati alrrajAAi",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 12,
+      "arabic": "وَٱلۡأَرۡضِ ذَاتِ ٱلصَّدۡعِ",
+      "french": "et par la terre qui se fend",
+      "phonetic": "Waalardi thati alssadAAi",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 13,
+      "arabic": "إِنَّهُۥ لَقَوۡلٞ فَصۡلٞ",
+      "french": "Ceci [le Coran] est certes, une parole décisive [qui tranche entre le vrai et le faux]",
+      "phonetic": "Innahu laqawlun faslun",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 14,
+      "arabic": "وَمَا هُوَ بِٱلۡهَزۡلِ",
+      "french": "et non point une plaisanterie frivole",
+      "phonetic": "Wama huwa bialhazli",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 15,
+      "arabic": "إِنَّهُمۡ يَكِيدُونَ كَيۡدٗا",
+      "french": "Ils se servent d'une ruse",
+      "phonetic": "Innahum yakeedoona kaydan",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 16,
+      "arabic": "وَأَكِيدُ كَيۡدٗا",
+      "french": "et Moi aussi Je me sers de Mon plan",
+      "phonetic": "Waakeedu kaydan",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    },
+    {
+      "number": 17,
+      "arabic": "فَمَهِّلِ ٱلۡكَٰفِرِينَ أَمۡهِلۡهُمۡ رُوَيۡدَۢا",
+      "french": "Accorde (ô Prophète) donc un délai aux infidèles: accorde-leur un court délai",
+      "phonetic": "Famahhili alkafireena amhilhum ruwaydan",
+      "juz": 30,
+      "hizb": 59,
+      "page": 591
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": 113,
+  "nameArabic": "الفلق",
+  "nameTransliteration": "Al-Falaq",
+  "nameFrench": "L'aube naissante",
+  "revelationType": "meccan",
+  "totalVerses": 5,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "قُلۡ أَعُوذُ بِرَبِّ ٱلۡفَلَقِ",
+      "french": "Dis: «Je cherche protection auprès du Seigneur de l'aube naissante",
+      "phonetic": "Qul aAAoothu birabbi alfalaqi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 604
+    },
+    {
+      "number": 2,
+      "arabic": "مِن شَرِّ مَا خَلَقَ",
+      "french": "contre le mal des êtres qu'Il a créés",
+      "phonetic": "Min sharri ma khalaqa",
+      "juz": 30,
+      "hizb": 60,
+      "page": 604
+    },
+    {
+      "number": 3,
+      "arabic": "وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ",
+      "french": "contre le mal de l'obscurité quand elle s'approfondit",
+      "phonetic": "Wamin sharri ghasiqin itha waqaba",
+      "juz": 30,
+      "hizb": 60,
+      "page": 604
+    },
+    {
+      "number": 4,
+      "arabic": "وَمِن شَرِّ ٱلنَّفَّـٰثَٰتِ فِي ٱلۡعُقَدِ",
+      "french": "contre le mal de celles qui soufflent [les sorcières] sur les nœuds",
+      "phonetic": "Wamin sharri alnnaffathati fee alAAuqadi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 604
+    },
+    {
+      "number": 5,
+      "arabic": "وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ",
+      "french": "et contre le mal de l'envieux quand il envie»",
+      "phonetic": "Wamin sharri hasidin itha hasada",
+      "juz": 30,
+      "hizb": 60,
+      "page": 604
+    }
+  ]
+}

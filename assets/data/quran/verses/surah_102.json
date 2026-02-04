@@ -1,0 +1,82 @@
+{
+  "id": 102,
+  "nameArabic": "التكاثر",
+  "nameTransliteration": "At-Takathur",
+  "nameFrench": "La course aux richesses",
+  "revelationType": "meccan",
+  "totalVerses": 8,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "أَلۡهَىٰكُمُ ٱلتَّكَاثُرُ",
+      "french": "La course aux richesses vous distrait",
+      "phonetic": "Alhakumu alttakathuru",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 2,
+      "arabic": "حَتَّىٰ زُرۡتُمُ ٱلۡمَقَابِرَ",
+      "french": "jusqu'à ce que vous visitiez les tombes",
+      "phonetic": "Hatta zurtumu almaqabira",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 3,
+      "arabic": "كَلَّا سَوۡفَ تَعۡلَمُونَ",
+      "french": "Mais non! Vous saurez bientôt",
+      "phonetic": "Kalla sawfa taAAlamoona",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 4,
+      "arabic": "ثُمَّ كَلَّا سَوۡفَ تَعۡلَمُونَ",
+      "french": "(Encore une fois)! Vous saurez bientôt",
+      "phonetic": "Thumma kalla sawfa taAAlamoona",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 5,
+      "arabic": "كَلَّا لَوۡ تَعۡلَمُونَ عِلۡمَ ٱلۡيَقِينِ",
+      "french": "Sûrement! Si vous saviez de science certaine",
+      "phonetic": "Kalla law taAAlamoona AAilma alyaqeeni",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 6,
+      "arabic": "لَتَرَوُنَّ ٱلۡجَحِيمَ",
+      "french": "Vous verrez, certes, la Fournaise",
+      "phonetic": "Latarawunna aljaheema",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 7,
+      "arabic": "ثُمَّ لَتَرَوُنَّهَا عَيۡنَ ٱلۡيَقِينِ",
+      "french": "Puis, vous la verrez certes, avec l'œil de la certitude",
+      "phonetic": "Thumma latarawunnaha AAayna alyaqeeni",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 8,
+      "arabic": "ثُمَّ لَتُسۡـَٔلُنَّ يَوۡمَئِذٍ عَنِ ٱلنَّعِيمِ",
+      "french": "Puis, assurément, vous serez interrogés, ce jour-là, sur les délices",
+      "phonetic": "Thumma latusalunna yawmaithin AAani alnnaAAeemi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    }
+  ]
+}

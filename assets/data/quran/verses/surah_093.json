@@ -1,0 +1,109 @@
+{
+  "id": 93,
+  "nameArabic": "الضحى",
+  "nameTransliteration": "Ad-Duhaa",
+  "nameFrench": "Le jour montant",
+  "revelationType": "meccan",
+  "totalVerses": 11,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "وَٱلضُّحَىٰ",
+      "french": "Par le Jour Montant",
+      "phonetic": "Waaldduha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 596
+    },
+    {
+      "number": 2,
+      "arabic": "وَٱلَّيۡلِ إِذَا سَجَىٰ",
+      "french": "Et par la nuit quand elle couvre tout",
+      "phonetic": "Waallayli itha saja",
+      "juz": 30,
+      "hizb": 60,
+      "page": 596
+    },
+    {
+      "number": 3,
+      "arabic": "مَا وَدَّعَكَ رَبُّكَ وَمَا قَلَىٰ",
+      "french": "Ton Seigneur ne t'a ni abandonné, ni détesté",
+      "phonetic": "Ma waddaAAaka rabbuka wama qala",
+      "juz": 30,
+      "hizb": 60,
+      "page": 596
+    },
+    {
+      "number": 4,
+      "arabic": "وَلَلۡأٓخِرَةُ خَيۡرٞ لَّكَ مِنَ ٱلۡأُولَىٰ",
+      "french": "La vie dernière t'est, certes, meilleure que la vie présente",
+      "phonetic": "Walalakhiratu khayrun laka mina aloola",
+      "juz": 30,
+      "hizb": 60,
+      "page": 596
+    },
+    {
+      "number": 5,
+      "arabic": "وَلَسَوۡفَ يُعۡطِيكَ رَبُّكَ فَتَرۡضَىٰٓ",
+      "french": "Ton Seigneur t'accordera certes [Ses faveurs], et alors tu seras satisfait",
+      "phonetic": "Walasawfa yuAAteeka rabbuka fatarda",
+      "juz": 30,
+      "hizb": 60,
+      "page": 596
+    },
+    {
+      "number": 6,
+      "arabic": "أَلَمۡ يَجِدۡكَ يَتِيمٗا فَـَٔاوَىٰ",
+      "french": "Ne t'a-t-Il pas trouvé orphelin? Alors Il t'a accueilli",
+      "phonetic": "Alam yajidka yateeman faawa",
+      "juz": 30,
+      "hizb": 60,
+      "page": 596
+    },
+    {
+      "number": 7,
+      "arabic": "وَوَجَدَكَ ضَآلّٗا فَهَدَىٰ",
+      "french": "Ne t'a-t-Il pas trouvé égaré? Alors Il t'a guidé",
+      "phonetic": "Wawajadaka dallan fahada",
+      "juz": 30,
+      "hizb": 60,
+      "page": 596
+    },
+    {
+      "number": 8,
+      "arabic": "وَوَجَدَكَ عَآئِلٗا فَأَغۡنَىٰ",
+      "french": "Ne t'a-t-Il pas trouvé pauvre? Alors Il t'a enrichi",
+      "phonetic": "Wawajadaka AAailan faaghna",
+      "juz": 30,
+      "hizb": 60,
+      "page": 596
+    },
+    {
+      "number": 9,
+      "arabic": "فَأَمَّا ٱلۡيَتِيمَ فَلَا تَقۡهَرۡ",
+      "french": "Quant à l'orphelin, donc, ne le maltraite pas",
+      "phonetic": "Faamma alyateema fala taqhar",
+      "juz": 30,
+      "hizb": 60,
+      "page": 596
+    },
+    {
+      "number": 10,
+      "arabic": "وَأَمَّا ٱلسَّآئِلَ فَلَا تَنۡهَرۡ",
+      "french": "Quant au demandeur, ne le repousse pas",
+      "phonetic": "Waamma alssaila fala tanhar",
+      "juz": 30,
+      "hizb": 60,
+      "page": 596
+    },
+    {
+      "number": 11,
+      "arabic": "وَأَمَّا بِنِعۡمَةِ رَبِّكَ فَحَدِّثۡ",
+      "french": "Et quant au bienfait de ton Seigneur, proclame-le",
+      "phonetic": "Waamma biniAAmati rabbika fahaddith",
+      "juz": 30,
+      "hizb": 60,
+      "page": 596
+    }
+  ]
+}

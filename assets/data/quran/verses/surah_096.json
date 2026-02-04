@@ -1,0 +1,181 @@
+{
+  "id": 96,
+  "nameArabic": "العلق",
+  "nameTransliteration": "Al-'Alaq",
+  "nameFrench": "L'adhérence",
+  "revelationType": "meccan",
+  "totalVerses": 19,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "ٱقۡرَأۡ بِٱسۡمِ رَبِّكَ ٱلَّذِي خَلَقَ",
+      "french": "Lis, au nom de ton Seigneur qui a créé",
+      "phonetic": "Iqra biismi rabbika allathee khalaqa",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 2,
+      "arabic": "خَلَقَ ٱلۡإِنسَٰنَ مِنۡ عَلَقٍ",
+      "french": "qui a créé l'homme d'une adhérence",
+      "phonetic": "Khalaqa alinsana min AAalaqin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 3,
+      "arabic": "ٱقۡرَأۡ وَرَبُّكَ ٱلۡأَكۡرَمُ",
+      "french": "Lis! Ton Seigneur est le Très Noble",
+      "phonetic": "Iqra warabbuka alakramu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 4,
+      "arabic": "ٱلَّذِي عَلَّمَ بِٱلۡقَلَمِ",
+      "french": "qui a enseigné par la plume [le calame]",
+      "phonetic": "Allathee AAallama bialqalami",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 5,
+      "arabic": "عَلَّمَ ٱلۡإِنسَٰنَ مَا لَمۡ يَعۡلَمۡ",
+      "french": "a enseigné à l'homme ce qu'il ne savait pas",
+      "phonetic": "AAallama alinsana ma lam yaAAlam",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 6,
+      "arabic": "كَلَّآ إِنَّ ٱلۡإِنسَٰنَ لَيَطۡغَىٰٓ",
+      "french": "Prenez-garde! Vraiment l'homme devient rebelle",
+      "phonetic": "Kalla inna alinsana layatgha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 7,
+      "arabic": "أَن رَّءَاهُ ٱسۡتَغۡنَىٰٓ",
+      "french": "dès qu'il estime qu'il peut se suffire à lui-même (à cause de sa richesse)",
+      "phonetic": "An raahu istaghna",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 8,
+      "arabic": "إِنَّ إِلَىٰ رَبِّكَ ٱلرُّجۡعَىٰٓ",
+      "french": "Mais, c'est vers ton Seigneur qu'est le retour",
+      "phonetic": "Inna ila rabbika alrrujAAa",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 9,
+      "arabic": "أَرَءَيۡتَ ٱلَّذِي يَنۡهَىٰ",
+      "french": "As-tu vu celui qui interdit",
+      "phonetic": "Araayta allathee yanha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 10,
+      "arabic": "عَبۡدًا إِذَا صَلَّىٰٓ",
+      "french": "à un serviteur d'Allah [Muhammad] de célébrer la Salât",
+      "phonetic": "AAabdan itha salla",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 11,
+      "arabic": "أَرَءَيۡتَ إِن كَانَ عَلَى ٱلۡهُدَىٰٓ",
+      "french": "Vois-tu s'il est sur la bonne voie",
+      "phonetic": "Araayta in kana AAala alhuda",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 12,
+      "arabic": "أَوۡ أَمَرَ بِٱلتَّقۡوَىٰٓ",
+      "french": "ou s'il ordonne la piété",
+      "phonetic": "Aw amara bialttaqwa",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 13,
+      "arabic": "أَرَءَيۡتَ إِن كَذَّبَ وَتَوَلَّىٰٓ",
+      "french": "Vois-tu s'il dément et tourne le dos",
+      "phonetic": "Araayta in kaththaba watawalla",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 14,
+      "arabic": "أَلَمۡ يَعۡلَم بِأَنَّ ٱللَّهَ يَرَىٰ",
+      "french": "Ne sait-il pas que vraiment Allah voit",
+      "phonetic": "Alam yaAAlam bianna Allaha yara",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 15,
+      "arabic": "كَلَّا لَئِن لَّمۡ يَنتَهِ لَنَسۡفَعَۢا بِٱلنَّاصِيَةِ",
+      "french": "Mais non! S'il ne cesse pas, Nous le saisirons certes, par le toupet",
+      "phonetic": "Kalla lain lam yantahi lanasfaAAan bialnnasiyati",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 16,
+      "arabic": "نَاصِيَةٖ كَٰذِبَةٍ خَاطِئَةٖ",
+      "french": "le toupet d'un menteur, d'un pécheur",
+      "phonetic": "Nasiyatin kathibatin khatiatin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 17,
+      "arabic": "فَلۡيَدۡعُ نَادِيَهُۥ",
+      "french": "Qu'il appelle donc son assemblée",
+      "phonetic": "FalyadAAu nadiyahu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 18,
+      "arabic": "سَنَدۡعُ ٱلزَّبَانِيَةَ",
+      "french": "Nous appellerons les gardiens [de l'Enfer]",
+      "phonetic": "SanadAAu alzzabaniyata",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 19,
+      "arabic": "كَلَّا لَا تُطِعۡهُ وَٱسۡجُدۡۤ وَٱقۡتَرِب۩",
+      "french": "Non! Ne lui obéis pas; mais prosterne-toi et rapproche-toi",
+      "phonetic": "Kalla la tutiAAhu waosjud waiqtarib",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    }
+  ]
+}

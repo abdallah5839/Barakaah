@@ -1,0 +1,109 @@
+{
+  "id": 101,
+  "nameArabic": "القارعة",
+  "nameTransliteration": "Al-Qari'ah",
+  "nameFrench": "Le fracas",
+  "revelationType": "meccan",
+  "totalVerses": 11,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "ٱلۡقَارِعَةُ",
+      "french": "Le fracas",
+      "phonetic": "AlqariAAatu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 2,
+      "arabic": "مَا ٱلۡقَارِعَةُ",
+      "french": "Qu'est-ce que le fracas",
+      "phonetic": "Ma alqariAAatu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 3,
+      "arabic": "وَمَآ أَدۡرَىٰكَ مَا ٱلۡقَارِعَةُ",
+      "french": "Et qui te dira ce qu'est le fracas",
+      "phonetic": "Wama adraka ma alqariAAatu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 4,
+      "arabic": "يَوۡمَ يَكُونُ ٱلنَّاسُ كَٱلۡفَرَاشِ ٱلۡمَبۡثُوثِ",
+      "french": "C'est le jour où les gens seront comme des papillons éparpillés",
+      "phonetic": "Yawma yakoonu alnnasu kaalfarashi almabthoothi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 5,
+      "arabic": "وَتَكُونُ ٱلۡجِبَالُ كَٱلۡعِهۡنِ ٱلۡمَنفُوشِ",
+      "french": "et les montagnes comme de la laine cardée",
+      "phonetic": "Watakoonu aljibalu kaalAAihni almanfooshi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 6,
+      "arabic": "فَأَمَّا مَن ثَقُلَتۡ مَوَٰزِينُهُۥ",
+      "french": "quant à celui dont la balance sera lourde",
+      "phonetic": "Faamma man thaqulat mawazeenuhu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 7,
+      "arabic": "فَهُوَ فِي عِيشَةٖ رَّاضِيَةٖ",
+      "french": "il sera dans une vie agréable",
+      "phonetic": "Fahuwa fee AAeeshatin radiyatin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 8,
+      "arabic": "وَأَمَّا مَنۡ خَفَّتۡ مَوَٰزِينُهُۥ",
+      "french": "et quant à celui dont la balance sera légère",
+      "phonetic": "Waamma man khaffat mawazeenuhu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 9,
+      "arabic": "فَأُمُّهُۥ هَاوِيَةٞ",
+      "french": "sa mère [destination] est un abîme très profond",
+      "phonetic": "Faommuhu hawiyatun",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 10,
+      "arabic": "وَمَآ أَدۡرَىٰكَ مَا هِيَهۡ",
+      "french": "Et qui te dira ce que c'est",
+      "phonetic": "Wama adraka ma hiyah",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 11,
+      "arabic": "نَارٌ حَامِيَةُۢ",
+      "french": "C'est un Feu ardent",
+      "phonetic": "Narun hamiyatun",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    }
+  ]
+}

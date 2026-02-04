@@ -1,0 +1,280 @@
+{
+  "id": 89,
+  "nameArabic": "الفجر",
+  "nameTransliteration": "Al-Fajr",
+  "nameFrench": "L'aube",
+  "revelationType": "meccan",
+  "totalVerses": 30,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "وَٱلۡفَجۡرِ",
+      "french": "Par l'Aube",
+      "phonetic": "Waalfajri",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 2,
+      "arabic": "وَلَيَالٍ عَشۡرٖ",
+      "french": "Et par les dix nuits",
+      "phonetic": "Walayalin AAashrin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 3,
+      "arabic": "وَٱلشَّفۡعِ وَٱلۡوَتۡرِ",
+      "french": "Par le pair et l'impair",
+      "phonetic": "WaalshshafAAi waalwatri",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 4,
+      "arabic": "وَٱلَّيۡلِ إِذَا يَسۡرِ",
+      "french": "Et par la nuit quand elle s'écoule",
+      "phonetic": "Waallayli itha yasri",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 5,
+      "arabic": "هَلۡ فِي ذَٰلِكَ قَسَمٞ لِّذِي حِجۡرٍ",
+      "french": "N'est-ce pas là un serment, pour un doué d'intelligence",
+      "phonetic": "Hal fee thalika qasamun lithee hijrin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 6,
+      "arabic": "أَلَمۡ تَرَ كَيۡفَ فَعَلَ رَبُّكَ بِعَادٍ",
+      "french": "N'as-tu pas vu comment ton Seigneur a agi avec les 'Aad",
+      "phonetic": "Alam tara kayfa faAAala rabbuka biAAadin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 7,
+      "arabic": "إِرَمَ ذَاتِ ٱلۡعِمَادِ",
+      "french": "[avec] Iram, [la cité] à la colonne remarquable",
+      "phonetic": "Irama thati alAAimadi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 8,
+      "arabic": "ٱلَّتِي لَمۡ يُخۡلَقۡ مِثۡلُهَا فِي ٱلۡبِلَٰدِ",
+      "french": "dont jamais pareille ne fut construite parmi les villes",
+      "phonetic": "Allatee lam yukhlaq mithluha fee albiladi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 9,
+      "arabic": "وَثَمُودَ ٱلَّذِينَ جَابُواْ ٱلصَّخۡرَ بِٱلۡوَادِ",
+      "french": "et avec les Thamûd qui taillaient le rocher dans la vallée",
+      "phonetic": "Wathamooda allatheena jaboo alssakhra bialwadi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 10,
+      "arabic": "وَفِرۡعَوۡنَ ذِي ٱلۡأَوۡتَادِ",
+      "french": "ainsi qu'avec Pharaon, l'homme aux épieux",
+      "phonetic": "WafirAAawna thee alawtadi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 11,
+      "arabic": "ٱلَّذِينَ طَغَوۡاْ فِي ٱلۡبِلَٰدِ",
+      "french": "Tous, étaient des gens qui transgressaient dans [leurs] pays",
+      "phonetic": "Allatheena taghaw fee albiladi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 12,
+      "arabic": "فَأَكۡثَرُواْ فِيهَا ٱلۡفَسَادَ",
+      "french": "et y avaient commis beaucoup de désordre",
+      "phonetic": "Faaktharoo feeha alfasada",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 13,
+      "arabic": "فَصَبَّ عَلَيۡهِمۡ رَبُّكَ سَوۡطَ عَذَابٍ",
+      "french": "Donc, ton Seigneur déversa sur eux un fouet du châtiment",
+      "phonetic": "Fasabba AAalayhim rabbuka sawta AAathabin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 14,
+      "arabic": "إِنَّ رَبَّكَ لَبِٱلۡمِرۡصَادِ",
+      "french": "Car ton Seigneur demeure aux aguets",
+      "phonetic": "Inna rabbaka labialmirsadi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 15,
+      "arabic": "فَأَمَّا ٱلۡإِنسَٰنُ إِذَا مَا ٱبۡتَلَىٰهُ رَبُّهُۥ فَأَكۡرَمَهُۥ وَنَعَّمَهُۥ فَيَقُولُ رَبِّيٓ أَكۡرَمَنِ",
+      "french": "Quant à l'homme, lorsque son Seigneur l'éprouve en l'honorant et en le comblant de bienfaits, il dit: «Mon Seigneur m'a honoré»",
+      "phonetic": "Faamma alinsanu itha ma ibtalahu rabbuhu faakramahu wanaAAAAamahu fayaqoolu rabbee akramani",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 16,
+      "arabic": "وَأَمَّآ إِذَا مَا ٱبۡتَلَىٰهُ فَقَدَرَ عَلَيۡهِ رِزۡقَهُۥ فَيَقُولُ رَبِّيٓ أَهَٰنَنِ",
+      "french": "Mais par contre, quand Il l'éprouve en lui restreignant sa subsistance, il dit: «Mon Seigneur m'a avili»",
+      "phonetic": "Waamma itha ma ibtalahu faqadara AAalayhi rizqahu fayaqoolu rabbee ahanani",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 17,
+      "arabic": "كَلَّاۖ بَل لَّا تُكۡرِمُونَ ٱلۡيَتِيمَ",
+      "french": "Mais non! C'est vous plutôt, qui n'êtes pas généreux envers les orphelins",
+      "phonetic": "Kalla bal la tukrimoona alyateema",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 18,
+      "arabic": "وَلَا تَحَـٰٓضُّونَ عَلَىٰ طَعَامِ ٱلۡمِسۡكِينِ",
+      "french": "qui ne vous incitez pas mutuellement à nourrir le pauvre",
+      "phonetic": "Wala tahaddoona AAala taAAami almiskeeni",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 19,
+      "arabic": "وَتَأۡكُلُونَ ٱلتُّرَاثَ أَكۡلٗا لَّمّٗا",
+      "french": "qui dévorez l'héritage avec une avidité vorace",
+      "phonetic": "Watakuloona altturatha aklan lamman",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 20,
+      "arabic": "وَتُحِبُّونَ ٱلۡمَالَ حُبّٗا جَمّٗا",
+      "french": "et aimez les richesses d'un amour sans bornes",
+      "phonetic": "Watuhibboona almala hubban jamman",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 21,
+      "arabic": "كَلَّآۖ إِذَا دُكَّتِ ٱلۡأَرۡضُ دَكّٗا دَكّٗا",
+      "french": "Prenez garde! Quand la terre sera complètement pulvérisée",
+      "phonetic": "Kalla itha dukkati alardu dakkan dakkan",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 22,
+      "arabic": "وَجَآءَ رَبُّكَ وَٱلۡمَلَكُ صَفّٗا صَفّٗا",
+      "french": "et que ton Seigneur viendra ainsi que les Anges, rang par rang",
+      "phonetic": "Wajaa rabbuka waalmalaku saffan saffan",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 23,
+      "arabic": "وَجِاْيٓءَ يَوۡمَئِذِۭ بِجَهَنَّمَۚ يَوۡمَئِذٖ يَتَذَكَّرُ ٱلۡإِنسَٰنُ وَأَنَّىٰ لَهُ ٱلذِّكۡرَىٰ",
+      "french": "et que ce jour-là, on amènera l'Enfer; ce jour-là, l'homme se rappellera. Mais à quoi lui servira de se souvenir",
+      "phonetic": "Wajeea yawmaithin bijahannama yawmaithin yatathakkaru alinsanu waanna lahu alththikra",
+      "juz": 30,
+      "hizb": 60,
+      "page": 593
+    },
+    {
+      "number": 24,
+      "arabic": "يَقُولُ يَٰلَيۡتَنِي قَدَّمۡتُ لِحَيَاتِي",
+      "french": "Il dira: «Hélas! Que n'ai-je fait du bien pour ma vie future",
+      "phonetic": "Yaqoolu ya laytanee qaddamtu lihayatee",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 25,
+      "arabic": "فَيَوۡمَئِذٖ لَّا يُعَذِّبُ عَذَابَهُۥٓ أَحَدٞ",
+      "french": "Ce jour-là donc, nul ne saura châtier comme Lui châtie",
+      "phonetic": "Fayawmaithin la yuAAaththibu AAathabahu ahadun",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 26,
+      "arabic": "وَلَا يُوثِقُ وَثَاقَهُۥٓ أَحَدٞ",
+      "french": "et nul ne saura garrotter comme Lui garrotte",
+      "phonetic": "Wala yoothiqu wathaqahu ahadun",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 27,
+      "arabic": "يَـٰٓأَيَّتُهَا ٱلنَّفۡسُ ٱلۡمُطۡمَئِنَّةُ",
+      "french": "«O toi, âme apaisée",
+      "phonetic": "Ya ayyatuha alnnafsu almutmainnatu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 28,
+      "arabic": "ٱرۡجِعِيٓ إِلَىٰ رَبِّكِ رَاضِيَةٗ مَّرۡضِيَّةٗ",
+      "french": "retourne vers ton Seigneur, satisfaite et agréée",
+      "phonetic": "IrjiAAee ila rabbiki radiyatan mardiyyatan",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 29,
+      "arabic": "فَٱدۡخُلِي فِي عِبَٰدِي",
+      "french": "entre donc parmi Mes serviteurs",
+      "phonetic": "Faodkhulee fee AAibadee",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 30,
+      "arabic": "وَٱدۡخُلِي جَنَّتِي",
+      "french": "et entre dans Mon Paradis»",
+      "phonetic": "Waodkhulee jannatee",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    }
+  ]
+}

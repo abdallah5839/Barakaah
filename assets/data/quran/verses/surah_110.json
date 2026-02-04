@@ -1,0 +1,37 @@
+{
+  "id": 110,
+  "nameArabic": "النصر",
+  "nameTransliteration": "An-Nasr",
+  "nameFrench": "Le secours",
+  "revelationType": "medinan",
+  "totalVerses": 3,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "إِذَا جَآءَ نَصۡرُ ٱللَّهِ وَٱلۡفَتۡحُ",
+      "french": "Lorsque vient le secours d'Allah ainsi que la victoire",
+      "phonetic": "Itha jaa nasru Allahi waalfathu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 603
+    },
+    {
+      "number": 2,
+      "arabic": "وَرَأَيۡتَ ٱلنَّاسَ يَدۡخُلُونَ فِي دِينِ ٱللَّهِ أَفۡوَاجٗا",
+      "french": "et que tu vois les gens entrer en foule dans la religion d'Allah",
+      "phonetic": "Waraayta alnnasa yadkhuloona fee deeni Allahi afwajan",
+      "juz": 30,
+      "hizb": 60,
+      "page": 603
+    },
+    {
+      "number": 3,
+      "arabic": "فَسَبِّحۡ بِحَمۡدِ رَبِّكَ وَٱسۡتَغۡفِرۡهُۚ إِنَّهُۥ كَانَ تَوَّابَۢا",
+      "french": "alors, par la louange, célèbre la gloire de ton Seigneur et implore Son pardon. Car c'est Lui le grand Accueillant au repentir",
+      "phonetic": "Fasabbih bihamdi rabbika waistaghfirhu innahu kana tawwaban",
+      "juz": 30,
+      "hizb": 60,
+      "page": 603
+    }
+  ]
+}

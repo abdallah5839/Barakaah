@@ -1,0 +1,478 @@
+{
+  "id": 69,
+  "nameArabic": "الحاقة",
+  "nameTransliteration": "Al-Haqqah",
+  "nameFrench": "L'inéluctable",
+  "revelationType": "meccan",
+  "totalVerses": 52,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "ٱلۡحَآقَّةُ",
+      "french": "L'inévitable [l'Heure qui montre la vérité]",
+      "phonetic": "Alhaqqatu",
+      "juz": 29,
+      "hizb": 57,
+      "page": 566
+    },
+    {
+      "number": 2,
+      "arabic": "مَا ٱلۡحَآقَّةُ",
+      "french": "Qu'est-ce que l'inévitable",
+      "phonetic": "Ma alhaqqatu",
+      "juz": 29,
+      "hizb": 57,
+      "page": 566
+    },
+    {
+      "number": 3,
+      "arabic": "وَمَآ أَدۡرَىٰكَ مَا ٱلۡحَآقَّةُ",
+      "french": "Et qui te dira ce que c'est que l'inévitable",
+      "phonetic": "Wama adraka ma alhaqqatu",
+      "juz": 29,
+      "hizb": 57,
+      "page": 566
+    },
+    {
+      "number": 4,
+      "arabic": "كَذَّبَتۡ ثَمُودُ وَعَادُۢ بِٱلۡقَارِعَةِ",
+      "french": "Les Thamûd et les 'Aad avaient traité de mensonge le cataclysme",
+      "phonetic": "Kaththabat thamoodu waAAadun bialqariAAati",
+      "juz": 29,
+      "hizb": 57,
+      "page": 566
+    },
+    {
+      "number": 5,
+      "arabic": "فَأَمَّا ثَمُودُ فَأُهۡلِكُواْ بِٱلطَّاغِيَةِ",
+      "french": "Quant aux Thamûd, ils furent détruits par le [bruit] excessivement fort",
+      "phonetic": "Faamma thamoodu faohlikoo bialttaghiyati",
+      "juz": 29,
+      "hizb": 57,
+      "page": 566
+    },
+    {
+      "number": 6,
+      "arabic": "وَأَمَّا عَادٞ فَأُهۡلِكُواْ بِرِيحٖ صَرۡصَرٍ عَاتِيَةٖ",
+      "french": "Et quant aux 'Aad, ils furent détruits par un vent mugissant et furieux",
+      "phonetic": "Waamma AAadun faohlikoo bireehin sarsarin AAatiyatin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 566
+    },
+    {
+      "number": 7,
+      "arabic": "سَخَّرَهَا عَلَيۡهِمۡ سَبۡعَ لَيَالٖ وَثَمَٰنِيَةَ أَيَّامٍ حُسُومٗاۖ فَتَرَى ٱلۡقَوۡمَ فِيهَا صَرۡعَىٰ كَأَنَّهُمۡ أَعۡجَازُ نَخۡلٍ خَاوِيَةٖ",
+      "french": "qu'[Allah] déchaîna contre eux pendant sept nuits et huit jours consécutifs; tu voyais alors les gens renversés par terre comme des souches de palmiers évidées",
+      "phonetic": "Sakhkharaha AAalayhim sabAAa layalin wathamaniyata ayyamin husooman fatara alqawma feeha sarAAa kaannahum aAAjazu nakhlin khawiyatun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 566
+    },
+    {
+      "number": 8,
+      "arabic": "فَهَلۡ تَرَىٰ لَهُم مِّنۢ بَاقِيَةٖ",
+      "french": "En vois-tu le moindre vestige",
+      "phonetic": "Fahal tara lahum min baqiyatin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 566
+    },
+    {
+      "number": 9,
+      "arabic": "وَجَآءَ فِرۡعَوۡنُ وَمَن قَبۡلَهُۥ وَٱلۡمُؤۡتَفِكَٰتُ بِٱلۡخَاطِئَةِ",
+      "french": "Pharaon et ceux qui vécurent avant lui ainsi que les Villes renversées, commirent des fautes",
+      "phonetic": "Wajaa firAAawnu waman qablahu waalmutafikatu bialkhatiati",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 10,
+      "arabic": "فَعَصَوۡاْ رَسُولَ رَبِّهِمۡ فَأَخَذَهُمۡ أَخۡذَةٗ رَّابِيَةً",
+      "french": "Ils désobéirent au Messager de leur Seigneur. Celui-ci donc, les saisit d'une façon irrésistible",
+      "phonetic": "FaAAasaw rasoola rabbihim faakhathahum akhthatan rabiyatan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 11,
+      "arabic": "إِنَّا لَمَّا طَغَا ٱلۡمَآءُ حَمَلۡنَٰكُمۡ فِي ٱلۡجَارِيَةِ",
+      "french": "C'est Nous qui, quand l'eau déborda, vous avons chargés sur l'Arche",
+      "phonetic": "Inna lamma tagha almao hamalnakum fee aljariyati",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 12,
+      "arabic": "لِنَجۡعَلَهَا لَكُمۡ تَذۡكِرَةٗ وَتَعِيَهَآ أُذُنٞ وَٰعِيَةٞ",
+      "french": "afin d'en faire pour vous un rappel que toute oreille fidèle conserve",
+      "phonetic": "LinajAAalaha lakum tathkiratan wataAAiyaha othunun waAAiyatun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 13,
+      "arabic": "فَإِذَا نُفِخَ فِي ٱلصُّورِ نَفۡخَةٞ وَٰحِدَةٞ",
+      "french": "Puis, quand d'un seul souffle, on soufflera dans la Trompe",
+      "phonetic": "Faitha nufikha fee alssoori nafkhatun wahidatun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 14,
+      "arabic": "وَحُمِلَتِ ٱلۡأَرۡضُ وَٱلۡجِبَالُ فَدُكَّتَا دَكَّةٗ وَٰحِدَةٗ",
+      "french": "et que la terre et les montagnes seront soulevées puis tassées d'un seul coup",
+      "phonetic": "Wahumilati alardu waaljibalu fadukkata dakkatan wahidatan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 15,
+      "arabic": "فَيَوۡمَئِذٖ وَقَعَتِ ٱلۡوَاقِعَةُ",
+      "french": "ce jour-là alors, l'Evénement se produira",
+      "phonetic": "Fayawmaithin waqaAAati alwaqiAAatu",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 16,
+      "arabic": "وَٱنشَقَّتِ ٱلسَّمَآءُ فَهِيَ يَوۡمَئِذٖ وَاهِيَةٞ",
+      "french": "et le ciel se fendra et sera fragile, ce jour-là",
+      "phonetic": "Wainshaqqati alssamao fahiya yawmaithin wahiyatun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 17,
+      "arabic": "وَٱلۡمَلَكُ عَلَىٰٓ أَرۡجَآئِهَاۚ وَيَحۡمِلُ عَرۡشَ رَبِّكَ فَوۡقَهُمۡ يَوۡمَئِذٖ ثَمَٰنِيَةٞ",
+      "french": "Et sur ses côtés [se tiendront] les Anges, tandis que huit, ce jour-là, porteront au-dessus d'eux le Trône de ton Seigneur",
+      "phonetic": "Waalmalaku AAala arjaiha wayahmilu AAarsha rabbika fawqahum yawmaithin thamaniyatun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 18,
+      "arabic": "يَوۡمَئِذٖ تُعۡرَضُونَ لَا تَخۡفَىٰ مِنكُمۡ خَافِيَةٞ",
+      "french": "Ce jour-là vous serez exposés; et rien de vous ne sera caché",
+      "phonetic": "Yawmaithin tuAAradoona la takhfa minkum khafiyatun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 19,
+      "arabic": "فَأَمَّا مَنۡ أُوتِيَ كِتَٰبَهُۥ بِيَمِينِهِۦ فَيَقُولُ هَآؤُمُ ٱقۡرَءُواْ كِتَٰبِيَهۡ",
+      "french": "Quant à celui à qui on aura remis le Livre en sa main droite, il dira: «Tenez! lisez mon livre",
+      "phonetic": "Faamma man ootiya kitabahu biyameenihi fayaqoolu haomu iqraoo kitabiyah",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 20,
+      "arabic": "إِنِّي ظَنَنتُ أَنِّي مُلَٰقٍ حِسَابِيَهۡ",
+      "french": "J'étais sûr d'y trouver mon compte»",
+      "phonetic": "Innee thanantu annee mulaqin hisabiyah",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 21,
+      "arabic": "فَهُوَ فِي عِيشَةٖ رَّاضِيَةٖ",
+      "french": "Il jouira d'une vie agréable",
+      "phonetic": "Fahuwa fee AAeeshatin radiyatin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 22,
+      "arabic": "فِي جَنَّةٍ عَالِيَةٖ",
+      "french": "dans un Jardin haut placé",
+      "phonetic": "Fee jannatin AAaliyatin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 23,
+      "arabic": "قُطُوفُهَا دَانِيَةٞ",
+      "french": "dont les fruits sont à portée de la main",
+      "phonetic": "Qutoofuha daniyatun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 24,
+      "arabic": "كُلُواْ وَٱشۡرَبُواْ هَنِيٓـَٔۢا بِمَآ أَسۡلَفۡتُمۡ فِي ٱلۡأَيَّامِ ٱلۡخَالِيَةِ",
+      "french": "«Mangez et buvez agréablement pour ce que vous avez avancé dans les jours passés»",
+      "phonetic": "Kuloo waishraboo haneean bima aslaftum fee alayyami alkhaliyati",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 25,
+      "arabic": "وَأَمَّا مَنۡ أُوتِيَ كِتَٰبَهُۥ بِشِمَالِهِۦ فَيَقُولُ يَٰلَيۡتَنِي لَمۡ أُوتَ كِتَٰبِيَهۡ",
+      "french": "Quant à celui à qui on aura remis le Livre en sa main gauche, il dira: «Hélas pour moi! J'aurai souhaité qu'on ne m'ait pas remis mon livre",
+      "phonetic": "Waamma man ootiya kitabahu bishimalihi fayaqoolu ya laytanee lam oota kitabiyah",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 26,
+      "arabic": "وَلَمۡ أَدۡرِ مَا حِسَابِيَهۡ",
+      "french": "et ne pas avoir connu mon compte",
+      "phonetic": "Walam adri ma hisabiyah",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 27,
+      "arabic": "يَٰلَيۡتَهَا كَانَتِ ٱلۡقَاضِيَةَ",
+      "french": "Hélas, comme j'aurai souhaité que [ma première mort] fût la définitive",
+      "phonetic": "Ya laytaha kanati alqadiyatu",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 28,
+      "arabic": "مَآ أَغۡنَىٰ عَنِّي مَالِيَهۡۜ",
+      "french": "Ma fortune ne m'a servi à rien",
+      "phonetic": "Ma aghna AAannee maliyah",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 29,
+      "arabic": "هَلَكَ عَنِّي سُلۡطَٰنِيَهۡ",
+      "french": "Mon autorité est anéantie et m'a quitté!»",
+      "phonetic": "Halaka AAannee sultaniyah",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 30,
+      "arabic": "خُذُوهُ فَغُلُّوهُ",
+      "french": "«Saisissez-le! Puis, mettez-lui un carcan",
+      "phonetic": "Khuthoohu faghulloohu",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 31,
+      "arabic": "ثُمَّ ٱلۡجَحِيمَ صَلُّوهُ",
+      "french": "ensuite, brûlez-le dans la Fournaise",
+      "phonetic": "Thumma aljaheema salloohu",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 32,
+      "arabic": "ثُمَّ فِي سِلۡسِلَةٖ ذَرۡعُهَا سَبۡعُونَ ذِرَاعٗا فَٱسۡلُكُوهُ",
+      "french": "puis, liez-le avec une chaîne de soixante-dix coudées",
+      "phonetic": "Thumma fee silsilatin tharAAuha sabAAoona thiraAAan faoslukoohu",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 33,
+      "arabic": "إِنَّهُۥ كَانَ لَا يُؤۡمِنُ بِٱللَّهِ ٱلۡعَظِيمِ",
+      "french": "car il ne croyait pas en Allah, le Très Grand",
+      "phonetic": "Innahu kana la yuminu biAllahi alAAatheemi",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 34,
+      "arabic": "وَلَا يَحُضُّ عَلَىٰ طَعَامِ ٱلۡمِسۡكِينِ",
+      "french": "et n'incitait pas à nourrir le pauvre",
+      "phonetic": "Wala yahuddu AAala taAAami almiskeeni",
+      "juz": 29,
+      "hizb": 57,
+      "page": 567
+    },
+    {
+      "number": 35,
+      "arabic": "فَلَيۡسَ لَهُ ٱلۡيَوۡمَ هَٰهُنَا حَمِيمٞ",
+      "french": "Il n'a pour lui ici, aujourd'hui, point d'ami chaleureux [pour le protéger]",
+      "phonetic": "Falaysa lahu alyawma hahuna hameemun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 36,
+      "arabic": "وَلَا طَعَامٌ إِلَّا مِنۡ غِسۡلِينٖ",
+      "french": "ni d'autre nourriture que du pus",
+      "phonetic": "Wala taAAamun illa min ghisleenin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 37,
+      "arabic": "لَّا يَأۡكُلُهُۥٓ إِلَّا ٱلۡخَٰطِـُٔونَ",
+      "french": "que seuls les fautifs mangeront»",
+      "phonetic": "La yakuluhu illa alkhatioona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 38,
+      "arabic": "فَلَآ أُقۡسِمُ بِمَا تُبۡصِرُونَ",
+      "french": "Mais non... Je jure par ce que vous voyez",
+      "phonetic": "Fala oqsimu bima tubsiroona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 39,
+      "arabic": "وَمَا لَا تُبۡصِرُونَ",
+      "french": "ainsi que par ce que vous ne voyez pas",
+      "phonetic": "Wama la tubsiroona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 40,
+      "arabic": "إِنَّهُۥ لَقَوۡلُ رَسُولٖ كَرِيمٖ",
+      "french": "que ceci [le Coran] est la parole d'un noble Messager",
+      "phonetic": "Innahu laqawlu rasoolin kareemin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 41,
+      "arabic": "وَمَا هُوَ بِقَوۡلِ شَاعِرٖۚ قَلِيلٗا مَّا تُؤۡمِنُونَ",
+      "french": "et que ce n'est pas la parole d'un poète; mais vous ne croyez que très peu",
+      "phonetic": "Wama huwa biqawli shaAAirin qaleelan ma tuminoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 42,
+      "arabic": "وَلَا بِقَوۡلِ كَاهِنٖۚ قَلِيلٗا مَّا تَذَكَّرُونَ",
+      "french": "ni la parole d'un devin, mais vous vous rappelez bien peu",
+      "phonetic": "Wala biqawli kahinin qaleelan ma tathakkaroona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 43,
+      "arabic": "تَنزِيلٞ مِّن رَّبِّ ٱلۡعَٰلَمِينَ",
+      "french": "C'est une révélation du Seigneur de l'Univers",
+      "phonetic": "Tanzeelun min rabbi alAAalameena",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 44,
+      "arabic": "وَلَوۡ تَقَوَّلَ عَلَيۡنَا بَعۡضَ ٱلۡأَقَاوِيلِ",
+      "french": "Et s'il avait forgé quelques paroles qu'ils Nous avait attribuées",
+      "phonetic": "Walaw taqawwala AAalayna baAAda alaqaweeli",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 45,
+      "arabic": "لَأَخَذۡنَا مِنۡهُ بِٱلۡيَمِينِ",
+      "french": "Nous l'aurions saisi de la main droite",
+      "phonetic": "Laakhathna minhu bialyameeni",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 46,
+      "arabic": "ثُمَّ لَقَطَعۡنَا مِنۡهُ ٱلۡوَتِينَ",
+      "french": "ensuite, Nous lui aurions tranché l'aorte",
+      "phonetic": "Thumma laqataAAna minhu alwateena",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 47,
+      "arabic": "فَمَا مِنكُم مِّنۡ أَحَدٍ عَنۡهُ حَٰجِزِينَ",
+      "french": "Et nul d'entre vous n'aurait pu lui servir de rempart",
+      "phonetic": "Fama minkum min ahadin AAanhu hajizeena",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 48,
+      "arabic": "وَإِنَّهُۥ لَتَذۡكِرَةٞ لِّلۡمُتَّقِينَ",
+      "french": "C'est en vérité un rappel pour les pieux",
+      "phonetic": "Wainnahu latathkiratun lilmuttaqeena",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 49,
+      "arabic": "وَإِنَّا لَنَعۡلَمُ أَنَّ مِنكُم مُّكَذِّبِينَ",
+      "french": "Et Nous savons qu'il y a parmi vous qui le traitent de menteur",
+      "phonetic": "Wainna lanaAAlamu anna minkum mukaththibeena",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 50,
+      "arabic": "وَإِنَّهُۥ لَحَسۡرَةٌ عَلَى ٱلۡكَٰفِرِينَ",
+      "french": "mais en vérité, ce sera un sujet de regret pour les mécréants",
+      "phonetic": "Wainnahu lahasratun AAala alkafireena",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 51,
+      "arabic": "وَإِنَّهُۥ لَحَقُّ ٱلۡيَقِينِ",
+      "french": "c'est là la véritable certitude",
+      "phonetic": "Wainnahu lahaqqu alyaqeeni",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 52,
+      "arabic": "فَسَبِّحۡ بِٱسۡمِ رَبِّكَ ٱلۡعَظِيمِ",
+      "french": "Glorifie donc le nom de ton Seigneur, le Très Grand",
+      "phonetic": "Fasabbih biismi rabbika alAAatheemi",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    }
+  ]
+}

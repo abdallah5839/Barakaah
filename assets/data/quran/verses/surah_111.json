@@ -1,0 +1,55 @@
+{
+  "id": 111,
+  "nameArabic": "المسد",
+  "nameTransliteration": "Al-Masad",
+  "nameFrench": "Les fibres",
+  "revelationType": "meccan",
+  "totalVerses": 5,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "تَبَّتۡ يَدَآ أَبِي لَهَبٖ وَتَبَّ",
+      "french": "Que périssent les deux mains d'Abû-Lahab et que lui-même périsse",
+      "phonetic": "Tabbat yada abee lahabin watabba",
+      "juz": 30,
+      "hizb": 60,
+      "page": 603
+    },
+    {
+      "number": 2,
+      "arabic": "مَآ أَغۡنَىٰ عَنۡهُ مَالُهُۥ وَمَا كَسَبَ",
+      "french": "Sa fortune ne lui sert à rien, ni ce qu'il a acquis",
+      "phonetic": "Ma aghna AAanhu maluhu wama kasaba",
+      "juz": 30,
+      "hizb": 60,
+      "page": 603
+    },
+    {
+      "number": 3,
+      "arabic": "سَيَصۡلَىٰ نَارٗا ذَاتَ لَهَبٖ",
+      "french": "Il sera brûlé dans un Feu plein de flammes",
+      "phonetic": "Sayasla naran thata lahabin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 603
+    },
+    {
+      "number": 4,
+      "arabic": "وَٱمۡرَأَتُهُۥ حَمَّالَةَ ٱلۡحَطَبِ",
+      "french": "de même sa femme, la porteuse de bois",
+      "phonetic": "Waimraatuhu hammalata alhatabi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 603
+    },
+    {
+      "number": 5,
+      "arabic": "فِي جِيدِهَا حَبۡلٞ مِّن مَّسَدِۭ",
+      "french": "à son cou, une corde de fibres",
+      "phonetic": "Fee jeediha hablun min masadin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 603
+    }
+  ]
+}

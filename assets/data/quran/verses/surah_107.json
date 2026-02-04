@@ -1,0 +1,73 @@
+{
+  "id": 107,
+  "nameArabic": "الماعون",
+  "nameTransliteration": "Al-Ma'un",
+  "nameFrench": "L'entraide",
+  "revelationType": "meccan",
+  "totalVerses": 7,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "أَرَءَيۡتَ ٱلَّذِي يُكَذِّبُ بِٱلدِّينِ",
+      "french": "Vois-tu celui qui traite de mensonge la Rétribution",
+      "phonetic": "Araayta allathee yukaththibu bialddeeni",
+      "juz": 30,
+      "hizb": 60,
+      "page": 602
+    },
+    {
+      "number": 2,
+      "arabic": "فَذَٰلِكَ ٱلَّذِي يَدُعُّ ٱلۡيَتِيمَ",
+      "french": "C'est bien lui qui repousse l'orphelin",
+      "phonetic": "Fathalika allathee yaduAAAAu alyateema",
+      "juz": 30,
+      "hizb": 60,
+      "page": 602
+    },
+    {
+      "number": 3,
+      "arabic": "وَلَا يَحُضُّ عَلَىٰ طَعَامِ ٱلۡمِسۡكِينِ",
+      "french": "et qui n'encourage point à nourrir le pauvre",
+      "phonetic": "Wala yahuddu AAala taAAami almiskeeni",
+      "juz": 30,
+      "hizb": 60,
+      "page": 602
+    },
+    {
+      "number": 4,
+      "arabic": "فَوَيۡلٞ لِّلۡمُصَلِّينَ",
+      "french": "Malheur donc, à ceux qui prient",
+      "phonetic": "Fawaylun lilmusalleena",
+      "juz": 30,
+      "hizb": 60,
+      "page": 602
+    },
+    {
+      "number": 5,
+      "arabic": "ٱلَّذِينَ هُمۡ عَن صَلَاتِهِمۡ سَاهُونَ",
+      "french": "tout en négligeant (et retardant) leur Salât",
+      "phonetic": "Allatheena hum AAan salatihim sahoona",
+      "juz": 30,
+      "hizb": 60,
+      "page": 602
+    },
+    {
+      "number": 6,
+      "arabic": "ٱلَّذِينَ هُمۡ يُرَآءُونَ",
+      "french": "qui sont pleins d'ostentation",
+      "phonetic": "Allatheena hum yuraoona",
+      "juz": 30,
+      "hizb": 60,
+      "page": 602
+    },
+    {
+      "number": 7,
+      "arabic": "وَيَمۡنَعُونَ ٱلۡمَاعُونَ",
+      "french": "et refusent l'ustensile (à celui qui en a besoin)",
+      "phonetic": "WayamnaAAoona almaAAoona",
+      "juz": 30,
+      "hizb": 60,
+      "page": 602
+    }
+  ]
+}

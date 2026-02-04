@@ -1,0 +1,181 @@
+{
+  "id": 82,
+  "nameArabic": "الإنفطار",
+  "nameTransliteration": "Al-Infitar",
+  "nameFrench": "La rupture",
+  "revelationType": "meccan",
+  "totalVerses": 19,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "إِذَا ٱلسَّمَآءُ ٱنفَطَرَتۡ",
+      "french": "Quand le ciel se rompra",
+      "phonetic": "Itha alssamao infatarat",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 2,
+      "arabic": "وَإِذَا ٱلۡكَوَاكِبُ ٱنتَثَرَتۡ",
+      "french": "et que les étoiles se disperseront",
+      "phonetic": "Waitha alkawakibu intatharat",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 3,
+      "arabic": "وَإِذَا ٱلۡبِحَارُ فُجِّرَتۡ",
+      "french": "et que les mers confondront leurs eaux",
+      "phonetic": "Waitha albiharu fujjirat",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 4,
+      "arabic": "وَإِذَا ٱلۡقُبُورُ بُعۡثِرَتۡ",
+      "french": "et que les tombeaux seront bouleversés",
+      "phonetic": "Waitha alqubooru buAAthirat",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 5,
+      "arabic": "عَلِمَتۡ نَفۡسٞ مَّا قَدَّمَتۡ وَأَخَّرَتۡ",
+      "french": "toute âme saura alors ce qu'elle a accompli et ce qu'elle a remis de faire à plus tard",
+      "phonetic": "AAalimat nafsun ma qaddamat waakhkharat",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 6,
+      "arabic": "يَـٰٓأَيُّهَا ٱلۡإِنسَٰنُ مَا غَرَّكَ بِرَبِّكَ ٱلۡكَرِيمِ",
+      "french": "O homme! Qu'est-ce qui t'a trompé au sujet de ton Seigneur, le Noble",
+      "phonetic": "Ya ayyuha alinsanu ma gharraka birabbika alkareemi",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 7,
+      "arabic": "ٱلَّذِي خَلَقَكَ فَسَوَّىٰكَ فَعَدَلَكَ",
+      "french": "qui t'a créé, puis modelé et constitué harmonieusement",
+      "phonetic": "Allathee khalaqaka fasawwaka faAAadalaka",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 8,
+      "arabic": "فِيٓ أَيِّ صُورَةٖ مَّا شَآءَ رَكَّبَكَ",
+      "french": "Il t'a façonné dans la forme qu'Il a voulue",
+      "phonetic": "Fee ayyi sooratin ma shaa rakkabaka",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 9,
+      "arabic": "كَلَّا بَلۡ تُكَذِّبُونَ بِٱلدِّينِ",
+      "french": "Non...! [malgré tout] vous traitez la Rétribution de mensonge",
+      "phonetic": "Kalla bal tukaththiboona bialddeeni",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 10,
+      "arabic": "وَإِنَّ عَلَيۡكُمۡ لَحَٰفِظِينَ",
+      "french": "alors que veillent sur vous des gardiens",
+      "phonetic": "Wainna AAalaykum lahafitheena",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 11,
+      "arabic": "كِرَامٗا كَٰتِبِينَ",
+      "french": "de nobles scribes",
+      "phonetic": "Kiraman katibeena",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 12,
+      "arabic": "يَعۡلَمُونَ مَا تَفۡعَلُونَ",
+      "french": "qui savent ce que vous faites",
+      "phonetic": "YaAAlamoona ma tafAAaloona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 13,
+      "arabic": "إِنَّ ٱلۡأَبۡرَارَ لَفِي نَعِيمٖ",
+      "french": "Les bons seront, certes, dans un [jardin] de délice",
+      "phonetic": "Inna alabrara lafee naAAeemin",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 14,
+      "arabic": "وَإِنَّ ٱلۡفُجَّارَ لَفِي جَحِيمٖ",
+      "french": "et les libertins seront, certes, dans une fournaise",
+      "phonetic": "Wainna alfujjara lafee jaheemin",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 15,
+      "arabic": "يَصۡلَوۡنَهَا يَوۡمَ ٱلدِّينِ",
+      "french": "où ils brûleront, le jour de la Rétribution",
+      "phonetic": "Yaslawnaha yawma alddeeni",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 16,
+      "arabic": "وَمَا هُمۡ عَنۡهَا بِغَآئِبِينَ",
+      "french": "incapables de s'en échapper",
+      "phonetic": "Wama hum AAanha bighaibeena",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 17,
+      "arabic": "وَمَآ أَدۡرَىٰكَ مَا يَوۡمُ ٱلدِّينِ",
+      "french": "Et qui te dira ce qu'est le jour de la Rétribution",
+      "phonetic": "Wama adraka ma yawmu alddeeni",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 18,
+      "arabic": "ثُمَّ مَآ أَدۡرَىٰكَ مَا يَوۡمُ ٱلدِّينِ",
+      "french": "Encore une fois, qui te dira ce qu'est le jour de la Rétribution",
+      "phonetic": "Thumma ma adraka ma yawmu alddeeni",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 19,
+      "arabic": "يَوۡمَ لَا تَمۡلِكُ نَفۡسٞ لِّنَفۡسٖ شَيۡـٔٗاۖ وَٱلۡأَمۡرُ يَوۡمَئِذٖ لِّلَّهِ",
+      "french": "Le jour où aucune âme ne pourra rien en faveur d'une autre âme. Et ce jour-là, le commandement sera à Allah",
+      "phonetic": "Yawma la tamliku nafsun linafsin shayan waalamru yawmaithin lillahi",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    }
+  ]
+}

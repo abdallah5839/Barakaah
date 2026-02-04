@@ -1,0 +1,64 @@
+{
+  "id": 114,
+  "nameArabic": "الناس",
+  "nameTransliteration": "An-Nas",
+  "nameFrench": "Les humains",
+  "revelationType": "meccan",
+  "totalVerses": 6,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "قُلۡ أَعُوذُ بِرَبِّ ٱلنَّاسِ",
+      "french": "Dis: «Je cherche protection auprès du Seigneur des hommes",
+      "phonetic": "Qul aAAoothu birabbi alnnasi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 604
+    },
+    {
+      "number": 2,
+      "arabic": "مَلِكِ ٱلنَّاسِ",
+      "french": "Le Souverain des hommes",
+      "phonetic": "Maliki alnnasi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 604
+    },
+    {
+      "number": 3,
+      "arabic": "إِلَٰهِ ٱلنَّاسِ",
+      "french": "Dieu des hommes",
+      "phonetic": "Ilahi alnnasi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 604
+    },
+    {
+      "number": 4,
+      "arabic": "مِن شَرِّ ٱلۡوَسۡوَاسِ ٱلۡخَنَّاسِ",
+      "french": "contre le mal du mauvais conseiller, furtif",
+      "phonetic": "Min sharri alwaswasi alkhannasi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 604
+    },
+    {
+      "number": 5,
+      "arabic": "ٱلَّذِي يُوَسۡوِسُ فِي صُدُورِ ٱلنَّاسِ",
+      "french": "qui souffle le mal dans les poitrines des hommes",
+      "phonetic": "Allathee yuwaswisu fee sudoori alnnasi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 604
+    },
+    {
+      "number": 6,
+      "arabic": "مِنَ ٱلۡجِنَّةِ وَٱلنَّاسِ",
+      "french": "qu'il (le conseiller) soit un djinn, ou un être humain»",
+      "phonetic": "Mina aljinnati wa alnnasm",
+      "juz": 30,
+      "hizb": 60,
+      "page": 604
+    }
+  ]
+}

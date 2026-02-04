@@ -1,0 +1,235 @@
+{
+  "id": 84,
+  "nameArabic": "الإنشقاق",
+  "nameTransliteration": "Al-Inshiqaq",
+  "nameFrench": "La déchirure",
+  "revelationType": "meccan",
+  "totalVerses": 25,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "إِذَا ٱلسَّمَآءُ ٱنشَقَّتۡ",
+      "french": "Quand le ciel se déchirera",
+      "phonetic": "Itha alssamao inshaqqat",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 2,
+      "arabic": "وَأَذِنَتۡ لِرَبِّهَا وَحُقَّتۡ",
+      "french": "et obéira à son Seigneur - et fera ce qu'il doit faire",
+      "phonetic": "Waathinat lirabbiha wahuqqat",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 3,
+      "arabic": "وَإِذَا ٱلۡأَرۡضُ مُدَّتۡ",
+      "french": "et que la terre sera nivelée",
+      "phonetic": "Waitha alardu muddat",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 4,
+      "arabic": "وَأَلۡقَتۡ مَا فِيهَا وَتَخَلَّتۡ",
+      "french": "et qu'elle rejettera ce qui est en son sein (les morts) et se videra",
+      "phonetic": "Waalqat ma feeha watakhallat",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 5,
+      "arabic": "وَأَذِنَتۡ لِرَبِّهَا وَحُقَّتۡ",
+      "french": "et qu'elle obéira à son Seigneur - et fera ce qu'elle doit faire",
+      "phonetic": "Waathinat lirabbiha wahuqqat",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 6,
+      "arabic": "يَـٰٓأَيُّهَا ٱلۡإِنسَٰنُ إِنَّكَ كَادِحٌ إِلَىٰ رَبِّكَ كَدۡحٗا فَمُلَٰقِيهِ",
+      "french": "O homme! Toi qui t'efforces vers ton Seigneur sans relâche, tu Le rencontreras alors",
+      "phonetic": "Ya ayyuha alinsanu innaka kadihun ila rabbika kadhan famulaqeehi",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 7,
+      "arabic": "فَأَمَّا مَنۡ أُوتِيَ كِتَٰبَهُۥ بِيَمِينِهِۦ",
+      "french": "Celui qui recevra son livre en sa main droite",
+      "phonetic": "Faama man ootiya kitabahu biyameenihi",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 8,
+      "arabic": "فَسَوۡفَ يُحَاسَبُ حِسَابٗا يَسِيرٗا",
+      "french": "sera soumis à un jugement facile",
+      "phonetic": "Fasawfa yuhasabu hisaban yaseeran",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 9,
+      "arabic": "وَيَنقَلِبُ إِلَىٰٓ أَهۡلِهِۦ مَسۡرُورٗا",
+      "french": "et retournera réjoui auprès de sa famille",
+      "phonetic": "Wayanqalibu ila ahlihi masrooran",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 10,
+      "arabic": "وَأَمَّا مَنۡ أُوتِيَ كِتَٰبَهُۥ وَرَآءَ ظَهۡرِهِۦ",
+      "french": "Quant à celui qui recevra son livre derrière son dos",
+      "phonetic": "Waamma man ootiya kitabahu waraa thahrihi",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 11,
+      "arabic": "فَسَوۡفَ يَدۡعُواْ ثُبُورٗا",
+      "french": "il invoquera la destruction sur lui-même",
+      "phonetic": "Fasawfa yadAAoo thubooran",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 12,
+      "arabic": "وَيَصۡلَىٰ سَعِيرًا",
+      "french": "et il brûlera dans un feu ardent",
+      "phonetic": "Wayasla saAAeeran",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 13,
+      "arabic": "إِنَّهُۥ كَانَ فِيٓ أَهۡلِهِۦ مَسۡرُورًا",
+      "french": "Car il était tout joyeux parmi les siens",
+      "phonetic": "Innahu kana fee ahlihi masrooran",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 14,
+      "arabic": "إِنَّهُۥ ظَنَّ أَن لَّن يَحُورَ",
+      "french": "et il pensait que jamais il ne ressusciterait",
+      "phonetic": "Innahu thanna an lan yahoora",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 15,
+      "arabic": "بَلَىٰٓۚ إِنَّ رَبَّهُۥ كَانَ بِهِۦ بَصِيرٗا",
+      "french": "Mais si! Certes, son Seigneur l'observait parfaitement",
+      "phonetic": "Bala inna rabbahu kana bihi baseeran",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 16,
+      "arabic": "فَلَآ أُقۡسِمُ بِٱلشَّفَقِ",
+      "french": "Non!... Je jure par le crépuscule",
+      "phonetic": "Fala oqsimu bialshshafaqi",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 17,
+      "arabic": "وَٱلَّيۡلِ وَمَا وَسَقَ",
+      "french": "et par la nuit et ce qu'elle enveloppe",
+      "phonetic": "Waallayli wama wasaqa",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 18,
+      "arabic": "وَٱلۡقَمَرِ إِذَا ٱتَّسَقَ",
+      "french": "et par la lune quand elle devient pleine lune",
+      "phonetic": "Waalqamari itha ittasaqa",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 19,
+      "arabic": "لَتَرۡكَبُنَّ طَبَقًا عَن طَبَقٖ",
+      "french": "Vous passerez, certes, par des états successifs",
+      "phonetic": "Latarkabunna tabaqan AAan tabaqin",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 20,
+      "arabic": "فَمَا لَهُمۡ لَا يُؤۡمِنُونَ",
+      "french": "Qu'ont-ils à ne pas croire",
+      "phonetic": "Fama lahum la yuminoona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 21,
+      "arabic": "وَإِذَا قُرِئَ عَلَيۡهِمُ ٱلۡقُرۡءَانُ لَا يَسۡجُدُونَۤ۩",
+      "french": "et à ne pas se prosterner quand le Coran leur est lu",
+      "phonetic": "Waitha quria AAalayhimu alquranu la yasjudoona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 22,
+      "arabic": "بَلِ ٱلَّذِينَ كَفَرُواْ يُكَذِّبُونَ",
+      "french": "Mais ceux qui ne croient pas, le traitent plutôt de mensonge",
+      "phonetic": "Bali allatheena kafaroo yukaththiboona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 23,
+      "arabic": "وَٱللَّهُ أَعۡلَمُ بِمَا يُوعُونَ",
+      "french": "Or, Allah sait bien ce qu'ils dissimulent",
+      "phonetic": "WaAllahu aAAlamu bima yooAAoona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 24,
+      "arabic": "فَبَشِّرۡهُم بِعَذَابٍ أَلِيمٍ",
+      "french": "Annonce-leur donc un châtiment douloureux",
+      "phonetic": "Fabashshirhum biAAathabin aleemin",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 25,
+      "arabic": "إِلَّا ٱلَّذِينَ ءَامَنُواْ وَعَمِلُواْ ٱلصَّـٰلِحَٰتِ لَهُمۡ أَجۡرٌ غَيۡرُ مَمۡنُونِۭ",
+      "french": "Sauf ceux qui croient et accomplissent les bonnes œuvres: à eux une récompense jamais interrompue",
+      "phonetic": "Illa allatheena amanoo waAAamiloo alssalihati lahum ajrun ghayru mamnoonin",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    }
+  ]
+}

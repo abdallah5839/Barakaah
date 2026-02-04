@@ -1,0 +1,145 @@
+{
+  "id": 91,
+  "nameArabic": "الشمس",
+  "nameTransliteration": "Ash-Shams",
+  "nameFrench": "Le soleil",
+  "revelationType": "meccan",
+  "totalVerses": 15,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "وَٱلشَّمۡسِ وَضُحَىٰهَا",
+      "french": "Par le soleil et par sa clarté",
+      "phonetic": "Waalshshamsi waduhaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 595
+    },
+    {
+      "number": 2,
+      "arabic": "وَٱلۡقَمَرِ إِذَا تَلَىٰهَا",
+      "french": "Et par la lune quand elle le suit",
+      "phonetic": "Waalqamari itha talaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 595
+    },
+    {
+      "number": 3,
+      "arabic": "وَٱلنَّهَارِ إِذَا جَلَّىٰهَا",
+      "french": "Et par le jour quand il l'éclaire",
+      "phonetic": "Waalnnahari itha jallaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 595
+    },
+    {
+      "number": 4,
+      "arabic": "وَٱلَّيۡلِ إِذَا يَغۡشَىٰهَا",
+      "french": "Et par la nuit quand elle l'enveloppe",
+      "phonetic": "Waallayli itha yaghshaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 595
+    },
+    {
+      "number": 5,
+      "arabic": "وَٱلسَّمَآءِ وَمَا بَنَىٰهَا",
+      "french": "Et par le ciel et Celui qui l'a construit",
+      "phonetic": "Waalssamai wama banaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 595
+    },
+    {
+      "number": 6,
+      "arabic": "وَٱلۡأَرۡضِ وَمَا طَحَىٰهَا",
+      "french": "Et par la terre et Celui qui l'a étendue",
+      "phonetic": "Waalardi wama tahaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 595
+    },
+    {
+      "number": 7,
+      "arabic": "وَنَفۡسٖ وَمَا سَوَّىٰهَا",
+      "french": "Et par l'âme et Celui qui l'a harmonieusement façonnée",
+      "phonetic": "Wanafsin wama sawwaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 595
+    },
+    {
+      "number": 8,
+      "arabic": "فَأَلۡهَمَهَا فُجُورَهَا وَتَقۡوَىٰهَا",
+      "french": "et lui a alors inspiré son immoralité, de même que sa piété",
+      "phonetic": "Faalhamaha fujooraha wataqwaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 595
+    },
+    {
+      "number": 9,
+      "arabic": "قَدۡ أَفۡلَحَ مَن زَكَّىٰهَا",
+      "french": "A réussi, certes, celui qui la purifie",
+      "phonetic": "Qad aflaha man zakkaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 595
+    },
+    {
+      "number": 10,
+      "arabic": "وَقَدۡ خَابَ مَن دَسَّىٰهَا",
+      "french": "Et est perdu, certes, celui qui la corrompt",
+      "phonetic": "Waqad khaba man dassaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 595
+    },
+    {
+      "number": 11,
+      "arabic": "كَذَّبَتۡ ثَمُودُ بِطَغۡوَىٰهَآ",
+      "french": "Les Thamûd, par leur transgression, ont crié au mensonge",
+      "phonetic": "Kaththabat thamoodu bitaghwaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 595
+    },
+    {
+      "number": 12,
+      "arabic": "إِذِ ٱنۢبَعَثَ أَشۡقَىٰهَا",
+      "french": "lorsque le plus misérable d'entre eux se leva (pour tuer la chamelle)",
+      "phonetic": "Ithi inbaAAatha ashqaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 595
+    },
+    {
+      "number": 13,
+      "arabic": "فَقَالَ لَهُمۡ رَسُولُ ٱللَّهِ نَاقَةَ ٱللَّهِ وَسُقۡيَٰهَا",
+      "french": "Le Messager d'Allah leur avait dit: «La chamelle d'Allah! Laissez-la boire",
+      "phonetic": "Faqala lahum rasoolu Allahi naqata Allahi wasuqyaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 595
+    },
+    {
+      "number": 14,
+      "arabic": "فَكَذَّبُوهُ فَعَقَرُوهَا فَدَمۡدَمَ عَلَيۡهِمۡ رَبُّهُم بِذَنۢبِهِمۡ فَسَوَّىٰهَا",
+      "french": "Mais, ils le traitèrent de menteur, et la tuèrent. Leur Seigneur les détruisit donc, pour leur péché et étendit Son châtiment sur tous",
+      "phonetic": "Fakaththaboohu faAAaqarooha fadamdama AAalayhim rabbuhum bithanbihim fasawwaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 595
+    },
+    {
+      "number": 15,
+      "arabic": "وَلَا يَخَافُ عُقۡبَٰهَا",
+      "french": "Et Allah n'a aucune crainte des conséquences",
+      "phonetic": "Wala yakhafu AAuqbaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 595
+    }
+  ]
+}

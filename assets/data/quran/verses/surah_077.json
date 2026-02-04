@@ -1,0 +1,460 @@
+{
+  "id": 77,
+  "nameArabic": "المرسلات",
+  "nameTransliteration": "Al-Mursalat",
+  "nameFrench": "Les envoyés",
+  "revelationType": "meccan",
+  "totalVerses": 50,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "وَٱلۡمُرۡسَلَٰتِ عُرۡفٗا",
+      "french": "Par ceux qu'on envoie en rafales",
+      "phonetic": "Waalmursalati AAurfan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 2,
+      "arabic": "فَٱلۡعَٰصِفَٰتِ عَصۡفٗا",
+      "french": "et qui soufflent en tempête",
+      "phonetic": "FaalAAasifati AAasfan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 3,
+      "arabic": "وَٱلنَّـٰشِرَٰتِ نَشۡرٗا",
+      "french": "Et qui dispersent largement [dans toutes les directions]",
+      "phonetic": "Waalnnashirati nashran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 4,
+      "arabic": "فَٱلۡفَٰرِقَٰتِ فَرۡقٗا",
+      "french": "Par ceux qui séparent nettement (le bien et le mal)",
+      "phonetic": "Faalfariqati farqan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 5,
+      "arabic": "فَٱلۡمُلۡقِيَٰتِ ذِكۡرًا",
+      "french": "et lancent un rappel",
+      "phonetic": "Faalmulqiyati thikran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 6,
+      "arabic": "عُذۡرًا أَوۡ نُذۡرًا",
+      "french": "en guise d'excuse ou d'avertissement",
+      "phonetic": "AAuthran aw nuthran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 7,
+      "arabic": "إِنَّمَا تُوعَدُونَ لَوَٰقِعٞ",
+      "french": "Ce qui vous est promis est inéluctable",
+      "phonetic": "Innama tooAAadoona lawaqiAAun",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 8,
+      "arabic": "فَإِذَا ٱلنُّجُومُ طُمِسَتۡ",
+      "french": "Quand donc les étoiles seront effacées",
+      "phonetic": "Faitha alnnujoomu tumisat",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 9,
+      "arabic": "وَإِذَا ٱلسَّمَآءُ فُرِجَتۡ",
+      "french": "et que le ciel sera fendu",
+      "phonetic": "Waitha alssamao furijat",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 10,
+      "arabic": "وَإِذَا ٱلۡجِبَالُ نُسِفَتۡ",
+      "french": "et que les montagnes seront pulvérisées",
+      "phonetic": "Waitha aljibalu nusifat",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 11,
+      "arabic": "وَإِذَا ٱلرُّسُلُ أُقِّتَتۡ",
+      "french": "et que le moment (pour la réunion) des Messagers a été fixé",
+      "phonetic": "Waitha alrrusulu oqqitat",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 12,
+      "arabic": "لِأَيِّ يَوۡمٍ أُجِّلَتۡ",
+      "french": "A quel jour tout cela a-t-il été renvoyé",
+      "phonetic": "Liayyi yawmin ojjilat",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 13,
+      "arabic": "لِيَوۡمِ ٱلۡفَصۡلِ",
+      "french": "Au Jour de la Décision. [le Jugement]",
+      "phonetic": "Liyawmi alfasli",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 14,
+      "arabic": "وَمَآ أَدۡرَىٰكَ مَا يَوۡمُ ٱلۡفَصۡلِ",
+      "french": "Et qui te dira ce qu'est le Jour de la Décision",
+      "phonetic": "Wama adraka ma yawmu alfasli",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 15,
+      "arabic": "وَيۡلٞ يَوۡمَئِذٖ لِّلۡمُكَذِّبِينَ",
+      "french": "Malheur, ce jour-là, à ceux qui criaient au mensonge",
+      "phonetic": "Waylun yawmaithin lilmukaththibeena",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 16,
+      "arabic": "أَلَمۡ نُهۡلِكِ ٱلۡأَوَّلِينَ",
+      "french": "N'avons-nous pas fait périr les premières [générations]",
+      "phonetic": "Alam nuhliki alawwaleena",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 17,
+      "arabic": "ثُمَّ نُتۡبِعُهُمُ ٱلۡأٓخِرِينَ",
+      "french": "Puis ne les avons-Nous pas fait suivre par les derniers",
+      "phonetic": "Thumma nutbiAAuhumu alakhireena",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 18,
+      "arabic": "كَذَٰلِكَ نَفۡعَلُ بِٱلۡمُجۡرِمِينَ",
+      "french": "C'est ainsi que Nous agissons avec les criminels",
+      "phonetic": "Kathalika nafAAalu bialmujrimeena",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 19,
+      "arabic": "وَيۡلٞ يَوۡمَئِذٖ لِّلۡمُكَذِّبِينَ",
+      "french": "Malheur, ce jour-là, à ceux qui criaient au mensonge",
+      "phonetic": "Waylun yawmaithin lilmukaththibeena",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 20,
+      "arabic": "أَلَمۡ نَخۡلُقكُّم مِّن مَّآءٖ مَّهِينٖ",
+      "french": "Ne vous avons-Nous pas créés d'une eau vile",
+      "phonetic": "Alam nakhluqkum min main maheenin",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 21,
+      "arabic": "فَجَعَلۡنَٰهُ فِي قَرَارٖ مَّكِينٍ",
+      "french": "que Nous avons placée dans un reposoir sûr",
+      "phonetic": "FajaAAalnahu fee qararin makeenin",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 22,
+      "arabic": "إِلَىٰ قَدَرٖ مَّعۡلُومٖ",
+      "french": "pour une durée connue",
+      "phonetic": "Ila qadarin maAAloomin",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 23,
+      "arabic": "فَقَدَرۡنَا فَنِعۡمَ ٱلۡقَٰدِرُونَ",
+      "french": "Nous l'avons décrété ainsi et Nous décrétons [tout] de façon parfaite",
+      "phonetic": "Faqadarna faniAAma alqadiroona",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 24,
+      "arabic": "وَيۡلٞ يَوۡمَئِذٖ لِّلۡمُكَذِّبِينَ",
+      "french": "Malheur, ce jour-là, à ceux qui criaient au mensonge",
+      "phonetic": "Waylun yawmaithin lilmukaththibeena",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 25,
+      "arabic": "أَلَمۡ نَجۡعَلِ ٱلۡأَرۡضَ كِفَاتًا",
+      "french": "N'avons-Nous pas fait de la terre un endroit les contenant tous",
+      "phonetic": "Alam najAAali alarda kifatan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 26,
+      "arabic": "أَحۡيَآءٗ وَأَمۡوَٰتٗا",
+      "french": "les vivants ainsi que les morts",
+      "phonetic": "Ahyaan waamwatan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 27,
+      "arabic": "وَجَعَلۡنَا فِيهَا رَوَٰسِيَ شَٰمِخَٰتٖ وَأَسۡقَيۡنَٰكُم مَّآءٗ فُرَاتٗا",
+      "french": "Et n'y avons-Nous pas placé fermement de hautes montagnes? Et ne vous avons-Nous pas abreuvés d'eau douce",
+      "phonetic": "WajaAAalna feeha rawasiya shamikhatin waasqaynakum maan furatan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 28,
+      "arabic": "وَيۡلٞ يَوۡمَئِذٖ لِّلۡمُكَذِّبِينَ",
+      "french": "Malheur, ce jour-là, à ceux qui criaient au mensonge",
+      "phonetic": "Waylun yawmaithin lilmukaththibeena",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 29,
+      "arabic": "ٱنطَلِقُوٓاْ إِلَىٰ مَا كُنتُم بِهِۦ تُكَذِّبُونَ",
+      "french": "Allez vers ce que vous traitiez alors de mensonge",
+      "phonetic": "Intaliqoo ila ma kuntum bihi tukaththiboona",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 30,
+      "arabic": "ٱنطَلِقُوٓاْ إِلَىٰ ظِلّٖ ذِي ثَلَٰثِ شُعَبٖ",
+      "french": "Allez vers une ombre [fumée de l'Enfer] à trois branches",
+      "phonetic": "Intaliqoo ila thillin thee thalathi shuAAabin",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 31,
+      "arabic": "لَّا ظَلِيلٖ وَلَا يُغۡنِي مِنَ ٱللَّهَبِ",
+      "french": "qui n'est ni ombreuse ni capable de protéger contre la flamme",
+      "phonetic": "La thaleelin wala yughnee mina allahabi",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 32,
+      "arabic": "إِنَّهَا تَرۡمِي بِشَرَرٖ كَٱلۡقَصۡرِ",
+      "french": "car [le feu] jette des étincelles volumineuses comme des châteaux",
+      "phonetic": "Innaha tarmee bishararin kaalqasri",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 33,
+      "arabic": "كَأَنَّهُۥ جِمَٰلَتٞ صُفۡرٞ",
+      "french": "et qu'on prendrait pour des chameaux jaunes",
+      "phonetic": "Kaannahu jimalatun sufrun",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 34,
+      "arabic": "وَيۡلٞ يَوۡمَئِذٖ لِّلۡمُكَذِّبِينَ",
+      "french": "Malheur, ce jour-là, à ceux qui criaient au mensonge",
+      "phonetic": "Waylun yawmaithin lilmukaththibeena",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 35,
+      "arabic": "هَٰذَا يَوۡمُ لَا يَنطِقُونَ",
+      "french": "Ce sera le jour où ils ne [peuvent] pas parler",
+      "phonetic": "Hatha yawmu la yantiqoona",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 36,
+      "arabic": "وَلَا يُؤۡذَنُ لَهُمۡ فَيَعۡتَذِرُونَ",
+      "french": "et point ne leur sera donné permission de s'excuser",
+      "phonetic": "Wala yuthanu lahum fayaAAtathiroona",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 37,
+      "arabic": "وَيۡلٞ يَوۡمَئِذٖ لِّلۡمُكَذِّبِينَ",
+      "french": "Malheur, ce jour-là, à ceux qui criaient au mensonge",
+      "phonetic": "Waylun yawmaithin lilmukaththibeena",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 38,
+      "arabic": "هَٰذَا يَوۡمُ ٱلۡفَصۡلِۖ جَمَعۡنَٰكُمۡ وَٱلۡأَوَّلِينَ",
+      "french": "C'est le Jour de la Décision [Jugement], où nous vous réunirons ainsi que les anciens",
+      "phonetic": "Hatha yawmu alfasli jamaAAnakum waalawwaleena",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 39,
+      "arabic": "فَإِن كَانَ لَكُمۡ كَيۡدٞ فَكِيدُونِ",
+      "french": "Si vous disposez d'une ruse, rusez donc contre Moi",
+      "phonetic": "Fain kana lakum kaydun fakeedooni",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 40,
+      "arabic": "وَيۡلٞ يَوۡمَئِذٖ لِّلۡمُكَذِّبِينَ",
+      "french": "Malheur, ce jour-là, à ceux qui criaient au mensonge",
+      "phonetic": "Waylun yawmaithin lilmukaththibeena",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 41,
+      "arabic": "إِنَّ ٱلۡمُتَّقِينَ فِي ظِلَٰلٖ وَعُيُونٖ",
+      "french": "Les pieux seront parmi des ombrages et des sources",
+      "phonetic": "Inna almuttaqeena fee thilalin waAAuyoonin",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 42,
+      "arabic": "وَفَوَٰكِهَ مِمَّا يَشۡتَهُونَ",
+      "french": "De même que des fruits selon leurs désirs",
+      "phonetic": "Wafawakiha mimma yashtahoona",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 43,
+      "arabic": "كُلُواْ وَٱشۡرَبُواْ هَنِيٓـَٔۢا بِمَا كُنتُمۡ تَعۡمَلُونَ",
+      "french": "«Mangez et buvez agréablement, pour ce que vous faisiez»",
+      "phonetic": "Kuloo waishraboo haneean bima kuntum taAAmaloona",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 44,
+      "arabic": "إِنَّا كَذَٰلِكَ نَجۡزِي ٱلۡمُحۡسِنِينَ",
+      "french": "C'est ainsi que Nous récompensons les bienfaisants",
+      "phonetic": "Inna kathalika najzee almuhsineena",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 45,
+      "arabic": "وَيۡلٞ يَوۡمَئِذٖ لِّلۡمُكَذِّبِينَ",
+      "french": "Malheur, ce jour-là, à ceux qui criaient au mensonge",
+      "phonetic": "Waylun yawmaithin lilmukaththibeena",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 46,
+      "arabic": "كُلُواْ وَتَمَتَّعُواْ قَلِيلًا إِنَّكُم مُّجۡرِمُونَ",
+      "french": "«Mangez et jouissez un peu (ici-bas); vous êtes certes des criminels»",
+      "phonetic": "Kuloo watamattaAAoo qaleelan innakum mujrimoona",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 47,
+      "arabic": "وَيۡلٞ يَوۡمَئِذٖ لِّلۡمُكَذِّبِينَ",
+      "french": "Malheur, ce jour-là, à ceux qui criaient au mensonge",
+      "phonetic": "Waylun yawmaithin lilmukaththibeena",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 48,
+      "arabic": "وَإِذَا قِيلَ لَهُمُ ٱرۡكَعُواْ لَا يَرۡكَعُونَ",
+      "french": "Et quand on leur dit: «Inclinez-vous, ils ne s'inclinent pas",
+      "phonetic": "Waitha qeela lahumu irkaAAoo la yarkaAAoona",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 49,
+      "arabic": "وَيۡلٞ يَوۡمَئِذٖ لِّلۡمُكَذِّبِينَ",
+      "french": "Malheur, ce jour-là, à ceux qui criaient au mensonge",
+      "phonetic": "Waylun yawmaithin lilmukaththibeena",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    },
+    {
+      "number": 50,
+      "arabic": "فَبِأَيِّ حَدِيثِۭ بَعۡدَهُۥ يُؤۡمِنُونَ",
+      "french": "Après cela, en quelle parole croiront-ils donc",
+      "phonetic": "Fabiayyi hadeethin baAAdahu yuminoona",
+      "juz": 29,
+      "hizb": 58,
+      "page": 581
+    }
+  ]
+}

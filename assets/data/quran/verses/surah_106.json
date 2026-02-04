@@ -1,0 +1,46 @@
+{
+  "id": 106,
+  "nameArabic": "قريش",
+  "nameTransliteration": "Quraysh",
+  "nameFrench": "Les Quraysh",
+  "revelationType": "meccan",
+  "totalVerses": 4,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "لِإِيلَٰفِ قُرَيۡشٍ",
+      "french": "A cause du pacte des Coraïch",
+      "phonetic": "Lieelafi qurayshin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 602
+    },
+    {
+      "number": 2,
+      "arabic": "إِۦلَٰفِهِمۡ رِحۡلَةَ ٱلشِّتَآءِ وَٱلصَّيۡفِ",
+      "french": "De leur pacte [concernant] les voyages d'hiver et d'été",
+      "phonetic": "Eelafihim rihlata alshshitai waalssayfi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 602
+    },
+    {
+      "number": 3,
+      "arabic": "فَلۡيَعۡبُدُواْ رَبَّ هَٰذَا ٱلۡبَيۡتِ",
+      "french": "Qu'ils adorent donc le Seigneur de cette Maison [la Ka'ba]",
+      "phonetic": "FalyaAAbudoo rabba hatha albayti",
+      "juz": 30,
+      "hizb": 60,
+      "page": 602
+    },
+    {
+      "number": 4,
+      "arabic": "ٱلَّذِيٓ أَطۡعَمَهُم مِّن جُوعٖ وَءَامَنَهُم مِّنۡ خَوۡفِۭ",
+      "french": "qui les a nourris contre la faim et rassurés de la crainte",
+      "phonetic": "Allathee atAAamahum min jooAAin waamanahum min khawfin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 602
+    }
+  ]
+}

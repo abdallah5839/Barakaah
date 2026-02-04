@@ -1,0 +1,64 @@
+{
+  "id": 109,
+  "nameArabic": "الكافرون",
+  "nameTransliteration": "Al-Kafirun",
+  "nameFrench": "Les mécréants",
+  "revelationType": "meccan",
+  "totalVerses": 6,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "قُلۡ يَـٰٓأَيُّهَا ٱلۡكَٰفِرُونَ",
+      "french": "Dis: «O vous les infidèles",
+      "phonetic": "Qul ya ayyuha alkafiroona",
+      "juz": 30,
+      "hizb": 60,
+      "page": 603
+    },
+    {
+      "number": 2,
+      "arabic": "لَآ أَعۡبُدُ مَا تَعۡبُدُونَ",
+      "french": "Je n'adore pas ce que vous adorez",
+      "phonetic": "La aAAbudu ma taAAbudoona",
+      "juz": 30,
+      "hizb": 60,
+      "page": 603
+    },
+    {
+      "number": 3,
+      "arabic": "وَلَآ أَنتُمۡ عَٰبِدُونَ مَآ أَعۡبُدُ",
+      "french": "Et vous n'êtes pas adorateurs de ce que j'adore",
+      "phonetic": "Wala antum AAabidoona ma aAAbudu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 603
+    },
+    {
+      "number": 4,
+      "arabic": "وَلَآ أَنَا۠ عَابِدٞ مَّا عَبَدتُّمۡ",
+      "french": "Je ne suis pas adorateur de ce que vous adorez",
+      "phonetic": "Wala ana AAabidun ma AAabadtum",
+      "juz": 30,
+      "hizb": 60,
+      "page": 603
+    },
+    {
+      "number": 5,
+      "arabic": "وَلَآ أَنتُمۡ عَٰبِدُونَ مَآ أَعۡبُدُ",
+      "french": "Et vous n'êtes pas adorateurs de ce que j'adore",
+      "phonetic": "Wala antum AAabidoona ma aAAbudu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 603
+    },
+    {
+      "number": 6,
+      "arabic": "لَكُمۡ دِينُكُمۡ وَلِيَ دِينِ",
+      "french": "A vous votre religion, et à moi ma religion»",
+      "phonetic": "Lakum deenukum waliya deeni",
+      "juz": 30,
+      "hizb": 60,
+      "page": 603
+    }
+  ]
+}

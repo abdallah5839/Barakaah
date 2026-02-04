@@ -1,0 +1,46 @@
+{
+  "id": 112,
+  "nameArabic": "الإخلاص",
+  "nameTransliteration": "Al-Ikhlas",
+  "nameFrench": "La sincérité",
+  "revelationType": "meccan",
+  "totalVerses": 4,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "قُلۡ هُوَ ٱللَّهُ أَحَدٌ",
+      "french": "Dis: «Il est Allah, Unique",
+      "phonetic": "Qul huwa Allahu ahadun",
+      "juz": 30,
+      "hizb": 60,
+      "page": 604
+    },
+    {
+      "number": 2,
+      "arabic": "ٱللَّهُ ٱلصَّمَدُ",
+      "french": "Allah, Le Seul à être imploré pour ce que nous désirons",
+      "phonetic": "Allahu alssamadu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 604
+    },
+    {
+      "number": 3,
+      "arabic": "لَمۡ يَلِدۡ وَلَمۡ يُولَدۡ",
+      "french": "Il n'a jamais engendré, n'a pas été engendré non plus",
+      "phonetic": "Lam yalid walam yooladu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 604
+    },
+    {
+      "number": 4,
+      "arabic": "وَلَمۡ يَكُن لَّهُۥ كُفُوًا أَحَدُۢ",
+      "french": "Et nul n'est égal à Lui»",
+      "phonetic": "Walam yakun lahu kufuwan ahadun",
+      "juz": 30,
+      "hizb": 60,
+      "page": 604
+    }
+  ]
+}

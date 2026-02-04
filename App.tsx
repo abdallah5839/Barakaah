@@ -20,6 +20,7 @@ import {
   Switch,
   Alert,
   ActivityIndicator,
+  InteractionManager,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -232,6 +233,7 @@ interface StreakData {
   longestStreak: number;
   totalDaysRead: number;
   lastReadDate: string;
+  lastGoalMetDate: string;
   dailyGoal: number;
   todayVersesRead: number;
   readingHistory: ReadingHistory[];
@@ -324,6 +326,7 @@ const DEFAULT_STREAK: StreakData = {
   longestStreak: 0,
   totalDaysRead: 0,
   lastReadDate: '',
+  lastGoalMetDate: '',
   dailyGoal: 10,
   todayVersesRead: 0,
   readingHistory: [],
@@ -546,6 +549,7 @@ interface SettingsContextType {
   removeBookmark: (id: string) => void;
   streak: StreakData;
   updateStreak: (versesRead: number) => void;
+  updateDailyGoal: (goal: number) => void;
   lastRead: LastReadPosition | null;
   updateLastRead: (position: Omit<LastReadPosition, 'timestamp'>) => void;
 }
@@ -595,7 +599,24 @@ const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
       if (settingsData) setSettings({ ...DEFAULT_SETTINGS, ...JSON.parse(settingsData) });
       if (bookmarksData) setBookmarks(JSON.parse(bookmarksData));
-      if (streakData) setStreak({ ...DEFAULT_STREAK, ...JSON.parse(streakData) });
+      if (streakData) {
+        const loaded: StreakData = { ...DEFAULT_STREAK, ...JSON.parse(streakData) };
+        const today = new Date().toISOString().split('T')[0];
+        const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+
+        // Nouveau jour : remettre le compteur de versets à 0
+        if (loaded.lastReadDate !== today) {
+          loaded.todayVersesRead = 0;
+        }
+
+        // Si l'objectif n'a été atteint ni aujourd'hui ni hier → streak = 0
+        if (loaded.lastGoalMetDate !== today && loaded.lastGoalMetDate !== yesterday) {
+          loaded.currentStreak = 0;
+        }
+
+        setStreak(loaded);
+        await AsyncStorage.setItem(STORAGE_KEYS.STREAK, JSON.stringify(loaded));
+      }
       if (lastReadData) setLastRead(JSON.parse(lastReadData));
     } catch (error) {
       console.error('Error loading data:', error);
@@ -628,20 +649,46 @@ const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
   const updateStreak = async (versesRead: number) => {
     const today = new Date().toISOString().split('T')[0];
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
     let newStreak = { ...streak };
 
-    newStreak.todayVersesRead += versesRead;
-
+    // Nouveau jour : remettre le compteur de versets à 0
     if (newStreak.lastReadDate !== today) {
-      const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-      if (newStreak.lastReadDate === yesterday) {
-        newStreak.currentStreak += 1;
-      } else if (newStreak.lastReadDate !== today) {
-        newStreak.currentStreak = 1;
-      }
+      newStreak.todayVersesRead = 0;
       newStreak.totalDaysRead += 1;
       newStreak.lastReadDate = today;
 
+      // Si l'objectif n'a été atteint ni aujourd'hui ni hier → streak = 0
+      if (newStreak.lastGoalMetDate !== today && newStreak.lastGoalMetDate !== yesterday) {
+        newStreak.currentStreak = 0;
+      }
+    }
+
+    // Incrémenter les versets lus
+    newStreak.todayVersesRead += versesRead;
+
+    // Vérifier si l'objectif vient d'être atteint (première fois aujourd'hui)
+    if (newStreak.todayVersesRead >= newStreak.dailyGoal && newStreak.lastGoalMetDate !== today) {
+      // Objectif atteint pour la première fois aujourd'hui
+      if (newStreak.lastGoalMetDate === yesterday) {
+        // Jour consécutif → chaîne +1
+        newStreak.currentStreak += 1;
+      } else {
+        // Chaîne brisée → recommencer à 1
+        newStreak.currentStreak = 1;
+      }
+      newStreak.lastGoalMetDate = today;
+
+      if (newStreak.currentStreak > newStreak.longestStreak) {
+        newStreak.longestStreak = newStreak.currentStreak;
+      }
+    }
+
+    // Mettre à jour l'historique du jour
+    const todayEntry = newStreak.readingHistory.find(h => h.date === today);
+    if (todayEntry) {
+      todayEntry.versesRead = newStreak.todayVersesRead;
+    } else {
       newStreak.readingHistory.push({
         date: today,
         versesRead: newStreak.todayVersesRead,
@@ -649,10 +696,12 @@ const SettingsProvider = ({ children }: { children: ReactNode }) => {
       });
     }
 
-    if (newStreak.currentStreak > newStreak.longestStreak) {
-      newStreak.longestStreak = newStreak.currentStreak;
-    }
+    setStreak(newStreak);
+    await AsyncStorage.setItem(STORAGE_KEYS.STREAK, JSON.stringify(newStreak));
+  };
 
+  const updateDailyGoal = async (goal: number) => {
+    const newStreak = { ...streak, dailyGoal: goal };
     setStreak(newStreak);
     await AsyncStorage.setItem(STORAGE_KEYS.STREAK, JSON.stringify(newStreak));
   };
@@ -675,7 +724,7 @@ const SettingsProvider = ({ children }: { children: ReactNode }) => {
   return (
     <SettingsContext.Provider value={{
       settings, updateSettings, bookmarks, addBookmark, removeBookmark,
-      streak, updateStreak, lastRead, updateLastRead,
+      streak, updateStreak, updateDailyGoal, lastRead, updateLastRead,
     }}>
       {children}
     </SettingsContext.Provider>
@@ -908,22 +957,154 @@ const headerStyles = StyleSheet.create({
   },
 });
 
-// ===== QURAN DATA =====
-const SURAHS = [
-  { number: 1, name: 'Al-Fatiha', nameAr: 'الفاتحة', versesCount: 7, type: 'Mecquoise' },
-  { number: 2, name: 'Al-Baqarah', nameAr: 'البقرة', versesCount: 286, type: 'Medinoise' },
-  { number: 3, name: 'Al-Imran', nameAr: 'آل عمران', versesCount: 200, type: 'Medinoise' },
-];
+// ===== QURAN DATA (chargé depuis les fichiers JSON) =====
+const surahsMetadata = require('./assets/data/quran/surahs-metadata.json');
+const SURAHS = surahsMetadata.map((s: any) => ({
+  number: s.id,
+  name: s.nameTransliteration,
+  nameAr: s.nameArabic,
+  versesCount: s.totalVerses,
+  type: s.revelationType === 'meccan' ? 'Mecquoise' : 'Médinoise',
+}));
 
-const FATIHA_VERSES = [
-  { num: 1, ar: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', fr: "Au nom d'Allah, le Tout Misericordieux, le Tres Misericordieux.", ph: 'Bismillahi ar-Rahmani ar-Raheem' },
-  { num: 2, ar: 'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ', fr: "Louange a Allah, Seigneur de l'univers.", ph: "Al-hamdu lillahi Rabbi al-'aalameen" },
-  { num: 3, ar: 'الرَّحْمَٰنِ الرَّحِيمِ', fr: 'Le Tout Misericordieux, le Tres Misericordieux.', ph: 'Ar-Rahmani ar-Raheem' },
-  { num: 4, ar: 'مَالِكِ يَوْمِ الدِّينِ', fr: 'Maitre du Jour de la retribution.', ph: 'Maliki yawmi ad-deen' },
-  { num: 5, ar: 'إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ', fr: "C'est Toi [Seul] que nous adorons, et c'est Toi [Seul] dont nous implorons secours.", ph: "Iyyaka na'budu wa iyyaka nasta'een" },
-  { num: 6, ar: 'اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ', fr: 'Guide-nous dans le droit chemin.', ph: 'Ihdina as-sirat al-mustaqeem' },
-  { num: 7, ar: 'صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ', fr: "Le chemin de ceux que Tu as combles de faveurs, non pas de ceux qui ont encouru Ta colere, ni des egares.", ph: "Sirat allatheena an'amta 'alayhim ghayril maghdoobi 'alayhim wa lad-daalleen" },
-];
+// Cache mémoire des versets déjà chargés
+const versesCache = new Map<number, { num: number; ar: string; fr: string; ph: string }[]>();
+
+// Lazy require : Metro bundle les fichiers mais ne les évalue qu'à l'appel
+const requireSurahFile = (n: number): any => {
+  switch (n) {
+    case 1: return require('./assets/data/quran/verses/surah_001.json');
+    case 2: return require('./assets/data/quran/verses/surah_002.json');
+    case 3: return require('./assets/data/quran/verses/surah_003.json');
+    case 4: return require('./assets/data/quran/verses/surah_004.json');
+    case 5: return require('./assets/data/quran/verses/surah_005.json');
+    case 6: return require('./assets/data/quran/verses/surah_006.json');
+    case 7: return require('./assets/data/quran/verses/surah_007.json');
+    case 8: return require('./assets/data/quran/verses/surah_008.json');
+    case 9: return require('./assets/data/quran/verses/surah_009.json');
+    case 10: return require('./assets/data/quran/verses/surah_010.json');
+    case 11: return require('./assets/data/quran/verses/surah_011.json');
+    case 12: return require('./assets/data/quran/verses/surah_012.json');
+    case 13: return require('./assets/data/quran/verses/surah_013.json');
+    case 14: return require('./assets/data/quran/verses/surah_014.json');
+    case 15: return require('./assets/data/quran/verses/surah_015.json');
+    case 16: return require('./assets/data/quran/verses/surah_016.json');
+    case 17: return require('./assets/data/quran/verses/surah_017.json');
+    case 18: return require('./assets/data/quran/verses/surah_018.json');
+    case 19: return require('./assets/data/quran/verses/surah_019.json');
+    case 20: return require('./assets/data/quran/verses/surah_020.json');
+    case 21: return require('./assets/data/quran/verses/surah_021.json');
+    case 22: return require('./assets/data/quran/verses/surah_022.json');
+    case 23: return require('./assets/data/quran/verses/surah_023.json');
+    case 24: return require('./assets/data/quran/verses/surah_024.json');
+    case 25: return require('./assets/data/quran/verses/surah_025.json');
+    case 26: return require('./assets/data/quran/verses/surah_026.json');
+    case 27: return require('./assets/data/quran/verses/surah_027.json');
+    case 28: return require('./assets/data/quran/verses/surah_028.json');
+    case 29: return require('./assets/data/quran/verses/surah_029.json');
+    case 30: return require('./assets/data/quran/verses/surah_030.json');
+    case 31: return require('./assets/data/quran/verses/surah_031.json');
+    case 32: return require('./assets/data/quran/verses/surah_032.json');
+    case 33: return require('./assets/data/quran/verses/surah_033.json');
+    case 34: return require('./assets/data/quran/verses/surah_034.json');
+    case 35: return require('./assets/data/quran/verses/surah_035.json');
+    case 36: return require('./assets/data/quran/verses/surah_036.json');
+    case 37: return require('./assets/data/quran/verses/surah_037.json');
+    case 38: return require('./assets/data/quran/verses/surah_038.json');
+    case 39: return require('./assets/data/quran/verses/surah_039.json');
+    case 40: return require('./assets/data/quran/verses/surah_040.json');
+    case 41: return require('./assets/data/quran/verses/surah_041.json');
+    case 42: return require('./assets/data/quran/verses/surah_042.json');
+    case 43: return require('./assets/data/quran/verses/surah_043.json');
+    case 44: return require('./assets/data/quran/verses/surah_044.json');
+    case 45: return require('./assets/data/quran/verses/surah_045.json');
+    case 46: return require('./assets/data/quran/verses/surah_046.json');
+    case 47: return require('./assets/data/quran/verses/surah_047.json');
+    case 48: return require('./assets/data/quran/verses/surah_048.json');
+    case 49: return require('./assets/data/quran/verses/surah_049.json');
+    case 50: return require('./assets/data/quran/verses/surah_050.json');
+    case 51: return require('./assets/data/quran/verses/surah_051.json');
+    case 52: return require('./assets/data/quran/verses/surah_052.json');
+    case 53: return require('./assets/data/quran/verses/surah_053.json');
+    case 54: return require('./assets/data/quran/verses/surah_054.json');
+    case 55: return require('./assets/data/quran/verses/surah_055.json');
+    case 56: return require('./assets/data/quran/verses/surah_056.json');
+    case 57: return require('./assets/data/quran/verses/surah_057.json');
+    case 58: return require('./assets/data/quran/verses/surah_058.json');
+    case 59: return require('./assets/data/quran/verses/surah_059.json');
+    case 60: return require('./assets/data/quran/verses/surah_060.json');
+    case 61: return require('./assets/data/quran/verses/surah_061.json');
+    case 62: return require('./assets/data/quran/verses/surah_062.json');
+    case 63: return require('./assets/data/quran/verses/surah_063.json');
+    case 64: return require('./assets/data/quran/verses/surah_064.json');
+    case 65: return require('./assets/data/quran/verses/surah_065.json');
+    case 66: return require('./assets/data/quran/verses/surah_066.json');
+    case 67: return require('./assets/data/quran/verses/surah_067.json');
+    case 68: return require('./assets/data/quran/verses/surah_068.json');
+    case 69: return require('./assets/data/quran/verses/surah_069.json');
+    case 70: return require('./assets/data/quran/verses/surah_070.json');
+    case 71: return require('./assets/data/quran/verses/surah_071.json');
+    case 72: return require('./assets/data/quran/verses/surah_072.json');
+    case 73: return require('./assets/data/quran/verses/surah_073.json');
+    case 74: return require('./assets/data/quran/verses/surah_074.json');
+    case 75: return require('./assets/data/quran/verses/surah_075.json');
+    case 76: return require('./assets/data/quran/verses/surah_076.json');
+    case 77: return require('./assets/data/quran/verses/surah_077.json');
+    case 78: return require('./assets/data/quran/verses/surah_078.json');
+    case 79: return require('./assets/data/quran/verses/surah_079.json');
+    case 80: return require('./assets/data/quran/verses/surah_080.json');
+    case 81: return require('./assets/data/quran/verses/surah_081.json');
+    case 82: return require('./assets/data/quran/verses/surah_082.json');
+    case 83: return require('./assets/data/quran/verses/surah_083.json');
+    case 84: return require('./assets/data/quran/verses/surah_084.json');
+    case 85: return require('./assets/data/quran/verses/surah_085.json');
+    case 86: return require('./assets/data/quran/verses/surah_086.json');
+    case 87: return require('./assets/data/quran/verses/surah_087.json');
+    case 88: return require('./assets/data/quran/verses/surah_088.json');
+    case 89: return require('./assets/data/quran/verses/surah_089.json');
+    case 90: return require('./assets/data/quran/verses/surah_090.json');
+    case 91: return require('./assets/data/quran/verses/surah_091.json');
+    case 92: return require('./assets/data/quran/verses/surah_092.json');
+    case 93: return require('./assets/data/quran/verses/surah_093.json');
+    case 94: return require('./assets/data/quran/verses/surah_094.json');
+    case 95: return require('./assets/data/quran/verses/surah_095.json');
+    case 96: return require('./assets/data/quran/verses/surah_096.json');
+    case 97: return require('./assets/data/quran/verses/surah_097.json');
+    case 98: return require('./assets/data/quran/verses/surah_098.json');
+    case 99: return require('./assets/data/quran/verses/surah_099.json');
+    case 100: return require('./assets/data/quran/verses/surah_100.json');
+    case 101: return require('./assets/data/quran/verses/surah_101.json');
+    case 102: return require('./assets/data/quran/verses/surah_102.json');
+    case 103: return require('./assets/data/quran/verses/surah_103.json');
+    case 104: return require('./assets/data/quran/verses/surah_104.json');
+    case 105: return require('./assets/data/quran/verses/surah_105.json');
+    case 106: return require('./assets/data/quran/verses/surah_106.json');
+    case 107: return require('./assets/data/quran/verses/surah_107.json');
+    case 108: return require('./assets/data/quran/verses/surah_108.json');
+    case 109: return require('./assets/data/quran/verses/surah_109.json');
+    case 110: return require('./assets/data/quran/verses/surah_110.json');
+    case 111: return require('./assets/data/quran/verses/surah_111.json');
+    case 112: return require('./assets/data/quran/verses/surah_112.json');
+    case 113: return require('./assets/data/quran/verses/surah_113.json');
+    case 114: return require('./assets/data/quran/verses/surah_114.json');
+    default: return null;
+  }
+};
+
+const getSurahVerses = (surahNumber: number) => {
+  const cached = versesCache.get(surahNumber);
+  if (cached) return cached;
+  const data = requireSurahFile(surahNumber);
+  if (!data) return [];
+  const verses = data.verses.map((v: any) => ({
+    num: v.number,
+    ar: v.arabic,
+    fr: v.french,
+    ph: v.phonetic,
+  }));
+  versesCache.set(surahNumber, verses);
+  return verses;
+};
 
 // ===== NAVIGATION CONTEXT =====
 interface NavigationContextType {
@@ -1417,15 +1598,80 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
 // ===== CORAN SCREEN =====
 const CoranScreen = () => {
   const { colors } = useTheme();
-  const { settings, updateSettings, bookmarks, addBookmark, removeBookmark, updateStreak, updateLastRead } = useSettings();
+  const { settings, updateSettings, bookmarks, addBookmark, removeBookmark, updateStreak, updateLastRead, lastRead } = useSettings();
   const navigation = useNavigation();
 
   const [currentSurah, setCurrentSurah] = useState(SURAHS[0]);
+  const hasRestoredPosition = useRef(false);
+
+  // Suivi de la position de lecture au scroll
+  const scrollRef = useRef<ScrollView>(null);
+  const versePositions = useRef<Record<number, number>>({});
+  const versePositionsSurah = useRef(0);
+  const [currentVisibleVerse, setCurrentVisibleVerse] = useState(1);
+  const currentVisibleVerseRef = useRef(1);
+  const saveDebounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const needsScrollRestore = useRef(false);
+
+  // Tracking des versets lus par scroll
+  const readVersesRef = useRef<Set<string>>(new Set());
+  const pendingVersesCountRef = useRef(0);
+  const streakDebounceRef = useRef<ReturnType<typeof setTimeout>>();
+
+  // Configuration audio iOS (mode silencieux)
+  useEffect(() => {
+    Audio.setAudioModeAsync({
+      playsInSilentModeIOS: true,
+      staysActiveInBackground: false,
+    });
+  }, []);
+
+  // Restaurer la dernière sourate lue au montage + pré-charger le cache
+  useEffect(() => {
+    if (!hasRestoredPosition.current && lastRead) {
+      const saved = SURAHS.find((s: any) => s.number === lastRead.surahNumber);
+      if (saved) {
+        getSurahVerses(lastRead.surahNumber); // pré-remplir le cache
+        needsScrollRestore.current = true;
+        setCurrentSurah(saved);
+      }
+      hasRestoredPosition.current = true;
+    }
+  }, [lastRead]);
   const [showSurahModal, setShowSurahModal] = useState(false);
   const [showBookmarkModal, setShowBookmarkModal] = useState(false);
   const [selectedVerse, setSelectedVerse] = useState<number | null>(null);
   const [bookmarkNote, setBookmarkNote] = useState('');
   const [bookmarkColor, setBookmarkColor] = useState(BOOKMARK_COLORS[0]);
+
+  // Versets de la sourate courante (chargés dynamiquement avec état de chargement)
+  const [currentVerses, setCurrentVerses] = useState<{ num: number; ar: string; fr: string; ph: string }[]>([]);
+  const [isLoadingVerses, setIsLoadingVerses] = useState(true);
+
+  useEffect(() => {
+    setIsLoadingVerses(true);
+    const task = InteractionManager.runAfterInteractions(() => {
+      const verses = getSurahVerses(currentSurah.number);
+      setCurrentVerses(verses);
+      setIsLoadingVerses(false);
+    });
+    return () => task.cancel();
+  }, [currentSurah.number]);
+
+  // Animation pulse pour skeleton loader
+  const skeletonOpacity = useRef(new Animated.Value(0.3)).current;
+  useEffect(() => {
+    if (isLoadingVerses) {
+      const pulse = Animated.loop(
+        Animated.sequence([
+          Animated.timing(skeletonOpacity, { toValue: 1, duration: 800, useNativeDriver: true }),
+          Animated.timing(skeletonOpacity, { toValue: 0.3, duration: 800, useNativeDriver: true }),
+        ])
+      );
+      pulse.start();
+      return () => pulse.stop();
+    }
+  }, [isLoadingVerses]);
 
   // Audio state
   const [sound, setSound] = useState<Audio.Sound | null>(null);
@@ -1440,12 +1686,107 @@ const CoranScreen = () => {
   }, [sound]);
 
   useEffect(() => {
-    updateLastRead({
-      surahNumber: currentSurah.number,
-      surahName: currentSurah.name,
-      verseNumber: 1,
-    });
+    setCurrentAudioVerse(1);
+    setCurrentVisibleVerse(1);
+    currentVisibleVerseRef.current = 1;
   }, [currentSurah]);
+
+  // Enregistrer la position Y de chaque verset via onLayout
+  const onVerseLayout = useCallback((verseNum: number, y: number) => {
+    // Nouvelle sourate → vider les anciennes positions
+    if (versePositionsSurah.current !== currentSurah.number) {
+      versePositions.current = {};
+      versePositionsSurah.current = currentSurah.number;
+    }
+    versePositions.current[verseNum] = y;
+  }, [currentSurah.number]);
+
+  // Scroll vers le verset restauré avec retry
+  const scrollToSavedVerse = useCallback((verseNum: number, attempt: number) => {
+    if (attempt > 12) return;
+    const y = versePositions.current[verseNum];
+    if (y !== undefined && scrollRef.current) {
+      scrollRef.current.scrollTo({ y, animated: true });
+    } else {
+      setTimeout(() => scrollToSavedVerse(verseNum, attempt + 1), 400);
+    }
+  }, []);
+
+  // Restaurer la position du verset quand les versets sont chargés
+  useEffect(() => {
+    if (needsScrollRestore.current && lastRead && lastRead.verseNumber > 1
+        && currentSurah.number === lastRead.surahNumber) {
+      needsScrollRestore.current = false;
+      const target = lastRead.verseNumber;
+      setCurrentVisibleVerse(target);
+      currentVisibleVerseRef.current = target;
+      setTimeout(() => scrollToSavedVerse(target, 0), 500);
+    }
+  }, [currentVerses]);
+
+  // Détecter le verset visible pendant le scroll
+  const handleScroll = useCallback((event: any) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    const offset = scrollY + 150;
+
+    const positions = versePositions.current;
+    let visible = 1;
+    let i = 1;
+    while (positions[i] !== undefined) {
+      if (positions[i] <= offset) {
+        visible = i;
+      } else {
+        break;
+      }
+      i++;
+    }
+
+    if (visible !== currentVisibleVerseRef.current) {
+      currentVisibleVerseRef.current = visible;
+      setCurrentVisibleVerse(visible);
+    }
+  }, []);
+
+  // Sauvegarde automatique de la position avec debounce
+  useEffect(() => {
+    if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current);
+    saveDebounceRef.current = setTimeout(() => {
+      updateLastRead({
+        surahNumber: currentSurah.number,
+        surahName: currentSurah.name,
+        verseNumber: currentVisibleVerse,
+      });
+    }, 1500);
+    return () => { if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current); };
+  }, [currentVisibleVerse, currentSurah]);
+
+  // Tracking versets lus : incrémenter le compteur quand un nouveau verset est visible
+  useEffect(() => {
+    const key = `${currentSurah.number}:${currentVisibleVerse}`;
+    if (!readVersesRef.current.has(key)) {
+      readVersesRef.current.add(key);
+      pendingVersesCountRef.current += 1;
+
+      if (streakDebounceRef.current) clearTimeout(streakDebounceRef.current);
+      streakDebounceRef.current = setTimeout(() => {
+        if (pendingVersesCountRef.current > 0) {
+          updateStreak(pendingVersesCountRef.current);
+          pendingVersesCountRef.current = 0;
+        }
+      }, 2000);
+    }
+  }, [currentVisibleVerse, currentSurah.number]);
+
+  // Sauvegarder les versets en attente au démontage
+  useEffect(() => {
+    return () => {
+      if (streakDebounceRef.current) clearTimeout(streakDebounceRef.current);
+      if (pendingVersesCountRef.current > 0) {
+        updateStreak(pendingVersesCountRef.current);
+        pendingVersesCountRef.current = 0;
+      }
+    };
+  }, []);
 
   const playVerse = async (verseNum: number) => {
     try {
@@ -1453,7 +1794,8 @@ const CoranScreen = () => {
 
       const surahStr = currentSurah.number.toString().padStart(3, '0');
       const verseStr = verseNum.toString().padStart(3, '0');
-      const url = `https://server.mp3quran.net/${settings.defaultReciter}/${surahStr}${verseStr}.mp3`;
+      const url = `https://everyayah.com/data/Alafasy_128kbps/${surahStr}${verseStr}.mp3`;
+      console.log('Audio URL:', url);
 
       const { sound: newSound } = await Audio.Sound.createAsync(
         { uri: url },
@@ -1470,7 +1812,7 @@ const CoranScreen = () => {
             setAudioProgress(status.positionMillis / status.durationMillis);
           }
           if (status.didJustFinish) {
-            if (verseNum < FATIHA_VERSES.length) {
+            if (verseNum < currentVerses.length) {
               playVerse(verseNum + 1);
             } else {
               setIsPlaying(false);
@@ -1479,7 +1821,7 @@ const CoranScreen = () => {
         }
       });
 
-      updateStreak(1);
+      // Le tracking des versets lus se fait via le scroll (pas besoin ici)
     } catch (error) {
       console.error('Error playing audio:', error);
       Alert.alert('Erreur', 'Impossible de charger l\'audio');
@@ -1582,7 +1924,7 @@ const CoranScreen = () => {
         onBack={handleGoBack}
       />
 
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+      <ScrollView ref={scrollRef} style={{ flex: 1 }} showsVerticalScrollIndicator={false} onScroll={handleScroll} scrollEventThrottle={100}>
         <View style={styles.screenContentWithHeader}>
           <FadeInView delay={100}>
             <Text style={[styles.screenTitle, { color: colors.text }]}>Sourate</Text>
@@ -1616,65 +1958,90 @@ const CoranScreen = () => {
             }} />
           </FadeInView>
 
-          {FATIHA_VERSES.map((v, i) => {
-            const bookmarked = isBookmarked(v.num);
-            const bookmark = getBookmark(v.num);
-
-            return (
-              <FadeInView key={v.num} delay={300 + i * 50}>
-                <GlassCard
-                  colors={colors}
-                  style={[
-                    styles.verseItemCard,
-                    bookmarked && { borderLeftWidth: 4, borderLeftColor: bookmark?.color }
-                  ]}
-                >
+          {isLoadingVerses ? (
+            // Skeleton loader
+            [0, 1, 2, 3].map((k) => (
+              <Animated.View key={k} style={{ opacity: skeletonOpacity, marginBottom: 12 }}>
+                <GlassCard colors={colors} style={styles.verseItemCard}>
                   <View style={styles.verseHeader}>
-                    <View style={[styles.verseBadge, { backgroundColor: colors.primary }]}>
-                      <Text style={styles.verseNumText}>{v.num}</Text>
+                    <View style={[styles.verseBadge, { backgroundColor: colors.textMuted + '40' }]}>
+                      <Text style={styles.verseNumText}> </Text>
                     </View>
-                    <PressableScale onPress={() => handleBookmarkPress(v.num)}>
-                      <Ionicons
-                        name={bookmarked ? 'bookmark' : 'bookmark-outline'}
-                        size={24}
-                        color={bookmarked ? bookmark?.color : colors.textMuted}
-                      />
-                    </PressableScale>
+                    <View style={{ width: 24, height: 24, borderRadius: 4, backgroundColor: colors.textMuted + '30' }} />
                   </View>
-
-                  {settings.showArabic && (
-                    <Text style={[styles.verseArabicText, { color: colors.text, fontSize: settings.arabicFontSize }]}>
-                      {v.ar}
-                    </Text>
-                  )}
-                  {settings.showTranslation && (
-                    <Text style={[styles.verseFrenchText, { color: colors.textSecondary }]}>{v.fr}</Text>
-                  )}
-                  {settings.showPhonetic && (
-                    <Text style={[styles.versePhoneticText, { color: colors.textMuted }]}>{v.ph}</Text>
-                  )}
-
-                  <View style={styles.verseActions}>
-                    <PressableScale onPress={() => playVerse(v.num)}>
-                      <View style={[styles.playBtn, { backgroundColor: currentAudioVerse === v.num && isPlaying ? colors.primary : colors.primary + '20' }]}>
-                        <Ionicons
-                          name={currentAudioVerse === v.num && isPlaying ? 'pause' : 'play'}
-                          size={20}
-                          color={currentAudioVerse === v.num && isPlaying ? '#FFF' : colors.primary}
-                        />
-                      </View>
-                    </PressableScale>
-                    <PressableScale>
-                      <Ionicons name="heart-outline" size={22} color={colors.textMuted} />
-                    </PressableScale>
-                    <PressableScale>
-                      <Ionicons name="share-outline" size={22} color={colors.textMuted} />
-                    </PressableScale>
+                  <View style={{ height: 28, borderRadius: 8, backgroundColor: colors.surface, marginTop: 12, width: '90%', alignSelf: 'flex-end' }} />
+                  <View style={{ height: 16, borderRadius: 6, backgroundColor: colors.surface, marginTop: 10, width: '70%' }} />
+                  <View style={{ flexDirection: 'row', gap: 12, marginTop: 14 }}>
+                    <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: colors.textMuted + '20' }} />
+                    <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: colors.textMuted + '20', alignSelf: 'center' }} />
+                    <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: colors.textMuted + '20', alignSelf: 'center' }} />
                   </View>
                 </GlassCard>
-              </FadeInView>
-            );
-          })}
+              </Animated.View>
+            ))
+          ) : (
+            currentVerses.map((v, i) => {
+              const bookmarked = isBookmarked(v.num);
+              const bookmark = getBookmark(v.num);
+
+              return (
+                <View key={v.num} onLayout={(e) => onVerseLayout(v.num, e.nativeEvent.layout.y)}>
+                <FadeInView delay={i < 10 ? 100 + i * 40 : 0}>
+                  <GlassCard
+                    colors={colors}
+                    style={[
+                      styles.verseItemCard,
+                      bookmarked && { borderLeftWidth: 4, borderLeftColor: bookmark?.color }
+                    ]}
+                  >
+                    <View style={styles.verseHeader}>
+                      <View style={[styles.verseBadge, { backgroundColor: colors.primary }]}>
+                        <Text style={styles.verseNumText}>{v.num}</Text>
+                      </View>
+                      <PressableScale onPress={() => handleBookmarkPress(v.num)}>
+                        <Ionicons
+                          name={bookmarked ? 'bookmark' : 'bookmark-outline'}
+                          size={24}
+                          color={bookmarked ? bookmark?.color : colors.textMuted}
+                        />
+                      </PressableScale>
+                    </View>
+
+                    {settings.showArabic && (
+                      <Text style={[styles.verseArabicText, { color: colors.text, fontSize: settings.arabicFontSize }]}>
+                        {v.ar}
+                      </Text>
+                    )}
+                    {settings.showTranslation && (
+                      <Text style={[styles.verseFrenchText, { color: colors.textSecondary }]}>{v.fr}</Text>
+                    )}
+                    {settings.showPhonetic && (
+                      <Text style={[styles.versePhoneticText, { color: colors.textMuted }]}>{v.ph}</Text>
+                    )}
+
+                    <View style={styles.verseActions}>
+                      <PressableScale onPress={() => playVerse(v.num)}>
+                        <View style={[styles.playBtn, { backgroundColor: currentAudioVerse === v.num && isPlaying ? colors.primary : colors.primary + '20' }]}>
+                          <Ionicons
+                            name={currentAudioVerse === v.num && isPlaying ? 'pause' : 'play'}
+                            size={20}
+                            color={currentAudioVerse === v.num && isPlaying ? '#FFF' : colors.primary}
+                          />
+                        </View>
+                      </PressableScale>
+                      <PressableScale>
+                        <Ionicons name="heart-outline" size={22} color={colors.textMuted} />
+                      </PressableScale>
+                      <PressableScale>
+                        <Ionicons name="share-outline" size={22} color={colors.textMuted} />
+                      </PressableScale>
+                    </View>
+                  </GlassCard>
+                </FadeInView>
+                </View>
+              );
+            })
+          )}
 
           <View style={{ height: 180 }} />
         </View>
@@ -1694,12 +2061,12 @@ const CoranScreen = () => {
               <Ionicons name={isPlaying ? 'pause' : 'play'} size={32} color="#FFF" />
             </View>
           </PressableScale>
-          <PressableScale onPress={() => currentAudioVerse < FATIHA_VERSES.length && playVerse(currentAudioVerse + 1)}>
+          <PressableScale onPress={() => currentAudioVerse < currentVerses.length && playVerse(currentAudioVerse + 1)}>
             <Ionicons name="play-skip-forward" size={28} color={colors.text} />
           </PressableScale>
         </View>
         <Text style={[styles.audioVerseText, { color: colors.textSecondary }]}>
-          Verset {currentAudioVerse} / {FATIHA_VERSES.length}
+          Verset {currentVisibleVerse} / {currentVerses.length}
         </Text>
       </View>
 
@@ -1901,7 +2268,7 @@ const PrieresScreen = () => {
 // ===== SETTINGS SCREEN =====
 const SettingsScreen = () => {
   const { colors } = useTheme();
-  const { settings, updateSettings, bookmarks } = useSettings();
+  const { settings, updateSettings, bookmarks, streak, updateDailyGoal } = useSettings();
   const navigation = useNavigation();
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [showBookmarksModal, setShowBookmarksModal] = useState(false);
@@ -2154,6 +2521,31 @@ const SettingsScreen = () => {
               updateSettings({ showPhonetic: !settings.showPhonetic });
             }}
           />
+          <View style={[styles.settingRow, { borderBottomColor: colors.border, flexDirection: 'column', alignItems: 'stretch' }]}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
+              <Text style={[styles.settingLabel, { color: colors.text }]}>Objectif quotidien (versets)</Text>
+              <Text style={[styles.settingValue, { color: colors.primary }]}>{streak.dailyGoal}</Text>
+            </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: -4 }}>
+              <View style={{ flexDirection: 'row', gap: 8, paddingHorizontal: 4 }}>
+                {[5, 10, 20, 30, 50, 100, 200].map(goal => (
+                  <PressableScale key={goal} onPress={() => updateDailyGoal(goal)}>
+                    <View style={[
+                      styles.goalBtn,
+                      {
+                        backgroundColor: streak.dailyGoal === goal ? colors.primary : colors.background,
+                        borderColor: colors.border
+                      }
+                    ]}>
+                      <Text style={{ color: streak.dailyGoal === goal ? '#FFF' : colors.text, fontSize: 13, fontWeight: '600' }}>
+                        {goal}
+                      </Text>
+                    </View>
+                  </PressableScale>
+                ))}
+              </View>
+            </ScrollView>
+          </View>
           <SettingRow
             label="Recitateur par defaut"
             value={RECITERS.find(r => r.id === settings.defaultReciter)?.name}

@@ -1,0 +1,181 @@
+{
+  "id": 87,
+  "nameArabic": "الأعلى",
+  "nameTransliteration": "Al-A'la",
+  "nameFrench": "Le Très-Haut",
+  "revelationType": "meccan",
+  "totalVerses": 19,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "سَبِّحِ ٱسۡمَ رَبِّكَ ٱلۡأَعۡلَى",
+      "french": "Glorifie le nom de ton Seigneur, le Très Haut",
+      "phonetic": "Sabbihi isma rabbika alaAAla",
+      "juz": 30,
+      "hizb": 60,
+      "page": 591
+    },
+    {
+      "number": 2,
+      "arabic": "ٱلَّذِي خَلَقَ فَسَوَّىٰ",
+      "french": "Celui Qui a créé et agencé harmonieusement",
+      "phonetic": "Allathee khalaqa fasawwa",
+      "juz": 30,
+      "hizb": 60,
+      "page": 591
+    },
+    {
+      "number": 3,
+      "arabic": "وَٱلَّذِي قَدَّرَ فَهَدَىٰ",
+      "french": "qui a décrété et guidé",
+      "phonetic": "Waallathee qaddara fahada",
+      "juz": 30,
+      "hizb": 60,
+      "page": 591
+    },
+    {
+      "number": 4,
+      "arabic": "وَٱلَّذِيٓ أَخۡرَجَ ٱلۡمَرۡعَىٰ",
+      "french": "et qui a fait pousser le pâturage",
+      "phonetic": "Waallathee akhraja almarAAa",
+      "juz": 30,
+      "hizb": 60,
+      "page": 591
+    },
+    {
+      "number": 5,
+      "arabic": "فَجَعَلَهُۥ غُثَآءً أَحۡوَىٰ",
+      "french": "et en a fait ensuite un foin sombre",
+      "phonetic": "FajaAAalahu ghuthaan ahwa",
+      "juz": 30,
+      "hizb": 60,
+      "page": 591
+    },
+    {
+      "number": 6,
+      "arabic": "سَنُقۡرِئُكَ فَلَا تَنسَىٰٓ",
+      "french": "Nous te ferons réciter (le Coran), de sorte que tu n'oublieras",
+      "phonetic": "Sanuqrioka fala tansa",
+      "juz": 30,
+      "hizb": 60,
+      "page": 591
+    },
+    {
+      "number": 7,
+      "arabic": "إِلَّا مَا شَآءَ ٱللَّهُۚ إِنَّهُۥ يَعۡلَمُ ٱلۡجَهۡرَ وَمَا يَخۡفَىٰ",
+      "french": "que ce qu'Allah veut. Car, Il connaît ce qui paraît au grand jour ainsi que ce qui est caché",
+      "phonetic": "Illa ma shaa Allahu innahu yaAAlamu aljahra wama yakhfa",
+      "juz": 30,
+      "hizb": 60,
+      "page": 591
+    },
+    {
+      "number": 8,
+      "arabic": "وَنُيَسِّرُكَ لِلۡيُسۡرَىٰ",
+      "french": "Nous te mettrons sur la voie la plus facile",
+      "phonetic": "Wanuyassiruka lilyusra",
+      "juz": 30,
+      "hizb": 60,
+      "page": 591
+    },
+    {
+      "number": 9,
+      "arabic": "فَذَكِّرۡ إِن نَّفَعَتِ ٱلذِّكۡرَىٰ",
+      "french": "Rappelle, donc, où le Rappel doit être utile",
+      "phonetic": "Fathakkir in nafaAAati alththikra",
+      "juz": 30,
+      "hizb": 60,
+      "page": 591
+    },
+    {
+      "number": 10,
+      "arabic": "سَيَذَّكَّرُ مَن يَخۡشَىٰ",
+      "french": "Quiconque craint (Allah) s'[en] rappellera",
+      "phonetic": "Sayaththakkaru man yakhsha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 591
+    },
+    {
+      "number": 11,
+      "arabic": "وَيَتَجَنَّبُهَا ٱلۡأَشۡقَى",
+      "french": "et s'en écartera le grand malheureux",
+      "phonetic": "Wayatajannabuha alashqa",
+      "juz": 30,
+      "hizb": 60,
+      "page": 591
+    },
+    {
+      "number": 12,
+      "arabic": "ٱلَّذِي يَصۡلَى ٱلنَّارَ ٱلۡكُبۡرَىٰ",
+      "french": "qui brûlera dans le plus grand Feu",
+      "phonetic": "Allathee yasla alnnara alkubra",
+      "juz": 30,
+      "hizb": 60,
+      "page": 591
+    },
+    {
+      "number": 13,
+      "arabic": "ثُمَّ لَا يَمُوتُ فِيهَا وَلَا يَحۡيَىٰ",
+      "french": "où il ne mourra ni ne vivra",
+      "phonetic": "Thumma la yamootu feeha wala yahya",
+      "juz": 30,
+      "hizb": 60,
+      "page": 591
+    },
+    {
+      "number": 14,
+      "arabic": "قَدۡ أَفۡلَحَ مَن تَزَكَّىٰ",
+      "french": "Réussit, certes, celui qui se purifie",
+      "phonetic": "Qad aflaha man tazakka",
+      "juz": 30,
+      "hizb": 60,
+      "page": 591
+    },
+    {
+      "number": 15,
+      "arabic": "وَذَكَرَ ٱسۡمَ رَبِّهِۦ فَصَلَّىٰ",
+      "french": "et se rappelle le nom de son Seigneur, puis célèbre la Salât",
+      "phonetic": "Wathakara isma rabbihi fasalla",
+      "juz": 30,
+      "hizb": 60,
+      "page": 591
+    },
+    {
+      "number": 16,
+      "arabic": "بَلۡ تُؤۡثِرُونَ ٱلۡحَيَوٰةَ ٱلدُّنۡيَا",
+      "french": "Mais, vous préférez plutôt la vie présente",
+      "phonetic": "Bal tuthiroona alhayata alddunya",
+      "juz": 30,
+      "hizb": 60,
+      "page": 592
+    },
+    {
+      "number": 17,
+      "arabic": "وَٱلۡأٓخِرَةُ خَيۡرٞ وَأَبۡقَىٰٓ",
+      "french": "alors que l'au-delà est meilleur et plus durable",
+      "phonetic": "Waalakhiratu khayrun waabqa",
+      "juz": 30,
+      "hizb": 60,
+      "page": 592
+    },
+    {
+      "number": 18,
+      "arabic": "إِنَّ هَٰذَا لَفِي ٱلصُّحُفِ ٱلۡأُولَىٰ",
+      "french": "Ceci se trouve, certes, dans les Feuilles anciennes",
+      "phonetic": "Inna hatha lafee alssuhufi aloola",
+      "juz": 30,
+      "hizb": 60,
+      "page": 592
+    },
+    {
+      "number": 19,
+      "arabic": "صُحُفِ إِبۡرَٰهِيمَ وَمُوسَىٰ",
+      "french": "les Feuilles d'Abraham et de Moïse",
+      "phonetic": "Suhufi ibraheema wamoosa",
+      "juz": 30,
+      "hizb": 60,
+      "page": 592
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "id": 104,
+  "nameArabic": "الهمزة",
+  "nameTransliteration": "Al-Humazah",
+  "nameFrench": "Les calomniateurs",
+  "revelationType": "meccan",
+  "totalVerses": 9,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "وَيۡلٞ لِّكُلِّ هُمَزَةٖ لُّمَزَةٍ",
+      "french": "Malheur à tout calomniateur diffamateur",
+      "phonetic": "Waylun likulli humazatin lumazatin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    },
+    {
+      "number": 2,
+      "arabic": "ٱلَّذِي جَمَعَ مَالٗا وَعَدَّدَهُۥ",
+      "french": "qui amasse une fortune et la compte",
+      "phonetic": "Allathee jamaAAa malan waAAaddadahu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    },
+    {
+      "number": 3,
+      "arabic": "يَحۡسَبُ أَنَّ مَالَهُۥٓ أَخۡلَدَهُۥ",
+      "french": "pensant que sa fortune l'immortalisera",
+      "phonetic": "Yahsabu anna malahu akhladahu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    },
+    {
+      "number": 4,
+      "arabic": "كَلَّاۖ لَيُنۢبَذَنَّ فِي ٱلۡحُطَمَةِ",
+      "french": "Mais non! Il sera certes, jeté dans la Hutamah",
+      "phonetic": "Kalla layunbathanna fee alhutamati",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    },
+    {
+      "number": 5,
+      "arabic": "وَمَآ أَدۡرَىٰكَ مَا ٱلۡحُطَمَةُ",
+      "french": "Et qui te dira ce qu'est la Hutamah",
+      "phonetic": "Wama adraka ma alhutamatu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    },
+    {
+      "number": 6,
+      "arabic": "نَارُ ٱللَّهِ ٱلۡمُوقَدَةُ",
+      "french": "Le Feu attisé d'Allah",
+      "phonetic": "Naru Allahi almooqadatu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    },
+    {
+      "number": 7,
+      "arabic": "ٱلَّتِي تَطَّلِعُ عَلَى ٱلۡأَفۡـِٔدَةِ",
+      "french": "qui monte jusqu'aux cœurs",
+      "phonetic": "Allatee tattaliAAu AAala alafidati",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    },
+    {
+      "number": 8,
+      "arabic": "إِنَّهَا عَلَيۡهِم مُّؤۡصَدَةٞ",
+      "french": "Il se refermera sur eux",
+      "phonetic": "lnnaha AAalayhim musadatun",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    },
+    {
+      "number": 9,
+      "arabic": "فِي عَمَدٖ مُّمَدَّدَةِۭ",
+      "french": "en colonnes (de flammes) étendues",
+      "phonetic": "Fee AAamadin mumaddadatin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    }
+  ]
+}

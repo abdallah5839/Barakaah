@@ -1,0 +1,82 @@
+{
+  "id": 98,
+  "nameArabic": "البينة",
+  "nameTransliteration": "Al-Bayyinah",
+  "nameFrench": "La preuve",
+  "revelationType": "medinan",
+  "totalVerses": 8,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "لَمۡ يَكُنِ ٱلَّذِينَ كَفَرُواْ مِنۡ أَهۡلِ ٱلۡكِتَٰبِ وَٱلۡمُشۡرِكِينَ مُنفَكِّينَ حَتَّىٰ تَأۡتِيَهُمُ ٱلۡبَيِّنَةُ",
+      "french": "Les infidèles parmi les gens du Livre, ainsi que les Associateurs, ne cesseront pas de mécroire jusqu'à ce que leur vienne la Preuve évidente",
+      "phonetic": "Lam yakuni allatheena kafaroo min ahli alkitabi waalmushrikeena munfakkeena hatta tatiyahumu albayyinatu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 598
+    },
+    {
+      "number": 2,
+      "arabic": "رَسُولٞ مِّنَ ٱللَّهِ يَتۡلُواْ صُحُفٗا مُّطَهَّرَةٗ",
+      "french": "un Messager, de la part d'Allah, qui leur récite des feuilles purifiées",
+      "phonetic": "Rasoolun mina Allahi yatloo suhufan mutahharatan",
+      "juz": 30,
+      "hizb": 60,
+      "page": 598
+    },
+    {
+      "number": 3,
+      "arabic": "فِيهَا كُتُبٞ قَيِّمَةٞ",
+      "french": "dans lesquelles se trouvent des prescriptions d'une rectitude parfaite",
+      "phonetic": "Feeha kutubun qayyimatun",
+      "juz": 30,
+      "hizb": 60,
+      "page": 598
+    },
+    {
+      "number": 4,
+      "arabic": "وَمَا تَفَرَّقَ ٱلَّذِينَ أُوتُواْ ٱلۡكِتَٰبَ إِلَّا مِنۢ بَعۡدِ مَا جَآءَتۡهُمُ ٱلۡبَيِّنَةُ",
+      "french": "Et ceux à qui le Livre a été donné ne se sont divisés qu'après que la preuve leur fut venue",
+      "phonetic": "Wama tafarraqa allatheena ootoo alkitaba illa min baAAdi ma jaathumu albayyinatu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 598
+    },
+    {
+      "number": 5,
+      "arabic": "وَمَآ أُمِرُوٓاْ إِلَّا لِيَعۡبُدُواْ ٱللَّهَ مُخۡلِصِينَ لَهُ ٱلدِّينَ حُنَفَآءَ وَيُقِيمُواْ ٱلصَّلَوٰةَ وَيُؤۡتُواْ ٱلزَّكَوٰةَۚ وَذَٰلِكَ دِينُ ٱلۡقَيِّمَةِ",
+      "french": "Il ne leur a été commandé, cependant, que d'adorer Allah, Lui vouant un culte exclusif, d'accomplir la Salât et d'acquitter la Zakât. Et voilà la religion de droiture",
+      "phonetic": "Wama omiroo illa liyaAAbudoo Allaha mukhliseena lahu alddeena hunafaa wayuqeemoo alssalata wayutoo alzzakata wathalika deenu alqayyimati",
+      "juz": 30,
+      "hizb": 60,
+      "page": 598
+    },
+    {
+      "number": 6,
+      "arabic": "إِنَّ ٱلَّذِينَ كَفَرُواْ مِنۡ أَهۡلِ ٱلۡكِتَٰبِ وَٱلۡمُشۡرِكِينَ فِي نَارِ جَهَنَّمَ خَٰلِدِينَ فِيهَآۚ أُوْلَـٰٓئِكَ هُمۡ شَرُّ ٱلۡبَرِيَّةِ",
+      "french": "Les infidèles parmi les gens du Livre, ainsi que les Associateurs iront au feu de l'Enfer, pour y demeurer éternellement. De toute la création, ce sont eux les pires",
+      "phonetic": "Inna allatheena kafaroo min ahli alkitabi waalmushrikeena fee nari jahannama khalideena feeha olaika hum sharru albariyyati",
+      "juz": 30,
+      "hizb": 60,
+      "page": 598
+    },
+    {
+      "number": 7,
+      "arabic": "إِنَّ ٱلَّذِينَ ءَامَنُواْ وَعَمِلُواْ ٱلصَّـٰلِحَٰتِ أُوْلَـٰٓئِكَ هُمۡ خَيۡرُ ٱلۡبَرِيَّةِ",
+      "french": "Quant à ceux qui croient et accomplissent les bonnes œuvres, ce sont les meilleurs de toute la création",
+      "phonetic": "Inna allatheena amanoo waAAamiloo alssalihati olaika hum khayru albariyyati",
+      "juz": 30,
+      "hizb": 60,
+      "page": 598
+    },
+    {
+      "number": 8,
+      "arabic": "جَزَآؤُهُمۡ عِندَ رَبِّهِمۡ جَنَّـٰتُ عَدۡنٖ تَجۡرِي مِن تَحۡتِهَا ٱلۡأَنۡهَٰرُ خَٰلِدِينَ فِيهَآ أَبَدٗاۖ رَّضِيَ ٱللَّهُ عَنۡهُمۡ وَرَضُواْ عَنۡهُۚ ذَٰلِكَ لِمَنۡ خَشِيَ رَبَّهُۥ",
+      "french": "Leur récompense auprès d'Allah sera les Jardins de séjour, sous lesquels coulent les ruisseaux, pour y demeurer éternellement. Allah les agrée et ils L'agréent. Telle sera [la récompense] de celui qui craint son Seigneur",
+      "phonetic": "Jazaohum AAinda rabbihim jannatu AAadnin tajree min tahtiha alanharu khalideena feeha abadan radiya Allahu AAanhum waradoo AAanhu thalika liman khashiya rabbahu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    }
+  ]
+}
