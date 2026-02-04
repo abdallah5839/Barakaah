@@ -1,0 +1,280 @@
+{
+  "id": 67,
+  "nameArabic": "الملك",
+  "nameTransliteration": "Al-Mulk",
+  "nameFrench": "La royauté",
+  "revelationType": "meccan",
+  "totalVerses": 30,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "تَبَٰرَكَ ٱلَّذِي بِيَدِهِ ٱلۡمُلۡكُ وَهُوَ عَلَىٰ كُلِّ شَيۡءٖ قَدِيرٌ",
+      "french": "Béni soit celui dans la main de qui est la royauté, et Il est Omnipotent",
+      "phonetic": "Tabaraka allathee biyadihi almulku wahuwa AAala kulli shayin qadeerun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 562
+    },
+    {
+      "number": 2,
+      "arabic": "ٱلَّذِي خَلَقَ ٱلۡمَوۡتَ وَٱلۡحَيَوٰةَ لِيَبۡلُوَكُمۡ أَيُّكُمۡ أَحۡسَنُ عَمَلٗاۚ وَهُوَ ٱلۡعَزِيزُ ٱلۡغَفُورُ",
+      "french": "Celui qui a créé la mort et la vie afin de vous éprouver (et de savoir) qui de vous est le meilleur en œuvre, et c'est Lui le Puissant, le Pardonneur",
+      "phonetic": "Allathee khalaqa almawta waalhayata liyabluwakum ayyukum ahsanu AAamalan wahuwa alAAazeezu alghafooru",
+      "juz": 29,
+      "hizb": 57,
+      "page": 562
+    },
+    {
+      "number": 3,
+      "arabic": "ٱلَّذِي خَلَقَ سَبۡعَ سَمَٰوَٰتٖ طِبَاقٗاۖ مَّا تَرَىٰ فِي خَلۡقِ ٱلرَّحۡمَٰنِ مِن تَفَٰوُتٖۖ فَٱرۡجِعِ ٱلۡبَصَرَ هَلۡ تَرَىٰ مِن فُطُورٖ",
+      "french": "Celui qui a créé sept cieux superposés sans que tu voies de disproportion en la création du Tout Miséricordieux. Ramène [sur elle] le regard. Y vois-tu une brèche quelconque",
+      "phonetic": "Allathee khalaqa sabAAa samawatin tibaqan ma tara fee khalqi alrrahmani min tafawutin fairjiAAi albasara hal tara min futoorin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 562
+    },
+    {
+      "number": 4,
+      "arabic": "ثُمَّ ٱرۡجِعِ ٱلۡبَصَرَ كَرَّتَيۡنِ يَنقَلِبۡ إِلَيۡكَ ٱلۡبَصَرُ خَاسِئٗا وَهُوَ حَسِيرٞ",
+      "french": "Puis, retourne ton regard à deux fois: le regard te reviendra humilié et frustré",
+      "phonetic": "Thumma irjiAAi albasara karratayni yanqalib ilayka albasaru khasian wahuwa haseerun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 562
+    },
+    {
+      "number": 5,
+      "arabic": "وَلَقَدۡ زَيَّنَّا ٱلسَّمَآءَ ٱلدُّنۡيَا بِمَصَٰبِيحَ وَجَعَلۡنَٰهَا رُجُومٗا لِّلشَّيَٰطِينِۖ وَأَعۡتَدۡنَا لَهُمۡ عَذَابَ ٱلسَّعِيرِ",
+      "french": "Nous avons effectivement embelli le ciel le plus proche avec des lampes [des étoiles] dont Nous avons fait des projectiles pour lapider les diables et Nous leur avons préparé le châtiment de la Fournaise",
+      "phonetic": "Walaqad zayyanna alssamaa alddunya bimasabeeha wajaAAalnaha rujooman lilshshayateeni waaAAtadna lahum AAathaba alssaAAeeri",
+      "juz": 29,
+      "hizb": 57,
+      "page": 562
+    },
+    {
+      "number": 6,
+      "arabic": "وَلِلَّذِينَ كَفَرُواْ بِرَبِّهِمۡ عَذَابُ جَهَنَّمَۖ وَبِئۡسَ ٱلۡمَصِيرُ",
+      "french": "Ceux qui ont mécru à leur Seigneur auront le châtiment de l'Enfer. Et quelle mauvaise destination",
+      "phonetic": "Walillatheena kafaroo birabbihim AAathabu jahannama wabisa almaseeru",
+      "juz": 29,
+      "hizb": 57,
+      "page": 562
+    },
+    {
+      "number": 7,
+      "arabic": "إِذَآ أُلۡقُواْ فِيهَا سَمِعُواْ لَهَا شَهِيقٗا وَهِيَ تَفُورُ",
+      "french": "Quand ils y seront jetés, ils lui entendront un gémissement, tandis qu'il bouillonne",
+      "phonetic": "Itha olqoo feeha samiAAoo laha shaheeqan wahiya tafooru",
+      "juz": 29,
+      "hizb": 57,
+      "page": 562
+    },
+    {
+      "number": 8,
+      "arabic": "تَكَادُ تَمَيَّزُ مِنَ ٱلۡغَيۡظِۖ كُلَّمَآ أُلۡقِيَ فِيهَا فَوۡجٞ سَأَلَهُمۡ خَزَنَتُهَآ أَلَمۡ يَأۡتِكُمۡ نَذِيرٞ",
+      "french": "Peu s'en faut que, de rage, il n'éclate. Toutes les fois qu'un groupe y est jeté, ses gardiens leur demandent: «Quoi! ne vous est-il pas venu d'avertisseur?»",
+      "phonetic": "Takadu tamayyazu mina alghaythi kullama olqiya feeha fawjun saalahum khazanatuha alam yatikum natheerun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 562
+    },
+    {
+      "number": 9,
+      "arabic": "قَالُواْ بَلَىٰ قَدۡ جَآءَنَا نَذِيرٞ فَكَذَّبۡنَا وَقُلۡنَا مَا نَزَّلَ ٱللَّهُ مِن شَيۡءٍ إِنۡ أَنتُمۡ إِلَّا فِي ضَلَٰلٖ كَبِيرٖ",
+      "french": "Ils dirent: «Mais si! un avertisseur nous était venu certes, mais nous avons crié au mensonge et avons dit: Allah n'a rien fait descendre: vous n'êtes que dans un grand égarement»",
+      "phonetic": "Qaloo bala qad jaana natheerun fakaththabna waqulna ma nazzala Allahu min shayin in antum illa fee dalalin kabeerin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 562
+    },
+    {
+      "number": 10,
+      "arabic": "وَقَالُواْ لَوۡ كُنَّا نَسۡمَعُ أَوۡ نَعۡقِلُ مَا كُنَّا فِيٓ أَصۡحَٰبِ ٱلسَّعِيرِ",
+      "french": "Et ils dirent: «Si nous avions écouté ou raisonné, nous ne serions pas parmi les gens de la Fournaise»",
+      "phonetic": "Waqaloo law kunna nasmaAAu aw naAAqilu ma kunna fee ashabi alssaAAeeri",
+      "juz": 29,
+      "hizb": 57,
+      "page": 562
+    },
+    {
+      "number": 11,
+      "arabic": "فَٱعۡتَرَفُواْ بِذَنۢبِهِمۡ فَسُحۡقٗا لِّأَصۡحَٰبِ ٱلسَّعِيرِ",
+      "french": "Ils ont reconnu leur péché. Que les gens de la Fournaise soient anéantis à jamais",
+      "phonetic": "FaiAAtarafoo bithanbihim fasuhqan liashabi alssaAAeeri",
+      "juz": 29,
+      "hizb": 57,
+      "page": 562
+    },
+    {
+      "number": 12,
+      "arabic": "إِنَّ ٱلَّذِينَ يَخۡشَوۡنَ رَبَّهُم بِٱلۡغَيۡبِ لَهُم مَّغۡفِرَةٞ وَأَجۡرٞ كَبِيرٞ",
+      "french": "Ceux qui redoutent leur Seigneur bien qu'ils ne L'aient jamais vu auront un pardon et une grande récompense",
+      "phonetic": "Inna allatheena yakhshawna rabbahum bialghaybi lahum maghfiratun waajrun kabeerun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 562
+    },
+    {
+      "number": 13,
+      "arabic": "وَأَسِرُّواْ قَوۡلَكُمۡ أَوِ ٱجۡهَرُواْ بِهِۦٓۖ إِنَّهُۥ عَلِيمُۢ بِذَاتِ ٱلصُّدُورِ",
+      "french": "Que vous cachiez votre parole ou la divulguiez Il connaît bien le contenu des poitrines",
+      "phonetic": "Waasirroo qawlakum awi ijharoo bihi innahu AAaleemun bithati alssudoori",
+      "juz": 29,
+      "hizb": 57,
+      "page": 563
+    },
+    {
+      "number": 14,
+      "arabic": "أَلَا يَعۡلَمُ مَنۡ خَلَقَ وَهُوَ ٱللَّطِيفُ ٱلۡخَبِيرُ",
+      "french": "Ne connaît-Il pas ce qu'Il a créé alors que c'est Lui le Compatissant, le Parfaitement Connaisseur",
+      "phonetic": "Ala yaAAlamu man khalaqa wahuwa allateefu alkhabeeru",
+      "juz": 29,
+      "hizb": 57,
+      "page": 563
+    },
+    {
+      "number": 15,
+      "arabic": "هُوَ ٱلَّذِي جَعَلَ لَكُمُ ٱلۡأَرۡضَ ذَلُولٗا فَٱمۡشُواْ فِي مَنَاكِبِهَا وَكُلُواْ مِن رِّزۡقِهِۦۖ وَإِلَيۡهِ ٱلنُّشُورُ",
+      "french": "C'est Lui qui vous a soumis la terre: parcourez donc ses grandes étendues. Mangez de ce qu'Il vous fournit. Vers Lui est la Résurrection",
+      "phonetic": "Huwa allathee jaAAala lakumu alarda thaloolan faimshoo fee manakibiha wakuloo min rizqihi wailayhi alnnushooru",
+      "juz": 29,
+      "hizb": 57,
+      "page": 563
+    },
+    {
+      "number": 16,
+      "arabic": "ءَأَمِنتُم مَّن فِي ٱلسَّمَآءِ أَن يَخۡسِفَ بِكُمُ ٱلۡأَرۡضَ فَإِذَا هِيَ تَمُورُ",
+      "french": "Etes-vous à l'abri que Celui qui est au ciel vous enfouisse en la terre? Et voici qu'elle tremble",
+      "phonetic": "Aamintum man fee alssamai an yakhsifa bikumu alarda faitha hiya tamooru",
+      "juz": 29,
+      "hizb": 57,
+      "page": 563
+    },
+    {
+      "number": 17,
+      "arabic": "أَمۡ أَمِنتُم مَّن فِي ٱلسَّمَآءِ أَن يُرۡسِلَ عَلَيۡكُمۡ حَاصِبٗاۖ فَسَتَعۡلَمُونَ كَيۡفَ نَذِيرِ",
+      "french": "Ou êtes-vous à l'abri que Celui qui est au ciel envoie contre vous un ouragan de pierres? Vous saurez ainsi quel fut Mon avertissement",
+      "phonetic": "Am amintum man fee alssamai an yursila AAalaykum hasiban fasataAAlamoona kayfa natheeri",
+      "juz": 29,
+      "hizb": 57,
+      "page": 563
+    },
+    {
+      "number": 18,
+      "arabic": "وَلَقَدۡ كَذَّبَ ٱلَّذِينَ مِن قَبۡلِهِمۡ فَكَيۡفَ كَانَ نَكِيرِ",
+      "french": "En effet, ceux d'avant eux avaient crié au mensonge. Quelle fut alors Ma réprobation",
+      "phonetic": "Walaqad kaththaba allatheena min qablihim fakayfa kana nakeeri",
+      "juz": 29,
+      "hizb": 57,
+      "page": 563
+    },
+    {
+      "number": 19,
+      "arabic": "أَوَلَمۡ يَرَوۡاْ إِلَى ٱلطَّيۡرِ فَوۡقَهُمۡ صَـٰٓفَّـٰتٖ وَيَقۡبِضۡنَۚ مَا يُمۡسِكُهُنَّ إِلَّا ٱلرَّحۡمَٰنُۚ إِنَّهُۥ بِكُلِّ شَيۡءِۭ بَصِيرٌ",
+      "french": "N'ont-ils pas vu les oiseaux au-dessus d'eux, déployant et repliant leurs ailes tour à tour? Seul le Tout Miséricordieux les soutient. Car Il est sur toute chose, Clairvoyant",
+      "phonetic": "Awalam yaraw ila alttayri fawqahum saffatin wayaqbidna ma yumsikuhunna illa alrrahmanu innahu bikulli shayin baseerun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 563
+    },
+    {
+      "number": 20,
+      "arabic": "أَمَّنۡ هَٰذَا ٱلَّذِي هُوَ جُندٞ لَّكُمۡ يَنصُرُكُم مِّن دُونِ ٱلرَّحۡمَٰنِۚ إِنِ ٱلۡكَٰفِرُونَ إِلَّا فِي غُرُورٍ",
+      "french": "Quel est celui qui constituerait pour vous une armée [capable] de vous secourir, en dehors du Tout Miséricordieux? En vérité les mécréants sont dans l'illusion complète",
+      "phonetic": "Amman hatha allathee huwa jundun lakum yansurukum min dooni alrrahmani ini alkafiroona illa fee ghuroorin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 563
+    },
+    {
+      "number": 21,
+      "arabic": "أَمَّنۡ هَٰذَا ٱلَّذِي يَرۡزُقُكُمۡ إِنۡ أَمۡسَكَ رِزۡقَهُۥۚ بَل لَّجُّواْ فِي عُتُوّٖ وَنُفُورٍ",
+      "french": "Ou quel est celui qui vous donnera votre subsistance s'Il s'arrête de fournir Son attribution? Mais ils persistent dans leur insolence et dans leur répulsion",
+      "phonetic": "Amman hatha allathee yarzuqukum in amsaka rizqahu bal lajjoo fee AAutuwwin wanufoorin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 563
+    },
+    {
+      "number": 22,
+      "arabic": "أَفَمَن يَمۡشِي مُكِبًّا عَلَىٰ وَجۡهِهِۦٓ أَهۡدَىٰٓ أَمَّن يَمۡشِي سَوِيًّا عَلَىٰ صِرَٰطٖ مُّسۡتَقِيمٖ",
+      "french": "Qui est donc mieux guidé? Celui qui marche face contre terre ou celui qui marche redressé sur un chemin droit",
+      "phonetic": "Afaman yamshee mukibban AAala wajhihi ahda amman yamshee sawiyyan AAala siratin mustaqeemin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 563
+    },
+    {
+      "number": 23,
+      "arabic": "قُلۡ هُوَ ٱلَّذِيٓ أَنشَأَكُمۡ وَجَعَلَ لَكُمُ ٱلسَّمۡعَ وَٱلۡأَبۡصَٰرَ وَٱلۡأَفۡـِٔدَةَۚ قَلِيلٗا مَّا تَشۡكُرُونَ",
+      "french": "Dis: «C'est Lui qui vous a créés et vous a donné l'ouïe, les yeux et les cœurs». Mais vous êtes rarement reconnaissants",
+      "phonetic": "Qul huwa allathee anshaakum wajaAAala lakumu alssamAAa waalabsara waalafidata qaleelan ma tashkuroona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 563
+    },
+    {
+      "number": 24,
+      "arabic": "قُلۡ هُوَ ٱلَّذِي ذَرَأَكُمۡ فِي ٱلۡأَرۡضِ وَإِلَيۡهِ تُحۡشَرُونَ",
+      "french": "Dis: «C'est Lui qui vous a répandus sur la terre, et c'est vers Lui que vous serez rassemblés»",
+      "phonetic": "Qul huwa allathee tharaakum fee alardi wailayhi tuhsharoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 563
+    },
+    {
+      "number": 25,
+      "arabic": "وَيَقُولُونَ مَتَىٰ هَٰذَا ٱلۡوَعۡدُ إِن كُنتُمۡ صَٰدِقِينَ",
+      "french": "Et ils disent: «A quand cette promesse si vous êtes véridiques?»",
+      "phonetic": "Wayaqooloona mata hatha alwaAAdu in kuntum sadiqeena",
+      "juz": 29,
+      "hizb": 57,
+      "page": 563
+    },
+    {
+      "number": 26,
+      "arabic": "قُلۡ إِنَّمَا ٱلۡعِلۡمُ عِندَ ٱللَّهِ وَإِنَّمَآ أَنَا۠ نَذِيرٞ مُّبِينٞ",
+      "french": "Dis: «Allah seul [en] a la connaissance. Et moi je ne suis qu'un avertisseur clair»",
+      "phonetic": "Qul innama alAAilmu AAinda Allahi wainnama ana natheerun mubeenun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 563
+    },
+    {
+      "number": 27,
+      "arabic": "فَلَمَّا رَأَوۡهُ زُلۡفَةٗ سِيٓـَٔتۡ وُجُوهُ ٱلَّذِينَ كَفَرُواْ وَقِيلَ هَٰذَا ٱلَّذِي كُنتُم بِهِۦ تَدَّعُونَ",
+      "french": "Puis, quand ils verront (le châtiment) de près, les visages de ceux qui ont mécru seront affligés. Et il leur sera dit: «Voilà ce que vous réclamiez»",
+      "phonetic": "Falamma raawhu zulfatan seeat wujoohu allatheena kafaroo waqeela hatha allathee kuntum bihi taddaAAoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 564
+    },
+    {
+      "number": 28,
+      "arabic": "قُلۡ أَرَءَيۡتُمۡ إِنۡ أَهۡلَكَنِيَ ٱللَّهُ وَمَن مَّعِيَ أَوۡ رَحِمَنَا فَمَن يُجِيرُ ٱلۡكَٰفِرِينَ مِنۡ عَذَابٍ أَلِيمٖ",
+      "french": "Dis: «Que vous en semble? Qu'Allah me fasse périr ainsi que ceux qui sont avec moi ou qu'Il nous fasse miséricorde, qui protégera alors les mécréants d'un châtiment douloureux?»",
+      "phonetic": "Qul araaytum in ahlakaniya Allahu waman maAAiya aw rahimana faman yujeeru alkafireena min AAathabin aleemin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 564
+    },
+    {
+      "number": 29,
+      "arabic": "قُلۡ هُوَ ٱلرَّحۡمَٰنُ ءَامَنَّا بِهِۦ وَعَلَيۡهِ تَوَكَّلۡنَاۖ فَسَتَعۡلَمُونَ مَنۡ هُوَ فِي ضَلَٰلٖ مُّبِينٖ",
+      "french": "Dis: «C'est Lui, le Tout Miséricordieux. Nous croyons en Lui et c'est en Lui que nous plaçons notre confiance. Vous saurez bientôt qui est dans un égarement évident»",
+      "phonetic": "Qul huwa alrrahmanu amanna bihi waAAalayhi tawakkalna fasataAAlamoona man huwa fee dalalin mubeenin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 564
+    },
+    {
+      "number": 30,
+      "arabic": "قُلۡ أَرَءَيۡتُمۡ إِنۡ أَصۡبَحَ مَآؤُكُمۡ غَوۡرٗا فَمَن يَأۡتِيكُم بِمَآءٖ مَّعِينِۭ",
+      "french": "Dis: «Que vous en semble? Si votre eau était absorbée au plus profond de la terre, qui donc vous apporterait de l'eau de source?»",
+      "phonetic": "Qul araaytum in asbaha maokum ghawran faman yateekum bimain maAAeenin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 564
+    }
+  ]
+}

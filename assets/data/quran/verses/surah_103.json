@@ -1,0 +1,37 @@
+{
+  "id": 103,
+  "nameArabic": "العصر",
+  "nameTransliteration": "Al-'Asr",
+  "nameFrench": "Le temps",
+  "revelationType": "meccan",
+  "totalVerses": 3,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "وَٱلۡعَصۡرِ",
+      "french": "Par le Temps",
+      "phonetic": "WaalAAasri",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    },
+    {
+      "number": 2,
+      "arabic": "إِنَّ ٱلۡإِنسَٰنَ لَفِي خُسۡرٍ",
+      "french": "L'homme est certes, en perdition",
+      "phonetic": "Inna alinsana lafee khusrin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    },
+    {
+      "number": 3,
+      "arabic": "إِلَّا ٱلَّذِينَ ءَامَنُواْ وَعَمِلُواْ ٱلصَّـٰلِحَٰتِ وَتَوَاصَوۡاْ بِٱلۡحَقِّ وَتَوَاصَوۡاْ بِٱلصَّبۡرِ",
+      "french": "sauf ceux qui croient et accomplissent les bonnes œuvres, s'enjoignent mutuellement la vérité et s'enjoignent mutuellement l'endurance",
+      "phonetic": "Illa allatheena amanoo waAAamiloo alssalihati watawasaw bialhaqqi watawasaw bialssabri",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    }
+  ]
+}

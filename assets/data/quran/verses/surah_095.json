@@ -1,0 +1,82 @@
+{
+  "id": 95,
+  "nameArabic": "التين",
+  "nameTransliteration": "At-Tin",
+  "nameFrench": "Les figues",
+  "revelationType": "meccan",
+  "totalVerses": 8,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "وَٱلتِّينِ وَٱلزَّيۡتُونِ",
+      "french": "Par le figuier et l'olivier",
+      "phonetic": "Waaltteeni waalzzaytooni",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 2,
+      "arabic": "وَطُورِ سِينِينَ",
+      "french": "Et par le Mont Sînîn",
+      "phonetic": "Watoori seeneena",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 3,
+      "arabic": "وَهَٰذَا ٱلۡبَلَدِ ٱلۡأَمِينِ",
+      "french": "Et par cette Cité sûre",
+      "phonetic": "Wahatha albaladi alameeni",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 4,
+      "arabic": "لَقَدۡ خَلَقۡنَا ٱلۡإِنسَٰنَ فِيٓ أَحۡسَنِ تَقۡوِيمٖ",
+      "french": "Nous avons certes créé l'homme dans la forme la plus parfaite",
+      "phonetic": "Laqad khalaqna alinsana fee ahsani taqweemin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 5,
+      "arabic": "ثُمَّ رَدَدۡنَٰهُ أَسۡفَلَ سَٰفِلِينَ",
+      "french": "Ensuite, Nous l'avons ramené au niveau le plus bas",
+      "phonetic": "Thumma radadnahu asfala safileena",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 6,
+      "arabic": "إِلَّا ٱلَّذِينَ ءَامَنُواْ وَعَمِلُواْ ٱلصَّـٰلِحَٰتِ فَلَهُمۡ أَجۡرٌ غَيۡرُ مَمۡنُونٖ",
+      "french": "sauf ceux qui croient et accomplissent les bonnes œuvres: ceux-là auront une récompense jamais interrompue",
+      "phonetic": "Illa allatheena amanoo waAAamiloo alssalihati falahum ajrun ghayru mamnoonin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 7,
+      "arabic": "فَمَا يُكَذِّبُكَ بَعۡدُ بِٱلدِّينِ",
+      "french": "Après cela, qu'est-ce qui te fait traiter la rétribution de mensonge",
+      "phonetic": "Fama yukaththibuka baAAdu bialddeeni",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    },
+    {
+      "number": 8,
+      "arabic": "أَلَيۡسَ ٱللَّهُ بِأَحۡكَمِ ٱلۡحَٰكِمِينَ",
+      "french": "Allah n'est-Il pas le plus sage des Juges",
+      "phonetic": "Alaysa Allahu biahkami alhakimeena",
+      "juz": 30,
+      "hizb": 60,
+      "page": 597
+    }
+  ]
+}

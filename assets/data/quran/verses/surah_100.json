@@ -1,0 +1,109 @@
+{
+  "id": 100,
+  "nameArabic": "العاديات",
+  "nameTransliteration": "Al-'Adiyat",
+  "nameFrench": "Les coursiers",
+  "revelationType": "meccan",
+  "totalVerses": 11,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "وَٱلۡعَٰدِيَٰتِ ضَبۡحٗا",
+      "french": "Par les coursiers qui halètent",
+      "phonetic": "WaalAAadiyati dabhan",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 2,
+      "arabic": "فَٱلۡمُورِيَٰتِ قَدۡحٗا",
+      "french": "qui font jaillir des étincelles",
+      "phonetic": "Faalmooriyati qadhan",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 3,
+      "arabic": "فَٱلۡمُغِيرَٰتِ صُبۡحٗا",
+      "french": "qui attaquent au matin",
+      "phonetic": "Faalmugheerati subhan",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 4,
+      "arabic": "فَأَثَرۡنَ بِهِۦ نَقۡعٗا",
+      "french": "et font ainsi voler la poussière",
+      "phonetic": "Faatharna bihi naqAAan",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 5,
+      "arabic": "فَوَسَطۡنَ بِهِۦ جَمۡعًا",
+      "french": "et pénètrent au centre de la troupe ennemie",
+      "phonetic": "Fawasatna bihi jamAAan",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 6,
+      "arabic": "إِنَّ ٱلۡإِنسَٰنَ لِرَبِّهِۦ لَكَنُودٞ",
+      "french": "L'homme est, certes, ingrat envers son Seigneur",
+      "phonetic": "Inna alinsana lirabbihi lakanoodun",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 7,
+      "arabic": "وَإِنَّهُۥ عَلَىٰ ذَٰلِكَ لَشَهِيدٞ",
+      "french": "et pourtant, il est certes, témoin de cela",
+      "phonetic": "Wainnahu AAala thalika lashaheedun",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 8,
+      "arabic": "وَإِنَّهُۥ لِحُبِّ ٱلۡخَيۡرِ لَشَدِيدٌ",
+      "french": "et pour l'amour des richesses il est certes ardent",
+      "phonetic": "Wainnahu lihubbi alkhayri lashadeedun",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 9,
+      "arabic": "۞أَفَلَا يَعۡلَمُ إِذَا بُعۡثِرَ مَا فِي ٱلۡقُبُورِ",
+      "french": "Ne sait-il donc pas que lorsque ce qui est dans les tombes sera bouleversé",
+      "phonetic": "Afala yaAAlamu itha buAAthira ma fee alquboori",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 10,
+      "arabic": "وَحُصِّلَ مَا فِي ٱلصُّدُورِ",
+      "french": "et que sera dévoilé ce qui est dans les poitrines",
+      "phonetic": "Wahussila ma fee alssudoori",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    },
+    {
+      "number": 11,
+      "arabic": "إِنَّ رَبَّهُم بِهِمۡ يَوۡمَئِذٖ لَّخَبِيرُۢ",
+      "french": "ce jour-là, certes, leur Seigneur sera Parfaitement Connaisseur d'eux",
+      "phonetic": "Inna rabbahum bihim yawmaithin lakhabeerun",
+      "juz": 30,
+      "hizb": 60,
+      "page": 600
+    }
+  ]
+}

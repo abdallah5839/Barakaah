@@ -1,0 +1,334 @@
+{
+  "id": 83,
+  "nameArabic": "المطففين",
+  "nameTransliteration": "Al-Mutaffifin",
+  "nameFrench": "Les fraudeurs",
+  "revelationType": "meccan",
+  "totalVerses": 36,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "وَيۡلٞ لِّلۡمُطَفِّفِينَ",
+      "french": "Malheur aux fraudeurs",
+      "phonetic": "Waylun lilmutaffifeena",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 2,
+      "arabic": "ٱلَّذِينَ إِذَا ٱكۡتَالُواْ عَلَى ٱلنَّاسِ يَسۡتَوۡفُونَ",
+      "french": "qui, lorsqu'ils font mesurer pour eux-mêmes exigent la pleine mesure",
+      "phonetic": "Allatheena itha iktaloo AAala alnnasi yastawfoona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 3,
+      "arabic": "وَإِذَا كَالُوهُمۡ أَو وَّزَنُوهُمۡ يُخۡسِرُونَ",
+      "french": "et qui lorsqu'eux-mêmes mesurent ou pèsent pour les autres, [leur] causent perte",
+      "phonetic": "Waitha kaloohum aw wazanoohum yukhsiroona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 4,
+      "arabic": "أَلَا يَظُنُّ أُوْلَـٰٓئِكَ أَنَّهُم مَّبۡعُوثُونَ",
+      "french": "Ceux-là ne pensent-ils pas qu'ils seront ressuscités",
+      "phonetic": "Ala yathunnu olaika annahum mabAAoothoona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 5,
+      "arabic": "لِيَوۡمٍ عَظِيمٖ",
+      "french": "en un jour terrible",
+      "phonetic": "Liyawmin AAatheemin",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 6,
+      "arabic": "يَوۡمَ يَقُومُ ٱلنَّاسُ لِرَبِّ ٱلۡعَٰلَمِينَ",
+      "french": "le jour où les gens se tiendront debout devant le Seigneur de l'Univers",
+      "phonetic": "Yawma yaqoomu alnnasu lirabbi alAAalameena",
+      "juz": 30,
+      "hizb": 59,
+      "page": 587
+    },
+    {
+      "number": 7,
+      "arabic": "كَلَّآ إِنَّ كِتَٰبَ ٱلۡفُجَّارِ لَفِي سِجِّينٖ",
+      "french": "Non...! Mais en vérité le livre des libertins sera dans le Sijjîn",
+      "phonetic": "Kalla inna kitaba alfujjari lafee sijjeenin",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 8,
+      "arabic": "وَمَآ أَدۡرَىٰكَ مَا سِجِّينٞ",
+      "french": "et qui te dira ce qu'est le Sijjîn",
+      "phonetic": "Wama adraka ma sijjeenun",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 9,
+      "arabic": "كِتَٰبٞ مَّرۡقُومٞ",
+      "french": "Un livre déjà cacheté (achevé)",
+      "phonetic": "Kitabun marqoomun",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 10,
+      "arabic": "وَيۡلٞ يَوۡمَئِذٖ لِّلۡمُكَذِّبِينَ",
+      "french": "Malheur, ce jour-là, aux négateurs",
+      "phonetic": "Waylun yawmaithin lilmukaththibeena",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 11,
+      "arabic": "ٱلَّذِينَ يُكَذِّبُونَ بِيَوۡمِ ٱلدِّينِ",
+      "french": "qui démentent le jour de la Rétribution",
+      "phonetic": "Allatheena yukaththiboona biyawmi alddeeni",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 12,
+      "arabic": "وَمَا يُكَذِّبُ بِهِۦٓ إِلَّا كُلُّ مُعۡتَدٍ أَثِيمٍ",
+      "french": "Or, ne le dément que tout transgresseur, pécheur",
+      "phonetic": "Wama yukaththibu bihi illa kullu muAAtadin atheemin",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 13,
+      "arabic": "إِذَا تُتۡلَىٰ عَلَيۡهِ ءَايَٰتُنَا قَالَ أَسَٰطِيرُ ٱلۡأَوَّلِينَ",
+      "french": "qui, lorsque Nos versets lui sont récités, dit: «[Ce sont] des contes d'anciens!»",
+      "phonetic": "Itha tutla AAalayhi ayatuna qala asateeru alawwaleena",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 14,
+      "arabic": "كَلَّاۖ بَلۡۜ رَانَ عَلَىٰ قُلُوبِهِم مَّا كَانُواْ يَكۡسِبُونَ",
+      "french": "Pas du tout, mais ce qu'ils ont accompli couvre leurs cœurs",
+      "phonetic": "Kalla bal rana AAala quloobihim ma kanoo yaksiboona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 15,
+      "arabic": "كَلَّآ إِنَّهُمۡ عَن رَّبِّهِمۡ يَوۡمَئِذٖ لَّمَحۡجُوبُونَ",
+      "french": "Qu'ils prennent garde! En vérité ce jour-là un voile les empêchera de voir leur Seigneur",
+      "phonetic": "Kalla innahum AAan rabbihim yawmaithin lamahjooboona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 16,
+      "arabic": "ثُمَّ إِنَّهُمۡ لَصَالُواْ ٱلۡجَحِيمِ",
+      "french": "ensuite, ils brûleront certes, dans la Fournaise",
+      "phonetic": "Thumma innahum lasaloo aljaheemi",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 17,
+      "arabic": "ثُمَّ يُقَالُ هَٰذَا ٱلَّذِي كُنتُم بِهِۦ تُكَذِّبُونَ",
+      "french": "on [leur] dira alors: «Voilà ce que vous traitiez de mensonge!»",
+      "phonetic": "Thumma yuqalu hatha allathee kuntum bihi tukaththiboona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 18,
+      "arabic": "كَلَّآ إِنَّ كِتَٰبَ ٱلۡأَبۡرَارِ لَفِي عِلِّيِّينَ",
+      "french": "Qu'ils prennent garde! Le livre des bons sera dans l'Illiyûn",
+      "phonetic": "Kalla inna kitaba alabrari lafee AAilliyyeena",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 19,
+      "arabic": "وَمَآ أَدۡرَىٰكَ مَا عِلِّيُّونَ",
+      "french": "et qui te dira ce qu'est l'Illiyûn",
+      "phonetic": "Wama adraka ma AAilliyyoona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 20,
+      "arabic": "كِتَٰبٞ مَّرۡقُومٞ",
+      "french": "un livre cacheté",
+      "phonetic": "Kitabun marqoomun",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 21,
+      "arabic": "يَشۡهَدُهُ ٱلۡمُقَرَّبُونَ",
+      "french": "Les rapprochés [d'Allah: les Anges] en témoignent",
+      "phonetic": "Yashhaduhu almuqarraboona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 22,
+      "arabic": "إِنَّ ٱلۡأَبۡرَارَ لَفِي نَعِيمٍ",
+      "french": "Les bons seront dans [un Jardin] de délice",
+      "phonetic": "Inna alabrara lafee naAAeemin",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 23,
+      "arabic": "عَلَى ٱلۡأَرَآئِكِ يَنظُرُونَ",
+      "french": "sur les divans, ils regardent",
+      "phonetic": "AAala alaraiki yanthuroona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 24,
+      "arabic": "تَعۡرِفُ فِي وُجُوهِهِمۡ نَضۡرَةَ ٱلنَّعِيمِ",
+      "french": "Tu reconnaîtras sur leurs visages, l'éclat de la félicité",
+      "phonetic": "TaAArifu fee wujoohihim nadrata alnnaAAeemi",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 25,
+      "arabic": "يُسۡقَوۡنَ مِن رَّحِيقٖ مَّخۡتُومٍ",
+      "french": "On leur sert à boire un nectar pur, cacheté",
+      "phonetic": "Yusqawna min raheeqin makhtoomin",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 26,
+      "arabic": "خِتَٰمُهُۥ مِسۡكٞۚ وَفِي ذَٰلِكَ فَلۡيَتَنَافَسِ ٱلۡمُتَنَٰفِسُونَ",
+      "french": "laissant un arrière-goût de musc. Que ceux qui la convoitent entrent en compétition [pour l'acquérir]",
+      "phonetic": "Khitamuhu miskun wafee thalika falyatanafasi almutanafisoona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 27,
+      "arabic": "وَمِزَاجُهُۥ مِن تَسۡنِيمٍ",
+      "french": "Il est mélangé à la boisson de Tasnîm",
+      "phonetic": "Wamizajuhu min tasneemin",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 28,
+      "arabic": "عَيۡنٗا يَشۡرَبُ بِهَا ٱلۡمُقَرَّبُونَ",
+      "french": "source dont les rapprochés boivent",
+      "phonetic": "AAaynan yashrabu biha almuqarraboona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 29,
+      "arabic": "إِنَّ ٱلَّذِينَ أَجۡرَمُواْ كَانُواْ مِنَ ٱلَّذِينَ ءَامَنُواْ يَضۡحَكُونَ",
+      "french": "Les criminels riaient de ceux qui croyaient",
+      "phonetic": "Inna allatheena ajramoo kanoo mina allatheena amanoo yadhakoona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 30,
+      "arabic": "وَإِذَا مَرُّواْ بِهِمۡ يَتَغَامَزُونَ",
+      "french": "et, passant près d'eux, ils se faisaient des œillades",
+      "phonetic": "Waitha marroo bihim yataghamazoona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 31,
+      "arabic": "وَإِذَا ٱنقَلَبُوٓاْ إِلَىٰٓ أَهۡلِهِمُ ٱنقَلَبُواْ فَكِهِينَ",
+      "french": "et, retournant dans leurs familles, ils retournaient en plaisantant",
+      "phonetic": "Waitha inqalaboo ila ahlihimu inqalaboo fakiheena",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 32,
+      "arabic": "وَإِذَا رَأَوۡهُمۡ قَالُوٓاْ إِنَّ هَـٰٓؤُلَآءِ لَضَآلُّونَ",
+      "french": "et les voyant, ils disaient: «Ce sont vraiment ceux-là les égarés»",
+      "phonetic": "Waitha raawhum qaloo inna haolai ladalloona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 33,
+      "arabic": "وَمَآ أُرۡسِلُواْ عَلَيۡهِمۡ حَٰفِظِينَ",
+      "french": "Or, ils n'ont pas été envoyés pour être leurs gardiens",
+      "phonetic": "Wama orsiloo AAalayhim hafitheena",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 34,
+      "arabic": "فَٱلۡيَوۡمَ ٱلَّذِينَ ءَامَنُواْ مِنَ ٱلۡكُفَّارِ يَضۡحَكُونَ",
+      "french": "Aujourd'hui, donc, ce sont ceux qui ont cru qui rient des infidèles",
+      "phonetic": "Faalyawma allatheena amanoo mina alkuffari yadhakoona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 588
+    },
+    {
+      "number": 35,
+      "arabic": "عَلَى ٱلۡأَرَآئِكِ يَنظُرُونَ",
+      "french": "sur les divans, ils regardent",
+      "phonetic": "AAala alaraiki yanthuroona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    },
+    {
+      "number": 36,
+      "arabic": "هَلۡ ثُوِّبَ ٱلۡكُفَّارُ مَا كَانُواْ يَفۡعَلُونَ",
+      "french": "Est-ce que les infidèles ont eu la récompense de ce qu'ils faisaient",
+      "phonetic": "Hal thuwwiba alkuffaru ma kanoo yafAAaloona",
+      "juz": 30,
+      "hizb": 59,
+      "page": 589
+    }
+  ]
+}

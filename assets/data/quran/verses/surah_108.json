@@ -1,0 +1,37 @@
+{
+  "id": 108,
+  "nameArabic": "الكوثر",
+  "nameTransliteration": "Al-Kawthar",
+  "nameFrench": "L'abondance",
+  "revelationType": "meccan",
+  "totalVerses": 3,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "إِنَّآ أَعۡطَيۡنَٰكَ ٱلۡكَوۡثَرَ",
+      "french": "Nous t'avons certes, accordé l'Abondance",
+      "phonetic": "Inna aAAtaynaka alkawthara",
+      "juz": 30,
+      "hizb": 60,
+      "page": 602
+    },
+    {
+      "number": 2,
+      "arabic": "فَصَلِّ لِرَبِّكَ وَٱنۡحَرۡ",
+      "french": "Accomplis la Salât pour ton Seigneur et sacrifie",
+      "phonetic": "Fasalli lirabbika wainhar",
+      "juz": 30,
+      "hizb": 60,
+      "page": 602
+    },
+    {
+      "number": 3,
+      "arabic": "إِنَّ شَانِئَكَ هُوَ ٱلۡأَبۡتَرُ",
+      "french": "Celui qui te hait sera certes, sans postérité",
+      "phonetic": "Inna shaniaka huwa alabtaru",
+      "juz": 30,
+      "hizb": 60,
+      "page": 602
+    }
+  ]
+}

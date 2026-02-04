@@ -1,0 +1,568 @@
+{
+  "id": 53,
+  "nameArabic": "النجم",
+  "nameTransliteration": "An-Najm",
+  "nameFrench": "L'étoile",
+  "revelationType": "meccan",
+  "totalVerses": 62,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "وَٱلنَّجۡمِ إِذَا هَوَىٰ",
+      "french": "Par l'étoile à son déclin",
+      "phonetic": "Waalnnajmi itha hawa",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 2,
+      "arabic": "مَا ضَلَّ صَاحِبُكُمۡ وَمَا غَوَىٰ",
+      "french": "Votre compagnon ne s'est pas égaré et n'a pas été induit en erreur",
+      "phonetic": "Ma dalla sahibukum wama ghawa",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 3,
+      "arabic": "وَمَا يَنطِقُ عَنِ ٱلۡهَوَىٰٓ",
+      "french": "et il ne prononce rien sous l'effet de la passion",
+      "phonetic": "Wama yantiqu AAani alhawa",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 4,
+      "arabic": "إِنۡ هُوَ إِلَّا وَحۡيٞ يُوحَىٰ",
+      "french": "ce n'est rien d'autre qu'une révélation inspirée",
+      "phonetic": "In huwa illa wahyun yooha",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 5,
+      "arabic": "عَلَّمَهُۥ شَدِيدُ ٱلۡقُوَىٰ",
+      "french": "Que lui a enseigné [l'Ange Gabriel] à la force prodigieuse",
+      "phonetic": "AAallamahu shadeedu alquwa",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 6,
+      "arabic": "ذُو مِرَّةٖ فَٱسۡتَوَىٰ",
+      "french": "doué de sagacité; c'est alors qu'il se montra sous sa forme réelle [angélique]",
+      "phonetic": "Thoo mirratin faistawa",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 7,
+      "arabic": "وَهُوَ بِٱلۡأُفُقِ ٱلۡأَعۡلَىٰ",
+      "french": "alors qu'il se trouvait à l'horizon supérieur",
+      "phonetic": "Wahuwa bialofuqi alaAAla",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 8,
+      "arabic": "ثُمَّ دَنَا فَتَدَلَّىٰ",
+      "french": "Puis il se rapprocha et descendit encore plus bas",
+      "phonetic": "Thumma dana fatadalla",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 9,
+      "arabic": "فَكَانَ قَابَ قَوۡسَيۡنِ أَوۡ أَدۡنَىٰ",
+      "french": "et fut à deux portées d'arc, ou plus près encore",
+      "phonetic": "Fakana qaba qawsayni aw adna",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 10,
+      "arabic": "فَأَوۡحَىٰٓ إِلَىٰ عَبۡدِهِۦ مَآ أَوۡحَىٰ",
+      "french": "Il révéla à Son serviteur ce qu'Il révéla",
+      "phonetic": "Faawha ila AAabdihi ma awha",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 11,
+      "arabic": "مَا كَذَبَ ٱلۡفُؤَادُ مَا رَأَىٰٓ",
+      "french": "Le cœur n'a pas menti en ce qu'il a vu",
+      "phonetic": "Ma kathaba alfuadu ma raa",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 12,
+      "arabic": "أَفَتُمَٰرُونَهُۥ عَلَىٰ مَا يَرَىٰ",
+      "french": "Lui contestez-vous donc ce qu'il voit",
+      "phonetic": "Afatumaroonahu AAala ma yara",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 13,
+      "arabic": "وَلَقَدۡ رَءَاهُ نَزۡلَةً أُخۡرَىٰ",
+      "french": "Il l'a pourtant vu, lors d'une autre descente",
+      "phonetic": "Walaqad raahu nazlatan okhra",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 14,
+      "arabic": "عِندَ سِدۡرَةِ ٱلۡمُنتَهَىٰ",
+      "french": "près de la Sidrat-ul-Muntahâ",
+      "phonetic": "AAinda sidrati almuntaha",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 15,
+      "arabic": "عِندَهَا جَنَّةُ ٱلۡمَأۡوَىٰٓ",
+      "french": "près d'elle se trouve le jardin de Ma'w",
+      "phonetic": "AAindaha jannatu almawa",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 16,
+      "arabic": "إِذۡ يَغۡشَى ٱلسِّدۡرَةَ مَا يَغۡشَىٰ",
+      "french": "au moment où le lotus était couvert de ce qui le couvrait",
+      "phonetic": "Ith yaghsha alssidrata ma yaghsha",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 17,
+      "arabic": "مَا زَاغَ ٱلۡبَصَرُ وَمَا طَغَىٰ",
+      "french": "la vue n'a nullement dévié ni outrepassé la mesure",
+      "phonetic": "Ma zagha albasaru wama tagha",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 18,
+      "arabic": "لَقَدۡ رَأَىٰ مِنۡ ءَايَٰتِ رَبِّهِ ٱلۡكُبۡرَىٰٓ",
+      "french": "Il a bien vu certaines des grandes merveilles de son Seigneur",
+      "phonetic": "Laqad raa min ayati rabbihi alkubra",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 19,
+      "arabic": "أَفَرَءَيۡتُمُ ٱللَّـٰتَ وَٱلۡعُزَّىٰ",
+      "french": "Que vous en semble [des divinités], Lât et Uuzzâ",
+      "phonetic": "Afaraaytumu allata waalAAuzza",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 20,
+      "arabic": "وَمَنَوٰةَ ٱلثَّالِثَةَ ٱلۡأُخۡرَىٰٓ",
+      "french": "ainsi que Manât, cette troisième autre",
+      "phonetic": "Wamanata alththalithata alokhra",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 21,
+      "arabic": "أَلَكُمُ ٱلذَّكَرُ وَلَهُ ٱلۡأُنثَىٰ",
+      "french": "Sera-ce à vous le garçon et à Lui la fille",
+      "phonetic": "Alakumu alththakaru walahu alontha",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 22,
+      "arabic": "تِلۡكَ إِذٗا قِسۡمَةٞ ضِيزَىٰٓ",
+      "french": "Que voilà donc un partage injuste",
+      "phonetic": "Tilka ithan qismatun deeza",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 23,
+      "arabic": "إِنۡ هِيَ إِلَّآ أَسۡمَآءٞ سَمَّيۡتُمُوهَآ أَنتُمۡ وَءَابَآؤُكُم مَّآ أَنزَلَ ٱللَّهُ بِهَا مِن سُلۡطَٰنٍۚ إِن يَتَّبِعُونَ إِلَّا ٱلظَّنَّ وَمَا تَهۡوَى ٱلۡأَنفُسُۖ وَلَقَدۡ جَآءَهُم مِّن رَّبِّهِمُ ٱلۡهُدَىٰٓ",
+      "french": "Ce ne sont que des noms que vous avez inventés, vous et vos ancêtres. Allah n'a fait descendre aucune preuve à leur sujet. Ils ne suivent que la conjecture et les passions de [leurs] âmes, alors que la guidée leur est venue de leur Seigneur",
+      "phonetic": "In hiya illa asmaon sammaytumooha antum waabaokum ma anzala Allahu biha min sultanin in yattabiAAoona illa alththanna wama tahwa alanfusu walaqad jaahum min rabbihimu alhuda",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 24,
+      "arabic": "أَمۡ لِلۡإِنسَٰنِ مَا تَمَنَّىٰ",
+      "french": "Ou bien l'homme aura-t-il tout ce qu'il désire",
+      "phonetic": "Am lilinsani ma tamanna",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 25,
+      "arabic": "فَلِلَّهِ ٱلۡأٓخِرَةُ وَٱلۡأُولَىٰ",
+      "french": "A Allah appartiennent la vie future et la vie d'ici-bas",
+      "phonetic": "Falillahi alakhiratu waaloola",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 26,
+      "arabic": "۞وَكَم مِّن مَّلَكٖ فِي ٱلسَّمَٰوَٰتِ لَا تُغۡنِي شَفَٰعَتُهُمۡ شَيۡـًٔا إِلَّا مِنۢ بَعۡدِ أَن يَأۡذَنَ ٱللَّهُ لِمَن يَشَآءُ وَيَرۡضَىٰٓ",
+      "french": "Et que d'Anges dans les cieux dont l'intercession ne sert à rien, sinon qu'après qu'Allah l'aura permis, en faveur de qui Il veut et qu'Il agrée",
+      "phonetic": "Wakam min malakin fee alssamawati la tughnee shafaAAatuhum shayan illa min baAAdi an yathana Allahu liman yashao wayarda",
+      "juz": 27,
+      "hizb": 53,
+      "page": 526
+    },
+    {
+      "number": 27,
+      "arabic": "إِنَّ ٱلَّذِينَ لَا يُؤۡمِنُونَ بِٱلۡأٓخِرَةِ لَيُسَمُّونَ ٱلۡمَلَـٰٓئِكَةَ تَسۡمِيَةَ ٱلۡأُنثَىٰ",
+      "french": "Ceux qui ne croient pas en l'au-delà donnent aux Anges des noms de femmes",
+      "phonetic": "Inna allatheena la yuminoona bialakhirati layusammoona almalaikata tasmiyata alontha",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 28,
+      "arabic": "وَمَا لَهُم بِهِۦ مِنۡ عِلۡمٍۖ إِن يَتَّبِعُونَ إِلَّا ٱلظَّنَّۖ وَإِنَّ ٱلظَّنَّ لَا يُغۡنِي مِنَ ٱلۡحَقِّ شَيۡـٔٗا",
+      "french": "alors qu'ils n'en ont aucune science: ils ne suivent que la conjecture, alors que la conjecture ne sert à rien contre la vérité",
+      "phonetic": "Wama lahum bihi min AAilmin in yattabiAAoona illa alththanna wainna alththanna la yughnee mina alhaqqi shayan",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 29,
+      "arabic": "فَأَعۡرِضۡ عَن مَّن تَوَلَّىٰ عَن ذِكۡرِنَا وَلَمۡ يُرِدۡ إِلَّا ٱلۡحَيَوٰةَ ٱلدُّنۡيَا",
+      "french": "Ecarte-toi donc, de celui qui tourne le dos à Notre rappel et qui ne désire que la vie présente",
+      "phonetic": "FaaAArid AAan man tawalla AAan thikrina walam yurid illa alhayata alddunya",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 30,
+      "arabic": "ذَٰلِكَ مَبۡلَغُهُم مِّنَ ٱلۡعِلۡمِۚ إِنَّ رَبَّكَ هُوَ أَعۡلَمُ بِمَن ضَلَّ عَن سَبِيلِهِۦ وَهُوَ أَعۡلَمُ بِمَنِ ٱهۡتَدَىٰ",
+      "french": "Voilà toute la portée de leur savoir. Certes ton Seigneur connaît parfaitement celui qui s'égare de Son chemin et Il connaît parfaitement qui est bien guidé",
+      "phonetic": "Thalika mablaghuhum mina alAAilmi inna rabbaka huwa aAAlamu biman dalla AAan sabeelihi wahuwa aAAlamu bimani ihtada",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 31,
+      "arabic": "وَلِلَّهِ مَا فِي ٱلسَّمَٰوَٰتِ وَمَا فِي ٱلۡأَرۡضِ لِيَجۡزِيَ ٱلَّذِينَ أَسَـٰٓـُٔواْ بِمَا عَمِلُواْ وَيَجۡزِيَ ٱلَّذِينَ أَحۡسَنُواْ بِٱلۡحُسۡنَى",
+      "french": "A Allah appartient ce qui est dans les cieux et sur la terre afin qu'Il rétribue ceux qui font le mal selon ce qu'ils œuvrent, et récompense ceux qui font le bien par la meilleure [récompense]",
+      "phonetic": "Walillahi ma fee alssamawati wama fee alardi liyajziya allatheena asaoo bima AAamiloo wayajziya allatheena ahsanoo bialhusna",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 32,
+      "arabic": "ٱلَّذِينَ يَجۡتَنِبُونَ كَبَـٰٓئِرَ ٱلۡإِثۡمِ وَٱلۡفَوَٰحِشَ إِلَّا ٱللَّمَمَۚ إِنَّ رَبَّكَ وَٰسِعُ ٱلۡمَغۡفِرَةِۚ هُوَ أَعۡلَمُ بِكُمۡ إِذۡ أَنشَأَكُم مِّنَ ٱلۡأَرۡضِ وَإِذۡ أَنتُمۡ أَجِنَّةٞ فِي بُطُونِ أُمَّهَٰتِكُمۡۖ فَلَا تُزَكُّوٓاْ أَنفُسَكُمۡۖ هُوَ أَعۡلَمُ بِمَنِ ٱتَّقَىٰٓ",
+      "french": "ceux qui évitent les plus grands péchés ainsi que les turpitudes et [qui ne commettent] que des fautes légères. Certes, le pardon de Ton Seigneur est immense. C'est Lui qui vous connaît le mieux quand Il vous a produits de terre, et aussi quand vous étiez des embryons dans les ventres de vos mères. Ne vantez pas vous-mêmes votre pureté; c'est Lui qui connaît mieux ceux qui [Le] craignent",
+      "phonetic": "Allatheena yajtaniboona kabaira alithmi waalfawahisha illa allamama inna rabbaka wasiAAu almaghfirati huwa aAAlamu bikum ith anshaakum mina alardi waith antum ajinnatun fee butooni ommahatikum fala tuzakkoo anfusakum huwa aAAlamu bimani ittaqa",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 33,
+      "arabic": "أَفَرَءَيۡتَ ٱلَّذِي تَوَلَّىٰ",
+      "french": "Vois-tu celui qui s'est détourné",
+      "phonetic": "Afaraayta allathee tawalla",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 34,
+      "arabic": "وَأَعۡطَىٰ قَلِيلٗا وَأَكۡدَىٰٓ",
+      "french": "donné peu et a [finalement] cessé de donner",
+      "phonetic": "WaaAAta qaleelan waakda",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 35,
+      "arabic": "أَعِندَهُۥ عِلۡمُ ٱلۡغَيۡبِ فَهُوَ يَرَىٰٓ",
+      "french": "Détient-il la science de l'Inconnaissable en sorte qu'il voit",
+      "phonetic": "aAAindahu AAilmu alghaybi fahuwa yara",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 36,
+      "arabic": "أَمۡ لَمۡ يُنَبَّأۡ بِمَا فِي صُحُفِ مُوسَىٰ",
+      "french": "Ne lui a-t-on pas annoncé ce qu'il y avait dans les feuilles de Moïse",
+      "phonetic": "Am lam yunabba bima fee suhufi moosa",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 37,
+      "arabic": "وَإِبۡرَٰهِيمَ ٱلَّذِي وَفَّىٰٓ",
+      "french": "et celles d'Abraham qui a tenu parfaitement [sa promesse de transmettre]",
+      "phonetic": "Waibraheema allathee waffa",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 38,
+      "arabic": "أَلَّا تَزِرُ وَازِرَةٞ وِزۡرَ أُخۡرَىٰ",
+      "french": "qu'aucune [âme] ne portera le fardeau (le péché) d'autrui",
+      "phonetic": "Alla taziru waziratun wizra okhra",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 39,
+      "arabic": "وَأَن لَّيۡسَ لِلۡإِنسَٰنِ إِلَّا مَا سَعَىٰ",
+      "french": "et qu'en vérité, l'homme n'obtient que [le fruit] de ses efforts",
+      "phonetic": "Waan laysa lilinsani illa ma saAAa",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 40,
+      "arabic": "وَأَنَّ سَعۡيَهُۥ سَوۡفَ يُرَىٰ",
+      "french": "et que son effort, en vérité, lui sera présenté (le jour du Jugement)",
+      "phonetic": "Waanna saAAyahu sawfa yura",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 41,
+      "arabic": "ثُمَّ يُجۡزَىٰهُ ٱلۡجَزَآءَ ٱلۡأَوۡفَىٰ",
+      "french": "Ensuite il en sera récompensé pleinement",
+      "phonetic": "Thumma yujzahu aljazaa alawfa",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 42,
+      "arabic": "وَأَنَّ إِلَىٰ رَبِّكَ ٱلۡمُنتَهَىٰ",
+      "french": "et que tout aboutit, en vérité, vers ton Seigneur",
+      "phonetic": "Waanna ila rabbika almuntaha",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 43,
+      "arabic": "وَأَنَّهُۥ هُوَ أَضۡحَكَ وَأَبۡكَىٰ",
+      "french": "et que c'est Lui qui a fait rire et qui a fait pleurer",
+      "phonetic": "Waannahu huwa adhaka waabka",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 44,
+      "arabic": "وَأَنَّهُۥ هُوَ أَمَاتَ وَأَحۡيَا",
+      "french": "et que c'est Lui qui a fait mourir et qui a ramené à la vie",
+      "phonetic": "Waannahu huwa amata waahya",
+      "juz": 27,
+      "hizb": 53,
+      "page": 527
+    },
+    {
+      "number": 45,
+      "arabic": "وَأَنَّهُۥ خَلَقَ ٱلزَّوۡجَيۡنِ ٱلذَّكَرَ وَٱلۡأُنثَىٰ",
+      "french": "et que c'est Lui qui a crée les deux éléments de couple, le mâle et la femelle",
+      "phonetic": "Waannahu khalaqa alzzawjayni alththakara waalontha",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 46,
+      "arabic": "مِن نُّطۡفَةٍ إِذَا تُمۡنَىٰ",
+      "french": "d'une goutte de sperme quand elle est éjaculée",
+      "phonetic": "Min nutfatin itha tumna",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 47,
+      "arabic": "وَأَنَّ عَلَيۡهِ ٱلنَّشۡأَةَ ٱلۡأُخۡرَىٰ",
+      "french": "et que la seconde création Lui incombe",
+      "phonetic": "Waanna AAalayhi alnnashata alokhra",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 48,
+      "arabic": "وَأَنَّهُۥ هُوَ أَغۡنَىٰ وَأَقۡنَىٰ",
+      "french": "et c'est Lui qui a enrichi et qui a fait acquérir",
+      "phonetic": "Waannahu huwa aghna waaqna",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 49,
+      "arabic": "وَأَنَّهُۥ هُوَ رَبُّ ٱلشِّعۡرَىٰ",
+      "french": "Et c'est Lui qui est le Seigneur de Sirius",
+      "phonetic": "Waannahu huwa rabbu alshshiAAra",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 50,
+      "arabic": "وَأَنَّهُۥٓ أَهۡلَكَ عَادًا ٱلۡأُولَىٰ",
+      "french": "et c'est Lui qui a fait périr les anciens 'Aad",
+      "phonetic": "Waannahu ahlaka AAadan aloola",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 51,
+      "arabic": "وَثَمُودَاْ فَمَآ أَبۡقَىٰ",
+      "french": "ainsi que les Thamûd, et Il fit que rien n'en subsistât",
+      "phonetic": "Wathamooda fama abqa",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 52,
+      "arabic": "وَقَوۡمَ نُوحٖ مِّن قَبۡلُۖ إِنَّهُمۡ كَانُواْ هُمۡ أَظۡلَمَ وَأَطۡغَىٰ",
+      "french": "ainsi que le peuple de Noé antérieurement, car ils étaient encore plus injustes et plus violents",
+      "phonetic": "Waqawma noohin min qablu innahum kanoo hum athlama waatgha",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 53,
+      "arabic": "وَٱلۡمُؤۡتَفِكَةَ أَهۡوَىٰ",
+      "french": "de même qu'Il anéantit les villes renversées",
+      "phonetic": "Waalmutafikata ahwa",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 54,
+      "arabic": "فَغَشَّىٰهَا مَا غَشَّىٰ",
+      "french": "Et les recouvrit de ce dont Il les recouvrit",
+      "phonetic": "Faghashshaha ma ghashsha",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 55,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكَ تَتَمَارَىٰ",
+      "french": "Lequel donc des bienfaits de ton Seigneur mets-tu en doute",
+      "phonetic": "Fabiayyi alai rabbika tatamara",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 56,
+      "arabic": "هَٰذَا نَذِيرٞ مِّنَ ٱلنُّذُرِ ٱلۡأُولَىٰٓ",
+      "french": "Voici un avertisseur analogue aux avertisseurs anciens",
+      "phonetic": "Hatha natheerun mina alnnuthuri aloola",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 57,
+      "arabic": "أَزِفَتِ ٱلۡأٓزِفَةُ",
+      "french": "l'Imminente (L'heure du Jugement) s'approche",
+      "phonetic": "Azifati alazifatu",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 58,
+      "arabic": "لَيۡسَ لَهَا مِن دُونِ ٱللَّهِ كَاشِفَةٌ",
+      "french": "Rien d'autre en dehors d'Allah ne peut la dévoiler",
+      "phonetic": "Laysa laha min dooni Allahi kashifatun",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 59,
+      "arabic": "أَفَمِنۡ هَٰذَا ٱلۡحَدِيثِ تَعۡجَبُونَ",
+      "french": "Quoi! vous étonnez-vous de ce discours (le Coran)",
+      "phonetic": "Afamin hatha alhadeethi taAAjaboona",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 60,
+      "arabic": "وَتَضۡحَكُونَ وَلَا تَبۡكُونَ",
+      "french": "Et vous [en] riez et n'[en] pleurez point",
+      "phonetic": "Watadhakoona wala tabkoona",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 61,
+      "arabic": "وَأَنتُمۡ سَٰمِدُونَ",
+      "french": "absorbés [que vous êtes] par votre distraction",
+      "phonetic": "Waantum samidoona",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    },
+    {
+      "number": 62,
+      "arabic": "فَٱسۡجُدُواْۤ لِلَّهِۤ وَٱعۡبُدُواْ۩",
+      "french": "Prosternez-vous donc à Allah et adorez-Le",
+      "phonetic": "Faosjudoo lillahi waoAAbudoo",
+      "juz": 27,
+      "hizb": 53,
+      "page": 528
+    }
+  ]
+}

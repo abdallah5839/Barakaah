@@ -1,0 +1,914 @@
+[
+  {
+    "id": 1,
+    "nameArabic": "الفاتحة",
+    "nameTransliteration": "Al-Fatihah",
+    "nameFrench": "L'ouverture",
+    "revelationType": "meccan",
+    "totalVerses": 7
+  },
+  {
+    "id": 2,
+    "nameArabic": "البقرة",
+    "nameTransliteration": "Al-Baqarah",
+    "nameFrench": "La vache",
+    "revelationType": "medinan",
+    "totalVerses": 286
+  },
+  {
+    "id": 3,
+    "nameArabic": "آل عمران",
+    "nameTransliteration": "Ali 'Imran",
+    "nameFrench": "La famille de 'imran",
+    "revelationType": "medinan",
+    "totalVerses": 200
+  },
+  {
+    "id": 4,
+    "nameArabic": "النساء",
+    "nameTransliteration": "An-Nisa",
+    "nameFrench": "Les femmes",
+    "revelationType": "medinan",
+    "totalVerses": 176
+  },
+  {
+    "id": 5,
+    "nameArabic": "المائدة",
+    "nameTransliteration": "Al-Ma'idah",
+    "nameFrench": "La table servie",
+    "revelationType": "medinan",
+    "totalVerses": 120
+  },
+  {
+    "id": 6,
+    "nameArabic": "الأنعام",
+    "nameTransliteration": "Al-An'am",
+    "nameFrench": "Les bestiaux",
+    "revelationType": "meccan",
+    "totalVerses": 165
+  },
+  {
+    "id": 7,
+    "nameArabic": "الأعراف",
+    "nameTransliteration": "Al-A'raf",
+    "nameFrench": "Al-A'raf",
+    "revelationType": "meccan",
+    "totalVerses": 206
+  },
+  {
+    "id": 8,
+    "nameArabic": "الأنفال",
+    "nameTransliteration": "Al-Anfal",
+    "nameFrench": "Le butin",
+    "revelationType": "medinan",
+    "totalVerses": 75
+  },
+  {
+    "id": 9,
+    "nameArabic": "التوبة",
+    "nameTransliteration": "At-Tawbah",
+    "nameFrench": "Le repentir",
+    "revelationType": "medinan",
+    "totalVerses": 129
+  },
+  {
+    "id": 10,
+    "nameArabic": "يونس",
+    "nameTransliteration": "Yunus",
+    "nameFrench": "Jonas",
+    "revelationType": "meccan",
+    "totalVerses": 109
+  },
+  {
+    "id": 11,
+    "nameArabic": "هود",
+    "nameTransliteration": "Hud",
+    "nameFrench": "Houd",
+    "revelationType": "meccan",
+    "totalVerses": 123
+  },
+  {
+    "id": 12,
+    "nameArabic": "يوسف",
+    "nameTransliteration": "Yusuf",
+    "nameFrench": "Joseph",
+    "revelationType": "meccan",
+    "totalVerses": 111
+  },
+  {
+    "id": 13,
+    "nameArabic": "الرعد",
+    "nameTransliteration": "Ar-Ra'd",
+    "nameFrench": "Le tonnerre",
+    "revelationType": "medinan",
+    "totalVerses": 43
+  },
+  {
+    "id": 14,
+    "nameArabic": "ابراهيم",
+    "nameTransliteration": "Ibrahim",
+    "nameFrench": "Abraham",
+    "revelationType": "meccan",
+    "totalVerses": 52
+  },
+  {
+    "id": 15,
+    "nameArabic": "الحجر",
+    "nameTransliteration": "Al-Hijr",
+    "nameFrench": "Al-Hijr",
+    "revelationType": "meccan",
+    "totalVerses": 99
+  },
+  {
+    "id": 16,
+    "nameArabic": "النحل",
+    "nameTransliteration": "An-Nahl",
+    "nameFrench": "Les abeilles",
+    "revelationType": "meccan",
+    "totalVerses": 128
+  },
+  {
+    "id": 17,
+    "nameArabic": "الإسراء",
+    "nameTransliteration": "Al-Isra",
+    "nameFrench": "Le voyage nocturne",
+    "revelationType": "meccan",
+    "totalVerses": 111
+  },
+  {
+    "id": 18,
+    "nameArabic": "الكهف",
+    "nameTransliteration": "Al-Kahf",
+    "nameFrench": "La caverne",
+    "revelationType": "meccan",
+    "totalVerses": 110
+  },
+  {
+    "id": 19,
+    "nameArabic": "مريم",
+    "nameTransliteration": "Maryam",
+    "nameFrench": "Marie",
+    "revelationType": "meccan",
+    "totalVerses": 98
+  },
+  {
+    "id": 20,
+    "nameArabic": "طه",
+    "nameTransliteration": "Taha",
+    "nameFrench": "Ta-Ha",
+    "revelationType": "meccan",
+    "totalVerses": 135
+  },
+  {
+    "id": 21,
+    "nameArabic": "الأنبياء",
+    "nameTransliteration": "Al-Anbya",
+    "nameFrench": "Les prophètes",
+    "revelationType": "meccan",
+    "totalVerses": 112
+  },
+  {
+    "id": 22,
+    "nameArabic": "الحج",
+    "nameTransliteration": "Al-Hajj",
+    "nameFrench": "Le pèlerinage",
+    "revelationType": "medinan",
+    "totalVerses": 78
+  },
+  {
+    "id": 23,
+    "nameArabic": "المؤمنون",
+    "nameTransliteration": "Al-Mu'minun",
+    "nameFrench": "Les croyants",
+    "revelationType": "meccan",
+    "totalVerses": 118
+  },
+  {
+    "id": 24,
+    "nameArabic": "النور",
+    "nameTransliteration": "An-Nur",
+    "nameFrench": "La lumière",
+    "revelationType": "medinan",
+    "totalVerses": 64
+  },
+  {
+    "id": 25,
+    "nameArabic": "الفرقان",
+    "nameTransliteration": "Al-Furqan",
+    "nameFrench": "Le discernement",
+    "revelationType": "meccan",
+    "totalVerses": 77
+  },
+  {
+    "id": 26,
+    "nameArabic": "الشعراء",
+    "nameTransliteration": "Ash-Shu'ara",
+    "nameFrench": "Les poètes",
+    "revelationType": "meccan",
+    "totalVerses": 227
+  },
+  {
+    "id": 27,
+    "nameArabic": "النمل",
+    "nameTransliteration": "An-Naml",
+    "nameFrench": "Les fourmis",
+    "revelationType": "meccan",
+    "totalVerses": 93
+  },
+  {
+    "id": 28,
+    "nameArabic": "القصص",
+    "nameTransliteration": "Al-Qasas",
+    "nameFrench": "Le récit",
+    "revelationType": "meccan",
+    "totalVerses": 88
+  },
+  {
+    "id": 29,
+    "nameArabic": "العنكبوت",
+    "nameTransliteration": "Al-'Ankabut",
+    "nameFrench": "L'araignée",
+    "revelationType": "meccan",
+    "totalVerses": 69
+  },
+  {
+    "id": 30,
+    "nameArabic": "الروم",
+    "nameTransliteration": "Ar-Rum",
+    "nameFrench": "Les romains",
+    "revelationType": "meccan",
+    "totalVerses": 60
+  },
+  {
+    "id": 31,
+    "nameArabic": "لقمان",
+    "nameTransliteration": "Luqman",
+    "nameFrench": "Louqman",
+    "revelationType": "meccan",
+    "totalVerses": 34
+  },
+  {
+    "id": 32,
+    "nameArabic": "السجدة",
+    "nameTransliteration": "As-Sajdah",
+    "nameFrench": "La prosternation",
+    "revelationType": "meccan",
+    "totalVerses": 30
+  },
+  {
+    "id": 33,
+    "nameArabic": "الأحزاب",
+    "nameTransliteration": "Al-Ahzab",
+    "nameFrench": "Les coalisés",
+    "revelationType": "medinan",
+    "totalVerses": 73
+  },
+  {
+    "id": 34,
+    "nameArabic": "سبإ",
+    "nameTransliteration": "Saba",
+    "nameFrench": "Saba'",
+    "revelationType": "meccan",
+    "totalVerses": 54
+  },
+  {
+    "id": 35,
+    "nameArabic": "فاطر",
+    "nameTransliteration": "Fatir",
+    "nameFrench": "Le Créateur",
+    "revelationType": "meccan",
+    "totalVerses": 45
+  },
+  {
+    "id": 36,
+    "nameArabic": "يس",
+    "nameTransliteration": "Ya-Sin",
+    "nameFrench": "Ya-Sin",
+    "revelationType": "meccan",
+    "totalVerses": 83
+  },
+  {
+    "id": 37,
+    "nameArabic": "الصافات",
+    "nameTransliteration": "As-Saffat",
+    "nameFrench": "Les rangés",
+    "revelationType": "meccan",
+    "totalVerses": 182
+  },
+  {
+    "id": 38,
+    "nameArabic": "ص",
+    "nameTransliteration": "Sad",
+    "nameFrench": "Sad",
+    "revelationType": "meccan",
+    "totalVerses": 88
+  },
+  {
+    "id": 39,
+    "nameArabic": "الزمر",
+    "nameTransliteration": "Az-Zumar",
+    "nameFrench": "Les groupes",
+    "revelationType": "meccan",
+    "totalVerses": 75
+  },
+  {
+    "id": 40,
+    "nameArabic": "غافر",
+    "nameTransliteration": "Ghafir",
+    "nameFrench": "Le Pardonneur",
+    "revelationType": "meccan",
+    "totalVerses": 85
+  },
+  {
+    "id": 41,
+    "nameArabic": "فصلت",
+    "nameTransliteration": "Fussilat",
+    "nameFrench": "Les versets explicites",
+    "revelationType": "meccan",
+    "totalVerses": 54
+  },
+  {
+    "id": 42,
+    "nameArabic": "الشورى",
+    "nameTransliteration": "Ash-Shuraa",
+    "nameFrench": "La concertation",
+    "revelationType": "meccan",
+    "totalVerses": 53
+  },
+  {
+    "id": 43,
+    "nameArabic": "الزخرف",
+    "nameTransliteration": "Az-Zukhruf",
+    "nameFrench": "L'ornement",
+    "revelationType": "meccan",
+    "totalVerses": 89
+  },
+  {
+    "id": 44,
+    "nameArabic": "الدخان",
+    "nameTransliteration": "Ad-Dukhan",
+    "nameFrench": "La fumée",
+    "revelationType": "meccan",
+    "totalVerses": 59
+  },
+  {
+    "id": 45,
+    "nameArabic": "الجاثية",
+    "nameTransliteration": "Al-Jathiyah",
+    "nameFrench": "L'agenouillée",
+    "revelationType": "meccan",
+    "totalVerses": 37
+  },
+  {
+    "id": 46,
+    "nameArabic": "الأحقاف",
+    "nameTransliteration": "Al-Ahqaf",
+    "nameFrench": "Al-Ahqaf",
+    "revelationType": "meccan",
+    "totalVerses": 35
+  },
+  {
+    "id": 47,
+    "nameArabic": "محمد",
+    "nameTransliteration": "Muhammad",
+    "nameFrench": "Mouhammad",
+    "revelationType": "medinan",
+    "totalVerses": 38
+  },
+  {
+    "id": 48,
+    "nameArabic": "الفتح",
+    "nameTransliteration": "Al-Fath",
+    "nameFrench": "La victoire éclatante",
+    "revelationType": "medinan",
+    "totalVerses": 29
+  },
+  {
+    "id": 49,
+    "nameArabic": "الحجرات",
+    "nameTransliteration": "Al-Hujurat",
+    "nameFrench": "Les appartements",
+    "revelationType": "medinan",
+    "totalVerses": 18
+  },
+  {
+    "id": 50,
+    "nameArabic": "ق",
+    "nameTransliteration": "Qaf",
+    "nameFrench": "Qaf",
+    "revelationType": "meccan",
+    "totalVerses": 45
+  },
+  {
+    "id": 51,
+    "nameArabic": "الذاريات",
+    "nameTransliteration": "Adh-Dhariyat",
+    "nameFrench": "Qui éparpillent",
+    "revelationType": "meccan",
+    "totalVerses": 60
+  },
+  {
+    "id": 52,
+    "nameArabic": "الطور",
+    "nameTransliteration": "At-Tur",
+    "nameFrench": "Le mont At-Tour",
+    "revelationType": "meccan",
+    "totalVerses": 49
+  },
+  {
+    "id": 53,
+    "nameArabic": "النجم",
+    "nameTransliteration": "An-Najm",
+    "nameFrench": "L'étoile",
+    "revelationType": "meccan",
+    "totalVerses": 62
+  },
+  {
+    "id": 54,
+    "nameArabic": "القمر",
+    "nameTransliteration": "Al-Qamar",
+    "nameFrench": "La lune",
+    "revelationType": "meccan",
+    "totalVerses": 55
+  },
+  {
+    "id": 55,
+    "nameArabic": "الرحمن",
+    "nameTransliteration": "Ar-Rahman",
+    "nameFrench": "Le Tout Miséricordieux",
+    "revelationType": "medinan",
+    "totalVerses": 78
+  },
+  {
+    "id": 56,
+    "nameArabic": "الواقعة",
+    "nameTransliteration": "Al-Waqi'ah",
+    "nameFrench": "L'inévitable",
+    "revelationType": "meccan",
+    "totalVerses": 96
+  },
+  {
+    "id": 57,
+    "nameArabic": "الحديد",
+    "nameTransliteration": "Al-Hadid",
+    "nameFrench": "Le fer",
+    "revelationType": "medinan",
+    "totalVerses": 29
+  },
+  {
+    "id": 58,
+    "nameArabic": "المجادلة",
+    "nameTransliteration": "Al-Mujadila",
+    "nameFrench": "La discussion",
+    "revelationType": "medinan",
+    "totalVerses": 22
+  },
+  {
+    "id": 59,
+    "nameArabic": "الحشر",
+    "nameTransliteration": "Al-Hashr",
+    "nameFrench": "L'exode",
+    "revelationType": "medinan",
+    "totalVerses": 24
+  },
+  {
+    "id": 60,
+    "nameArabic": "الممتحنة",
+    "nameTransliteration": "Al-Mumtahanah",
+    "nameFrench": "L'éprouvée",
+    "revelationType": "medinan",
+    "totalVerses": 13
+  },
+  {
+    "id": 61,
+    "nameArabic": "الصف",
+    "nameTransliteration": "As-Saf",
+    "nameFrench": "Le rang",
+    "revelationType": "medinan",
+    "totalVerses": 14
+  },
+  {
+    "id": 62,
+    "nameArabic": "الجمعة",
+    "nameTransliteration": "Al-Jumu'ah",
+    "nameFrench": "Le vendredi",
+    "revelationType": "medinan",
+    "totalVerses": 11
+  },
+  {
+    "id": 63,
+    "nameArabic": "المنافقون",
+    "nameTransliteration": "Al-Munafiqun",
+    "nameFrench": "Les hypocrites",
+    "revelationType": "medinan",
+    "totalVerses": 11
+  },
+  {
+    "id": 64,
+    "nameArabic": "التغابن",
+    "nameTransliteration": "At-Taghabun",
+    "nameFrench": "La grande perte",
+    "revelationType": "medinan",
+    "totalVerses": 18
+  },
+  {
+    "id": 65,
+    "nameArabic": "الطلاق",
+    "nameTransliteration": "At-Talaq",
+    "nameFrench": "Le divorce",
+    "revelationType": "medinan",
+    "totalVerses": 12
+  },
+  {
+    "id": 66,
+    "nameArabic": "التحريم",
+    "nameTransliteration": "At-Tahrim",
+    "nameFrench": "L'interdiction",
+    "revelationType": "medinan",
+    "totalVerses": 12
+  },
+  {
+    "id": 67,
+    "nameArabic": "الملك",
+    "nameTransliteration": "Al-Mulk",
+    "nameFrench": "La royauté",
+    "revelationType": "meccan",
+    "totalVerses": 30
+  },
+  {
+    "id": 68,
+    "nameArabic": "القلم",
+    "nameTransliteration": "Al-Qalam",
+    "nameFrench": "La plume",
+    "revelationType": "meccan",
+    "totalVerses": 52
+  },
+  {
+    "id": 69,
+    "nameArabic": "الحاقة",
+    "nameTransliteration": "Al-Haqqah",
+    "nameFrench": "L'inéluctable",
+    "revelationType": "meccan",
+    "totalVerses": 52
+  },
+  {
+    "id": 70,
+    "nameArabic": "المعارج",
+    "nameTransliteration": "Al-Ma'arij",
+    "nameFrench": "Les voies d'ascension",
+    "revelationType": "meccan",
+    "totalVerses": 44
+  },
+  {
+    "id": 71,
+    "nameArabic": "نوح",
+    "nameTransliteration": "Nuh",
+    "nameFrench": "Noé",
+    "revelationType": "meccan",
+    "totalVerses": 28
+  },
+  {
+    "id": 72,
+    "nameArabic": "الجن",
+    "nameTransliteration": "Al-Jinn",
+    "nameFrench": "Les djinns",
+    "revelationType": "meccan",
+    "totalVerses": 28
+  },
+  {
+    "id": 73,
+    "nameArabic": "المزمل",
+    "nameTransliteration": "Al-Muzzammil",
+    "nameFrench": "L'enveloppé",
+    "revelationType": "meccan",
+    "totalVerses": 20
+  },
+  {
+    "id": 74,
+    "nameArabic": "المدثر",
+    "nameTransliteration": "Al-Muddaththir",
+    "nameFrench": "Celui qui se couvre",
+    "revelationType": "meccan",
+    "totalVerses": 56
+  },
+  {
+    "id": 75,
+    "nameArabic": "القيامة",
+    "nameTransliteration": "Al-Qiyamah",
+    "nameFrench": "La résurrection",
+    "revelationType": "meccan",
+    "totalVerses": 40
+  },
+  {
+    "id": 76,
+    "nameArabic": "الانسان",
+    "nameTransliteration": "Al-Insan",
+    "nameFrench": "L'homme",
+    "revelationType": "medinan",
+    "totalVerses": 31
+  },
+  {
+    "id": 77,
+    "nameArabic": "المرسلات",
+    "nameTransliteration": "Al-Mursalat",
+    "nameFrench": "Les envoyés",
+    "revelationType": "meccan",
+    "totalVerses": 50
+  },
+  {
+    "id": 78,
+    "nameArabic": "النبإ",
+    "nameTransliteration": "An-Naba",
+    "nameFrench": "La nouvelle",
+    "revelationType": "meccan",
+    "totalVerses": 40
+  },
+  {
+    "id": 79,
+    "nameArabic": "النازعات",
+    "nameTransliteration": "An-Nazi'at",
+    "nameFrench": "Ceux qui arrachent",
+    "revelationType": "meccan",
+    "totalVerses": 46
+  },
+  {
+    "id": 80,
+    "nameArabic": "عبس",
+    "nameTransliteration": "'Abasa",
+    "nameFrench": "Il s'est renfrogné",
+    "revelationType": "meccan",
+    "totalVerses": 42
+  },
+  {
+    "id": 81,
+    "nameArabic": "التكوير",
+    "nameTransliteration": "At-Takwir",
+    "nameFrench": "L'obscurcissement",
+    "revelationType": "meccan",
+    "totalVerses": 29
+  },
+  {
+    "id": 82,
+    "nameArabic": "الإنفطار",
+    "nameTransliteration": "Al-Infitar",
+    "nameFrench": "La rupture",
+    "revelationType": "meccan",
+    "totalVerses": 19
+  },
+  {
+    "id": 83,
+    "nameArabic": "المطففين",
+    "nameTransliteration": "Al-Mutaffifin",
+    "nameFrench": "Les fraudeurs",
+    "revelationType": "meccan",
+    "totalVerses": 36
+  },
+  {
+    "id": 84,
+    "nameArabic": "الإنشقاق",
+    "nameTransliteration": "Al-Inshiqaq",
+    "nameFrench": "La déchirure",
+    "revelationType": "meccan",
+    "totalVerses": 25
+  },
+  {
+    "id": 85,
+    "nameArabic": "البروج",
+    "nameTransliteration": "Al-Buruj",
+    "nameFrench": "Les constellations",
+    "revelationType": "meccan",
+    "totalVerses": 22
+  },
+  {
+    "id": 86,
+    "nameArabic": "الطارق",
+    "nameTransliteration": "At-Tariq",
+    "nameFrench": "L'astre nocturne",
+    "revelationType": "meccan",
+    "totalVerses": 17
+  },
+  {
+    "id": 87,
+    "nameArabic": "الأعلى",
+    "nameTransliteration": "Al-A'la",
+    "nameFrench": "Le Très-Haut",
+    "revelationType": "meccan",
+    "totalVerses": 19
+  },
+  {
+    "id": 88,
+    "nameArabic": "الغاشية",
+    "nameTransliteration": "Al-Ghashiyah",
+    "nameFrench": "L'enveloppante",
+    "revelationType": "meccan",
+    "totalVerses": 26
+  },
+  {
+    "id": 89,
+    "nameArabic": "الفجر",
+    "nameTransliteration": "Al-Fajr",
+    "nameFrench": "L'aube",
+    "revelationType": "meccan",
+    "totalVerses": 30
+  },
+  {
+    "id": 90,
+    "nameArabic": "البلد",
+    "nameTransliteration": "Al-Balad",
+    "nameFrench": "La cité",
+    "revelationType": "meccan",
+    "totalVerses": 20
+  },
+  {
+    "id": 91,
+    "nameArabic": "الشمس",
+    "nameTransliteration": "Ash-Shams",
+    "nameFrench": "Le soleil",
+    "revelationType": "meccan",
+    "totalVerses": 15
+  },
+  {
+    "id": 92,
+    "nameArabic": "الليل",
+    "nameTransliteration": "Al-Layl",
+    "nameFrench": "La nuit",
+    "revelationType": "meccan",
+    "totalVerses": 21
+  },
+  {
+    "id": 93,
+    "nameArabic": "الضحى",
+    "nameTransliteration": "Ad-Duhaa",
+    "nameFrench": "Le jour montant",
+    "revelationType": "meccan",
+    "totalVerses": 11
+  },
+  {
+    "id": 94,
+    "nameArabic": "الشرح",
+    "nameTransliteration": "Ash-Sharh",
+    "nameFrench": "L'ouverture",
+    "revelationType": "meccan",
+    "totalVerses": 8
+  },
+  {
+    "id": 95,
+    "nameArabic": "التين",
+    "nameTransliteration": "At-Tin",
+    "nameFrench": "Les figues",
+    "revelationType": "meccan",
+    "totalVerses": 8
+  },
+  {
+    "id": 96,
+    "nameArabic": "العلق",
+    "nameTransliteration": "Al-'Alaq",
+    "nameFrench": "L'adhérence",
+    "revelationType": "meccan",
+    "totalVerses": 19
+  },
+  {
+    "id": 97,
+    "nameArabic": "القدر",
+    "nameTransliteration": "Al-Qadr",
+    "nameFrench": "La destinée",
+    "revelationType": "meccan",
+    "totalVerses": 5
+  },
+  {
+    "id": 98,
+    "nameArabic": "البينة",
+    "nameTransliteration": "Al-Bayyinah",
+    "nameFrench": "La preuve",
+    "revelationType": "medinan",
+    "totalVerses": 8
+  },
+  {
+    "id": 99,
+    "nameArabic": "الزلزلة",
+    "nameTransliteration": "Az-Zalzalah",
+    "nameFrench": "Le séisme",
+    "revelationType": "medinan",
+    "totalVerses": 8
+  },
+  {
+    "id": 100,
+    "nameArabic": "العاديات",
+    "nameTransliteration": "Al-'Adiyat",
+    "nameFrench": "Les coursiers",
+    "revelationType": "meccan",
+    "totalVerses": 11
+  },
+  {
+    "id": 101,
+    "nameArabic": "القارعة",
+    "nameTransliteration": "Al-Qari'ah",
+    "nameFrench": "Le fracas",
+    "revelationType": "meccan",
+    "totalVerses": 11
+  },
+  {
+    "id": 102,
+    "nameArabic": "التكاثر",
+    "nameTransliteration": "At-Takathur",
+    "nameFrench": "La course aux richesses",
+    "revelationType": "meccan",
+    "totalVerses": 8
+  },
+  {
+    "id": 103,
+    "nameArabic": "العصر",
+    "nameTransliteration": "Al-'Asr",
+    "nameFrench": "Le temps",
+    "revelationType": "meccan",
+    "totalVerses": 3
+  },
+  {
+    "id": 104,
+    "nameArabic": "الهمزة",
+    "nameTransliteration": "Al-Humazah",
+    "nameFrench": "Les calomniateurs",
+    "revelationType": "meccan",
+    "totalVerses": 9
+  },
+  {
+    "id": 105,
+    "nameArabic": "الفيل",
+    "nameTransliteration": "Al-Fil",
+    "nameFrench": "L'éléphant",
+    "revelationType": "meccan",
+    "totalVerses": 5
+  },
+  {
+    "id": 106,
+    "nameArabic": "قريش",
+    "nameTransliteration": "Quraysh",
+    "nameFrench": "Les Quraysh",
+    "revelationType": "meccan",
+    "totalVerses": 4
+  },
+  {
+    "id": 107,
+    "nameArabic": "الماعون",
+    "nameTransliteration": "Al-Ma'un",
+    "nameFrench": "L'entraide",
+    "revelationType": "meccan",
+    "totalVerses": 7
+  },
+  {
+    "id": 108,
+    "nameArabic": "الكوثر",
+    "nameTransliteration": "Al-Kawthar",
+    "nameFrench": "L'abondance",
+    "revelationType": "meccan",
+    "totalVerses": 3
+  },
+  {
+    "id": 109,
+    "nameArabic": "الكافرون",
+    "nameTransliteration": "Al-Kafirun",
+    "nameFrench": "Les mécréants",
+    "revelationType": "meccan",
+    "totalVerses": 6
+  },
+  {
+    "id": 110,
+    "nameArabic": "النصر",
+    "nameTransliteration": "An-Nasr",
+    "nameFrench": "Le secours",
+    "revelationType": "medinan",
+    "totalVerses": 3
+  },
+  {
+    "id": 111,
+    "nameArabic": "المسد",
+    "nameTransliteration": "Al-Masad",
+    "nameFrench": "Les fibres",
+    "revelationType": "meccan",
+    "totalVerses": 5
+  },
+  {
+    "id": 112,
+    "nameArabic": "الإخلاص",
+    "nameTransliteration": "Al-Ikhlas",
+    "nameFrench": "La sincérité",
+    "revelationType": "meccan",
+    "totalVerses": 4
+  },
+  {
+    "id": 113,
+    "nameArabic": "الفلق",
+    "nameTransliteration": "Al-Falaq",
+    "nameFrench": "L'aube naissante",
+    "revelationType": "meccan",
+    "totalVerses": 5
+  },
+  {
+    "id": 114,
+    "nameArabic": "الناس",
+    "nameTransliteration": "An-Nas",
+    "nameFrench": "Les humains",
+    "revelationType": "meccan",
+    "totalVerses": 6
+  }
+]

@@ -1,0 +1,73 @@
+{
+  "id": 1,
+  "nameArabic": "الفاتحة",
+  "nameTransliteration": "Al-Fatihah",
+  "nameFrench": "L'ouverture",
+  "revelationType": "meccan",
+  "totalVerses": 7,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ",
+      "french": "Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux",
+      "phonetic": "Bismi Allahi alrrahmani alrraheemi",
+      "juz": 1,
+      "hizb": 1,
+      "page": 1
+    },
+    {
+      "number": 2,
+      "arabic": "ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ",
+      "french": "Louange à Allah, Seigneur de l'univers",
+      "phonetic": "Alhamdu lillahi rabbi alAAalameena",
+      "juz": 1,
+      "hizb": 1,
+      "page": 1
+    },
+    {
+      "number": 3,
+      "arabic": "ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ",
+      "french": "Le Tout Miséricordieux, le Très Miséricordieux",
+      "phonetic": "Alrrahmani alrraheemi",
+      "juz": 1,
+      "hizb": 1,
+      "page": 1
+    },
+    {
+      "number": 4,
+      "arabic": "مَٰلِكِ يَوۡمِ ٱلدِّينِ",
+      "french": "Maître du Jour de la rétribution",
+      "phonetic": "Maliki yawmi alddeeni",
+      "juz": 1,
+      "hizb": 1,
+      "page": 1
+    },
+    {
+      "number": 5,
+      "arabic": "إِيَّاكَ نَعۡبُدُ وَإِيَّاكَ نَسۡتَعِينُ",
+      "french": "C'est Toi [Seul] que nous adorons, et c'est Toi [Seul] dont nous implorons secours",
+      "phonetic": "Iyyaka naAAbudu waiyyaka nastaAAeenu",
+      "juz": 1,
+      "hizb": 1,
+      "page": 1
+    },
+    {
+      "number": 6,
+      "arabic": "ٱهۡدِنَا ٱلصِّرَٰطَ ٱلۡمُسۡتَقِيمَ",
+      "french": "Guide-nous dans le droit chemin",
+      "phonetic": "Ihdina alssirata almustaqeema",
+      "juz": 1,
+      "hizb": 1,
+      "page": 1
+    },
+    {
+      "number": 7,
+      "arabic": "صِرَٰطَ ٱلَّذِينَ أَنۡعَمۡتَ عَلَيۡهِمۡ غَيۡرِ ٱلۡمَغۡضُوبِ عَلَيۡهِمۡ وَلَا ٱلضَّآلِّينَ",
+      "french": "le chemin de ceux que Tu as comblés de faveurs, non pas de ceux qui ont encouru Ta colère, ni des égarés",
+      "phonetic": "Sirata allatheena anAAamta AAalayhim ghayri almaghdoobi AAalayhim wala alddalleena",
+      "juz": 1,
+      "hizb": 1,
+      "page": 1
+    }
+  ]
+}

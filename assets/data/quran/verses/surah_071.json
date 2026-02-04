@@ -1,0 +1,262 @@
+{
+  "id": 71,
+  "nameArabic": "نوح",
+  "nameTransliteration": "Nuh",
+  "nameFrench": "Noé",
+  "revelationType": "meccan",
+  "totalVerses": 28,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "إِنَّآ أَرۡسَلۡنَا نُوحًا إِلَىٰ قَوۡمِهِۦٓ أَنۡ أَنذِرۡ قَوۡمَكَ مِن قَبۡلِ أَن يَأۡتِيَهُمۡ عَذَابٌ أَلِيمٞ",
+      "french": "Nous avons envoyé Noé vers son peuple: «Avertis ton peuple, avant que leur vienne un châtiment douloureux»",
+      "phonetic": "Inna arsalna noohan ila qawmihi an anthir qawmaka min qabli an yatiyahum AAathabun aleemun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 570
+    },
+    {
+      "number": 2,
+      "arabic": "قَالَ يَٰقَوۡمِ إِنِّي لَكُمۡ نَذِيرٞ مُّبِينٌ",
+      "french": "Il [leur] dit: «O mon peuple, je suis vraiment pour vous, un avertisseur clair",
+      "phonetic": "Qala ya qawmi innee lakum natheerun mubeenun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 570
+    },
+    {
+      "number": 3,
+      "arabic": "أَنِ ٱعۡبُدُواْ ٱللَّهَ وَٱتَّقُوهُ وَأَطِيعُونِ",
+      "french": "Adorez Allah, craignez-Le et obéissez-moi",
+      "phonetic": "Ani oAAbudoo Allaha waittaqoohu waateeAAooni",
+      "juz": 29,
+      "hizb": 57,
+      "page": 570
+    },
+    {
+      "number": 4,
+      "arabic": "يَغۡفِرۡ لَكُم مِّن ذُنُوبِكُمۡ وَيُؤَخِّرۡكُمۡ إِلَىٰٓ أَجَلٖ مُّسَمًّىۚ إِنَّ أَجَلَ ٱللَّهِ إِذَا جَآءَ لَا يُؤَخَّرُۚ لَوۡ كُنتُمۡ تَعۡلَمُونَ",
+      "french": "pour qu'Il vous pardonne vos péchés et qu'Il vous donne un délai jusqu'à un terme fixé. Mais quand vient le terme fixé par Allah, il ne saurait être différé si vous saviez!»",
+      "phonetic": "Yaghfir lakum min thunoobikum wayuakhkhirkum ila ajalin musamman inna ajala Allahi itha jaa la yuakhkharu law kuntum taAAlamoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 570
+    },
+    {
+      "number": 5,
+      "arabic": "قَالَ رَبِّ إِنِّي دَعَوۡتُ قَوۡمِي لَيۡلٗا وَنَهَارٗا",
+      "french": "Il dit: «Seigneur! J'ai appelé mon peuple, nuit et jour",
+      "phonetic": "Qala rabbi innee daAAawtu qawmee laylan wanaharan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 570
+    },
+    {
+      "number": 6,
+      "arabic": "فَلَمۡ يَزِدۡهُمۡ دُعَآءِيٓ إِلَّا فِرَارٗا",
+      "french": "Mais mon appel n'a fait qu'accroître leur fuite",
+      "phonetic": "Falam yazidhum duAAaee illa firaran",
+      "juz": 29,
+      "hizb": 57,
+      "page": 570
+    },
+    {
+      "number": 7,
+      "arabic": "وَإِنِّي كُلَّمَا دَعَوۡتُهُمۡ لِتَغۡفِرَ لَهُمۡ جَعَلُوٓاْ أَصَٰبِعَهُمۡ فِيٓ ءَاذَانِهِمۡ وَٱسۡتَغۡشَوۡاْ ثِيَابَهُمۡ وَأَصَرُّواْ وَٱسۡتَكۡبَرُواْ ٱسۡتِكۡبَارٗا",
+      "french": "Et chaque fois que je les ai appelés pour que Tu leur pardonnes, ils ont mis leurs doigts dans leurs oreilles. se sont enveloppés de leurs vêtements, se sont entêtés et se sont montrés extrêmement orgueilleux",
+      "phonetic": "Wainnee kullama daAAawtuhum litaghfira lahum jaAAaloo asabiAAahum fee athanihim waistaghshaw thiyabahum waasarroo waistakbaroo istikbaran",
+      "juz": 29,
+      "hizb": 57,
+      "page": 570
+    },
+    {
+      "number": 8,
+      "arabic": "ثُمَّ إِنِّي دَعَوۡتُهُمۡ جِهَارٗا",
+      "french": "Ensuite, je les ai appelés ouvertement",
+      "phonetic": "Thumma innee daAAawtuhum jiharan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 570
+    },
+    {
+      "number": 9,
+      "arabic": "ثُمَّ إِنِّيٓ أَعۡلَنتُ لَهُمۡ وَأَسۡرَرۡتُ لَهُمۡ إِسۡرَارٗا",
+      "french": "Puis, je leur ai fait des proclamations publiques, et des confidences en secret",
+      "phonetic": "Thumma innee aAAlantu lahum waasrartu lahum israran",
+      "juz": 29,
+      "hizb": 57,
+      "page": 570
+    },
+    {
+      "number": 10,
+      "arabic": "فَقُلۡتُ ٱسۡتَغۡفِرُواْ رَبَّكُمۡ إِنَّهُۥ كَانَ غَفَّارٗا",
+      "french": "J'ai donc dit: «Implorez le pardon de votre Seigneur, car Il est grand Pardonneur",
+      "phonetic": "Faqultu istaghfiroo rabbakum innahu kana ghaffaran",
+      "juz": 29,
+      "hizb": 57,
+      "page": 570
+    },
+    {
+      "number": 11,
+      "arabic": "يُرۡسِلِ ٱلسَّمَآءَ عَلَيۡكُم مِّدۡرَارٗا",
+      "french": "pour qu'Il vous envoie du ciel, des pluies abondantes",
+      "phonetic": "Yursili alssamaa AAalaykum midraran",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 12,
+      "arabic": "وَيُمۡدِدۡكُم بِأَمۡوَٰلٖ وَبَنِينَ وَيَجۡعَل لَّكُمۡ جَنَّـٰتٖ وَيَجۡعَل لَّكُمۡ أَنۡهَٰرٗا",
+      "french": "et qu'Il vous accorde beaucoup de biens et d'enfants, et vous donne des jardins et vous donne des rivières",
+      "phonetic": "Wayumdidkum biamwalin wabaneena wayajAAal lakum jannatin wayajAAal lakum anharan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 13,
+      "arabic": "مَّا لَكُمۡ لَا تَرۡجُونَ لِلَّهِ وَقَارٗا",
+      "french": "Qu'avez-vous à ne pas vénérer Allah comme il se doit",
+      "phonetic": "Ma lakum la tarjoona lillahi waqaran",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 14,
+      "arabic": "وَقَدۡ خَلَقَكُمۡ أَطۡوَارًا",
+      "french": "alors qu'Il vous a créés par phases successives",
+      "phonetic": "Waqad khalaqakum atwaran",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 15,
+      "arabic": "أَلَمۡ تَرَوۡاْ كَيۡفَ خَلَقَ ٱللَّهُ سَبۡعَ سَمَٰوَٰتٖ طِبَاقٗا",
+      "french": "N'avez-vous pas vu comment Allah a créé sept cieux superposés",
+      "phonetic": "Alam taraw kayfa khalaqa Allahu sabAAa samawatin tibaqan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 16,
+      "arabic": "وَجَعَلَ ٱلۡقَمَرَ فِيهِنَّ نُورٗا وَجَعَلَ ٱلشَّمۡسَ سِرَاجٗا",
+      "french": "et y a fait de la lune une lumière et du soleil une lampe",
+      "phonetic": "WajaAAala alqamara feehinna nooran wajaAAala alshshamsa sirajan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 17,
+      "arabic": "وَٱللَّهُ أَنۢبَتَكُم مِّنَ ٱلۡأَرۡضِ نَبَاتٗا",
+      "french": "Et c'est Allah qui, de la terre, vous a fait croître comme des plantes",
+      "phonetic": "WaAllahu anbatakum mina alardi nabatan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 18,
+      "arabic": "ثُمَّ يُعِيدُكُمۡ فِيهَا وَيُخۡرِجُكُمۡ إِخۡرَاجٗا",
+      "french": "puis Il vous y fera retourner et vous en fera sortir véritablement",
+      "phonetic": "Thumma yuAAeedukum feeha wayukhrijukum ikhrajan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 19,
+      "arabic": "وَٱللَّهُ جَعَلَ لَكُمُ ٱلۡأَرۡضَ بِسَاطٗا",
+      "french": "Et c'est Allah qui vous a fait de la terre un tapis",
+      "phonetic": "WaAllahu jaAAala lakumu alarda bisatan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 20,
+      "arabic": "لِّتَسۡلُكُواْ مِنۡهَا سُبُلٗا فِجَاجٗا",
+      "french": "pour que vous vous acheminiez par ses voies spacieuses»",
+      "phonetic": "Litaslukoo minha subulan fijajan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 21,
+      "arabic": "قَالَ نُوحٞ رَّبِّ إِنَّهُمۡ عَصَوۡنِي وَٱتَّبَعُواْ مَن لَّمۡ يَزِدۡهُ مَالُهُۥ وَوَلَدُهُۥٓ إِلَّا خَسَارٗا",
+      "french": "Noé dit: «Seigneur, ils m'ont désobéi et ils ont suivi celui dont les biens et les enfants n'ont fait qu'accroître la perte",
+      "phonetic": "Qala noohun rabbi innahum AAasawnee waittabaAAoo man lam yazidhu maluhu wawaladuhu illa khasaran",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 22,
+      "arabic": "وَمَكَرُواْ مَكۡرٗا كُبَّارٗا",
+      "french": "Ils ont ourdi un immense stratagème",
+      "phonetic": "Wamakaroo makran kubbaran",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 23,
+      "arabic": "وَقَالُواْ لَا تَذَرُنَّ ءَالِهَتَكُمۡ وَلَا تَذَرُنَّ وَدّٗا وَلَا سُوَاعٗا وَلَا يَغُوثَ وَيَعُوقَ وَنَسۡرٗا",
+      "french": "et ils ont dit: «N'abandonnez jamais vos divinités et n'abandonnez jamais Wadd, Suwâ, Yaghhû, Ya'ûq et Nasr",
+      "phonetic": "Waqaloo la tatharunna alihatakum wala tatharunna waddan wala suwaAAan wala yaghootha wayaAAooqa wanasran",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 24,
+      "arabic": "وَقَدۡ أَضَلُّواْ كَثِيرٗاۖ وَلَا تَزِدِ ٱلظَّـٰلِمِينَ إِلَّا ضَلَٰلٗا",
+      "french": "Elles [les idoles] ont déjà égaré plusieurs. Ne fais (Seigneur) croître les injustes qu'en égarement",
+      "phonetic": "Waqad adalloo katheeran wala tazidi alththalimeena illa dalalan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 25,
+      "arabic": "مِّمَّا خَطِيٓـَٰٔتِهِمۡ أُغۡرِقُواْ فَأُدۡخِلُواْ نَارٗا فَلَمۡ يَجِدُواْ لَهُم مِّن دُونِ ٱللَّهِ أَنصَارٗا",
+      "french": "A cause de leurs fautes, ils ont été noyés, puis on les a fait entrer au Feu, et ils n'ont pas trouvé en dehors d'Allah, de secoureurs»",
+      "phonetic": "Mimma khateeatihim oghriqoo faodkhiloo naran falam yajidoo lahum min dooni Allahi ansaran",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 26,
+      "arabic": "وَقَالَ نُوحٞ رَّبِّ لَا تَذَرۡ عَلَى ٱلۡأَرۡضِ مِنَ ٱلۡكَٰفِرِينَ دَيَّارًا",
+      "french": "Et Noé dit: «Seigneur, ne laisse sur la terre aucun infidèle",
+      "phonetic": "Waqala noohun rabbi la tathar AAala alardi mina alkafireena dayyaran",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 27,
+      "arabic": "إِنَّكَ إِن تَذَرۡهُمۡ يُضِلُّواْ عِبَادَكَ وَلَا يَلِدُوٓاْ إِلَّا فَاجِرٗا كَفَّارٗا",
+      "french": "Si Tu les laisses [en vie], ils égareront Tes serviteurs et n'engendreront que des pécheurs infidèles",
+      "phonetic": "Innaka in tatharhum yudilloo AAibadaka wala yalidoo illa fajiran kaffaran",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    },
+    {
+      "number": 28,
+      "arabic": "رَّبِّ ٱغۡفِرۡ لِي وَلِوَٰلِدَيَّ وَلِمَن دَخَلَ بَيۡتِيَ مُؤۡمِنٗا وَلِلۡمُؤۡمِنِينَ وَٱلۡمُؤۡمِنَٰتِۖ وَلَا تَزِدِ ٱلظَّـٰلِمِينَ إِلَّا تَبَارَۢا",
+      "french": "Seigneur! Pardonne-moi, et à mes père et mère et à celui qui entre dans ma demeure croyant, ainsi qu'aux croyants et croyantes; et ne fais croître les injustes qu'en perdition»",
+      "phonetic": "Rabbi ighfir lee waliwalidayya waliman dakhala baytiya muminan walilmumineena waalmuminati wala tazidi alththalimeena illa tabaran",
+      "juz": 29,
+      "hizb": 57,
+      "page": 571
+    }
+  ]
+}

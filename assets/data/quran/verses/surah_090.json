@@ -1,0 +1,190 @@
+{
+  "id": 90,
+  "nameArabic": "البلد",
+  "nameTransliteration": "Al-Balad",
+  "nameFrench": "La cité",
+  "revelationType": "meccan",
+  "totalVerses": 20,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "لَآ أُقۡسِمُ بِهَٰذَا ٱلۡبَلَدِ",
+      "french": "Non!... Je jure par cette Cité",
+      "phonetic": "La oqsimu bihatha albaladi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 2,
+      "arabic": "وَأَنتَ حِلُّۢ بِهَٰذَا ٱلۡبَلَدِ",
+      "french": "et toi, tu es un résident dans cette cité",
+      "phonetic": "Waanta hillun bihatha albaladi",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 3,
+      "arabic": "وَوَالِدٖ وَمَا وَلَدَ",
+      "french": "Et par le père et ce qu'il engendre",
+      "phonetic": "Wawalidin wama walada",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 4,
+      "arabic": "لَقَدۡ خَلَقۡنَا ٱلۡإِنسَٰنَ فِي كَبَدٍ",
+      "french": "Nous avons, certes, créé l'homme pour une vie de lutte",
+      "phonetic": "Laqad khalaqna alinsana fee kabadin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 5,
+      "arabic": "أَيَحۡسَبُ أَن لَّن يَقۡدِرَ عَلَيۡهِ أَحَدٞ",
+      "french": "Pense-t-il que personne ne pourra rien contre lui",
+      "phonetic": "Ayahsabu an lan yaqdira AAalayhi ahadun",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 6,
+      "arabic": "يَقُولُ أَهۡلَكۡتُ مَالٗا لُّبَدًا",
+      "french": "Il dit: «J'ai gaspillé beaucoup de biens»",
+      "phonetic": "Yaqoolu ahlaktu malan lubadan",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 7,
+      "arabic": "أَيَحۡسَبُ أَن لَّمۡ يَرَهُۥٓ أَحَدٌ",
+      "french": "Pense-t-il que nul ne l'a vu",
+      "phonetic": "Ayahsabu an lam yarahu ahadun",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 8,
+      "arabic": "أَلَمۡ نَجۡعَل لَّهُۥ عَيۡنَيۡنِ",
+      "french": "Ne lui avons Nous pas assigné deux yeux",
+      "phonetic": "Alam najAAal lahu AAaynayni",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 9,
+      "arabic": "وَلِسَانٗا وَشَفَتَيۡنِ",
+      "french": "et une langue et deux lèvres",
+      "phonetic": "Walisanan washafatayni",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 10,
+      "arabic": "وَهَدَيۡنَٰهُ ٱلنَّجۡدَيۡنِ",
+      "french": "Ne l'avons-Nous pas guidé aux deux voies",
+      "phonetic": "Wahadaynahu alnnajdayni",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 11,
+      "arabic": "فَلَا ٱقۡتَحَمَ ٱلۡعَقَبَةَ",
+      "french": "Or, il ne s'engage pas dans la voie difficile",
+      "phonetic": "Fala iqtahama alAAaqabata",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 12,
+      "arabic": "وَمَآ أَدۡرَىٰكَ مَا ٱلۡعَقَبَةُ",
+      "french": "Et qui te dira ce qu'est la voie difficile",
+      "phonetic": "Wama adraka ma alAAaqabatu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 13,
+      "arabic": "فَكُّ رَقَبَةٍ",
+      "french": "C'est délier un joug [affranchir un esclave]",
+      "phonetic": "Fakku raqabatin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 14,
+      "arabic": "أَوۡ إِطۡعَٰمٞ فِي يَوۡمٖ ذِي مَسۡغَبَةٖ",
+      "french": "ou nourrir, en un jour de famine",
+      "phonetic": "Aw itAAamun fee yawmin thee masghabatin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 15,
+      "arabic": "يَتِيمٗا ذَا مَقۡرَبَةٍ",
+      "french": "un orphelin proche parent",
+      "phonetic": "Yateeman tha maqrabatin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 16,
+      "arabic": "أَوۡ مِسۡكِينٗا ذَا مَتۡرَبَةٖ",
+      "french": "ou un pauvre dans le dénuement",
+      "phonetic": "Aw miskeenan tha matrabatin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 17,
+      "arabic": "ثُمَّ كَانَ مِنَ ٱلَّذِينَ ءَامَنُواْ وَتَوَاصَوۡاْ بِٱلصَّبۡرِ وَتَوَاصَوۡاْ بِٱلۡمَرۡحَمَةِ",
+      "french": "Et c'est être, en outre, de ceux qui croient et s'enjoignent mutuellement l'endurance, et s'enjoignent mutuellement la miséricorde",
+      "phonetic": "Thumma kana mina allatheena amanoo watawasaw bialssabri watawasaw bialmarhamati",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 18,
+      "arabic": "أُوْلَـٰٓئِكَ أَصۡحَٰبُ ٱلۡمَيۡمَنَةِ",
+      "french": "Ceux-là sont les gens de la droite",
+      "phonetic": "Olaika ashabu almaymanati",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 19,
+      "arabic": "وَٱلَّذِينَ كَفَرُواْ بِـَٔايَٰتِنَا هُمۡ أَصۡحَٰبُ ٱلۡمَشۡـَٔمَةِ",
+      "french": "alors que ceux qui ne croient pas en Nos versets sont les gens de la gauche",
+      "phonetic": "Waallatheena kafaroo biayatina hum ashabu almashamati",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    },
+    {
+      "number": 20,
+      "arabic": "عَلَيۡهِمۡ نَارٞ مُّؤۡصَدَةُۢ",
+      "french": "Le Feu se refermera sur eux",
+      "phonetic": "AAalayhim narun musadatun",
+      "juz": 30,
+      "hizb": 60,
+      "page": 594
+    }
+  ]
+}

@@ -1,0 +1,289 @@
+{
+  "id": 76,
+  "nameArabic": "الانسان",
+  "nameTransliteration": "Al-Insan",
+  "nameFrench": "L'homme",
+  "revelationType": "medinan",
+  "totalVerses": 31,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "هَلۡ أَتَىٰ عَلَى ٱلۡإِنسَٰنِ حِينٞ مِّنَ ٱلدَّهۡرِ لَمۡ يَكُن شَيۡـٔٗا مَّذۡكُورًا",
+      "french": "S'est-il écoulé pour l'homme un laps de temps durant lequel il n'était même pas une chose mentionnable",
+      "phonetic": "Hal ata AAala alinsani heenun mina alddahri lam yakun shayan mathkooran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 2,
+      "arabic": "إِنَّا خَلَقۡنَا ٱلۡإِنسَٰنَ مِن نُّطۡفَةٍ أَمۡشَاجٖ نَّبۡتَلِيهِ فَجَعَلۡنَٰهُ سَمِيعَۢا بَصِيرًا",
+      "french": "En effet, Nous avons créé l'homme d'une goutte de sperme mélangé [aux composantes diverses] pour le mettre à l'épreuve. [C'est pourquoi] Nous l'avons fait entendant et voyant",
+      "phonetic": "Inna khalaqna alinsana min nutfatin amshajin nabtaleehi fajaAAalnahu sameeAAan baseeran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 3,
+      "arabic": "إِنَّا هَدَيۡنَٰهُ ٱلسَّبِيلَ إِمَّا شَاكِرٗا وَإِمَّا كَفُورًا",
+      "french": "Nous l'avons guidé dans le chemin, - qu'il soit reconnaissant ou ingrat",
+      "phonetic": "Inna hadaynahu alssabeela imma shakiran waimma kafooran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 4,
+      "arabic": "إِنَّآ أَعۡتَدۡنَا لِلۡكَٰفِرِينَ سَلَٰسِلَاْ وَأَغۡلَٰلٗا وَسَعِيرًا",
+      "french": "Nous avons préparé pour les infidèles des chaînes, des carcans et une fournaise ardente",
+      "phonetic": "Inna aAAtadna lilkafireena salasila waaghlalan wasaAAeeran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 5,
+      "arabic": "إِنَّ ٱلۡأَبۡرَارَ يَشۡرَبُونَ مِن كَأۡسٖ كَانَ مِزَاجُهَا كَافُورًا",
+      "french": "Les vertueux boiront d'une coupe dont le mélange sera de camphre",
+      "phonetic": "Inna alabrara yashraboona min kasin kana mizajuha kafooran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 6,
+      "arabic": "عَيۡنٗا يَشۡرَبُ بِهَا عِبَادُ ٱللَّهِ يُفَجِّرُونَهَا تَفۡجِيرٗا",
+      "french": "d'une source de laquelle boiront les serviteurs d'Allah et ils la feront jaillir en abondance",
+      "phonetic": "AAaynan yashrabu biha AAibadu Allahi yufajjiroonaha tafjeeran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 7,
+      "arabic": "يُوفُونَ بِٱلنَّذۡرِ وَيَخَافُونَ يَوۡمٗا كَانَ شَرُّهُۥ مُسۡتَطِيرٗا",
+      "french": "Ils accomplissent leurs vœux et ils redoutent un jour dont le mal s'étendra partout",
+      "phonetic": "Yoofoona bialnnathri wayakhafoona yawman kana sharruhu mustateeran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 8,
+      "arabic": "وَيُطۡعِمُونَ ٱلطَّعَامَ عَلَىٰ حُبِّهِۦ مِسۡكِينٗا وَيَتِيمٗا وَأَسِيرًا",
+      "french": "et offrent la nourriture, malgré son amour, au pauvre, à l'orphelin et au prisonnier",
+      "phonetic": "WayutAAimona alttaAAama AAala hubbihi miskeenan wayateeman waaseeran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 9,
+      "arabic": "إِنَّمَا نُطۡعِمُكُمۡ لِوَجۡهِ ٱللَّهِ لَا نُرِيدُ مِنكُمۡ جَزَآءٗ وَلَا شُكُورًا",
+      "french": "(disant): «C'est pour le visage d'Allah que nous vous nourrissons: nous ne voulons de vous ni récompense ni gratitude",
+      "phonetic": "Innama nutAAimukum liwajhi Allahi la nureedu minkum jazaan wala shukooran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 10,
+      "arabic": "إِنَّا نَخَافُ مِن رَّبِّنَا يَوۡمًا عَبُوسٗا قَمۡطَرِيرٗا",
+      "french": "Nous redoutons, de notre Seigneur, un jour terrible et catastrophique»",
+      "phonetic": "Inna nakhafu min rabbina yawman AAaboosan qamtareeran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 11,
+      "arabic": "فَوَقَىٰهُمُ ٱللَّهُ شَرَّ ذَٰلِكَ ٱلۡيَوۡمِ وَلَقَّىٰهُمۡ نَضۡرَةٗ وَسُرُورٗا",
+      "french": "Allah les protègera donc du mal de ce jour-là, et leur fera rencontrer la splendeur et la joie",
+      "phonetic": "Fawaqahumu Allahu sharra thalika alyawmi walaqqahum nadratan wasurooran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 12,
+      "arabic": "وَجَزَىٰهُم بِمَا صَبَرُواْ جَنَّةٗ وَحَرِيرٗا",
+      "french": "et les rétribuera pour ce qu'ils auront enduré, en leur donnant le Paradis et des [vêtements] de soie",
+      "phonetic": "Wajazahum bima sabaroo jannatan wahareeran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 13,
+      "arabic": "مُّتَّكِـِٔينَ فِيهَا عَلَى ٱلۡأَرَآئِكِۖ لَا يَرَوۡنَ فِيهَا شَمۡسٗا وَلَا زَمۡهَرِيرٗا",
+      "french": "ils y seront accoudés sur des divans, n'y voyant ni soleil ni froid glacial",
+      "phonetic": "Muttakieena feeha AAala alaraiki la yarawna feeha shamsan wala zamhareeran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 14,
+      "arabic": "وَدَانِيَةً عَلَيۡهِمۡ ظِلَٰلُهَا وَذُلِّلَتۡ قُطُوفُهَا تَذۡلِيلٗا",
+      "french": "Ses ombrages les couvriront de près, et ses fruits inclinés bien bas [à portée de leurs mains]",
+      "phonetic": "Wadaniyatan AAalayhim thilaluha wathullilat qutoofuha tathleelan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 15,
+      "arabic": "وَيُطَافُ عَلَيۡهِم بِـَٔانِيَةٖ مِّن فِضَّةٖ وَأَكۡوَابٖ كَانَتۡ قَوَارِيرَا۠",
+      "french": "Et l'on fera circuler parmi eux des récipients d'argent et des coupes cristallines",
+      "phonetic": "Wayutafu AAalayhim bianiyatin min fiddatin waakwabin kanat qawareera",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 16,
+      "arabic": "قَوَارِيرَاْ مِن فِضَّةٖ قَدَّرُوهَا تَقۡدِيرٗا",
+      "french": "en cristal d'argent, dont le contenu a été savamment dosé",
+      "phonetic": "Qawareera min fiddatin qaddarooha taqdeeran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 17,
+      "arabic": "وَيُسۡقَوۡنَ فِيهَا كَأۡسٗا كَانَ مِزَاجُهَا زَنجَبِيلًا",
+      "french": "Et là, ils seront abreuvés d'une coupe dont le mélange sera de gingembre",
+      "phonetic": "Wayusqawna feeha kasan kana mizajuha zanjabeelan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 18,
+      "arabic": "عَيۡنٗا فِيهَا تُسَمَّىٰ سَلۡسَبِيلٗا",
+      "french": "puisé là-dedans à une source qui s'appelle Salsabîl",
+      "phonetic": "AAaynan feeha tusamma salsabeelan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 19,
+      "arabic": "۞وَيَطُوفُ عَلَيۡهِمۡ وِلۡدَٰنٞ مُّخَلَّدُونَ إِذَا رَأَيۡتَهُمۡ حَسِبۡتَهُمۡ لُؤۡلُؤٗا مَّنثُورٗا",
+      "french": "Et parmi eux, circuleront des garçons éternellement jeunes. Quand tu les verras, tu les prendras pour des perles éparpillées",
+      "phonetic": "Wayatoofu AAalayhim wildanun mukhalladoona itha raaytahum hasibtahum luluan manthooran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 20,
+      "arabic": "وَإِذَا رَأَيۡتَ ثَمَّ رَأَيۡتَ نَعِيمٗا وَمُلۡكٗا كَبِيرًا",
+      "french": "Et quand tu regarderas là-bas, tu verras un délice et un vaste royaume",
+      "phonetic": "Waitha raayta thamma raayta naAAeeman wamulkan kabeeran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 21,
+      "arabic": "عَٰلِيَهُمۡ ثِيَابُ سُندُسٍ خُضۡرٞ وَإِسۡتَبۡرَقٞۖ وَحُلُّوٓاْ أَسَاوِرَ مِن فِضَّةٖ وَسَقَىٰهُمۡ رَبُّهُمۡ شَرَابٗا طَهُورًا",
+      "french": "Ils porteront des vêtements verts de satin et de brocart. Et ils seront parés de bracelets d'argent. Et leur Seigneur les abreuvera d'une boisson très pure",
+      "phonetic": "AAaliyahum thiyabu sundusin khudrun waistabraqun wahulloo asawira min fiddatin wasaqahum rabbuhum sharaban tahooran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 22,
+      "arabic": "إِنَّ هَٰذَا كَانَ لَكُمۡ جَزَآءٗ وَكَانَ سَعۡيُكُم مَّشۡكُورًا",
+      "french": "Cela sera pour vous une récompense, et votre effort sera reconnu",
+      "phonetic": "Inna hatha kana lakum jazaan wakana saAAyukum mashkooran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 23,
+      "arabic": "إِنَّا نَحۡنُ نَزَّلۡنَا عَلَيۡكَ ٱلۡقُرۡءَانَ تَنزِيلٗا",
+      "french": "En vérité c'est Nous qui avons fait descendre sur toi le Coran graduellement",
+      "phonetic": "Inna nahnu nazzalna AAalayka alqurana tanzeelan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 24,
+      "arabic": "فَٱصۡبِرۡ لِحُكۡمِ رَبِّكَ وَلَا تُطِعۡ مِنۡهُمۡ ءَاثِمًا أَوۡ كَفُورٗا",
+      "french": "Endure donc ce que ton Seigneur a décrété, et n'obéis ni au pécheur, parmi eux, ni au grand mécréant",
+      "phonetic": "Faisbir lihukmi rabbika wala tutiAA minhum athiman aw kafooran",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 25,
+      "arabic": "وَٱذۡكُرِ ٱسۡمَ رَبِّكَ بُكۡرَةٗ وَأَصِيلٗا",
+      "french": "Et invoque le nom de ton Seigneur, matin et après-midi",
+      "phonetic": "Waothkuri isma rabbika bukratan waaseelan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 579
+    },
+    {
+      "number": 26,
+      "arabic": "وَمِنَ ٱلَّيۡلِ فَٱسۡجُدۡ لَهُۥ وَسَبِّحۡهُ لَيۡلٗا طَوِيلًا",
+      "french": "et prosterne-toi devant Lui une partie de la nuit; et glorifie-Le de longues [heures] pendant la nuit",
+      "phonetic": "Wamina allayli faosjud lahu wasabbihhu laylan taweelan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 27,
+      "arabic": "إِنَّ هَـٰٓؤُلَآءِ يُحِبُّونَ ٱلۡعَاجِلَةَ وَيَذَرُونَ وَرَآءَهُمۡ يَوۡمٗا ثَقِيلٗا",
+      "french": "Ces gens-là aiment [la vie] éphémère (la vie sur terre) et laissent derrière eux un jour bien lourd [le Jour du Jugement]",
+      "phonetic": "Inna haolai yuhibboona alAAajilata wayatharoona waraahum yawman thaqeelan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 28,
+      "arabic": "نَّحۡنُ خَلَقۡنَٰهُمۡ وَشَدَدۡنَآ أَسۡرَهُمۡۖ وَإِذَا شِئۡنَا بَدَّلۡنَآ أَمۡثَٰلَهُمۡ تَبۡدِيلًا",
+      "french": "C'est Nous qui les avons créés et avons fortifié leur constitution. Quand Nous voulons, cependant, Nous les remplaçons [facilement] par leurs semblables",
+      "phonetic": "Nahnu khalaqnahum washadadna asrahum waitha shina baddalna amthalahum tabdeelan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 29,
+      "arabic": "إِنَّ هَٰذِهِۦ تَذۡكِرَةٞۖ فَمَن شَآءَ ٱتَّخَذَ إِلَىٰ رَبِّهِۦ سَبِيلٗا",
+      "french": "Ceci est un rappel. Que celui qui veut prenne donc le chemin vers son Seigneur",
+      "phonetic": "Inna hathihi tathkiratun faman shaa ittakhatha ila rabbihi sabeelan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 30,
+      "arabic": "وَمَا تَشَآءُونَ إِلَّآ أَن يَشَآءَ ٱللَّهُۚ إِنَّ ٱللَّهَ كَانَ عَلِيمًا حَكِيمٗا",
+      "french": "Cependant, vous ne saurez vouloir, à moins qu'Allah veuille. Et Allah est Omniscient et Sage",
+      "phonetic": "Wama tashaoona illa an yashaa Allahu inna Allaha kana AAaleeman hakeeman",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    },
+    {
+      "number": 31,
+      "arabic": "يُدۡخِلُ مَن يَشَآءُ فِي رَحۡمَتِهِۦۚ وَٱلظَّـٰلِمِينَ أَعَدَّ لَهُمۡ عَذَابًا أَلِيمَۢا",
+      "french": "Il fait entrer qui Il veut dans Sa miséricorde. Et quant aux injustes, Il leur a préparé un châtiment douloureux",
+      "phonetic": "Yudkhilu man yashao fee rahmatihi waalththalimeena aAAadda lahum AAathaban aleeman",
+      "juz": 29,
+      "hizb": 58,
+      "page": 580
+    }
+  ]
+}

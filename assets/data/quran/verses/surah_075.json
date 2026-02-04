@@ -1,0 +1,370 @@
+{
+  "id": 75,
+  "nameArabic": "القيامة",
+  "nameTransliteration": "Al-Qiyamah",
+  "nameFrench": "La résurrection",
+  "revelationType": "meccan",
+  "totalVerses": 40,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "لَآ أُقۡسِمُ بِيَوۡمِ ٱلۡقِيَٰمَةِ",
+      "french": "Non!... Je jure par le Jour de la Résurrection",
+      "phonetic": "La oqsimu biyawmi alqiyamati",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 2,
+      "arabic": "وَلَآ أُقۡسِمُ بِٱلنَّفۡسِ ٱللَّوَّامَةِ",
+      "french": "Mais non!, Je jure par l'âme qui ne cesse de se blâmer",
+      "phonetic": "Wala oqsimu bialnnafsi allawwamati",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 3,
+      "arabic": "أَيَحۡسَبُ ٱلۡإِنسَٰنُ أَلَّن نَّجۡمَعَ عِظَامَهُۥ",
+      "french": "L'homme, pense-t-il que Nous ne réunirons jamais ses os",
+      "phonetic": "Ayahsabu alinsanu allan najmaAAa AAithamahu",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 4,
+      "arabic": "بَلَىٰ قَٰدِرِينَ عَلَىٰٓ أَن نُّسَوِّيَ بَنَانَهُۥ",
+      "french": "Mais si! Nous sommes Capable de remettre à leur place les extrémités de ses doigts",
+      "phonetic": "Bala qadireena AAala an nusawwiya bananahu",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 5,
+      "arabic": "بَلۡ يُرِيدُ ٱلۡإِنسَٰنُ لِيَفۡجُرَ أَمَامَهُۥ",
+      "french": "L'homme voudrait plutôt continuer à vivre en libertin",
+      "phonetic": "Bal yureedu alinsanu liyafjura amamahu",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 6,
+      "arabic": "يَسۡـَٔلُ أَيَّانَ يَوۡمُ ٱلۡقِيَٰمَةِ",
+      "french": "Il interroge: «A quand, le Jour de la Résurrection?»",
+      "phonetic": "Yasalu ayyana yawmu alqiyamati",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 7,
+      "arabic": "فَإِذَا بَرِقَ ٱلۡبَصَرُ",
+      "french": "Lorsque la vue sera éblouie",
+      "phonetic": "Faitha bariqa albasaru",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 8,
+      "arabic": "وَخَسَفَ ٱلۡقَمَرُ",
+      "french": "et que la lune s'éclipsera",
+      "phonetic": "Wakhasafa alqamaru",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 9,
+      "arabic": "وَجُمِعَ ٱلشَّمۡسُ وَٱلۡقَمَرُ",
+      "french": "et que le soleil et la lune seront réunis",
+      "phonetic": "WajumiAAa alshshamsu waalqamaru",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 10,
+      "arabic": "يَقُولُ ٱلۡإِنسَٰنُ يَوۡمَئِذٍ أَيۡنَ ٱلۡمَفَرُّ",
+      "french": "l'homme, ce jour-là, dira: «Où fuir?»",
+      "phonetic": "Yaqoolu alinsanu yawmaithin ayna almafarru",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 11,
+      "arabic": "كَلَّا لَا وَزَرَ",
+      "french": "Non! Point de refuge",
+      "phonetic": "Kalla la wazara",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 12,
+      "arabic": "إِلَىٰ رَبِّكَ يَوۡمَئِذٍ ٱلۡمُسۡتَقَرُّ",
+      "french": "Vers ton Seigneur sera, ce jour-là, le retour",
+      "phonetic": "Ila rabbika yawmaithin almustaqarru",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 13,
+      "arabic": "يُنَبَّؤُاْ ٱلۡإِنسَٰنُ يَوۡمَئِذِۭ بِمَا قَدَّمَ وَأَخَّرَ",
+      "french": "L'homme sera informé ce jour-là de ce qu'il aura avancé et de ce qu'il aura remis à plus tard",
+      "phonetic": "Yunabbao alinsanu yawmaithin bima qaddama waakhkhara",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 14,
+      "arabic": "بَلِ ٱلۡإِنسَٰنُ عَلَىٰ نَفۡسِهِۦ بَصِيرَةٞ",
+      "french": "Mais l'homme sera un témoin perspicace contre lui-même",
+      "phonetic": "Bali alinsanu AAala nafsihi baseeratun",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 15,
+      "arabic": "وَلَوۡ أَلۡقَىٰ مَعَاذِيرَهُۥ",
+      "french": "quand même il présenterait ses excuses",
+      "phonetic": "Walaw alqa maAAatheerahu",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 16,
+      "arabic": "لَا تُحَرِّكۡ بِهِۦ لِسَانَكَ لِتَعۡجَلَ بِهِۦٓ",
+      "french": "Ne remue pas ta langue pour hâter sa récitation",
+      "phonetic": "La tuharrik bihi lisanaka litaAAjala bihi",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 17,
+      "arabic": "إِنَّ عَلَيۡنَا جَمۡعَهُۥ وَقُرۡءَانَهُۥ",
+      "french": "Son rassemblement (dans ton cœur et sa fixation dans ta mémoire) Nous incombent, ainsi que la façon de le réciter",
+      "phonetic": "Inna AAalayna jamAAahu waquranahu",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 18,
+      "arabic": "فَإِذَا قَرَأۡنَٰهُ فَٱتَّبِعۡ قُرۡءَانَهُۥ",
+      "french": "Quand donc Nous le récitons, suis sa récitation",
+      "phonetic": "Faitha qaranahu faittabiAA quranahu",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 19,
+      "arabic": "ثُمَّ إِنَّ عَلَيۡنَا بَيَانَهُۥ",
+      "french": "A Nous, ensuite incombera son explication",
+      "phonetic": "Thumma inna AAalayna bayanahu",
+      "juz": 29,
+      "hizb": 58,
+      "page": 577
+    },
+    {
+      "number": 20,
+      "arabic": "كَلَّا بَلۡ تُحِبُّونَ ٱلۡعَاجِلَةَ",
+      "french": "Mais vous aimez plutôt [la vie] éphémère",
+      "phonetic": "Kalla bal tuhibboona alAAajilata",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 21,
+      "arabic": "وَتَذَرُونَ ٱلۡأٓخِرَةَ",
+      "french": "et vous délaissez l'au-delà",
+      "phonetic": "Watatharoona alakhirata",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 22,
+      "arabic": "وُجُوهٞ يَوۡمَئِذٖ نَّاضِرَةٌ",
+      "french": "Ce jour-là, il y aura des visages resplendissants",
+      "phonetic": "Wujoohun yawmaithin nadiratun",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 23,
+      "arabic": "إِلَىٰ رَبِّهَا نَاظِرَةٞ",
+      "french": "qui regarderont leur Seigneur",
+      "phonetic": "Ila rabbiha nathiratun",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 24,
+      "arabic": "وَوُجُوهٞ يَوۡمَئِذِۭ بَاسِرَةٞ",
+      "french": "et il y aura ce jour-là, des visages assombris",
+      "phonetic": "Wawujoohun yawmaithin basiratun",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 25,
+      "arabic": "تَظُنُّ أَن يُفۡعَلَ بِهَا فَاقِرَةٞ",
+      "french": "qui s'attendent à subir une catastrophe",
+      "phonetic": "Tathunnu an yufAAala biha faqiratun",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 26,
+      "arabic": "كَلَّآ إِذَا بَلَغَتِ ٱلتَّرَاقِيَ",
+      "french": "Mais non! Quand [l'âme] en arrive aux clavicules",
+      "phonetic": "Kalla itha balaghati alttaraqiya",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 27,
+      "arabic": "وَقِيلَ مَنۡۜ رَاقٖ",
+      "french": "et qu'on dit: «Qui est exorciseur?»",
+      "phonetic": "Waqeela man raqin",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 28,
+      "arabic": "وَظَنَّ أَنَّهُ ٱلۡفِرَاقُ",
+      "french": "et qu'il [l'agonisant] est convaincu que c'est la séparation (la mort)",
+      "phonetic": "Wathanna annahu alfiraqu",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 29,
+      "arabic": "وَٱلۡتَفَّتِ ٱلسَّاقُ بِٱلسَّاقِ",
+      "french": "et que la jambe s'enlace à la jambe",
+      "phonetic": "Wailtaffati alssaqu bialssaqi",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 30,
+      "arabic": "إِلَىٰ رَبِّكَ يَوۡمَئِذٍ ٱلۡمَسَاقُ",
+      "french": "c'est vers ton Seigneur, ce jour-là que tu seras conduit",
+      "phonetic": "Ila rabbika yawmaithin almasaqu",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 31,
+      "arabic": "فَلَا صَدَّقَ وَلَا صَلَّىٰ",
+      "french": "Mais il n'a ni cru, ni fait la Salât",
+      "phonetic": "Fala saddaqa wala salla",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 32,
+      "arabic": "وَلَٰكِن كَذَّبَ وَتَوَلَّىٰ",
+      "french": "par contre, il a démenti et tourné le dos",
+      "phonetic": "Walakin kaththaba watawalla",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 33,
+      "arabic": "ثُمَّ ذَهَبَ إِلَىٰٓ أَهۡلِهِۦ يَتَمَطَّىٰٓ",
+      "french": "puis il s'en est allé vers sa famille, marchant avec orgueil",
+      "phonetic": "Thumma thahaba ila ahlihi yatamatta",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 34,
+      "arabic": "أَوۡلَىٰ لَكَ فَأَوۡلَىٰ",
+      "french": "«Malheur à toi, malheur!»",
+      "phonetic": "Awla laka faawla",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 35,
+      "arabic": "ثُمَّ أَوۡلَىٰ لَكَ فَأَوۡلَىٰٓ",
+      "french": "Et encore malheur à toi, malheur",
+      "phonetic": "Thumma awla laka faawla",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 36,
+      "arabic": "أَيَحۡسَبُ ٱلۡإِنسَٰنُ أَن يُتۡرَكَ سُدًى",
+      "french": "L'homme pense-t-il qu'on le laissera sans obligation à observer",
+      "phonetic": "Ayahsabu alinsanu an yutraka sudan",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 37,
+      "arabic": "أَلَمۡ يَكُ نُطۡفَةٗ مِّن مَّنِيّٖ يُمۡنَىٰ",
+      "french": "N'était-il pas une goutte de sperme éjaculé",
+      "phonetic": "Alam yaku nutfatan min manayyin yumna",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 38,
+      "arabic": "ثُمَّ كَانَ عَلَقَةٗ فَخَلَقَ فَسَوَّىٰ",
+      "french": "Et ensuite une adhérence Puis [Allah] l'a créée et formée harmonieusement",
+      "phonetic": "Thumma kana AAalaqatan fakhalaqa fasawwa",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 39,
+      "arabic": "فَجَعَلَ مِنۡهُ ٱلزَّوۡجَيۡنِ ٱلذَّكَرَ وَٱلۡأُنثَىٰٓ",
+      "french": "puis en a fait alors les deux éléments de couple: le mâle et la femelle",
+      "phonetic": "FajaAAala minhu alzzawjayni alththakara waalontha",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    },
+    {
+      "number": 40,
+      "arabic": "أَلَيۡسَ ذَٰلِكَ بِقَٰدِرٍ عَلَىٰٓ أَن يُحۡـِۧيَ ٱلۡمَوۡتَىٰ",
+      "french": "Celui-là [Allah] n'est-Il pas capable de faire revivre les morts",
+      "phonetic": "Alaysa thalika biqadirin AAala an yuhyiya almawta",
+      "juz": 29,
+      "hizb": 58,
+      "page": 578
+    }
+  ]
+}

@@ -1,0 +1,424 @@
+{
+  "id": 79,
+  "nameArabic": "النازعات",
+  "nameTransliteration": "An-Nazi'at",
+  "nameFrench": "Ceux qui arrachent",
+  "revelationType": "meccan",
+  "totalVerses": 46,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "وَٱلنَّـٰزِعَٰتِ غَرۡقٗا",
+      "french": "Par ceux qui arrachent violemment",
+      "phonetic": "WaalnnaziAAati gharqan",
+      "juz": 30,
+      "hizb": 59,
+      "page": 583
+    },
+    {
+      "number": 2,
+      "arabic": "وَٱلنَّـٰشِطَٰتِ نَشۡطٗا",
+      "french": "Et par ceux qui recueillent avec douceur",
+      "phonetic": "Waalnnashitati nashtan",
+      "juz": 30,
+      "hizb": 59,
+      "page": 583
+    },
+    {
+      "number": 3,
+      "arabic": "وَٱلسَّـٰبِحَٰتِ سَبۡحٗا",
+      "french": "Et par ceux qui voguent librement",
+      "phonetic": "Waalssabihati sabhan",
+      "juz": 30,
+      "hizb": 59,
+      "page": 583
+    },
+    {
+      "number": 4,
+      "arabic": "فَٱلسَّـٰبِقَٰتِ سَبۡقٗا",
+      "french": "puis s'élancent à toute vitesse",
+      "phonetic": "Faalssabiqati sabqan",
+      "juz": 30,
+      "hizb": 59,
+      "page": 583
+    },
+    {
+      "number": 5,
+      "arabic": "فَٱلۡمُدَبِّرَٰتِ أَمۡرٗا",
+      "french": "et règlent les affaires",
+      "phonetic": "Faalmudabbirati amran",
+      "juz": 30,
+      "hizb": 59,
+      "page": 583
+    },
+    {
+      "number": 6,
+      "arabic": "يَوۡمَ تَرۡجُفُ ٱلرَّاجِفَةُ",
+      "french": "Le jour où [la terre] tremblera [au premier son du clairon]",
+      "phonetic": "Yawma tarjufu alrrajifatu",
+      "juz": 30,
+      "hizb": 59,
+      "page": 583
+    },
+    {
+      "number": 7,
+      "arabic": "تَتۡبَعُهَا ٱلرَّادِفَةُ",
+      "french": "immédiatement suivi du deuxième",
+      "phonetic": "TatbaAAuha alrradifatu",
+      "juz": 30,
+      "hizb": 59,
+      "page": 583
+    },
+    {
+      "number": 8,
+      "arabic": "قُلُوبٞ يَوۡمَئِذٖ وَاجِفَةٌ",
+      "french": "Ce jour-là, il y aura des cœurs qui seront agités d'effroi",
+      "phonetic": "Quloobun yawmaithin wajifatun",
+      "juz": 30,
+      "hizb": 59,
+      "page": 583
+    },
+    {
+      "number": 9,
+      "arabic": "أَبۡصَٰرُهَا خَٰشِعَةٞ",
+      "french": "et leurs regards se baisseront",
+      "phonetic": "Absaruha khashiAAatun",
+      "juz": 30,
+      "hizb": 59,
+      "page": 583
+    },
+    {
+      "number": 10,
+      "arabic": "يَقُولُونَ أَءِنَّا لَمَرۡدُودُونَ فِي ٱلۡحَافِرَةِ",
+      "french": "Ils disent: «Quoi! Serons-nous ramenés à notre vie première",
+      "phonetic": "Yaqooloona ainna lamardoodoona fee alhafirati",
+      "juz": 30,
+      "hizb": 59,
+      "page": 583
+    },
+    {
+      "number": 11,
+      "arabic": "أَءِذَا كُنَّا عِظَٰمٗا نَّخِرَةٗ",
+      "french": "quand nous serons ossements pourris?»",
+      "phonetic": "Aitha kunna AAithaman nakhiratan",
+      "juz": 30,
+      "hizb": 59,
+      "page": 583
+    },
+    {
+      "number": 12,
+      "arabic": "قَالُواْ تِلۡكَ إِذٗا كَرَّةٌ خَاسِرَةٞ",
+      "french": "Ils disent: «ce sera alors un retour ruineux!»",
+      "phonetic": "Qaloo tilka ithan karratun khasiratun",
+      "juz": 30,
+      "hizb": 59,
+      "page": 583
+    },
+    {
+      "number": 13,
+      "arabic": "فَإِنَّمَا هِيَ زَجۡرَةٞ وَٰحِدَةٞ",
+      "french": "Il n'y aura qu'une sommation",
+      "phonetic": "Fainnama hiya zajratun wahidatun",
+      "juz": 30,
+      "hizb": 59,
+      "page": 583
+    },
+    {
+      "number": 14,
+      "arabic": "فَإِذَا هُم بِٱلسَّاهِرَةِ",
+      "french": "et voilà qu'ils seront sur la terre (ressuscités)",
+      "phonetic": "Faitha hum bialssahirati",
+      "juz": 30,
+      "hizb": 59,
+      "page": 583
+    },
+    {
+      "number": 15,
+      "arabic": "هَلۡ أَتَىٰكَ حَدِيثُ مُوسَىٰٓ",
+      "french": "Le récit de Moïse t'est-il parvenu",
+      "phonetic": "Hal ataka hadeethu moosa",
+      "juz": 30,
+      "hizb": 59,
+      "page": 583
+    },
+    {
+      "number": 16,
+      "arabic": "إِذۡ نَادَىٰهُ رَبُّهُۥ بِٱلۡوَادِ ٱلۡمُقَدَّسِ طُوًى",
+      "french": "Quand son Seigneur l'appela, dans Towâ, la vallée sanctifiée",
+      "phonetic": "Ith nadahu rabbuhu bialwadi almuqaddasi tuwan",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 17,
+      "arabic": "ٱذۡهَبۡ إِلَىٰ فِرۡعَوۡنَ إِنَّهُۥ طَغَىٰ",
+      "french": "«Va vers Pharaon. Vraiment, il s'est rebellé!»",
+      "phonetic": "Ithhab ila firAAawna innahu tagha",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 18,
+      "arabic": "فَقُلۡ هَل لَّكَ إِلَىٰٓ أَن تَزَكَّىٰ",
+      "french": "Puis dis-lui: «Voudrais-tu te purifier",
+      "phonetic": "Faqul hal laka ila an tazakka",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 19,
+      "arabic": "وَأَهۡدِيَكَ إِلَىٰ رَبِّكَ فَتَخۡشَىٰ",
+      "french": "et que je te guide vers ton Seigneur afin que tu Le craignes?»",
+      "phonetic": "Waahdiyaka ila rabbika fatakhsha",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 20,
+      "arabic": "فَأَرَىٰهُ ٱلۡأٓيَةَ ٱلۡكُبۡرَىٰ",
+      "french": "Il lui fit voir le très grand miracle",
+      "phonetic": "Faarahu alayata alkubra",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 21,
+      "arabic": "فَكَذَّبَ وَعَصَىٰ",
+      "french": "Mais il le qualifia de mensonge et désobéit",
+      "phonetic": "Fakaththaba waAAasa",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 22,
+      "arabic": "ثُمَّ أَدۡبَرَ يَسۡعَىٰ",
+      "french": "Ensuite, il tourna le dos, s'en alla précipitamment",
+      "phonetic": "Thumma adbara yasAAa",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 23,
+      "arabic": "فَحَشَرَ فَنَادَىٰ",
+      "french": "rassembla [les gens] et leur fit une proclamation",
+      "phonetic": "Fahashara fanada",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 24,
+      "arabic": "فَقَالَ أَنَا۠ رَبُّكُمُ ٱلۡأَعۡلَىٰ",
+      "french": "et dit: «C'est moi votre Seigneur, le très haut»",
+      "phonetic": "Faqala ana rabbukumu alaAAla",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 25,
+      "arabic": "فَأَخَذَهُ ٱللَّهُ نَكَالَ ٱلۡأٓخِرَةِ وَٱلۡأُولَىٰٓ",
+      "french": "Alors Allah le saisit de la punition exemplaire de l'au-delà et de celle d'ici-bas",
+      "phonetic": "Faakhathahu Allahu nakala alakhirati waaloola",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 26,
+      "arabic": "إِنَّ فِي ذَٰلِكَ لَعِبۡرَةٗ لِّمَن يَخۡشَىٰٓ",
+      "french": "Il y a certes là un sujet de réflexion pour celui qui craint",
+      "phonetic": "Inna fee thalika laAAibratan liman yakhsha",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 27,
+      "arabic": "ءَأَنتُمۡ أَشَدُّ خَلۡقًا أَمِ ٱلسَّمَآءُۚ بَنَىٰهَا",
+      "french": "Etes-vous plus durs à créer? ou le ciel, qu'Il a pourtant construit",
+      "phonetic": "Aantum ashaddu khalqan ami alssamao banaha",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 28,
+      "arabic": "رَفَعَ سَمۡكَهَا فَسَوَّىٰهَا",
+      "french": "Il a élevé bien haut sa voûte, puis l'a parfaitement ordonné",
+      "phonetic": "RafaAAa samkaha fasawwaha",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 29,
+      "arabic": "وَأَغۡطَشَ لَيۡلَهَا وَأَخۡرَجَ ضُحَىٰهَا",
+      "french": "Il a assombri sa nuit et fait luire son jour",
+      "phonetic": "Waaghtasha laylaha waakhraja duhaha",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 30,
+      "arabic": "وَٱلۡأَرۡضَ بَعۡدَ ذَٰلِكَ دَحَىٰهَآ",
+      "french": "Et quant à la terre, après cela, Il l'a étendue",
+      "phonetic": "Waalarda baAAda thalika dahaha",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 31,
+      "arabic": "أَخۡرَجَ مِنۡهَا مَآءَهَا وَمَرۡعَىٰهَا",
+      "french": "Il a fait sortir d'elle son eau et son pâturage",
+      "phonetic": "Akhraja minha maaha wamarAAaha",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 32,
+      "arabic": "وَٱلۡجِبَالَ أَرۡسَىٰهَا",
+      "french": "et quant aux montagnes, Il les a ancrées",
+      "phonetic": "Waaljibala arsaha",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 33,
+      "arabic": "مَتَٰعٗا لَّكُمۡ وَلِأَنۡعَٰمِكُمۡ",
+      "french": "pour votre jouissance, vous et vos bestiaux",
+      "phonetic": "MataAAan lakum walianAAamikum",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 34,
+      "arabic": "فَإِذَا جَآءَتِ ٱلطَّآمَّةُ ٱلۡكُبۡرَىٰ",
+      "french": "Puis quand viendra le grand cataclysme",
+      "phonetic": "Faitha jaati alttammatu alkubra",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 35,
+      "arabic": "يَوۡمَ يَتَذَكَّرُ ٱلۡإِنسَٰنُ مَا سَعَىٰ",
+      "french": "le jour où l'homme se rappellera à quoi il s'est efforcé",
+      "phonetic": "Yawma yatathakkaru alinsanu ma saAAa",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 36,
+      "arabic": "وَبُرِّزَتِ ٱلۡجَحِيمُ لِمَن يَرَىٰ",
+      "french": "l'Enfer sera pleinement visible à celui qui regardera",
+      "phonetic": "Waburrizati aljaheemu liman yara",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 37,
+      "arabic": "فَأَمَّا مَن طَغَىٰ",
+      "french": "Quant à celui qui aura dépassé les limites",
+      "phonetic": "Faamma man tagha",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 38,
+      "arabic": "وَءَاثَرَ ٱلۡحَيَوٰةَ ٱلدُّنۡيَا",
+      "french": "et aura préféré la vie présente",
+      "phonetic": "Waathara alhayata alddunya",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 39,
+      "arabic": "فَإِنَّ ٱلۡجَحِيمَ هِيَ ٱلۡمَأۡوَىٰ",
+      "french": "alors, l'Enfer sera son refuge",
+      "phonetic": "Fainna aljaheema hiya almawa",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 40,
+      "arabic": "وَأَمَّا مَنۡ خَافَ مَقَامَ رَبِّهِۦ وَنَهَى ٱلنَّفۡسَ عَنِ ٱلۡهَوَىٰ",
+      "french": "Et pour celui qui aura redouté de comparaître devant son Seigneur, et préservé son âme de la passion",
+      "phonetic": "Waama man khafa maqama rabbihi wanaha alnnafsa AAani alhawa",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 41,
+      "arabic": "فَإِنَّ ٱلۡجَنَّةَ هِيَ ٱلۡمَأۡوَىٰ",
+      "french": "le Paradis sera alors son refuge",
+      "phonetic": "Fainna aljannata hiya almawa",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 42,
+      "arabic": "يَسۡـَٔلُونَكَ عَنِ ٱلسَّاعَةِ أَيَّانَ مُرۡسَىٰهَا",
+      "french": "Ils t'interrogent au sujet de l'Heure: «Quand va-t-elle jeter l'ancre?»",
+      "phonetic": "Yasaloonaka AAani alssaAAati ayyana mursaha",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 43,
+      "arabic": "فِيمَ أَنتَ مِن ذِكۡرَىٰهَآ",
+      "french": "Quelle [science] en as-tu pour le leur dire",
+      "phonetic": "Feema anta min thikraha",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 44,
+      "arabic": "إِلَىٰ رَبِّكَ مُنتَهَىٰهَآ",
+      "french": "Son terme n'est connu que de ton Seigneur",
+      "phonetic": "Ila rabbika muntahaha",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 45,
+      "arabic": "إِنَّمَآ أَنتَ مُنذِرُ مَن يَخۡشَىٰهَا",
+      "french": "Tu n'es que l'avertisseur de celui qui la redoute",
+      "phonetic": "Innama anta munthiru man yakhshaha",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    },
+    {
+      "number": 46,
+      "arabic": "كَأَنَّهُمۡ يَوۡمَ يَرَوۡنَهَا لَمۡ يَلۡبَثُوٓاْ إِلَّا عَشِيَّةً أَوۡ ضُحَىٰهَا",
+      "french": "Le jour où ils la verront, il leur semblera n'avoir demeuré qu'un soir ou un matin",
+      "phonetic": "Kaannahum yawma yarawnaha lam yalbathoo illa AAashiyyatan aw duhaha",
+      "juz": 30,
+      "hizb": 59,
+      "page": 584
+    }
+  ]
+}

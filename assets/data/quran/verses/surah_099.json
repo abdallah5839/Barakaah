@@ -1,0 +1,82 @@
+{
+  "id": 99,
+  "nameArabic": "الزلزلة",
+  "nameTransliteration": "Az-Zalzalah",
+  "nameFrench": "Le séisme",
+  "revelationType": "medinan",
+  "totalVerses": 8,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "إِذَا زُلۡزِلَتِ ٱلۡأَرۡضُ زِلۡزَالَهَا",
+      "french": "Quand la terre tremblera d'un violent tremblement",
+      "phonetic": "Itha zulzilati alardu zilzalaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 2,
+      "arabic": "وَأَخۡرَجَتِ ٱلۡأَرۡضُ أَثۡقَالَهَا",
+      "french": "et que la terre fera sortir ses fardeaux",
+      "phonetic": "Waakhrajati alardu athqalaha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 3,
+      "arabic": "وَقَالَ ٱلۡإِنسَٰنُ مَا لَهَا",
+      "french": "et que l'homme dira: «Qu'a-t-elle?»",
+      "phonetic": "Waqala alinsanu ma laha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 4,
+      "arabic": "يَوۡمَئِذٖ تُحَدِّثُ أَخۡبَارَهَا",
+      "french": "ce jour-là, elle contera son histoire",
+      "phonetic": "Yawmaithin tuhaddithu akhbaraha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 5,
+      "arabic": "بِأَنَّ رَبَّكَ أَوۡحَىٰ لَهَا",
+      "french": "selon ce que ton Seigneur lui aura révélé [ordonné]",
+      "phonetic": "Bianna rabbaka awha laha",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 6,
+      "arabic": "يَوۡمَئِذٖ يَصۡدُرُ ٱلنَّاسُ أَشۡتَاتٗا لِّيُرَوۡاْ أَعۡمَٰلَهُمۡ",
+      "french": "Ce jour-là, les gens sortiront séparément pour que leur soient montrées leurs œuvres",
+      "phonetic": "Yawmaithin yasduru alnnasu ashtatan liyuraw aAAmalahum",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 7,
+      "arabic": "فَمَن يَعۡمَلۡ مِثۡقَالَ ذَرَّةٍ خَيۡرٗا يَرَهُۥ",
+      "french": "Quiconque fait un bien fût-ce du poids d'un atome, le verra",
+      "phonetic": "Faman yaAAmal mithqala tharratin khayran yarahu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    },
+    {
+      "number": 8,
+      "arabic": "وَمَن يَعۡمَلۡ مِثۡقَالَ ذَرَّةٖ شَرّٗا يَرَهُۥ",
+      "french": "et quiconque fait un mal fût-ce du poids d'un atome, le verra",
+      "phonetic": "Waman yaAAmal mithqala tharratin sharran yarahu",
+      "juz": 30,
+      "hizb": 60,
+      "page": 599
+    }
+  ]
+}

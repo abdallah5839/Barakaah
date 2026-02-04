@@ -1,0 +1,406 @@
+{
+  "id": 70,
+  "nameArabic": "المعارج",
+  "nameTransliteration": "Al-Ma'arij",
+  "nameFrench": "Les voies d'ascension",
+  "revelationType": "meccan",
+  "totalVerses": 44,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "سَأَلَ سَآئِلُۢ بِعَذَابٖ وَاقِعٖ",
+      "french": "Un demandeur a réclamé un châtiment inéluctable",
+      "phonetic": "Saala sailun biAAathabin waqiAAin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 2,
+      "arabic": "لِّلۡكَٰفِرِينَ لَيۡسَ لَهُۥ دَافِعٞ",
+      "french": "pour les mécréants, que nul ne pourrait repousser",
+      "phonetic": "Lilkafireena laysa lahu dafiAAun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 3,
+      "arabic": "مِّنَ ٱللَّهِ ذِي ٱلۡمَعَارِجِ",
+      "french": "et qui vient d'Allah, le Maître des voies d'ascension",
+      "phonetic": "Mina Allahi thee almaAAariji",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 4,
+      "arabic": "تَعۡرُجُ ٱلۡمَلَـٰٓئِكَةُ وَٱلرُّوحُ إِلَيۡهِ فِي يَوۡمٖ كَانَ مِقۡدَارُهُۥ خَمۡسِينَ أَلۡفَ سَنَةٖ",
+      "french": "Les Anges ainsi que l'Esprit montent vers Lui en un jour dont la durée est de cinquante mille ans",
+      "phonetic": "TaAAruju almalaikatu waalrroohu ilayhi fee yawmin kana miqdaruhu khamseena alfa sanatin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 5,
+      "arabic": "فَٱصۡبِرۡ صَبۡرٗا جَمِيلًا",
+      "french": "Supporte donc, d'une belle patience",
+      "phonetic": "Faisbir sabran jameelan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 6,
+      "arabic": "إِنَّهُمۡ يَرَوۡنَهُۥ بَعِيدٗا",
+      "french": "Ils le (le châtiment) voient bien loin",
+      "phonetic": "Innahum yarawnahu baAAeedan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 7,
+      "arabic": "وَنَرَىٰهُ قَرِيبٗا",
+      "french": "alors que Nous le voyons bien proche",
+      "phonetic": "Wanarahu qareeban",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 8,
+      "arabic": "يَوۡمَ تَكُونُ ٱلسَّمَآءُ كَٱلۡمُهۡلِ",
+      "french": "le jour où le ciel sera comme du métal en fusion",
+      "phonetic": "Yawma takoonu alssamao kaalmuhli",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 9,
+      "arabic": "وَتَكُونُ ٱلۡجِبَالُ كَٱلۡعِهۡنِ",
+      "french": "et les montagnes comme de la laine",
+      "phonetic": "Watakoonu aljibalu kaalAAihni",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 10,
+      "arabic": "وَلَا يَسۡـَٔلُ حَمِيمٌ حَمِيمٗا",
+      "french": "où nul ami dévoué ne s'enquerra d'un ami",
+      "phonetic": "Wala yasalu hameemun hameeman",
+      "juz": 29,
+      "hizb": 57,
+      "page": 568
+    },
+    {
+      "number": 11,
+      "arabic": "يُبَصَّرُونَهُمۡۚ يَوَدُّ ٱلۡمُجۡرِمُ لَوۡ يَفۡتَدِي مِنۡ عَذَابِ يَوۡمِئِذِۭ بِبَنِيهِ",
+      "french": "bien qu'ils se voient l'un l'autre. Le criminel aimerait pouvoir se racheter du châtiment de ce jour, en livrant ses enfants",
+      "phonetic": "Yubassaroonahum yawaddu almujrimu law yaftadee min AAathabi yawmiithin bibaneehi",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 12,
+      "arabic": "وَصَٰحِبَتِهِۦ وَأَخِيهِ",
+      "french": "sa compagne, son frère",
+      "phonetic": "Wasahibatihi waakheehi",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 13,
+      "arabic": "وَفَصِيلَتِهِ ٱلَّتِي تُـٔۡوِيهِ",
+      "french": "même son clan qui lui donnait asile",
+      "phonetic": "Wafaseelatihi allatee tuweehi",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 14,
+      "arabic": "وَمَن فِي ٱلۡأَرۡضِ جَمِيعٗا ثُمَّ يُنجِيهِ",
+      "french": "et tout ce qui est sur la terre, tout, qui pourrait le sauver",
+      "phonetic": "Waman fee alardi jameeAAan thumma yunjeehi",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 15,
+      "arabic": "كَلَّآۖ إِنَّهَا لَظَىٰ",
+      "french": "Mais rien [ne le sauvera]. [L'Enfer] est un brasier",
+      "phonetic": "Kalla innaha latha",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 16,
+      "arabic": "نَزَّاعَةٗ لِّلشَّوَىٰ",
+      "french": "arrachant brutalement la peau du crâne",
+      "phonetic": "NazzaAAatan lilshshawa",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 17,
+      "arabic": "تَدۡعُواْ مَنۡ أَدۡبَرَ وَتَوَلَّىٰ",
+      "french": "Il appellera celui qui tournait le dos et s'en allait",
+      "phonetic": "TadAAoo man adbara watawalla",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 18,
+      "arabic": "وَجَمَعَ فَأَوۡعَىٰٓ",
+      "french": "amassait et thésaurisait",
+      "phonetic": "WajamaAAa faawAAa",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 19,
+      "arabic": "۞إِنَّ ٱلۡإِنسَٰنَ خُلِقَ هَلُوعًا",
+      "french": "Oui, l'homme a été créé instable [très inquiet]",
+      "phonetic": "Inna alinsana khuliqa halooAAan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 20,
+      "arabic": "إِذَا مَسَّهُ ٱلشَّرُّ جَزُوعٗا",
+      "french": "quand le malheur le touche, il est abattu",
+      "phonetic": "Itha massahu alshsharru jazooAAan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 21,
+      "arabic": "وَإِذَا مَسَّهُ ٱلۡخَيۡرُ مَنُوعًا",
+      "french": "et quand le bonheur le touche, il est grand refuseur",
+      "phonetic": "Waitha massahu alkhayru manooAAan",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 22,
+      "arabic": "إِلَّا ٱلۡمُصَلِّينَ",
+      "french": "Sauf ceux qui pratiquent la Salât",
+      "phonetic": "Illa almusalleena",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 23,
+      "arabic": "ٱلَّذِينَ هُمۡ عَلَىٰ صَلَاتِهِمۡ دَآئِمُونَ",
+      "french": "qui sont assidus à leurs Salâts",
+      "phonetic": "Allatheena hum AAala salatihim daimoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 24,
+      "arabic": "وَٱلَّذِينَ فِيٓ أَمۡوَٰلِهِمۡ حَقّٞ مَّعۡلُومٞ",
+      "french": "et sur les biens desquels il y a un droit bien déterminé [la Zakât]",
+      "phonetic": "Waallatheena fee amwalihim haqqun maAAloomun",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 25,
+      "arabic": "لِّلسَّآئِلِ وَٱلۡمَحۡرُومِ",
+      "french": "pour le mendiant et le déshérité",
+      "phonetic": "Lilssaili waalmahroomi",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 26,
+      "arabic": "وَٱلَّذِينَ يُصَدِّقُونَ بِيَوۡمِ ٱلدِّينِ",
+      "french": "et qui déclarent véridique le Jour de la Rétribution",
+      "phonetic": "Waallatheena yusaddiqoona biyawmi alddeeni",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 27,
+      "arabic": "وَٱلَّذِينَ هُم مِّنۡ عَذَابِ رَبِّهِم مُّشۡفِقُونَ",
+      "french": "et ceux qui craignent le châtiment de leur Seigneur",
+      "phonetic": "Waallatheena hum min AAathabi rabbihim mushfiqoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 28,
+      "arabic": "إِنَّ عَذَابَ رَبِّهِمۡ غَيۡرُ مَأۡمُونٖ",
+      "french": "car vraiment, il n'y a nulle assurance contre le châtiment de leur Seigneur",
+      "phonetic": "Inna AAathaba rabbihim ghayru mamoonin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 29,
+      "arabic": "وَٱلَّذِينَ هُمۡ لِفُرُوجِهِمۡ حَٰفِظُونَ",
+      "french": "et qui se maintiennent dans la chasteté",
+      "phonetic": "Waallatheena hum lifuroojihim hafithoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 30,
+      "arabic": "إِلَّا عَلَىٰٓ أَزۡوَٰجِهِمۡ أَوۡ مَا مَلَكَتۡ أَيۡمَٰنُهُمۡ فَإِنَّهُمۡ غَيۡرُ مَلُومِينَ",
+      "french": "et n'ont de rapports qu'avec leurs épouses ou les esclaves qu'ils possèdent car dans ce cas, ils ne sont pas blâmables",
+      "phonetic": "Illa AAala azwajihim aw ma malakat aymanuhum fainnahum ghayru maloomeena",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 31,
+      "arabic": "فَمَنِ ٱبۡتَغَىٰ وَرَآءَ ذَٰلِكَ فَأُوْلَـٰٓئِكَ هُمُ ٱلۡعَادُونَ",
+      "french": "mais ceux qui cherchent [leur plaisir] en dehors de cela, sont des transgresseurs",
+      "phonetic": "Famani ibtagha waraa thalika faolaika humu alAAadoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 32,
+      "arabic": "وَٱلَّذِينَ هُمۡ لِأَمَٰنَٰتِهِمۡ وَعَهۡدِهِمۡ رَٰعُونَ",
+      "french": "et qui gardent les dépôts confiés à eux, et respectent leurs engagements scrupuleusement",
+      "phonetic": "Waallatheena hum liamanatihim waAAahdihim raAAoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 33,
+      "arabic": "وَٱلَّذِينَ هُم بِشَهَٰدَٰتِهِمۡ قَآئِمُونَ",
+      "french": "et qui témoignent de la stricte vérité",
+      "phonetic": "Waallatheena hum bishahadatihim qaimoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 34,
+      "arabic": "وَٱلَّذِينَ هُمۡ عَلَىٰ صَلَاتِهِمۡ يُحَافِظُونَ",
+      "french": "et qui sont réguliers dans leur Salât",
+      "phonetic": "Waallatheena hum AAala salatihim yuhafithoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 35,
+      "arabic": "أُوْلَـٰٓئِكَ فِي جَنَّـٰتٖ مُّكۡرَمُونَ",
+      "french": "Ceux-là seront honorés dans des Jardins",
+      "phonetic": "Olaika fee jannatin mukramoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 36,
+      "arabic": "فَمَالِ ٱلَّذِينَ كَفَرُواْ قِبَلَكَ مُهۡطِعِينَ",
+      "french": "Qu'ont donc, ceux qui ont mécru, à courir vers toi, le cou tendu",
+      "phonetic": "Famali allatheena kafaroo qibalaka muhtiAAeena",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 37,
+      "arabic": "عَنِ ٱلۡيَمِينِ وَعَنِ ٱلشِّمَالِ عِزِينَ",
+      "french": "de droite et de gauche, [venant] par bandes",
+      "phonetic": "AAani alyameeni waAAani alshshimali AAizeena",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 38,
+      "arabic": "أَيَطۡمَعُ كُلُّ ٱمۡرِيٕٖ مِّنۡهُمۡ أَن يُدۡخَلَ جَنَّةَ نَعِيمٖ",
+      "french": "Chacun d'eux convoite-t-il qu'on le laisse entrer au Jardin des délices",
+      "phonetic": "AyatmaAAu kullu imriin minhum an yudkhala jannata naAAeemin",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 39,
+      "arabic": "كَلَّآۖ إِنَّا خَلَقۡنَٰهُم مِّمَّا يَعۡلَمُونَ",
+      "french": "Mais non! Nous les avons créés de ce qu'ils savent",
+      "phonetic": "Kalla inna khalaqnahum mimma yaAAlamoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 569
+    },
+    {
+      "number": 40,
+      "arabic": "فَلَآ أُقۡسِمُ بِرَبِّ ٱلۡمَشَٰرِقِ وَٱلۡمَغَٰرِبِ إِنَّا لَقَٰدِرُونَ",
+      "french": "Eh Non!... Je jure par le Seigneur des Levants et des Couchants que Nous sommes Capable",
+      "phonetic": "Fala oqsimu birabbi almashariqi waalmagharibi inna laqadiroona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 570
+    },
+    {
+      "number": 41,
+      "arabic": "عَلَىٰٓ أَن نُّبَدِّلَ خَيۡرٗا مِّنۡهُمۡ وَمَا نَحۡنُ بِمَسۡبُوقِينَ",
+      "french": "de les remplacer par de meilleurs qu'eux, et nul ne peut nous en empêcher",
+      "phonetic": "AAala an nubaddila khayran minhum wama nahnu bimasbooqeena",
+      "juz": 29,
+      "hizb": 57,
+      "page": 570
+    },
+    {
+      "number": 42,
+      "arabic": "فَذَرۡهُمۡ يَخُوضُواْ وَيَلۡعَبُواْ حَتَّىٰ يُلَٰقُواْ يَوۡمَهُمُ ٱلَّذِي يُوعَدُونَ",
+      "french": "Laisse-les donc s'enfoncer (dans leur mécréance) et se divertir jusqu'à ce qu'ils rencontrent leur jour dont on les menaçait",
+      "phonetic": "Fatharhum yakhoodoo wayalAAaboo hatta yulaqoo yawmahumu allathee yooAAadoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 570
+    },
+    {
+      "number": 43,
+      "arabic": "يَوۡمَ يَخۡرُجُونَ مِنَ ٱلۡأَجۡدَاثِ سِرَاعٗا كَأَنَّهُمۡ إِلَىٰ نُصُبٖ يُوفِضُونَ",
+      "french": "le jour où ils sortiront des tombes, rapides comme s'ils couraient vers des pierres dressées",
+      "phonetic": "Yawma yakhrujoona mina alajdathi siraAAan kaannahum ila nusubin yoofidoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 570
+    },
+    {
+      "number": 44,
+      "arabic": "خَٰشِعَةً أَبۡصَٰرُهُمۡ تَرۡهَقُهُمۡ ذِلَّةٞۚ ذَٰلِكَ ٱلۡيَوۡمُ ٱلَّذِي كَانُواْ يُوعَدُونَ",
+      "french": "leurs yeux seront abaissés, l'avilissement les couvrira. C'est cela le jour dont on les menaçait",
+      "phonetic": "KhashiAAatan absaruhum tarhaquhum thillatun thalika alyawmu allathee kanoo yooAAadoona",
+      "juz": 29,
+      "hizb": 57,
+      "page": 570
+    }
+  ]
+}

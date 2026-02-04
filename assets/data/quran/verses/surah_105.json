@@ -1,0 +1,55 @@
+{
+  "id": 105,
+  "nameArabic": "الفيل",
+  "nameTransliteration": "Al-Fil",
+  "nameFrench": "L'éléphant",
+  "revelationType": "meccan",
+  "totalVerses": 5,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "أَلَمۡ تَرَ كَيۡفَ فَعَلَ رَبُّكَ بِأَصۡحَٰبِ ٱلۡفِيلِ",
+      "french": "N'as-tu pas vu comment ton Seigneur a agi envers les gens de l'Eléphant",
+      "phonetic": "Alam tara kayfa faAAala rabbuka biashabi alfeeli",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    },
+    {
+      "number": 2,
+      "arabic": "أَلَمۡ يَجۡعَلۡ كَيۡدَهُمۡ فِي تَضۡلِيلٖ",
+      "french": "N'a-t-Il pas rendu leur ruse complètement vaine",
+      "phonetic": "Alam yajAAal kaydahum fee tadleelin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    },
+    {
+      "number": 3,
+      "arabic": "وَأَرۡسَلَ عَلَيۡهِمۡ طَيۡرًا أَبَابِيلَ",
+      "french": "et envoyé sur eux des oiseaux par volées",
+      "phonetic": "Waarsala AAalayhim tayran ababeela",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    },
+    {
+      "number": 4,
+      "arabic": "تَرۡمِيهِم بِحِجَارَةٖ مِّن سِجِّيلٖ",
+      "french": "qui leur lançaient des pierres d'argile",
+      "phonetic": "Tarmeehim bihijaratin min sijjeelin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    },
+    {
+      "number": 5,
+      "arabic": "فَجَعَلَهُمۡ كَعَصۡفٖ مَّأۡكُولِۭ",
+      "french": "Et Il les a rendus semblables à une paille mâchée",
+      "phonetic": "FajaAAalahum kaAAasfin makoolin",
+      "juz": 30,
+      "hizb": 60,
+      "page": 601
+    }
+  ]
+}

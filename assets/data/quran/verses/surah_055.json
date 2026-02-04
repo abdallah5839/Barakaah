@@ -1,0 +1,712 @@
+{
+  "id": 55,
+  "nameArabic": "الرحمن",
+  "nameTransliteration": "Ar-Rahman",
+  "nameFrench": "Le Tout Miséricordieux",
+  "revelationType": "medinan",
+  "totalVerses": 78,
+  "verses": [
+    {
+      "number": 1,
+      "arabic": "ٱلرَّحۡمَٰنُ",
+      "french": "Le Tout Miséricordieux",
+      "phonetic": "Alrrahmanu",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 2,
+      "arabic": "عَلَّمَ ٱلۡقُرۡءَانَ",
+      "french": "Il a enseigné le Coran",
+      "phonetic": "AAallama alqurana",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 3,
+      "arabic": "خَلَقَ ٱلۡإِنسَٰنَ",
+      "french": "Il a créé l'homme",
+      "phonetic": "Khalaqa alinsana",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 4,
+      "arabic": "عَلَّمَهُ ٱلۡبَيَانَ",
+      "french": "Il lui a appris à s'exprimer clairement",
+      "phonetic": "AAallamahu albayana",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 5,
+      "arabic": "ٱلشَّمۡسُ وَٱلۡقَمَرُ بِحُسۡبَانٖ",
+      "french": "Le soleil et la lune [évoluent] selon un calcul [minutieux]",
+      "phonetic": "Alshshamsu waalqamaru bihusbanin",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 6,
+      "arabic": "وَٱلنَّجۡمُ وَٱلشَّجَرُ يَسۡجُدَانِ",
+      "french": "Et l'herbe et les arbres se prosternent",
+      "phonetic": "Waalnnajmu waalshshajaru yasjudani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 7,
+      "arabic": "وَٱلسَّمَآءَ رَفَعَهَا وَوَضَعَ ٱلۡمِيزَانَ",
+      "french": "Et quant au ciel, Il l'a élevé bien haut. Et Il a établi la balance",
+      "phonetic": "Waalssamaa rafaAAaha wawadaAAa almeezana",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 8,
+      "arabic": "أَلَّا تَطۡغَوۡاْ فِي ٱلۡمِيزَانِ",
+      "french": "afin que vous ne transgressiez pas dans la pesée",
+      "phonetic": "Alla tatghaw fee almeezani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 9,
+      "arabic": "وَأَقِيمُواْ ٱلۡوَزۡنَ بِٱلۡقِسۡطِ وَلَا تُخۡسِرُواْ ٱلۡمِيزَانَ",
+      "french": "Donnez [toujours] le poids exact et ne faussez pas la pesée",
+      "phonetic": "Waaqeemoo alwazna bialqisti wala tukhsiroo almeezana",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 10,
+      "arabic": "وَٱلۡأَرۡضَ وَضَعَهَا لِلۡأَنَامِ",
+      "french": "Quant à la terre, Il l'a étendue pour les êtres vivants",
+      "phonetic": "Waalarda wadaAAaha lilanami",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 11,
+      "arabic": "فِيهَا فَٰكِهَةٞ وَٱلنَّخۡلُ ذَاتُ ٱلۡأَكۡمَامِ",
+      "french": "il s'y trouve des fruits, et aussi les palmiers aux fruits recouverts d'enveloppes",
+      "phonetic": "Feeha fakihatun waalnnakhlu thatu alakmami",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 12,
+      "arabic": "وَٱلۡحَبُّ ذُو ٱلۡعَصۡفِ وَٱلرَّيۡحَانُ",
+      "french": "tout comme les grains dans leurs balles, et les plantes aromatiques",
+      "phonetic": "Waalhabbu thoo alAAasfi waalrrayhani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 13,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 14,
+      "arabic": "خَلَقَ ٱلۡإِنسَٰنَ مِن صَلۡصَٰلٖ كَٱلۡفَخَّارِ",
+      "french": "Il a crée l'homme d'argile sonnante comme la poterie",
+      "phonetic": "Khalaqa alinsana min salsalin kaalfakhkhari",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 15,
+      "arabic": "وَخَلَقَ ٱلۡجَآنَّ مِن مَّارِجٖ مِّن نَّارٖ",
+      "french": "et Il a créé les djinns de la flamme d'un feu sans fumée",
+      "phonetic": "Wakhalaqa aljanna min marijin min narin",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 16,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 531
+    },
+    {
+      "number": 17,
+      "arabic": "رَبُّ ٱلۡمَشۡرِقَيۡنِ وَرَبُّ ٱلۡمَغۡرِبَيۡنِ",
+      "french": "Seigneur des deux Levants et Seigneur des deux Couchants",
+      "phonetic": "Rabbu almashriqayni warabbu almaghribayni",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 18,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 19,
+      "arabic": "مَرَجَ ٱلۡبَحۡرَيۡنِ يَلۡتَقِيَانِ",
+      "french": "Il a donné libre cours aux deux mers pour se rencontrer",
+      "phonetic": "Maraja albahrayni yaltaqiyani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 20,
+      "arabic": "بَيۡنَهُمَا بَرۡزَخٞ لَّا يَبۡغِيَانِ",
+      "french": "il y a entre elles une barrière qu'elles ne dépassent pas",
+      "phonetic": "Baynahuma barzakhun la yabghiyani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 21,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 22,
+      "arabic": "يَخۡرُجُ مِنۡهُمَا ٱللُّؤۡلُؤُ وَٱلۡمَرۡجَانُ",
+      "french": "De ces deux [mers] sortent la perle et le corail",
+      "phonetic": "Yakhruju minhuma alluluo waalmarjanu",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 23,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 24,
+      "arabic": "وَلَهُ ٱلۡجَوَارِ ٱلۡمُنشَـَٔاتُ فِي ٱلۡبَحۡرِ كَٱلۡأَعۡلَٰمِ",
+      "french": "A Lui appartiennent les vaisseaux élevés sur la mer comme des montagnes",
+      "phonetic": "Walahu aljawari almunshaatu fee albahri kaalaAAlami",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 25,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 26,
+      "arabic": "كُلُّ مَنۡ عَلَيۡهَا فَانٖ",
+      "french": "Tout ce qui est sur elle [la terre] doit disparaître",
+      "phonetic": "Kullu man AAalayha fanin",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 27,
+      "arabic": "وَيَبۡقَىٰ وَجۡهُ رَبِّكَ ذُو ٱلۡجَلَٰلِ وَٱلۡإِكۡرَامِ",
+      "french": "[Seule] subsistera La Face [Wajh] de ton Seigneur, plein de majesté et de noblesse",
+      "phonetic": "Wayabqa wajhu rabbika thoo aljalali waalikrami",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 28,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 29,
+      "arabic": "يَسۡـَٔلُهُۥ مَن فِي ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضِۚ كُلَّ يَوۡمٍ هُوَ فِي شَأۡنٖ",
+      "french": "Ceux qui sont dans les cieux et la terre L'implorent. Chaque jour, Il accomplit une œuvre nouvelle",
+      "phonetic": "Yasaluhu man fee alssamawati waalardi kulla yawmin huwa fee shanin",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 30,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 31,
+      "arabic": "سَنَفۡرُغُ لَكُمۡ أَيُّهَ ٱلثَّقَلَانِ",
+      "french": "Nous allons bientôt entreprendre votre jugement, ô vous les deux charges [hommes et djinns]",
+      "phonetic": "Sanafrughu lakum ayyuha alththaqalani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 32,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 33,
+      "arabic": "يَٰمَعۡشَرَ ٱلۡجِنِّ وَٱلۡإِنسِ إِنِ ٱسۡتَطَعۡتُمۡ أَن تَنفُذُواْ مِنۡ أَقۡطَارِ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضِ فَٱنفُذُواْۚ لَا تَنفُذُونَ إِلَّا بِسُلۡطَٰنٖ",
+      "french": "O peuple de djinns et d'hommes! Si vous pouvez sortir du domaine des cieux et de la terre, alors faites-le. Mais vous ne pourrez en sortir qu'à l'aide d'un pouvoir [illimité]",
+      "phonetic": "Ya maAAshara aljinni waalinsi ini istataAAtum an tanfuthoo min aqtari alssamawati waalardi faonfuthoo la tanfuthoona illa bisultanin",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 34,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 35,
+      "arabic": "يُرۡسَلُ عَلَيۡكُمَا شُوَاظٞ مِّن نَّارٖ وَنُحَاسٞ فَلَا تَنتَصِرَانِ",
+      "french": "Il sera lancé contre vous un jet de feu et de fumée [ou de cuivre fondu], et vous ne serez pas secourus",
+      "phonetic": "Yursalu AAalaykuma shuwathun min narin wanuhasun fala tantasirani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 36,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 37,
+      "arabic": "فَإِذَا ٱنشَقَّتِ ٱلسَّمَآءُ فَكَانَتۡ وَرۡدَةٗ كَٱلدِّهَانِ",
+      "french": "Puis quand le ciel se fendra et deviendra alors écarlate comme le cuir rouge",
+      "phonetic": "Faitha inshaqqati alssamao fakanat wardatan kaalddihani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 38,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 39,
+      "arabic": "فَيَوۡمَئِذٖ لَّا يُسۡـَٔلُ عَن ذَنۢبِهِۦٓ إِنسٞ وَلَا جَآنّٞ",
+      "french": "Alors, ni aux hommes ni aux djinns, on ne posera des questions à propos de leurs péchés",
+      "phonetic": "Fayawmaithin la yusalu AAan thanbihi insun wala jannun",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 40,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 532
+    },
+    {
+      "number": 41,
+      "arabic": "يُعۡرَفُ ٱلۡمُجۡرِمُونَ بِسِيمَٰهُمۡ فَيُؤۡخَذُ بِٱلنَّوَٰصِي وَٱلۡأَقۡدَامِ",
+      "french": "On reconnaîtra les criminels à leurs traits. Ils seront donc saisis par les toupets et les pieds",
+      "phonetic": "YuAArafu almujrimoona biseemahum fayukhathu bialnnawasee waalaqdami",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 42,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 43,
+      "arabic": "هَٰذِهِۦ جَهَنَّمُ ٱلَّتِي يُكَذِّبُ بِهَا ٱلۡمُجۡرِمُونَ",
+      "french": "Voilà l'Enfer que les criminels traitaient de mensonge",
+      "phonetic": "Hathihi jahannamu allatee yukaththibu biha almujrimoona",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 44,
+      "arabic": "يَطُوفُونَ بَيۡنَهَا وَبَيۡنَ حَمِيمٍ ءَانٖ",
+      "french": "Ils feront le va-et-vient entre lui (l'Enfer) et une eau bouillante extrêmement chaude",
+      "phonetic": "Yatoofoona baynaha wabayna hameemin anin",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 45,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 46,
+      "arabic": "وَلِمَنۡ خَافَ مَقَامَ رَبِّهِۦ جَنَّتَانِ",
+      "french": "Et pour celui qui aura craint de comparaître devant son Seigneur, il y aura deux jardins",
+      "phonetic": "Waliman khafa maqama rabbihi jannatani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 47,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 48,
+      "arabic": "ذَوَاتَآ أَفۡنَانٖ",
+      "french": "Aux branches touffues",
+      "phonetic": "Thawata afnanin",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 49,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 50,
+      "arabic": "فِيهِمَا عَيۡنَانِ تَجۡرِيَانِ",
+      "french": "Ils y trouveront deux sources courantes",
+      "phonetic": "Feehima AAaynani tajriyani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 51,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 52,
+      "arabic": "فِيهِمَا مِن كُلِّ فَٰكِهَةٖ زَوۡجَانِ",
+      "french": "Ils contiennent deux espèces de chaque fruit",
+      "phonetic": "Feehima min kulli fakihatin zawjani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 53,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 54,
+      "arabic": "مُتَّكِـِٔينَ عَلَىٰ فُرُشِۭ بَطَآئِنُهَا مِنۡ إِسۡتَبۡرَقٖۚ وَجَنَى ٱلۡجَنَّتَيۡنِ دَانٖ",
+      "french": "Ils seront accoudés sur des tapis doublés de brocart, et les fruits des deux jardins seront à leur portée (pour être cueillis)",
+      "phonetic": "Muttakieena AAala furushin batainuha min istabraqin wajana aljannatayni danin",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 55,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 56,
+      "arabic": "فِيهِنَّ قَٰصِرَٰتُ ٱلطَّرۡفِ لَمۡ يَطۡمِثۡهُنَّ إِنسٞ قَبۡلَهُمۡ وَلَا جَآنّٞ",
+      "french": "Ils y trouveront [les houris] aux regards chastes, qu'avant eux aucun homme ou djinn n'aura déflorées",
+      "phonetic": "Feehinna qasiratu alttarfi lam yatmithhunna insun qablahum wala jannun",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 57,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 58,
+      "arabic": "كَأَنَّهُنَّ ٱلۡيَاقُوتُ وَٱلۡمَرۡجَانُ",
+      "french": "Elles seront [aussi belles] que le rubis et le corail",
+      "phonetic": "Kaannahunna alyaqootu waalmarjanu",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 59,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 60,
+      "arabic": "هَلۡ جَزَآءُ ٱلۡإِحۡسَٰنِ إِلَّا ٱلۡإِحۡسَٰنُ",
+      "french": "Y a-t-il d'autre récompense pour le bien, que le bien",
+      "phonetic": "Hal jazao alihsani illa alihsanu",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 61,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 62,
+      "arabic": "وَمِن دُونِهِمَا جَنَّتَانِ",
+      "french": "En deçà de ces deux jardins il y aura deux autres jardins",
+      "phonetic": "Wamin doonihima jannatani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 63,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 64,
+      "arabic": "مُدۡهَآمَّتَانِ",
+      "french": "Ils sont d'un vert sombre",
+      "phonetic": "Mudhammatani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 65,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 66,
+      "arabic": "فِيهِمَا عَيۡنَانِ نَضَّاخَتَانِ",
+      "french": "Dans lesquelles il y aura deux sources jaillissantes",
+      "phonetic": "Feehima AAaynani naddakhatani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 67,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 533
+    },
+    {
+      "number": 68,
+      "arabic": "فِيهِمَا فَٰكِهَةٞ وَنَخۡلٞ وَرُمَّانٞ",
+      "french": "Ils contiennent des fruits, des palmiers, et des grenadiers",
+      "phonetic": "Feehima fakihatun wanakhlun warummanun",
+      "juz": 27,
+      "hizb": 54,
+      "page": 534
+    },
+    {
+      "number": 69,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 534
+    },
+    {
+      "number": 70,
+      "arabic": "فِيهِنَّ خَيۡرَٰتٌ حِسَانٞ",
+      "french": "Là, il y aura des vertueuses et des belles",
+      "phonetic": "Feehinna khayratun hisanun",
+      "juz": 27,
+      "hizb": 54,
+      "page": 534
+    },
+    {
+      "number": 71,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 534
+    },
+    {
+      "number": 72,
+      "arabic": "حُورٞ مَّقۡصُورَٰتٞ فِي ٱلۡخِيَامِ",
+      "french": "Des houris cloîtrées dans les tentes",
+      "phonetic": "Hoorun maqsooratun fee alkhiyami",
+      "juz": 27,
+      "hizb": 54,
+      "page": 534
+    },
+    {
+      "number": 73,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 534
+    },
+    {
+      "number": 74,
+      "arabic": "لَمۡ يَطۡمِثۡهُنَّ إِنسٞ قَبۡلَهُمۡ وَلَا جَآنّٞ",
+      "french": "qu'avant eux aucun homme ou djinn n'a déflorées",
+      "phonetic": "Lam yatmithhunna insun qablahum wala jannun",
+      "juz": 27,
+      "hizb": 54,
+      "page": 534
+    },
+    {
+      "number": 75,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 534
+    },
+    {
+      "number": 76,
+      "arabic": "مُتَّكِـِٔينَ عَلَىٰ رَفۡرَفٍ خُضۡرٖ وَعَبۡقَرِيٍّ حِسَانٖ",
+      "french": "Ils seront accoudés sur des coussins verts et des tapis épais et jolis",
+      "phonetic": "Muttakieena AAala rafrafin khudrin waAAabqariyyin hisanin",
+      "juz": 27,
+      "hizb": 54,
+      "page": 534
+    },
+    {
+      "number": 77,
+      "arabic": "فَبِأَيِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+      "french": "Lequel donc des bienfaits de votre Seigneur nierez-vous",
+      "phonetic": "Fabiayyi alai rabbikuma tukaththibani",
+      "juz": 27,
+      "hizb": 54,
+      "page": 534
+    },
+    {
+      "number": 78,
+      "arabic": "تَبَٰرَكَ ٱسۡمُ رَبِّكَ ذِي ٱلۡجَلَٰلِ وَٱلۡإِكۡرَامِ",
+      "french": "Béni soit le Nom de ton Seigneur, Plein de Majesté et de Munificence",
+      "phonetic": "Tabaraka ismu rabbika thee aljalali waalikrami",
+      "juz": 27,
+      "hizb": 54,
+      "page": 534
+    }
+  ]
+}
