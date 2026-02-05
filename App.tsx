@@ -4086,14 +4086,16 @@ const AppContent = () => {
       case 'calendrier': return <CalendrierHijriScreen navigation={{ goBack }} isDark={isDark} />;
       case 'about': return <AboutScreen navigation={{ goBack }} isDark={isDark} />;
       case 'cercle': return (
-        <View style={{ flex: 1 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 }}>
-            <Pressable onPress={goBack} style={{ padding: 8 }}>
-              <Ionicons name="arrow-back" size={24} color={isDark ? '#FFF' : '#000'} />
-            </Pressable>
+        <DuaThemeProvider>
+          <View style={{ flex: 1 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 }}>
+              <Pressable onPress={goBack} style={{ padding: 8 }}>
+                <Ionicons name="arrow-back" size={24} color={isDark ? '#FFF' : '#000'} />
+              </Pressable>
+            </View>
+            <CircleNavigator />
           </View>
-          <CircleNavigator />
-        </View>
+        </DuaThemeProvider>
       );
       case 'downloads': return <DownloadsScreen navigation={{ goBack }} isDark={isDark} />;
     }
