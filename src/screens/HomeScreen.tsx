@@ -3,7 +3,7 @@
  * Dashboard principal de l'application Barakaah
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,23 +13,28 @@ import {
   Pressable,
   RefreshControl,
   Platform,
+  Modal,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { useTheme } from '../contexts';
+import { useDevice } from '../contexts/DeviceContext';
 import { Spacing, Typography, Shadows, APP_NAME } from '../constants';
 import { formatDateFrench, getHijriDate } from '../utils';
 import { usePrayerTimes } from '../hooks';
 import { Card, NextPrayerCard, QuickAccessCard } from '../components';
 import { getDuaOfTheDay, getVerseOfTheDay } from '../data';
+import { checkUserCircle } from '../services/circleService';
+import { CircleNavigator } from '../navigation/CircleNavigator';
+import type { Circle, CircleMember } from '../types/circle.types';
 
 // Type pour la navigation
 type RootTabParamList = {
   Home: undefined;
   Coran: undefined;
   Prieres: undefined;
-  Cercle: undefined;
+  Ramadan: undefined;
   Dua: undefined;
 };
 
@@ -38,7 +43,16 @@ type NavigationProp = BottomTabNavigationProp<RootTabParamList, 'Home'>;
 export const HomeScreen: React.FC = () => {
   const { colors, toggleTheme, isDark } = useTheme();
   const navigation = useNavigation<NavigationProp>();
+  const { deviceId, isReady: deviceReady } = useDevice();
   const [refreshing, setRefreshing] = useState(false);
+
+  // État du cercle de l'utilisateur
+  const [userCircle, setUserCircle] = useState<{
+    circle: Circle;
+    membership: CircleMember;
+  } | null>(null);
+  const [circleLoading, setCircleLoading] = useState(true);
+  const [showCircleModal, setShowCircleModal] = useState(false);
 
   // Utiliser le hook pour les horaires de prière (mise à jour chaque seconde)
   const {
@@ -49,6 +63,35 @@ export const HomeScreen: React.FC = () => {
     refresh,
   } = usePrayerTimes();
 
+  // Charger le cercle de l'utilisateur
+  const loadUserCircle = useCallback(async () => {
+    if (!deviceId) return;
+    try {
+      const result = await checkUserCircle(deviceId);
+      setUserCircle(result);
+    } catch (error) {
+      console.error('Erreur chargement cercle:', error);
+    } finally {
+      setCircleLoading(false);
+    }
+  }, [deviceId]);
+
+  // Charger le cercle au montage
+  useEffect(() => {
+    if (deviceReady && deviceId) {
+      loadUserCircle();
+    }
+  }, [deviceReady, deviceId, loadUserCircle]);
+
+  // Recharger le cercle quand l'écran reprend le focus
+  useFocusEffect(
+    useCallback(() => {
+      if (deviceReady && deviceId) {
+        loadUserCircle();
+      }
+    }, [deviceReady, deviceId, loadUserCircle])
+  );
+
   // Date du jour pour déclencher le recalcul à minuit
   const todayDateStr = new Date().toISOString().slice(0, 10);
 
@@ -56,11 +99,12 @@ export const HomeScreen: React.FC = () => {
   const duaOfTheDay = useMemo(() => getDuaOfTheDay(), [todayDateStr]);
 
   // Rafraîchir les données
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     refresh();
+    await loadUserCircle();
     setRefreshing(false);
-  }, [refresh]);
+  }, [refresh, loadUserCircle]);
 
   // Verset du jour (basé sur la date - recalculé quand la date change)
   const verseOfTheDay = useMemo(() => {
@@ -186,6 +230,47 @@ export const HomeScreen: React.FC = () => {
           </Card>
         </View>
 
+        {/* Carte Cercle de Lecture */}
+        <View style={styles.sectionContainer}>
+          <Pressable
+            onPress={() => setShowCircleModal(true)}
+            style={({ pressed }) => [
+              styles.circleCard,
+              { backgroundColor: colors.surface },
+              Shadows.small,
+              pressed && { opacity: 0.9, transform: [{ scale: 0.98 }] },
+            ]}
+          >
+            <View style={styles.circleCardContent}>
+              <View style={[styles.circleIconContainer, { backgroundColor: colors.primary + '20' }]}>
+                <Ionicons name="people" size={24} color={colors.primary} />
+              </View>
+              <View style={styles.circleInfo}>
+                {userCircle ? (
+                  <>
+                    <Text style={[styles.circleTitle, { color: colors.text }]}>
+                      {userCircle.circle.name}
+                    </Text>
+                    <Text style={[styles.circleSubtitle, { color: colors.textSecondary }]}>
+                      {userCircle.circle.completed_juz}/30 Juz ({Math.round((userCircle.circle.completed_juz / 30) * 100)}%)
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <Text style={[styles.circleTitle, { color: colors.text }]}>
+                      Cercle de Lecture
+                    </Text>
+                    <Text style={[styles.circleSubtitle, { color: colors.textSecondary }]}>
+                      Lisez le Coran en famille
+                    </Text>
+                  </>
+                )}
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
+            </View>
+          </Pressable>
+        </View>
+
         {/* Accès rapides */}
         <View style={styles.sectionContainer}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
@@ -206,9 +291,9 @@ export const HomeScreen: React.FC = () => {
             </View>
             <View style={styles.quickAccessRow}>
               <QuickAccessCard
-                icon="people-outline"
-                label="Cercle"
-                onPress={() => navigation.navigate('Cercle')}
+                icon="moon-outline"
+                label="Ramadan"
+                onPress={() => navigation.navigate('Ramadan')}
               />
               <QuickAccessCard
                 icon="hand-left-outline"
@@ -222,6 +307,28 @@ export const HomeScreen: React.FC = () => {
         {/* Espacement en bas */}
         <View style={styles.bottomSpacer} />
       </ScrollView>
+
+      {/* Modal Cercle de Lecture */}
+      <Modal
+        visible={showCircleModal}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setShowCircleModal(false)}
+      >
+        <SafeAreaView style={[styles.modalContainer, { backgroundColor: colors.background }]}>
+          {/* Header du modal avec bouton fermer */}
+          <View style={[styles.modalHeader, { borderBottomColor: colors.border }]}>
+            <Pressable
+              onPress={() => setShowCircleModal(false)}
+              style={[styles.modalCloseButton, { backgroundColor: colors.surface }]}
+            >
+              <Ionicons name="close" size={24} color={colors.text} />
+            </Pressable>
+          </View>
+          {/* Contenu du module Cercle */}
+          <CircleNavigator />
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -351,6 +458,53 @@ const styles = StyleSheet.create({
   },
   bottomSpacer: {
     height: Spacing['4xl'],
+  },
+  // Styles pour la carte Cercle
+  circleCard: {
+    borderRadius: Spacing.radiusLg,
+    overflow: 'hidden',
+  },
+  circleCardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: Spacing.lg,
+    gap: Spacing.md,
+  },
+  circleIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  circleInfo: {
+    flex: 1,
+  },
+  circleTitle: {
+    fontSize: Typography.sizes.md,
+    fontWeight: Typography.weights.semibold,
+    marginBottom: Spacing.xs,
+  },
+  circleSubtitle: {
+    fontSize: Typography.sizes.sm,
+  },
+  // Styles pour le modal
+  modalContainer: {
+    flex: 1,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingHorizontal: Spacing.screenHorizontal,
+    paddingVertical: Spacing.sm,
+    borderBottomWidth: 1,
+  },
+  modalCloseButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

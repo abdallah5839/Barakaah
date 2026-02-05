@@ -18,14 +18,13 @@ import {
   RamadanScreen,
 } from '../screens';
 import { DuaNavigator } from './DuaNavigator';
-import { CircleNavigator } from './CircleNavigator';
 
 // Types pour la navigation
 export type RootTabParamList = {
   Home: undefined;
   Coran: undefined;
   Prieres: undefined;
-  Cercle: undefined;
+  Ramadan: undefined;
   Dua: undefined;
 };
 
@@ -43,7 +42,7 @@ const tabIcons: Record<keyof RootTabParamList, TabIconConfig> = {
   Home: { focused: 'home', unfocused: 'home-outline' },
   Coran: { focused: 'book', unfocused: 'book-outline' },
   Prieres: { focused: 'time', unfocused: 'time-outline' },
-  Cercle: { focused: 'people', unfocused: 'people-outline' },
+  Ramadan: { focused: 'moon', unfocused: 'moon-outline' },
   Dua: { focused: 'hand-left', unfocused: 'hand-left-outline' },
 };
 
@@ -52,7 +51,7 @@ const tabLabels: Record<keyof RootTabParamList, string> = {
   Home: 'Accueil',
   Coran: 'Coran',
   Prieres: 'Prières',
-  Cercle: 'Cercle',
+  Ramadan: 'Ramadan',
   Dua: 'Dua',
 };
 
@@ -108,7 +107,7 @@ export const AppNavigator: React.FC = () => {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Coran" component={CoranScreen} />
       <Tab.Screen name="Prieres" component={PrieresScreen} />
-      <Tab.Screen name="Cercle" component={CircleNavigator} />
+      <Tab.Screen name="Ramadan" component={RamadanScreen} />
       <Tab.Screen name="Dua" component={DuaNavigator} />
     </Tab.Navigator>
   );
