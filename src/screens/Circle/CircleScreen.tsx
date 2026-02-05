@@ -15,7 +15,6 @@ import {
   RefreshControl,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../../contexts';
 import { useDevice } from '../../contexts/DeviceContext';
 import { useCircleNavigation } from '../../navigation/CircleNavigator';
@@ -65,15 +64,6 @@ export const CircleScreen: React.FC = () => {
       loadUserCircle();
     }
   }, [isReady, deviceId, loadUserCircle]);
-
-  // Recharger quand l'écran reprend le focus
-  useFocusEffect(
-    useCallback(() => {
-      if (isReady && deviceId) {
-        loadUserCircle();
-      }
-    }, [isReady, deviceId, loadUserCircle])
-  );
 
   // Rafraîchir manuellement
   const onRefresh = () => {
