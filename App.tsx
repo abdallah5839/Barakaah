@@ -40,6 +40,7 @@ import { PrayerTimes, Coordinates, CalculationMethod, CalculationParameters } fr
 
 // Import du module Dua
 import { DuaProvider, ThemeProvider as DuaThemeProvider } from './src/contexts';
+import { DeviceProvider } from './src/contexts/DeviceContext';
 import { DuaNavigator } from './src/navigation';
 import { QiblaScreen, CalendrierHijriScreen, AboutScreen, DownloadsScreen } from './src/screens';
 
@@ -1206,6 +1207,60 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
   const { colors, toggleTheme, isDark } = useTheme();
   const { streak, lastRead, settings } = useSettings();
   const ramadanInfo = getRamadanInfo();
+
+  // ===== TEST CONNEXION SUPABASE + DEVICE ID (TEMPORAIRE) =====
+  useEffect(() => {
+    const testAll = async () => {
+      try {
+        // 1. Test Device ID
+        const { getDeviceId } = await import('./src/services/deviceService');
+        const deviceId = await getDeviceId();
+        console.log('📱 [Test] Device ID:', deviceId);
+
+        // 2. Test Supabase
+        const { supabase, isSupabaseConfigured } = await import('./src/services/supabase');
+
+        if (!isSupabaseConfigured()) {
+          console.log('⚠️ [Supabase] Non configuré - vérifiez le fichier .env');
+          return;
+        }
+
+        console.log('🔄 [Supabase] Test de connexion...');
+        const startTime = Date.now();
+
+        const { error } = await supabase
+          .from('circles')
+          .select('count', { count: 'exact', head: true });
+
+        const latency = Date.now() - startTime;
+
+        if (error) {
+          if (error.message.includes('does not exist') || error.code === '42P01') {
+            console.log(`✅ [Supabase] Connexion OK (${latency}ms) - Tables non créées`);
+            console.log('📋 [Supabase] Exécutez le SQL dans supabase/migrations/001_create_circle_tables.sql');
+          } else {
+            console.error('❌ [Supabase] Erreur:', error.message);
+          }
+        } else {
+          console.log(`✅ [Supabase] Connexion établie (${latency}ms) - Tables OK`);
+
+          // 3. Test checkUserCircle (seulement si tables OK)
+          const { checkUserCircle } = await import('./src/services/circleService');
+          const userCircle = await checkUserCircle(deviceId);
+
+          if (userCircle) {
+            console.log('🔵 [Test] Utilisateur dans cercle:', userCircle.circle.name);
+          } else {
+            console.log('⚪ [Test] Utilisateur sans cercle (normal)');
+          }
+        }
+      } catch (err: any) {
+        console.error('❌ [Test] Erreur:', err.message);
+      }
+    };
+
+    testAll();
+  }, []);
 
   // Utiliser le hook temps réel pour les horaires de prière
   const { nextPrayer, countdown, currentTime } = usePrayerTimesRealtime(
@@ -4001,13 +4056,15 @@ const AppContent = () => {
 
 export default function App() {
   return (
-    <SettingsProvider>
-      <ThemeProvider>
-        <DuaProvider>
-          <AppContent />
-        </DuaProvider>
-      </ThemeProvider>
-    </SettingsProvider>
+    <DeviceProvider>
+      <SettingsProvider>
+        <ThemeProvider>
+          <DuaProvider>
+            <AppContent />
+          </DuaProvider>
+        </ThemeProvider>
+      </SettingsProvider>
+    </DeviceProvider>
   );
 }
 
