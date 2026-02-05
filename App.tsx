@@ -43,6 +43,7 @@ import { DuaProvider, ThemeProvider as DuaThemeProvider } from './src/contexts';
 import { DeviceProvider } from './src/contexts/DeviceContext';
 import { DuaNavigator } from './src/navigation';
 import { QiblaScreen, CalendrierHijriScreen, AboutScreen, DownloadsScreen } from './src/screens';
+import { CircleNavigator } from './src/navigation/CircleNavigator';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -231,7 +232,7 @@ const usePrayerTimesRealtime = (latitude: number, longitude: number, timezone: s
 };
 
 // ===== TYPES =====
-type ScreenName = 'home' | 'coran' | 'prieres' | 'ramadan' | 'dua' | 'settings' | 'qibla' | 'calendrier' | 'about' | 'downloads';
+type ScreenName = 'home' | 'coran' | 'prieres' | 'ramadan' | 'dua' | 'settings' | 'qibla' | 'calendrier' | 'about' | 'downloads' | 'cercle';
 
 // Titres des écrans pour le header
 const SCREEN_TITLES: Record<ScreenName, string> = {
@@ -1208,6 +1209,12 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
   const { streak, lastRead, settings } = useSettings();
   const ramadanInfo = getRamadanInfo();
 
+  // État du cercle de l'utilisateur
+  const [userCircle, setUserCircle] = useState<{
+    circle: { id: string; name: string; completed_juz: number };
+    membership: { nickname: string };
+  } | null>(null);
+
   // ===== TEST CONNEXION SUPABASE + DEVICE ID (TEMPORAIRE) =====
   useEffect(() => {
     const testAll = async () => {
@@ -1260,6 +1267,22 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
     };
 
     testAll();
+  }, []);
+
+  // Charger le cercle de l'utilisateur
+  useEffect(() => {
+    const loadCircle = async () => {
+      try {
+        const { getDeviceId } = await import('./src/services/deviceService');
+        const { checkUserCircle } = await import('./src/services/circleService');
+        const deviceId = await getDeviceId();
+        const result = await checkUserCircle(deviceId);
+        setUserCircle(result);
+      } catch (error) {
+        console.log('Erreur chargement cercle:', error);
+      }
+    };
+    loadCircle();
   }, []);
 
   // Utiliser le hook temps réel pour les horaires de prière
@@ -1469,6 +1492,29 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
             </PressableScale>
           </FadeInView>
         )}
+
+        {/* Cercle de Lecture Card */}
+        <FadeInView delay={360}>
+          <PressableScale onPress={() => onNavigate('cercle')}>
+            <GlassCard colors={colors} style={styles.circleHomeCard}>
+              <View style={[styles.circleHomeIcon, { backgroundColor: colors.primary + '20' }]}>
+                <Ionicons name="people" size={24} color={colors.primary} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.circleHomeTitle, { color: colors.text }]}>
+                  {userCircle ? userCircle.circle.name : 'Cercle de Lecture'}
+                </Text>
+                <Text style={[styles.circleHomeSubtitle, { color: colors.textSecondary }]}>
+                  {userCircle
+                    ? `${userCircle.circle.completed_juz}/30 Juz (${Math.round((userCircle.circle.completed_juz / 30) * 100)}%)`
+                    : 'Lisez le Coran en famille'
+                  }
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward" size={24} color={colors.textMuted} />
+            </GlassCard>
+          </PressableScale>
+        </FadeInView>
 
         {/* Ramadan Card - Affichee si pendant le Ramadan */}
         {ramadanInfo.status === 'during' && (
@@ -4039,6 +4085,16 @@ const AppContent = () => {
       case 'qibla': return <QiblaScreen navigation={{ goBack }} isDark={isDark} />;
       case 'calendrier': return <CalendrierHijriScreen navigation={{ goBack }} isDark={isDark} />;
       case 'about': return <AboutScreen navigation={{ goBack }} isDark={isDark} />;
+      case 'cercle': return (
+        <View style={{ flex: 1 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 }}>
+            <Pressable onPress={goBack} style={{ padding: 8 }}>
+              <Ionicons name="arrow-back" size={24} color={isDark ? '#FFF' : '#000'} />
+            </Pressable>
+          </View>
+          <CircleNavigator />
+        </View>
+      );
       case 'downloads': return <DownloadsScreen navigation={{ goBack }} isDark={isDark} />;
     }
   };
@@ -4113,6 +4169,12 @@ const styles = StyleSheet.create({
   lastReadTitle: { fontSize: 14, fontWeight: '600' },
   lastReadText: { fontSize: 16, fontWeight: '500', marginTop: 2 },
   lastReadTime: { fontSize: 12, marginTop: 2 },
+
+  // Circle Home Card
+  circleHomeCard: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
+  circleHomeIcon: { width: 48, height: 48, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
+  circleHomeTitle: { fontSize: 14, fontWeight: '600' },
+  circleHomeSubtitle: { fontSize: 14, marginTop: 2 },
 
   // Glass Card
   glassCard: { borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.08, shadowRadius: 8, elevation: 4 },
