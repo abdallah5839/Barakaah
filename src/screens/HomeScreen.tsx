@@ -29,7 +29,7 @@ type RootTabParamList = {
   Home: undefined;
   Coran: undefined;
   Prieres: undefined;
-  Ramadan: undefined;
+  Cercle: undefined;
   Dua: undefined;
 };
 
@@ -206,9 +206,9 @@ export const HomeScreen: React.FC = () => {
             </View>
             <View style={styles.quickAccessRow}>
               <QuickAccessCard
-                icon="moon-outline"
-                label="Ramadan"
-                onPress={() => navigation.navigate('Ramadan')}
+                icon="people-outline"
+                label="Cercle"
+                onPress={() => navigation.navigate('Cercle')}
               />
               <QuickAccessCard
                 icon="hand-left-outline"
