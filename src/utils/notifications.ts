@@ -1,11 +1,21 @@
 /**
  * Service de notifications pour l'application Barakaah
- * Gère les rappels de Dua (notamment Dua Kumayl le jeudi soir)
+ * Gère les rappels de prière, Iftar et Dua Kumayl
  */
 
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
+import { Audio } from 'expo-av';
 import type { DuaKumaylReminder } from '../types';
+
+// ===== CONFIGURATION DU SON ADHAN =====
+// Utilise le fichier complet et contrôle la durée de lecture
+const ADHAN_SOUND = require('../../assets/sounds/adhan_full.mp3');
+const ADHAN_DURATION_MS = 8000; // Jouer seulement 8 secondes (Allahu Akbar)
+
+// Channel Android pour les notifications de prière (avec son Adhan)
+const PRAYER_CHANNEL_ID = 'prayer-reminders';
+const IFTAR_CHANNEL_ID = 'iftar-reminders';
 
 // Configuration des notifications
 Notifications.setNotificationHandler({
@@ -18,8 +28,61 @@ Notifications.setNotificationHandler({
   }),
 });
 
-// Identifiant unique pour la notification Dua Kumayl
+// Identifiants des notifications
 const KUMAYL_NOTIFICATION_ID = 'dua-kumayl-weekly';
+const PRAYER_NOTIFICATION_PREFIX = 'prayer-reminder-';
+const IFTAR_NOTIFICATION_ID = 'iftar-reminder';
+
+/**
+ * Initialiser les channels de notification Android
+ */
+export const initNotificationChannels = async (): Promise<void> => {
+  if (Platform.OS === 'android') {
+    // Channel pour les rappels de prière
+    await Notifications.setNotificationChannelAsync(PRAYER_CHANNEL_ID, {
+      name: 'Rappels de prière',
+      description: 'Notifications pour les horaires de prière',
+      importance: Notifications.AndroidImportance.HIGH,
+      sound: 'adhan_short.wav', // Fichier dans android/app/src/main/res/raw/
+      vibrationPattern: [0, 250, 250, 250],
+      enableVibrate: true,
+    });
+
+    // Channel pour les rappels Iftar
+    await Notifications.setNotificationChannelAsync(IFTAR_CHANNEL_ID, {
+      name: 'Rappels Iftar',
+      description: 'Notifications pour le moment de rompre le jeûne',
+      importance: Notifications.AndroidImportance.HIGH,
+      sound: 'adhan_short.wav',
+      vibrationPattern: [0, 250, 250, 250],
+      enableVibrate: true,
+    });
+
+    console.log('📢 Channels de notification Android créés');
+  }
+};
+
+/**
+ * Jouer le son de l'Adhan (premières 8 secondes seulement)
+ */
+export const playAdhanSound = async (): Promise<void> => {
+  try {
+    const { sound } = await Audio.Sound.createAsync(ADHAN_SOUND);
+    await sound.playAsync();
+
+    // Arrêter après ADHAN_DURATION_MS (8 secondes)
+    setTimeout(async () => {
+      try {
+        await sound.stopAsync();
+        await sound.unloadAsync();
+      } catch (e) {}
+    }, ADHAN_DURATION_MS);
+
+    console.log('🔊 Son Adhan démarré');
+  } catch (error) {
+    console.error('Erreur lecture son Adhan:', error);
+  }
+};
 
 /**
  * Demander les permissions de notification
@@ -31,6 +94,11 @@ export const requestNotificationPermissions = async (): Promise<boolean> => {
   if (existingStatus !== 'granted') {
     const { status } = await Notifications.requestPermissionsAsync();
     finalStatus = status;
+  }
+
+  // Initialiser les channels Android après avoir obtenu les permissions
+  if (finalStatus === 'granted') {
+    await initNotificationChannels();
   }
 
   return finalStatus === 'granted';
@@ -45,8 +113,121 @@ export const checkNotificationPermissions = async (): Promise<boolean> => {
 };
 
 /**
+ * Planifier un rappel de prière
+ */
+export const schedulePrayerReminder = async (
+  prayerName: string,
+  prayerTime: Date,
+  minutesBefore: number
+): Promise<string | null> => {
+  const hasPermission = await requestNotificationPermissions();
+  if (!hasPermission) return null;
+
+  // Calculer l'heure du rappel
+  const reminderTime = new Date(prayerTime.getTime() - minutesBefore * 60 * 1000);
+
+  // Si l'heure est déjà passée, ne pas programmer
+  if (reminderTime <= new Date()) return null;
+
+  const identifier = `${PRAYER_NOTIFICATION_PREFIX}${prayerName}`;
+
+  // Annuler l'ancienne notification si elle existe
+  try {
+    await Notifications.cancelScheduledNotificationAsync(identifier);
+  } catch (e) {}
+
+  try {
+    const notificationId = await Notifications.scheduleNotificationAsync({
+      content: {
+        title: `🕌 ${prayerName} dans ${minutesBefore} minutes`,
+        body: `Préparez-vous pour la prière de ${prayerName}`,
+        data: { type: 'prayer-reminder', prayer: prayerName },
+        sound: Platform.OS === 'ios' ? 'adhan_short.wav' : true,
+        ...(Platform.OS === 'android' && { channelId: PRAYER_CHANNEL_ID }),
+      },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DATE,
+        date: reminderTime,
+      },
+      identifier,
+    });
+
+    console.log(`📿 Rappel ${prayerName} programmé pour`, reminderTime.toLocaleTimeString());
+    return notificationId;
+  } catch (error) {
+    console.error('Erreur planification rappel prière:', error);
+    return null;
+  }
+};
+
+/**
+ * Planifier un rappel Iftar
+ */
+export const scheduleIftarReminder = async (
+  iftarTime: Date,
+  minutesBefore: number
+): Promise<string | null> => {
+  const hasPermission = await requestNotificationPermissions();
+  if (!hasPermission) return null;
+
+  const reminderTime = new Date(iftarTime.getTime() - minutesBefore * 60 * 1000);
+
+  if (reminderTime <= new Date()) return null;
+
+  // Annuler l'ancienne notification
+  try {
+    await Notifications.cancelScheduledNotificationAsync(IFTAR_NOTIFICATION_ID);
+  } catch (e) {}
+
+  try {
+    const notificationId = await Notifications.scheduleNotificationAsync({
+      content: {
+        title: `🌙 Iftar dans ${minutesBefore} minutes`,
+        body: 'Préparez-vous à rompre le jeûne',
+        data: { type: 'iftar-reminder' },
+        sound: Platform.OS === 'ios' ? 'adhan_short.wav' : true,
+        ...(Platform.OS === 'android' && { channelId: IFTAR_CHANNEL_ID }),
+      },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DATE,
+        date: reminderTime,
+      },
+      identifier: IFTAR_NOTIFICATION_ID,
+    });
+
+    console.log('🌙 Rappel Iftar programmé pour', reminderTime.toLocaleTimeString());
+    return notificationId;
+  } catch (error) {
+    console.error('Erreur planification rappel Iftar:', error);
+    return null;
+  }
+};
+
+/**
+ * Annuler tous les rappels de prière
+ */
+export const cancelAllPrayerReminders = async (): Promise<void> => {
+  const prayers = ['Sobh', 'Dohr', 'Asr', 'Maghrib', 'Icha'];
+  for (const prayer of prayers) {
+    try {
+      await Notifications.cancelScheduledNotificationAsync(`${PRAYER_NOTIFICATION_PREFIX}${prayer}`);
+    } catch (e) {}
+  }
+  console.log('Tous les rappels de prière annulés');
+};
+
+/**
+ * Annuler le rappel Iftar
+ */
+export const cancelIftarReminder = async (): Promise<void> => {
+  try {
+    await Notifications.cancelScheduledNotificationAsync(IFTAR_NOTIFICATION_ID);
+    console.log('Rappel Iftar annulé');
+  } catch (e) {}
+};
+
+/**
  * Planifier le rappel hebdomadaire de Dua Kumayl
- * S'exécute chaque jeudi soir à l'heure configurée
  */
 export const scheduleDuaKumaylReminder = async (
   config: DuaKumaylReminder
@@ -62,12 +243,9 @@ export const scheduleDuaKumaylReminder = async (
     return null;
   }
 
-  // Annuler l'ancienne notification avant d'en créer une nouvelle
   await cancelDuaKumaylReminder();
 
   try {
-    // Créer le trigger hebdomadaire pour le jeudi
-    // Note: weekday 5 = jeudi (1 = dimanche, 7 = samedi)
     const trigger: Notifications.WeeklyTriggerInput = {
       type: Notifications.SchedulableTriggerInputTypes.WEEKLY,
       weekday: 5, // Jeudi
@@ -77,7 +255,7 @@ export const scheduleDuaKumaylReminder = async (
 
     const notificationId = await Notifications.scheduleNotificationAsync({
       content: {
-        title: "C'est le moment de Dua Kumayl",
+        title: "🤲 C'est le moment de Dua Kumayl",
         body: 'La nuit du jeudi est le moment idéal pour réciter cette invocation bénie.',
         data: {
           type: 'dua-kumayl',
@@ -107,7 +285,6 @@ export const cancelDuaKumaylReminder = async (): Promise<void> => {
     await Notifications.cancelScheduledNotificationAsync(KUMAYL_NOTIFICATION_ID);
     console.log('Notification Dua Kumayl annulée');
   } catch (error) {
-    // Ignorer l'erreur si la notification n'existe pas
     console.log('Pas de notification Dua Kumayl à annuler');
   }
 };
@@ -130,7 +307,7 @@ export const getScheduledNotifications = async () => {
 };
 
 /**
- * Envoyer une notification de test
+ * Envoyer une notification de test avec son Adhan
  */
 export const sendTestNotification = async (): Promise<void> => {
   const hasPermission = await requestNotificationPermissions();
@@ -141,20 +318,22 @@ export const sendTestNotification = async (): Promise<void> => {
 
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: 'Test de notification',
-      body: 'Les notifications Barakaah fonctionnent correctement!',
+      title: '🕌 Test Barakaah',
+      body: 'Les notifications fonctionnent correctement!',
       data: { type: 'test' },
+      sound: Platform.OS === 'ios' ? 'adhan_short.wav' : true,
+      ...(Platform.OS === 'android' && { channelId: PRAYER_CHANNEL_ID }),
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
       seconds: 2,
+      repeats: false,
     },
   });
 };
 
 /**
  * Configurer le listener pour les notifications reçues
- * Retourne une fonction de cleanup
  */
 export const setupNotificationListener = (
   onNotificationReceived: (notification: Notifications.Notification) => void
@@ -165,7 +344,6 @@ export const setupNotificationListener = (
 
 /**
  * Configurer le listener pour les interactions avec les notifications
- * Retourne une fonction de cleanup
  */
 export const setupNotificationResponseListener = (
   onNotificationResponse: (response: Notifications.NotificationResponse) => void
@@ -182,8 +360,14 @@ export const getLastNotificationResponse = async () => {
 };
 
 export default {
+  initNotificationChannels,
+  playAdhanSound,
   requestNotificationPermissions,
   checkNotificationPermissions,
+  schedulePrayerReminder,
+  scheduleIftarReminder,
+  cancelAllPrayerReminders,
+  cancelIftarReminder,
   scheduleDuaKumaylReminder,
   cancelDuaKumaylReminder,
   isDuaKumaylReminderScheduled,

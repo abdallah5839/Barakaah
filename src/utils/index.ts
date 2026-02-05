@@ -5,3 +5,4 @@
 export * from './prayerTimes';
 export * from './date';
 export * from './notifications';
+export * from './hijriOffset';

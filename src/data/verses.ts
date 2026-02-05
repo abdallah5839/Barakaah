@@ -152,4 +152,52 @@ export const isSurahAvailable = (surahNumber: number): boolean => {
   return surahNumber >= 1 && surahNumber <= 114;
 };
 
+// --- Verset du jour ---
+
+import { surahs } from './surahs';
+
+export interface VerseOfTheDay {
+  arabic: string;
+  french: string;
+  surahName: string;
+  verseNumber: number;
+}
+
+/** Hash déterministe djb2 basé sur une chaîne de date */
+function dateSeedHash(dateStr: string): number {
+  let hash = 5381;
+  for (let i = 0; i < dateStr.length; i++) {
+    hash = ((hash << 5) - hash + dateStr.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash);
+}
+
+/** Retourne un verset pseudo-aléatoire basé sur la date du jour */
+export const getVerseOfTheDay = (): VerseOfTheDay => {
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const globalIndex = dateSeedHash(dateStr) % 6236;
+
+  // Trouver la sourate et le verset correspondant à l'index global
+  let remaining = globalIndex;
+  let surahNumber = 1;
+  for (const surah of surahs) {
+    if (remaining < surah.versesCount) {
+      surahNumber = surah.number;
+      break;
+    }
+    remaining -= surah.versesCount;
+  }
+
+  const verses = getVersesBySurah(surahNumber);
+  const verse = verses[remaining] || verses[0];
+  const surah = surahs[surahNumber - 1];
+
+  return {
+    arabic: verse.arabic,
+    french: verse.french,
+    surahName: surah.frenchName,
+    verseNumber: verse.number,
+  };
+};
+
 export default surahFiles;

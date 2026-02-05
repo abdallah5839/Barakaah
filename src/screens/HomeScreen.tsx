@@ -12,6 +12,7 @@ import {
   SafeAreaView,
   Pressable,
   RefreshControl,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -21,7 +22,7 @@ import { Spacing, Typography, Shadows, APP_NAME } from '../constants';
 import { formatDateFrench, getHijriDate } from '../utils';
 import { usePrayerTimes } from '../hooks';
 import { Card, NextPrayerCard, QuickAccessCard } from '../components';
-import { getDuaOfTheDay } from '../data';
+import { getDuaOfTheDay, getVerseOfTheDay } from '../data';
 
 // Type pour la navigation
 type RootTabParamList = {
@@ -48,8 +49,11 @@ export const HomeScreen: React.FC = () => {
     refresh,
   } = usePrayerTimes();
 
+  // Date du jour pour déclencher le recalcul à minuit
+  const todayDateStr = new Date().toISOString().slice(0, 10);
+
   // Dua du jour (basée sur la date)
-  const duaOfTheDay = useMemo(() => getDuaOfTheDay(), []);
+  const duaOfTheDay = useMemo(() => getDuaOfTheDay(), [todayDateStr]);
 
   // Rafraîchir les données
   const onRefresh = useCallback(() => {
@@ -58,11 +62,13 @@ export const HomeScreen: React.FC = () => {
     setRefreshing(false);
   }, [refresh]);
 
-  // Verset du jour (placeholder)
-  const verseOfTheDay = {
-    text: '"Et c\'est vers Allah que se fait le retour final."',
-    reference: 'Sourate Al-Baqarah, Verset 285',
-  };
+  // Verset du jour (basé sur la date - recalculé quand la date change)
+  const verseOfTheDay = useMemo(() => {
+    console.log('📖 Calcul verset du jour pour:', todayDateStr);
+    const verse = getVerseOfTheDay();
+    console.log('📖 Verset sélectionné:', verse.surahName, 'v.', verse.verseNumber);
+    return verse;
+  }, [todayDateStr]);
 
   // Navigation vers l'onglet Dua
   const goToDuaTab = () => {
@@ -168,11 +174,14 @@ export const HomeScreen: React.FC = () => {
             Verset du jour
           </Text>
           <Card variant="outlined">
+            <Text style={[styles.verseArabic, { color: colors.text }]}>
+              {verseOfTheDay.arabic}
+            </Text>
             <Text style={[styles.verseText, { color: colors.text }]}>
-              {verseOfTheDay.text}
+              {verseOfTheDay.french}
             </Text>
             <Text style={[styles.verseReference, { color: colors.textSecondary }]}>
-              {verseOfTheDay.reference}
+              {verseOfTheDay.surahName} - Verset {verseOfTheDay.verseNumber}
             </Text>
           </Card>
         </View>
@@ -316,6 +325,13 @@ const styles = StyleSheet.create({
   },
   duaOccasion: {
     fontSize: Typography.sizes.sm,
+  },
+  verseArabic: {
+    fontSize: 22,
+    lineHeight: 36,
+    textAlign: 'right',
+    fontFamily: Platform.OS === 'ios' ? 'Geeza Pro' : 'serif',
+    marginBottom: Spacing.sm,
   },
   verseText: {
     fontSize: Typography.sizes.md,

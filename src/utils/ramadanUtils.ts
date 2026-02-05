@@ -7,6 +7,7 @@
 import momentTz from 'moment-timezone';
 import moment from 'moment-hijri';
 import { DEFAULT_COORDINATES } from '../constants';
+import { getAdjustedHijriMoment } from './hijriOffset';
 
 // Timezone par défaut
 const DEFAULT_TIMEZONE = DEFAULT_COORDINATES.timezone || 'Africa/Abidjan';
@@ -73,7 +74,7 @@ const HIJRI_MONTHS_FR = [
  * Obtient la date Hijri actuelle dans la timezone d'Abidjan
  */
 export function getCurrentHijriDate(timezone: string = DEFAULT_TIMEZONE): { day: number; month: number; year: number; monthName: string; monthNameFr: string } {
-  const m = moment(momentTz().tz(timezone).toDate());
+  const m = getAdjustedHijriMoment(new Date(), timezone);
   return {
     day: m.iDate(),
     month: m.iMonth() + 1, // iMonth() retourne 0-11
@@ -87,7 +88,7 @@ export function getCurrentHijriDate(timezone: string = DEFAULT_TIMEZONE): { day:
  * Détecte le statut du Ramadan (avant, pendant, après)
  */
 export function getRamadanStatus(timezone: string = DEFAULT_TIMEZONE): RamadanInfo {
-  const m = moment(momentTz().tz(timezone).toDate());
+  const m = getAdjustedHijriMoment(new Date(), timezone);
   const hijriMonth = m.iMonth() + 1; // 1-12
   const hijriDay = m.iDate();
   const hijriYear = m.iYear();
@@ -174,7 +175,7 @@ export function getRamadanEndDate(hijriYear: number): Date {
  * Convertit une date grégorienne en date Hijri
  */
 export function gregorianToHijri(date: Date): { day: number; month: number; year: number; monthName: string } {
-  const m = moment(date);
+  const m = getAdjustedHijriMoment(date);
   return {
     day: m.iDate(),
     month: m.iMonth() + 1,
