@@ -22,6 +22,7 @@ import {
   ActivityIndicator,
   InteractionManager,
   Share,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -31,9 +32,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Audio, Video, ResizeMode } from 'expo-av';
 import * as Location from 'expo-location';
 import * as FileSystem from 'expo-file-system';
+import * as Notifications from 'expo-notifications';
 import moment from 'moment-hijri';
 import momentTz from 'moment-timezone';
-import { PrayerTimes, Coordinates, CalculationMethod } from 'adhan';
+import { getAdjustedHijriMoment } from './src/utils/hijriOffset';
+import { PrayerTimes, Coordinates, CalculationMethod, CalculationParameters } from 'adhan';
 
 // Import du module Dua
 import { DuaProvider, ThemeProvider as DuaThemeProvider } from './src/contexts';
@@ -66,14 +69,40 @@ interface NextPrayerInfo {
   icon: string;
 }
 
+// Crée les paramètres de calcul Jafari (chiite) avec angles 16°/14°
+// Calibration via methodAdjustments pour correspondre à l'app 313 (Abidjan référence)
+const createJafariParams = (adjustments?: { [key: string]: number }): CalculationParameters => {
+  const params = CalculationMethod.Tehran();
+  params.fajrAngle = 16;
+  params.ishaAngle = 14;
+  params.maghribAngle = 0;
+
+  // Calibration fixe (methodAdjustments) pour aligner sur l'app 313
+  params.methodAdjustments.fajr = 4;
+  params.methodAdjustments.asr = -1;
+  params.methodAdjustments.maghrib = 13;
+
+  // Ajustements utilisateur (se cumulent avec la calibration)
+  if (adjustments) {
+    params.adjustments.fajr = adjustments['Sobh'] || adjustments['Fajr'] || 0;
+    params.adjustments.dhuhr = adjustments['Dohr'] || adjustments['Dhuhr'] || 0;
+    params.adjustments.asr = adjustments['Asr'] || 0;
+    params.adjustments.maghrib = adjustments['Maghrib'] || 0;
+    params.adjustments.isha = adjustments['Icha'] || adjustments['Isha'] || 0;
+  }
+
+  return params;
+};
+
 // Calcule les horaires de prière pour une position donnée
 const calculatePrayerTimesForLocation = (
   latitude: number,
   longitude: number,
-  timezone: string
+  timezone: string,
+  adjustments?: { [key: string]: number }
 ): { fajr: string; dhuhr: string; asr: string; maghrib: string; isha: string } => {
   const coords = new Coordinates(latitude, longitude);
-  const params = CalculationMethod.Tehran(); // Méthode Jafari (chiite)
+  const params = createJafariParams(adjustments);
   const now = momentTz().tz(timezone);
   const date = new Date(now.year(), now.month(), now.date());
   const times = new PrayerTimes(coords, date, params);
@@ -91,18 +120,19 @@ const calculatePrayerTimesForLocation = (
 const getPrayersWithStatus = (
   latitude: number,
   longitude: number,
-  timezone: string
+  timezone: string,
+  adjustments?: { [key: string]: number }
 ): { prayers: PrayerInfo[]; nextPrayer: NextPrayerInfo | null; countdown: { h: number; m: number; s: number } } => {
-  const times = calculatePrayerTimesForLocation(latitude, longitude, timezone);
+  const times = calculatePrayerTimesForLocation(latitude, longitude, timezone, adjustments);
   const now = momentTz().tz(timezone);
   const currentTimeStr = now.format('HH:mm:ss');
 
   const prayersList = [
-    { name: 'Fajr', ar: 'الفجر', time: times.fajr, icon: 'sunny-outline' },
-    { name: 'Dhuhr', ar: 'الظهر', time: times.dhuhr, icon: 'sunny' },
+    { name: 'Sobh', ar: 'الصبح', time: times.fajr, icon: 'sunny-outline' },
+    { name: 'Dohr', ar: 'الظهر', time: times.dhuhr, icon: 'sunny' },
     { name: 'Asr', ar: 'العصر', time: times.asr, icon: 'partly-sunny-outline' },
     { name: 'Maghrib', ar: 'المغرب', time: times.maghrib, icon: 'moon-outline' },
-    { name: 'Isha', ar: 'العشاء', time: times.isha, icon: 'cloudy-night-outline' },
+    { name: 'Icha', ar: 'العشاء', time: times.isha, icon: 'cloudy-night-outline' },
   ];
 
   let nextPrayer: NextPrayerInfo | null = null;
@@ -122,16 +152,16 @@ const getPrayersWithStatus = (
     return { ...prayer, passed: isPassed, isNext };
   });
 
-  // Si toutes les prières sont passées, la prochaine est Fajr demain
+  // Si toutes les prières sont passées, la prochaine est Sobh demain
   if (!nextPrayer) {
     const tomorrow = now.clone().add(1, 'day');
     const tomorrowDate = new Date(tomorrow.year(), tomorrow.month(), tomorrow.date());
     const coords = new Coordinates(latitude, longitude);
-    const params = CalculationMethod.Tehran();
+    const params = createJafariParams(adjustments);
     const tomorrowTimes = new PrayerTimes(coords, tomorrowDate, params);
     const fajrTomorrow = momentTz(tomorrowTimes.fajr).tz(timezone).format('HH:mm');
 
-    nextPrayer = { name: 'Fajr', ar: 'الفجر', time: fajrTomorrow, icon: 'sunny-outline' };
+    nextPrayer = { name: 'Sobh', ar: 'الصبح', time: fajrTomorrow, icon: 'sunny-outline' };
     nextPrayerTime = fajrTomorrow;
   }
 
@@ -161,11 +191,14 @@ const getPrayersWithStatus = (
 };
 
 // Hook personnalisé pour les horaires de prière en temps réel
-const usePrayerTimesRealtime = (latitude: number, longitude: number, timezone: string) => {
+const usePrayerTimesRealtime = (latitude: number, longitude: number, timezone: string, adjustments?: { [key: string]: number }) => {
   const [prayers, setPrayers] = useState<PrayerInfo[]>([]);
   const [nextPrayer, setNextPrayer] = useState<NextPrayerInfo | null>(null);
   const [countdown, setCountdown] = useState({ h: 0, m: 0, s: 0 });
   const [currentTime, setCurrentTime] = useState(momentTz().tz(timezone).format('HH:mm:ss'));
+
+  // Sérialiser les adjustments pour la dépendance useEffect
+  const adjustmentsKey = JSON.stringify(adjustments || {});
 
   useEffect(() => {
     // Fonction de mise à jour
@@ -173,7 +206,7 @@ const usePrayerTimesRealtime = (latitude: number, longitude: number, timezone: s
       const now = momentTz().tz(timezone);
       setCurrentTime(now.format('HH:mm:ss'));
 
-      const result = getPrayersWithStatus(latitude, longitude, timezone);
+      const result = getPrayersWithStatus(latitude, longitude, timezone, adjustments);
       setPrayers(result.prayers);
       setNextPrayer(result.nextPrayer);
       setCountdown(result.countdown);
@@ -191,7 +224,7 @@ const usePrayerTimesRealtime = (latitude: number, longitude: number, timezone: s
     const interval = setInterval(update, 1000);
 
     return () => clearInterval(interval);
-  }, [latitude, longitude, timezone]);
+  }, [latitude, longitude, timezone, adjustmentsKey]);
 
   return { prayers, nextPrayer, countdown, currentTime };
 };
@@ -257,6 +290,11 @@ interface LastReadPosition {
   timestamp: number;
 }
 
+interface TodayReadVerses {
+  date: string;  // Format YYYY-MM-DD
+  verses: string[];  // Format "surah:verse" ex: ["1:1", "1:2", "2:255"]
+}
+
 interface Settings {
   // Location
   city: string;
@@ -302,6 +340,7 @@ const STORAGE_KEYS = {
   RAMADAN_PROGRESS: 'barakaah_ramadan_progress',
   RAMADAN_JOURNAL: 'barakaah_ramadan_journal',
   FAVORITES: 'barakaah_favorites',
+  TODAY_READ_VERSES: 'barakaah_today_read_verses',
 };
 
 const DEFAULT_SETTINGS: Settings = {
@@ -311,10 +350,10 @@ const DEFAULT_SETTINGS: Settings = {
   longitude: DEFAULT_LONGITUDE,
   timezone: DEFAULT_TIMEZONE,
   calculationMethod: 'Jafari',
-  prayerAdjustments: { Fajr: 0, Dhuhr: 0, Asr: 0, Maghrib: 0, Isha: 0 },
+  prayerAdjustments: { Sobh: 0, Dohr: 0, Asr: 0, Maghrib: 0, Icha: 0 },
   notificationsEnabled: true,
   notificationMinutes: 10,
-  prayerNotifications: { Fajr: true, Dhuhr: true, Asr: true, Maghrib: true, Isha: true },
+  prayerNotifications: { Sobh: true, Dohr: true, Asr: true, Maghrib: true, Icha: true },
   dailyReadingReminder: true,
   duaKumaylReminder: true,
   themeMode: 'light',
@@ -454,7 +493,7 @@ interface RamadanJournalEntry {
 
 // ===== RAMADAN UTILITY FUNCTIONS =====
 const getRamadanInfo = (): RamadanInfo => {
-  const m = moment();
+  const m = getAdjustedHijriMoment();
   const hijriDay = m.iDate();
   const hijriMonth = m.iMonth() + 1;
   const hijriYear = m.iYear();
@@ -1163,22 +1202,6 @@ const useNavigation = () => {
 const KAABA_LAT = 21.4225;
 const KAABA_LNG = 39.8262;
 
-// Islamic events for Calendar card
-const ISLAMIC_EVENTS_MINI = [
-  { hijriMonth: 1, hijriDay: 1, name: 'Nouvel An Hijri', type: 'celebration' },
-  { hijriMonth: 1, hijriDay: 10, name: 'Achoura', type: 'mourning' },
-  { hijriMonth: 3, hijriDay: 12, name: 'Mawlid an-Nabi', type: 'celebration' },
-  { hijriMonth: 7, hijriDay: 27, name: "Isra et Mi'raj", type: 'special' },
-  { hijriMonth: 8, hijriDay: 15, name: 'Nuit du Doute', type: 'special' },
-  { hijriMonth: 9, hijriDay: 1, name: 'Debut Ramadan', type: 'celebration' },
-  { hijriMonth: 9, hijriDay: 19, name: 'Blessure Imam Ali', type: 'mourning' },
-  { hijriMonth: 9, hijriDay: 21, name: 'Martyre Imam Ali', type: 'mourning' },
-  { hijriMonth: 9, hijriDay: 27, name: 'Laylat al-Qadr', type: 'special' },
-  { hijriMonth: 10, hijriDay: 1, name: 'Eid al-Fitr', type: 'celebration' },
-  { hijriMonth: 12, hijriDay: 10, name: 'Eid al-Adha', type: 'celebration' },
-  { hijriMonth: 12, hijriDay: 18, name: 'Eid al-Ghadir', type: 'celebration' },
-];
-
 const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => {
   const { colors, toggleTheme, isDark } = useTheme();
   const { streak, lastRead, settings } = useSettings();
@@ -1188,7 +1211,8 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
   const { nextPrayer, countdown, currentTime } = usePrayerTimesRealtime(
     settings.latitude || DEFAULT_LATITUDE,
     settings.longitude || DEFAULT_LONGITUDE,
-    settings.timezone || DEFAULT_TIMEZONE
+    settings.timezone || DEFAULT_TIMEZONE,
+    settings.prayerAdjustments
   );
 
   // Qibla calculation
@@ -1217,56 +1241,21 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
     return { angle: Math.round(angle), distance };
   }, [settings.latitude, settings.longitude]);
 
-  // Next Islamic event calculation
-  const nextEvent = useMemo(() => {
-    try {
-      const today = moment();
-      const currentHijriMonth = today.iMonth() + 1;
-      const currentHijriDay = today.iDate();
-
-      // Find next event - simplified calculation
-      let nextEvt = null;
-      let minDays = 366;
-
-      for (const evt of ISLAMIC_EVENTS_MINI) {
-        let daysUntil = 0;
-
-        // Simple calculation: if event is later this month or in future months
-        if (evt.hijriMonth > currentHijriMonth) {
-          daysUntil = (evt.hijriMonth - currentHijriMonth) * 30 + evt.hijriDay - currentHijriDay;
-        } else if (evt.hijriMonth === currentHijriMonth && evt.hijriDay >= currentHijriDay) {
-          daysUntil = evt.hijriDay - currentHijriDay;
-        } else {
-          // Event passed this year, calculate for next year
-          daysUntil = (12 - currentHijriMonth + evt.hijriMonth) * 30 + evt.hijriDay - currentHijriDay;
-        }
-
-        if (daysUntil >= 0 && daysUntil < minDays) {
-          minDays = daysUntil;
-          nextEvt = { ...evt, daysUntil };
-        }
-      }
-
-      return nextEvt;
-    } catch (e) {
-      return null;
-    }
-  }, []);
-
   // Week days for calendar card
   const weekDays = useMemo(() => {
     try {
       const days = [];
-      const today = moment();
-      const todayHijriDay = today.iDate();
+      const todayRaw = moment();                      // pour le jour de la semaine grégorien
+      const todayAdjusted = getAdjustedHijriMoment(); // pour le jour Hijri
+      const todayHijriDay = todayAdjusted.iDate();
 
       for (let i = 0; i < 7; i++) {
-        const day = today.clone().add(i - today.day(), 'days');
-        const hijriDay = day.iDate();
+        const dayDate = todayRaw.clone().add(i - todayRaw.day(), 'days').toDate();
+        const dayAdjusted = getAdjustedHijriMoment(dayDate);
         days.push({
           dayName: ['D', 'L', 'M', 'M', 'J', 'V', 'S'][i],
-          hijriDay: hijriDay,
-          isToday: i === today.day(),
+          hijriDay: dayAdjusted.iDate(),
+          isToday: i === todayRaw.day(),
         });
       }
       return days;
@@ -1563,23 +1552,6 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
                   </View>
                 ))}
               </View>
-
-              {/* Next Event */}
-              {nextEvent && (
-                <View style={[styles.calendarHomeEvent, { backgroundColor: colors.primary + '10' }]}>
-                  <View style={[
-                    styles.calendarHomeEventDot,
-                    { backgroundColor: nextEvent.type === 'mourning' ? '#EF4444' :
-                                       nextEvent.type === 'celebration' ? '#10B981' : '#F59E0B' }
-                  ]} />
-                  <Text style={[styles.calendarHomeEventText, { color: colors.text }]}>
-                    {nextEvent.name}
-                  </Text>
-                  <Text style={[styles.calendarHomeEventDays, { color: colors.primary }]}>
-                    {nextEvent.daysUntil === 0 ? "Aujourd'hui" : `Dans ${nextEvent.daysUntil}j`}
-                  </Text>
-                </View>
-              )}
             </GlassCard>
           </PressableScale>
         </FadeInView>
@@ -1653,6 +1625,45 @@ const CoranScreen = () => {
   const readVersesRef = useRef<Set<string>>(new Set());
   const pendingVersesCountRef = useRef(0);
   const streakDebounceRef = useRef<ReturnType<typeof setTimeout>>();
+
+  // Versets lus aujourd'hui (persistés)
+  const [todayReadVerses, setTodayReadVerses] = useState<Set<string>>(new Set());
+  const todayReadVersesLoaded = useRef(false);
+
+  // Charger les versets lus du jour depuis AsyncStorage
+  useEffect(() => {
+    const loadTodayReadVerses = async () => {
+      console.log('📚 [LOAD] Démarrage chargement versets lus...');
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const data = await AsyncStorage.getItem(STORAGE_KEYS.TODAY_READ_VERSES);
+        console.log('📚 [LOAD] Data brute:', data);
+
+        if (data) {
+          const parsed: TodayReadVerses = JSON.parse(data);
+          console.log('📚 [LOAD] Date stockée:', parsed.date, '| Aujourd\'hui:', today);
+
+          if (parsed.date === today) {
+            console.log('📚 [LOAD] Même jour - Restauration de', parsed.verses.length, 'versets:', parsed.verses);
+            setTodayReadVerses(new Set(parsed.verses));
+            readVersesRef.current = new Set(parsed.verses);
+          } else {
+            console.log('📚 [LOAD] Nouveau jour - Réinitialisation');
+            setTodayReadVerses(new Set());
+            readVersesRef.current = new Set();
+          }
+        } else {
+          console.log('📚 [LOAD] Aucune donnée stockée');
+        }
+        todayReadVersesLoaded.current = true;
+        console.log('📚 [LOAD] Chargement terminé, loaded =', todayReadVersesLoaded.current);
+      } catch (error) {
+        console.error('📚 [LOAD] Erreur:', error);
+        todayReadVersesLoaded.current = true;
+      }
+    };
+    loadTodayReadVerses();
+  }, []);
 
   // Configuration audio iOS (mode silencieux)
   useEffect(() => {
@@ -1796,20 +1807,45 @@ const CoranScreen = () => {
     return () => { if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current); };
   }, [currentVisibleVerse, currentSurah]);
 
-  // Tracking versets lus : incrémenter le compteur quand un nouveau verset est visible
+  // Tracking versets lus : incrémenter le compteur uniquement pour les nouveaux versets
   useEffect(() => {
-    const key = `${currentSurah.number}:${currentVisibleVerse}`;
-    if (!readVersesRef.current.has(key)) {
+    const key = `${currentSurah.number}_${currentVisibleVerse}`;
+    const isLoaded = todayReadVersesLoaded.current;
+    const alreadyRead = readVersesRef.current.has(key);
+    const setSize = readVersesRef.current.size;
+
+    console.log(`📖 [TRACK] Verset: ${key} | Chargé: ${isLoaded} | Déjà lu: ${alreadyRead} | Total Set: ${setSize}`);
+
+    if (!isLoaded) {
+      console.log('📖 [TRACK] ⏳ Attente chargement...');
+      return;
+    }
+
+    if (!alreadyRead) {
       readVersesRef.current.add(key);
       pendingVersesCountRef.current += 1;
+      console.log(`📖 [TRACK] ✅ NOUVEAU verset ajouté! Pending: ${pendingVersesCountRef.current} | Set: ${readVersesRef.current.size}`);
+
+      // Persister immédiatement les versets lus
+      const today = new Date().toISOString().split('T')[0];
+      const versesArray = Array.from(readVersesRef.current);
+      AsyncStorage.setItem(
+        STORAGE_KEYS.TODAY_READ_VERSES,
+        JSON.stringify({ date: today, verses: versesArray })
+      ).then(() => {
+        console.log('📖 [TRACK] 💾 Persisté:', versesArray.length, 'versets');
+      });
 
       if (streakDebounceRef.current) clearTimeout(streakDebounceRef.current);
       streakDebounceRef.current = setTimeout(() => {
         if (pendingVersesCountRef.current > 0) {
+          console.log(`📖 [TRACK] 🔥 updateStreak appelé avec: ${pendingVersesCountRef.current}`);
           updateStreak(pendingVersesCountRef.current);
           pendingVersesCountRef.current = 0;
         }
       }, 2000);
+    } else {
+      console.log(`📖 [TRACK] ⏭️ Verset déjà lu, ignoré`);
     }
   }, [currentVisibleVerse, currentSurah.number]);
 
@@ -1866,7 +1902,7 @@ const CoranScreen = () => {
 
   const togglePlayPause = async () => {
     if (!sound) {
-      playVerse(currentAudioVerse);
+      playVerse(currentVisibleVerse);
       return;
     }
 
@@ -1876,6 +1912,28 @@ const CoranScreen = () => {
       await sound.playAsync();
     }
     setIsPlaying(!isPlaying);
+  };
+
+  const goToPreviousVerse = () => {
+    if (currentVisibleVerse > 1) {
+      const newVerse = currentVisibleVerse - 1;
+      const y = versePositions.current[newVerse];
+      if (y !== undefined && scrollRef.current) {
+        scrollRef.current.scrollTo({ y, animated: true });
+      }
+      playVerse(newVerse);
+    }
+  };
+
+  const goToNextVerse = () => {
+    if (currentVisibleVerse < currentVerses.length) {
+      const newVerse = currentVisibleVerse + 1;
+      const y = versePositions.current[newVerse];
+      if (y !== undefined && scrollRef.current) {
+        scrollRef.current.scrollTo({ y, animated: true });
+      }
+      playVerse(newVerse);
+    }
   };
 
   const isBookmarked = (verseNum: number) => {
@@ -2126,7 +2184,7 @@ const CoranScreen = () => {
           <View style={[styles.audioProgressFill, { width: `${audioProgress * 100}%`, backgroundColor: colors.primary }]} />
         </View>
         <View style={styles.audioControls}>
-          <PressableScale onPress={() => currentAudioVerse > 1 && playVerse(currentAudioVerse - 1)}>
+          <PressableScale onPress={goToPreviousVerse}>
             <Ionicons name="play-skip-back" size={28} color={colors.text} />
           </PressableScale>
           <PressableScale onPress={togglePlayPause}>
@@ -2134,7 +2192,7 @@ const CoranScreen = () => {
               <Ionicons name={isPlaying ? 'pause' : 'play'} size={32} color="#FFF" />
             </View>
           </PressableScale>
-          <PressableScale onPress={() => currentAudioVerse < currentVerses.length && playVerse(currentAudioVerse + 1)}>
+          <PressableScale onPress={goToNextVerse}>
             <Ionicons name="play-skip-forward" size={28} color={colors.text} />
           </PressableScale>
         </View>
@@ -2179,49 +2237,54 @@ const CoranScreen = () => {
 
       {/* Bookmark Modal */}
       <Modal visible={showBookmarkModal} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={[styles.bookmarkModal, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.modalTitle, { color: colors.text }]}>Ajouter un marque-page</Text>
-            <Text style={[styles.bookmarkVerse, { color: colors.textSecondary }]}>
-              {currentSurah.name} - Verset {selectedVerse}
-            </Text>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', padding: 20, backgroundColor: 'rgba(0,0,0,0.5)' }}
+            keyboardShouldPersistTaps="handled"
+          >
+            <View style={[styles.bookmarkModal, { backgroundColor: colors.surface }]}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>Ajouter un marque-page</Text>
+              <Text style={[styles.bookmarkVerse, { color: colors.textSecondary }]}>
+                {currentSurah.name} - Verset {selectedVerse}
+              </Text>
 
-            <TextInput
-              style={[styles.noteInput, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
-              placeholder="Note (optionnel)"
-              placeholderTextColor={colors.textMuted}
-              value={bookmarkNote}
-              onChangeText={setBookmarkNote}
-              multiline
-            />
+              <TextInput
+                style={[styles.noteInput, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+                placeholder="Note (optionnel)"
+                placeholderTextColor={colors.textMuted}
+                value={bookmarkNote}
+                onChangeText={setBookmarkNote}
+                multiline
+              />
 
-            <Text style={[styles.colorLabel, { color: colors.text }]}>Couleur</Text>
-            <View style={styles.colorPicker}>
-              {BOOKMARK_COLORS.map(color => (
-                <PressableScale key={color} onPress={() => setBookmarkColor(color)}>
-                  <View style={[
-                    styles.colorOption,
-                    { backgroundColor: color },
-                    bookmarkColor === color && styles.colorSelected
-                  ]} />
+              <Text style={[styles.colorLabel, { color: colors.text }]}>Couleur</Text>
+              <View style={styles.colorPicker}>
+                {BOOKMARK_COLORS.map(color => (
+                  <PressableScale key={color} onPress={() => setBookmarkColor(color)}>
+                    <View style={[
+                      styles.colorOption,
+                      { backgroundColor: color },
+                      bookmarkColor === color && styles.colorSelected
+                    ]} />
+                  </PressableScale>
+                ))}
+              </View>
+
+              <View style={styles.modalButtons}>
+                <PressableScale onPress={() => setShowBookmarkModal(false)} style={{ flex: 1 }}>
+                  <View style={[styles.modalBtn, { backgroundColor: colors.background }]}>
+                    <Text style={{ color: colors.text }}>Annuler</Text>
+                  </View>
                 </PressableScale>
-              ))}
+                <PressableScale onPress={saveBookmark} style={{ flex: 1 }}>
+                  <View style={[styles.modalBtn, { backgroundColor: colors.primary }]}>
+                    <Text style={{ color: '#FFF' }}>Enregistrer</Text>
+                  </View>
+                </PressableScale>
+              </View>
             </View>
-
-            <View style={styles.modalButtons}>
-              <PressableScale onPress={() => setShowBookmarkModal(false)} style={{ flex: 1 }}>
-                <View style={[styles.modalBtn, { backgroundColor: colors.background }]}>
-                  <Text style={{ color: colors.text }}>Annuler</Text>
-                </View>
-              </PressableScale>
-              <PressableScale onPress={saveBookmark} style={{ flex: 1 }}>
-                <View style={[styles.modalBtn, { backgroundColor: colors.primary }]}>
-                  <Text style={{ color: '#FFF' }}>Enregistrer</Text>
-                </View>
-              </PressableScale>
-            </View>
-          </View>
-        </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );
@@ -2237,7 +2300,8 @@ const PrieresScreen = () => {
   const { prayers, nextPrayer, countdown, currentTime } = usePrayerTimesRealtime(
     settings.latitude || DEFAULT_LATITUDE,
     settings.longitude || DEFAULT_LONGITUDE,
-    settings.timezone || DEFAULT_TIMEZONE
+    settings.timezone || DEFAULT_TIMEZONE,
+    settings.prayerAdjustments
   );
 
   // Date du jour formatée
@@ -2447,42 +2511,6 @@ const SettingsScreen = () => {
           />
         </Section>
 
-        <Section title="HORAIRES DE PRIERE" icon="time-outline">
-          <SettingRow label="Methode de calcul" value={settings.calculationMethod} onPress={() => {}} />
-          <View style={styles.adjustmentsGrid}>
-            {['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'].map(prayer => (
-              <View key={prayer} style={styles.adjustmentRow}>
-                <Text style={[styles.adjustmentLabel, { color: colors.text }]}>{prayer}</Text>
-                <View style={styles.adjustmentBtns}>
-                  {[-5, 0, 5].map(adj => (
-                    <PressableScale
-                      key={adj}
-                      onPress={() => updateSettings({
-                        prayerAdjustments: { ...settings.prayerAdjustments, [prayer]: adj }
-                      })}
-                    >
-                      <View style={[
-                        styles.adjustBtn,
-                        {
-                          backgroundColor: settings.prayerAdjustments[prayer] === adj ? colors.primary : colors.background,
-                          borderColor: colors.border
-                        }
-                      ]}>
-                        <Text style={{
-                          color: settings.prayerAdjustments[prayer] === adj ? '#FFF' : colors.text,
-                          fontSize: 12
-                        }}>
-                          {adj > 0 ? `+${adj}` : adj}
-                        </Text>
-                      </View>
-                    </PressableScale>
-                  ))}
-                </View>
-              </View>
-            ))}
-          </View>
-        </Section>
-
         <Section title="NOTIFICATIONS" icon="notifications-outline">
           <SettingToggle
             label="Activer les notifications"
@@ -2638,31 +2666,6 @@ const SettingsScreen = () => {
         </Section>
 
         <Section title="RAMADAN" icon="moon-outline">
-          <View style={[styles.settingRow, { borderBottomColor: colors.border, flexDirection: 'column', alignItems: 'stretch' }]}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
-              <Text style={[styles.settingLabel, { color: colors.text }]}>Objectif quotidien (versets)</Text>
-              <Text style={[styles.settingValue, { color: colors.primary }]}>{settings.ramadanDailyGoal}</Text>
-            </View>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: -4 }}>
-              <View style={{ flexDirection: 'row', gap: 8, paddingHorizontal: 4 }}>
-                {[5, 10, 20, 30, 50, 100, 200].map(goal => (
-                  <PressableScale key={goal} onPress={() => updateSettings({ ramadanDailyGoal: goal })}>
-                    <View style={[
-                      styles.goalBtn,
-                      {
-                        backgroundColor: settings.ramadanDailyGoal === goal ? colors.primary : colors.background,
-                        borderColor: colors.border
-                      }
-                    ]}>
-                      <Text style={{ color: settings.ramadanDailyGoal === goal ? '#FFF' : colors.text, fontSize: 13, fontWeight: '600' }}>
-                        {goal}
-                      </Text>
-                    </View>
-                  </PressableScale>
-                ))}
-              </View>
-            </ScrollView>
-          </View>
           <SettingToggle
             label="Notifications Ramadan"
             value={settings.ramadanNotifications}
@@ -2883,25 +2886,26 @@ const RamadanScreen = () => {
   const navigation = useNavigation();
 
   const [ramadanInfo, setRamadanInfo] = useState<RamadanInfo>(getRamadanInfo());
-  const [countdown, setCountdown] = useState({ hours: 0, minutes: 0, seconds: 0 });
-  const [isIftarTime, setIsIftarTime] = useState(false);
+  const [ramadanCountdown, setRamadanCountdown] = useState({ hours: 0, minutes: 0, seconds: 0 });
+  const [countdownPhase, setCountdownPhase] = useState<'suhoor' | 'iftar' | 'iftarTime'>('iftar');
   const [currentDuaIndex, setCurrentDuaIndex] = useState(0);
-  const [showVideoModal, setShowVideoModal] = useState(false);
-  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
-  const [showJournalModal, setShowJournalModal] = useState(false);
-  const [journalText, setJournalText] = useState('');
   const [ramadanProgress, setRamadanProgress] = useState<RamadanProgressData | null>(null);
 
   // Animation refs
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const starAnim = useRef(new Animated.Value(0)).current;
 
-  // Horaires de priere pour le calcul (simulation - a remplacer par vraie API)
-  const prayerTimes = {
-    fajr: '05:30',
-    maghrib: '19:45',
-  };
+  // Horaires de priere reels via le hook
+  const { prayers: ramadanPrayers } = usePrayerTimesRealtime(
+    settings.latitude || DEFAULT_LATITUDE,
+    settings.longitude || DEFAULT_LONGITUDE,
+    settings.timezone || DEFAULT_TIMEZONE,
+    settings.prayerAdjustments
+  );
+
+  const fajrPrayer = ramadanPrayers.find(p => p.name === 'Sobh');
+  const maghribPrayer = ramadanPrayers.find(p => p.name === 'Maghrib');
 
   // Charger la progression Ramadan
   useEffect(() => {
@@ -2952,42 +2956,81 @@ const RamadanScreen = () => {
     return () => twinkle.stop();
   }, []);
 
-  // Countdown timer
+  // Countdown timer basé sur les vrais horaires de prière
   useEffect(() => {
     if (ramadanInfo.status !== 'during') return;
+    if (!fajrPrayer || !maghribPrayer) return;
+
+    const tz = settings.timezone || DEFAULT_TIMEZONE;
 
     const updateCountdown = () => {
-      const now = new Date();
-      const [mH, mM] = prayerTimes.maghrib.split(':').map(Number);
-      const iftarTime = new Date();
-      iftarTime.setHours(mH, mM, 0, 0);
+      const now = momentTz().tz(tz);
+      const currentTimeStr = now.format('HH:mm:ss');
 
-      const diff = iftarTime.getTime() - now.getTime();
+      const fajrTimeStr = fajrPrayer.time + ':00';
+      const maghribTimeStr = maghribPrayer.time + ':00';
 
-      if (diff <= 0) {
-        setIsIftarTime(true);
-        setCountdown({ hours: 0, minutes: 0, seconds: 0 });
+      if (currentTimeStr >= maghribTimeStr) {
+        // Après Maghrib → Bon Iftar !
+        setCountdownPhase('iftarTime');
+        setRamadanCountdown({ hours: 0, minutes: 0, seconds: 0 });
+      } else if (currentTimeStr < fajrTimeStr) {
+        // Entre minuit et Sobh → countdown vers Suhoor (fin = heure du Sobh)
+        setCountdownPhase('suhoor');
+        const [fH, fM] = fajrPrayer.time.split(':').map(Number);
+        const target = now.clone().hour(fH).minute(fM).second(0);
+        const diffMs = target.diff(now);
+        if (diffMs > 0) {
+          const totalSec = Math.floor(diffMs / 1000);
+          setRamadanCountdown({
+            hours: Math.floor(totalSec / 3600),
+            minutes: Math.floor((totalSec % 3600) / 60),
+            seconds: totalSec % 60,
+          });
+        }
       } else {
-        setIsIftarTime(false);
-        const totalSec = Math.floor(diff / 1000);
-        setCountdown({
-          hours: Math.floor(totalSec / 3600),
-          minutes: Math.floor((totalSec % 3600) / 60),
-          seconds: totalSec % 60,
-        });
+        // Entre Sobh et Maghrib → countdown vers Iftar
+        setCountdownPhase('iftar');
+        const [mH, mM] = maghribPrayer.time.split(':').map(Number);
+        const target = now.clone().hour(mH).minute(mM).second(0);
+        const diffMs = target.diff(now);
+        if (diffMs > 0) {
+          const totalSec = Math.floor(diffMs / 1000);
+          setRamadanCountdown({
+            hours: Math.floor(totalSec / 3600),
+            minutes: Math.floor((totalSec % 3600) / 60),
+            seconds: totalSec % 60,
+          });
+        }
       }
     };
 
     updateCountdown();
     const interval = setInterval(updateCountdown, 1000);
     return () => clearInterval(interval);
-  }, [ramadanInfo.status]);
+  }, [ramadanInfo.status, fajrPrayer, maghribPrayer]);
 
   const pad = (n: number) => n.toString().padStart(2, '0');
 
   const progressPercentage = ramadanProgress
     ? Math.min(100, (ramadanProgress.totalVersesRead / TOTAL_QURAN_VERSES) * 100)
     : 0;
+
+  const chartData = useMemo(() => {
+    const currentDay = ramadanInfo.ramadanDay || 1;
+    return [...Array(7)].map((_, i) => {
+      const dayIndex = currentDay - 6 + i;
+      if (dayIndex < 1) return { height: 0, isToday: false, label: '' };
+      const isToday = i === 6;
+      const dailyEntry = ramadanProgress?.dailyProgress?.find(
+        (d) => d.day === dayIndex
+      );
+      const versesRead = dailyEntry?.versesRead || (isToday ? streak.todayVersesRead : 0);
+      const goal = settings.ramadanDailyGoal || 208;
+      const height = Math.min(100, (versesRead / goal) * 100);
+      return { height, isToday, label: isToday ? 'Auj' : `J${dayIndex}` };
+    });
+  }, [ramadanInfo.ramadanDay, ramadanProgress, streak.todayVersesRead, settings.ramadanDailyGoal]);
 
   // Rendu AVANT Ramadan
   if (ramadanInfo.status === 'before' || ramadanInfo.status === 'after') {
@@ -3134,28 +3177,41 @@ const RamadanScreen = () => {
 
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         <View style={ramadanStyles.duringContent}>
-          {/* Card Countdown Iftar */}
+          {/* Card Countdown Iftar / Suhoor */}
           <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
             <LinearGradient
-              colors={isIftarTime ? ['#22C55E', '#16A34A'] : RamadanColors.iftarGradient}
+              colors={countdownPhase === 'iftarTime' ? ['#22C55E', '#16A34A'] : countdownPhase === 'suhoor' ? ['#1E3A8A', '#312E81'] : RamadanColors.iftarGradient}
               style={ramadanStyles.iftarCard}
             >
-              {isIftarTime ? (
+              {countdownPhase === 'iftarTime' ? (
                 <View style={ramadanStyles.iftarContent}>
                   <Text style={ramadanStyles.iftarLabel}>C'EST L'HEURE DE L'IFTAR !</Text>
                   <Text style={ramadanStyles.iftarEmoji}>🌙</Text>
                   <Text style={ramadanStyles.iftarBlessings}>Bon Iftar !</Text>
                 </View>
-              ) : (
+              ) : countdownPhase === 'suhoor' ? (
                 <View style={ramadanStyles.iftarContent}>
-                  <Text style={ramadanStyles.iftarLabel}>IFTAR (FTOUR) DANS</Text>
+                  <Text style={ramadanStyles.iftarLabel}>FIN DU SUHOOR DANS</Text>
                   <Text style={ramadanStyles.iftarCountdown}>
-                    {pad(countdown.hours)}:{pad(countdown.minutes)}:{pad(countdown.seconds)}
+                    {pad(ramadanCountdown.hours)}:{pad(ramadanCountdown.minutes)}:{pad(ramadanCountdown.seconds)}
                   </Text>
                   <View style={ramadanStyles.iftarTimeRow}>
                     <Ionicons name="location" size={16} color="rgba(255,255,255,0.8)" />
                     <Text style={ramadanStyles.iftarTime}>
-                      {prayerTimes.maghrib} - {settings.city}
+                      Sobh {fajrPrayer?.time || '--:--'} - {settings.city}
+                    </Text>
+                  </View>
+                </View>
+              ) : (
+                <View style={ramadanStyles.iftarContent}>
+                  <Text style={ramadanStyles.iftarLabel}>IFTAR (FTOUR) DANS</Text>
+                  <Text style={ramadanStyles.iftarCountdown}>
+                    {pad(ramadanCountdown.hours)}:{pad(ramadanCountdown.minutes)}:{pad(ramadanCountdown.seconds)}
+                  </Text>
+                  <View style={ramadanStyles.iftarTimeRow}>
+                    <Ionicons name="location" size={16} color="rgba(255,255,255,0.8)" />
+                    <Text style={ramadanStyles.iftarTime}>
+                      Maghrib {maghribPrayer?.time || '--:--'} - {settings.city}
                     </Text>
                   </View>
                 </View>
@@ -3175,12 +3231,12 @@ const RamadanScreen = () => {
               pagingEnabled
               showsHorizontalScrollIndicator={false}
               onMomentumScrollEnd={(e) => {
-                const index = Math.round(e.nativeEvent.contentOffset.x / (SCREEN_WIDTH - 40));
+                const index = Math.round(e.nativeEvent.contentOffset.x / (SCREEN_WIDTH - 80));
                 setCurrentDuaIndex(index);
               }}
             >
               {IFTAR_DUAS.map((dua, index) => (
-                <View key={dua.id} style={[ramadanStyles.duaSlide, { width: SCREEN_WIDTH - 40 }]}>
+                <View key={dua.id} style={[ramadanStyles.duaSlide, { width: SCREEN_WIDTH - 80 }]}>
                   <Text style={ramadanStyles.duaArabic}>{dua.arabic}</Text>
                   <Text style={ramadanStyles.duaTranslit}>{dua.transliteration}</Text>
                   <Text style={ramadanStyles.duaTranslation}>{dua.translation}</Text>
@@ -3208,7 +3264,7 @@ const RamadanScreen = () => {
             <Ionicons name="sunny-outline" size={24} color={RamadanColors.secondary} />
             <View style={{ marginLeft: 12, flex: 1 }}>
               <Text style={ramadanStyles.suhoorLabel}>HORAIRE SUHOOR</Text>
-              <Text style={ramadanStyles.suhoorTime}>{prayerTimes.fajr}</Text>
+              <Text style={ramadanStyles.suhoorTime}>{fajrPrayer?.time || '--:--'}</Text>
             </View>
             <Text style={ramadanStyles.suhoorNote}>Fin du Suhoor</Text>
           </View>
@@ -3245,7 +3301,7 @@ const RamadanScreen = () => {
               </View>
               <View style={ramadanStyles.trackerStat}>
                 <Text style={ramadanStyles.trackerStatValue}>
-                  {streak.todayVersesRead}/{settings.ramadanDailyGoal}
+                  {streak.todayVersesRead}
                 </Text>
                 <Text style={ramadanStyles.trackerStatLabel}>aujourd'hui</Text>
               </View>
@@ -3253,30 +3309,24 @@ const RamadanScreen = () => {
 
             {/* Mini graphique */}
             <View style={ramadanStyles.miniChart}>
-              {[...Array(7)].map((_, i) => {
-                const height = Math.random() * 100;
-                const isToday = i === 6;
-                return (
-                  <View key={i} style={ramadanStyles.chartBarContainer}>
-                    <View
-                      style={[
-                        ramadanStyles.chartBar,
-                        {
-                          height: `${height}%`,
-                          backgroundColor: isToday
-                            ? RamadanColors.secondary
-                            : height > 50
-                            ? '#22C55E'
-                            : '#6B7280',
-                        },
-                      ]}
-                    />
-                    <Text style={ramadanStyles.chartDay}>
-                      {isToday ? 'Auj' : `J${ramadanInfo.ramadanDay! - 6 + i}`}
-                    </Text>
-                  </View>
-                );
-              })}
+              {chartData.map((bar, i) => (
+                <View key={i} style={ramadanStyles.chartBarContainer}>
+                  <View
+                    style={[
+                      ramadanStyles.chartBar,
+                      {
+                        height: `${bar.height}%`,
+                        backgroundColor: bar.isToday
+                          ? RamadanColors.secondary
+                          : bar.height > 50
+                          ? '#22C55E'
+                          : '#6B7280',
+                      },
+                    ]}
+                  />
+                  <Text style={ramadanStyles.chartDay}>{bar.label}</Text>
+                </View>
+              ))}
             </View>
           </View>
 
@@ -3293,51 +3343,14 @@ const RamadanScreen = () => {
             </View>
           )}
 
-          {/* Section Videos */}
-          <View style={ramadanStyles.videosSection}>
-            <Text style={ramadanStyles.sectionTitle}>MES VIDEOS RAMADAN</Text>
-            <View style={ramadanStyles.videosGrid}>
-              <PressableScale style={ramadanStyles.videoCard}>
-                <LinearGradient
-                  colors={['#6D28D9', '#4C1D95']}
-                  style={ramadanStyles.videoPlaceholder}
-                >
-                  <Ionicons name="hand-right" size={32} color="#FFF" />
-                  <Text style={ramadanStyles.videoLabel}>Dua</Text>
-                </LinearGradient>
-              </PressableScale>
-              <PressableScale style={ramadanStyles.videoCard}>
-                <LinearGradient
-                  colors={['#1E3A8A', '#1E1B4B']}
-                  style={ramadanStyles.videoPlaceholder}
-                >
-                  <Ionicons name="moon" size={32} color="#FFF" />
-                  <Text style={ramadanStyles.videoLabel}>Ramadan</Text>
-                </LinearGradient>
-              </PressableScale>
-            </View>
-            <Text style={ramadanStyles.videoHint}>
-              Ajoutez vos videos dans assets/ramadan-videos/
-            </Text>
-          </View>
-
-          {/* Boutons calendrier et journal */}
-          <View style={ramadanStyles.actionsRow}>
-            <PressableScale
-              style={ramadanStyles.actionButton}
-              onPress={() => setShowCalendarModal(true)}
-            >
-              <Ionicons name="calendar" size={24} color={RamadanColors.secondary} />
-              <Text style={ramadanStyles.actionButtonText}>Calendrier</Text>
-            </PressableScale>
-            <PressableScale
-              style={ramadanStyles.actionButton}
-              onPress={() => setShowJournalModal(true)}
-            >
-              <Ionicons name="journal" size={24} color={RamadanColors.secondary} />
-              <Text style={ramadanStyles.actionButtonText}>Journal</Text>
-            </PressableScale>
-          </View>
+          {/* Bouton calendrier */}
+          <PressableScale
+            style={ramadanStyles.actionButton}
+            onPress={() => setShowCalendarModal(true)}
+          >
+            <Ionicons name="calendar" size={24} color={RamadanColors.secondary} />
+            <Text style={ramadanStyles.actionButtonText}>Calendrier Ramadan</Text>
+          </PressableScale>
 
           <View style={{ height: 120 }} />
         </View>
@@ -3411,73 +3424,6 @@ const RamadanScreen = () => {
         </View>
       </Modal>
 
-      {/* Modal Journal */}
-      <Modal visible={showJournalModal} animationType="slide" transparent>
-        <View style={ramadanStyles.modalOverlay}>
-          <View style={ramadanStyles.modalContent}>
-            <View style={ramadanStyles.modalHeader}>
-              <Text style={ramadanStyles.modalTitle}>Journal Spirituel</Text>
-              <PressableScale onPress={() => setShowJournalModal(false)}>
-                <Ionicons name="close" size={28} color="#FFF" />
-              </PressableScale>
-            </View>
-
-            <View style={ramadanStyles.journalEntry}>
-              <Text style={ramadanStyles.journalDate}>
-                Jour {ramadanInfo.ramadanDay} - {new Date().toLocaleDateString('fr-FR')}
-              </Text>
-              <TextInput
-                style={ramadanStyles.journalInput}
-                placeholder="Ecrivez vos reflexions du jour..."
-                placeholderTextColor="rgba(255,255,255,0.5)"
-                multiline
-                value={journalText}
-                onChangeText={setJournalText}
-              />
-
-              <View style={ramadanStyles.journalStats}>
-                <Ionicons name="book-outline" size={16} color={RamadanColors.secondary} />
-                <Text style={ramadanStyles.journalStatsText}>
-                  {streak.todayVersesRead} versets lus aujourd'hui
-                </Text>
-              </View>
-
-              <PressableScale
-                style={ramadanStyles.journalSaveBtn}
-                onPress={async () => {
-                  // Sauvegarder le journal
-                  try {
-                    const journalData = await AsyncStorage.getItem(STORAGE_KEYS.RAMADAN_JOURNAL);
-                    const entries = journalData ? JSON.parse(journalData) : [];
-                    const entry: RamadanJournalEntry = {
-                      day: ramadanInfo.ramadanDay!,
-                      date: new Date().toISOString(),
-                      hijriDate: `${ramadanInfo.hijriDay} ${ramadanInfo.hijriMonthName}`,
-                      notes: journalText,
-                      versesRead: streak.todayVersesRead,
-                      updatedAt: Date.now(),
-                    };
-                    // Mettre a jour ou ajouter
-                    const existingIndex = entries.findIndex((e: RamadanJournalEntry) => e.day === entry.day);
-                    if (existingIndex >= 0) {
-                      entries[existingIndex] = entry;
-                    } else {
-                      entries.push(entry);
-                    }
-                    await AsyncStorage.setItem(STORAGE_KEYS.RAMADAN_JOURNAL, JSON.stringify(entries));
-                    Alert.alert('Succes', 'Journal sauvegarde !');
-                    setShowJournalModal(false);
-                  } catch (error) {
-                    Alert.alert('Erreur', 'Impossible de sauvegarder');
-                  }
-                }}
-              >
-                <Text style={ramadanStyles.journalSaveBtnText}>Sauvegarder</Text>
-              </PressableScale>
-            </View>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };
@@ -3835,47 +3781,7 @@ const ramadanStyles = StyleSheet.create({
     color: 'rgba(255,255,255,0.7)',
     marginTop: 4,
   },
-  // Videos
-  videosSection: {
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: RamadanColors.secondary,
-    letterSpacing: 1,
-    marginBottom: 12,
-  },
-  videosGrid: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  videoCard: {
-    flex: 1,
-  },
-  videoPlaceholder: {
-    height: 100,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  videoLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#FFF',
-    marginTop: 8,
-  },
-  videoHint: {
-    fontSize: 11,
-    color: 'rgba(255,255,255,0.4)',
-    textAlign: 'center',
-    marginTop: 8,
-  },
   // Actions
-  actionsRow: {
-    flexDirection: 'row',
-    gap: 12,
-  },
   actionButton: {
     flex: 1,
     backgroundColor: 'rgba(255,255,255,0.1)',
@@ -3967,47 +3873,6 @@ const ramadanStyles = StyleSheet.create({
   legendText: {
     fontSize: 12,
     color: 'rgba(255,255,255,0.7)',
-  },
-  // Journal
-  journalEntry: {
-    flex: 1,
-  },
-  journalDate: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: RamadanColors.secondary,
-    marginBottom: 16,
-  },
-  journalInput: {
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    borderRadius: 12,
-    padding: 16,
-    fontSize: 15,
-    color: '#FFF',
-    minHeight: 150,
-    textAlignVertical: 'top',
-  },
-  journalStats: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 16,
-  },
-  journalStatsText: {
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.7)',
-    marginLeft: 8,
-  },
-  journalSaveBtn: {
-    backgroundColor: RamadanColors.secondary,
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  journalSaveBtnText: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#000',
   },
 });
 
@@ -4301,11 +4166,11 @@ const styles = StyleSheet.create({
   surahItemAr: { fontSize: 18 },
 
   // Bookmark Modal
-  bookmarkModal: { margin: 20, borderRadius: 20, padding: 24 },
-  bookmarkVerse: { fontSize: 16, marginBottom: 20 },
-  noteInput: { borderWidth: 1, borderRadius: 12, padding: 14, fontSize: 15, minHeight: 80, textAlignVertical: 'top', marginBottom: 20 },
-  colorLabel: { fontSize: 14, fontWeight: '600', marginBottom: 12 },
-  colorPicker: { flexDirection: 'row', gap: 12, marginBottom: 24 },
+  bookmarkModal: { margin: 20, borderRadius: 20, padding: 24, paddingBottom: 28 },
+  bookmarkVerse: { fontSize: 16, marginBottom: 12 },
+  noteInput: { borderWidth: 1, borderRadius: 12, padding: 14, fontSize: 15, minHeight: 60, textAlignVertical: 'top', marginBottom: 12 },
+  colorLabel: { fontSize: 14, fontWeight: '600', marginBottom: 8 },
+  colorPicker: { flexDirection: 'row', gap: 10, marginBottom: 16 },
   colorOption: { width: 40, height: 40, borderRadius: 20 },
   colorSelected: { borderWidth: 3, borderColor: '#FFF', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 4, elevation: 4 },
   modalButtons: { flexDirection: 'row', gap: 12 },

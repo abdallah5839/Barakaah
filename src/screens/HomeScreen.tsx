@@ -49,8 +49,11 @@ export const HomeScreen: React.FC = () => {
     refresh,
   } = usePrayerTimes();
 
+  // Date du jour pour déclencher le recalcul à minuit
+  const todayDateStr = new Date().toISOString().slice(0, 10);
+
   // Dua du jour (basée sur la date)
-  const duaOfTheDay = useMemo(() => getDuaOfTheDay(), []);
+  const duaOfTheDay = useMemo(() => getDuaOfTheDay(), [todayDateStr]);
 
   // Rafraîchir les données
   const onRefresh = useCallback(() => {
@@ -59,8 +62,13 @@ export const HomeScreen: React.FC = () => {
     setRefreshing(false);
   }, [refresh]);
 
-  // Verset du jour (basé sur la date)
-  const verseOfTheDay = useMemo(() => getVerseOfTheDay(), []);
+  // Verset du jour (basé sur la date - recalculé quand la date change)
+  const verseOfTheDay = useMemo(() => {
+    console.log('📖 Calcul verset du jour pour:', todayDateStr);
+    const verse = getVerseOfTheDay();
+    console.log('📖 Verset sélectionné:', verse.surahName, 'v.', verse.verseNumber);
+    return verse;
+  }, [todayDateStr]);
 
   // Navigation vers l'onglet Dua
   const goToDuaTab = () => {

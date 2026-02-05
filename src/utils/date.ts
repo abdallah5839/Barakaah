@@ -6,6 +6,7 @@
 import moment from 'moment-timezone';
 import momentHijri from 'moment-hijri';
 import { DAYS_FR, MONTHS_FR, DEFAULT_COORDINATES } from '../constants';
+import { getAdjustedHijriMoment } from './hijriOffset';
 
 // Timezone par défaut
 const DEFAULT_TIMEZONE = DEFAULT_COORDINATES.timezone || 'Africa/Abidjan';
@@ -60,7 +61,7 @@ export const formatDateShort = (date: Date = new Date(), timezone: string = DEFA
  * Utilise moment-hijri pour la conversion
  */
 export const getHijriDate = (date: Date = new Date(), timezone: string = DEFAULT_TIMEZONE): string => {
-  const m = momentHijri(moment(date).tz(timezone));
+  const m = getAdjustedHijriMoment(date, timezone);
   const day = m.iDate();
   const monthIndex = m.iMonth();
   const year = m.iYear();
@@ -106,7 +107,7 @@ export const getCurrentTimeFormatted = (timezone: string = DEFAULT_TIMEZONE): st
  * Note: Le Ramadan est le 9ème mois du calendrier Hijri (index 8)
  */
 export const isRamadan = (date: Date = new Date(), timezone: string = DEFAULT_TIMEZONE): boolean => {
-  const m = momentHijri(moment(date).tz(timezone));
+  const m = getAdjustedHijriMoment(date, timezone);
   return m.iMonth() === 8; // Ramadan est le 9ème mois (index 8)
 };
 
@@ -114,7 +115,7 @@ export const isRamadan = (date: Date = new Date(), timezone: string = DEFAULT_TI
  * Obtient le jour du Ramadan (si on est en Ramadan)
  */
 export const getRamadanDay = (date: Date = new Date(), timezone: string = DEFAULT_TIMEZONE): number | null => {
-  const m = momentHijri(moment(date).tz(timezone));
+  const m = getAdjustedHijriMoment(date, timezone);
   if (m.iMonth() === 8) {
     return m.iDate();
   }

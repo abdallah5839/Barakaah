@@ -42,7 +42,8 @@
     "plugins": [
       "expo-location",
       "expo-asset",
-      "expo-sensors"
+      "expo-sensors",
+      "expo-notifications"
     ],
     "extra": {
       "eas": {
