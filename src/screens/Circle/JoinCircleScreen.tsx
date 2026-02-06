@@ -1,9 +1,9 @@
 /**
- * Écran de création d'un nouveau cercle de lecture
- * Formulaire avec nom, pseudo et date limite
+ * Écran pour rejoindre un cercle de lecture existant
+ * Formulaire avec code du cercle et pseudo
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -18,67 +18,65 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import * as Haptics from 'expo-haptics';
 import { useTheme } from '../../contexts';
 import { useDevice } from '../../contexts/DeviceContext';
 import { useCircleNavigation } from '../../navigation/CircleNavigator';
 import { Spacing, Shadows } from '../../constants';
-import { createCircle } from '../../services/circleService';
+import { joinCircle } from '../../services/circleService';
 
-export const CreateCircleScreen: React.FC = () => {
+export const JoinCircleScreen: React.FC = () => {
   const { colors } = useTheme();
-  const { navigate, goBack } = useCircleNavigation();
+  const { reset, goBack } = useCircleNavigation();
   const { deviceId } = useDevice();
+  const nicknameRef = useRef<TextInput>(null);
 
   // États du formulaire
-  const [circleName, setCircleName] = useState('');
+  const [code, setCode] = useState('');
   const [nickname, setNickname] = useState('');
-  const [expiresAt, setExpiresAt] = useState<Date>(() => {
-    const date = new Date();
-    date.setDate(date.getDate() + 30); // Par défaut: 30 jours
-    return date;
-  });
-  const [showDatePicker, setShowDatePicker] = useState(false);
 
   // États de validation
   const [errors, setErrors] = useState<{
-    circleName?: string;
+    code?: string;
     nickname?: string;
-    expiresAt?: string;
   }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Dates limites
-  const minDate = new Date();
-  minDate.setDate(minDate.getDate() + 1); // Demain minimum
-  minDate.setHours(0, 0, 0, 0);
+  // Formater le code automatiquement (ajouter le tiret)
+  const handleCodeChange = (text: string) => {
+    // Retirer tout sauf lettres et chiffres
+    const cleaned = text.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
 
-  const maxDate = new Date();
-  maxDate.setFullYear(maxDate.getFullYear() + 1); // 1 an maximum
+    // Ajouter le tiret après 4 caractères
+    let formatted = cleaned;
+    if (cleaned.length > 4) {
+      formatted = `${cleaned.substring(0, 4)}-${cleaned.substring(4, 8)}`;
+    }
+
+    setCode(formatted);
+    if (errors.code) setErrors(prev => ({ ...prev, code: undefined }));
+
+    // Passer au champ pseudo quand le code est complet
+    if (cleaned.length === 8) {
+      nicknameRef.current?.focus();
+    }
+  };
 
   // Validation du formulaire
   const validateForm = (): boolean => {
     const newErrors: typeof errors = {};
 
-    // Valider le nom du cercle
-    if (!circleName.trim()) {
-      newErrors.circleName = 'Le nom du cercle est requis';
-    } else if (circleName.length > 50) {
-      newErrors.circleName = 'Maximum 50 caractères';
+    const codeRegex = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/;
+    if (!code.trim()) {
+      newErrors.code = 'Le code du cercle est requis';
+    } else if (!codeRegex.test(code.toUpperCase().trim())) {
+      newErrors.code = 'Format invalide (XXXX-XXXX)';
     }
 
-    // Valider le pseudo
     if (!nickname.trim()) {
-      newErrors.nickname = 'Votre pseudo est requis';
+      newErrors.nickname = 'Ton pseudo est requis';
     } else if (nickname.length > 20) {
       newErrors.nickname = 'Maximum 20 caractères';
-    }
-
-    // Valider la date
-    if (expiresAt < minDate) {
-      newErrors.expiresAt = 'La date doit être au moins demain';
-    } else if (expiresAt > maxDate) {
-      newErrors.expiresAt = 'La date ne peut pas dépasser 1 an';
     }
 
     setErrors(newErrors);
@@ -96,21 +94,28 @@ export const CreateCircleScreen: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const result = await createCircle({
-        name: circleName.trim(),
-        organizerNickname: nickname.trim(),
-        expiresAt,
+      const result = await joinCircle({
+        code: code.trim(),
+        nickname: nickname.trim(),
         deviceId,
       });
 
       if (result.success && result.data) {
-        // Naviguer vers l'écran de succès
-        navigate('CircleCreated', {
-          circle: result.data.circle,
-          membership: result.data.membership,
-        });
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        // Naviguer vers le dashboard du cercle
+        reset([{ name: 'CircleMain' }]);
       } else {
-        Alert.alert('Erreur', result.error || 'Impossible de créer le cercle');
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+        // Afficher l'erreur dans le bon champ
+        const errorMsg = result.error || 'Impossible de rejoindre le cercle';
+
+        if (errorMsg.includes('pseudo')) {
+          setErrors({ nickname: errorMsg });
+        } else if (errorMsg.includes('code') || errorMsg.includes('introuvable') || errorMsg.includes('expiré') || errorMsg.includes('complet')) {
+          setErrors({ code: errorMsg });
+        } else {
+          Alert.alert('Erreur', errorMsg);
+        }
       }
     } catch (error: any) {
       Alert.alert('Erreur', error.message || 'Une erreur est survenue');
@@ -118,30 +123,6 @@ export const CreateCircleScreen: React.FC = () => {
       setIsSubmitting(false);
     }
   };
-
-  // Gestion du DatePicker
-  const handleDateChange = (event: any, selectedDate?: Date) => {
-    setShowDatePicker(Platform.OS === 'ios');
-    if (selectedDate) {
-      setExpiresAt(selectedDate);
-      setErrors(prev => ({ ...prev, expiresAt: undefined }));
-    }
-  };
-
-  // Formater la date pour l'affichage
-  const formatDate = (date: Date): string => {
-    return date.toLocaleDateString('fr-FR', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-  };
-
-  // Calculer le nombre de jours restants
-  const daysFromNow = Math.ceil(
-    (expiresAt.getTime() - Date.now()) / (1000 * 60 * 60 * 24)
-  );
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -163,48 +144,53 @@ export const CreateCircleScreen: React.FC = () => {
               <Ionicons name="arrow-back" size={24} color={colors.text} />
             </Pressable>
             <Text style={[styles.headerTitle, { color: colors.text }]}>
-              Créer un Cercle
+              Rejoindre un Cercle
             </Text>
             <View style={styles.headerSpacer} />
           </View>
 
+          {/* Illustration */}
+          <View style={styles.illustration}>
+            <View style={[styles.illustrationIcon, { backgroundColor: colors.primary + '15' }]}>
+              <Ionicons name="enter-outline" size={48} color={colors.primary} />
+            </View>
+            <Text style={[styles.illustrationText, { color: colors.textSecondary }]}>
+              Entre le code reçu de l'organisateur pour rejoindre son cercle
+            </Text>
+          </View>
+
           {/* Formulaire */}
           <View style={styles.form}>
-            {/* Champ Nom du cercle */}
+            {/* Champ Code du cercle */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, { color: colors.text }]}>
-                Nom du cercle
+                Code du cercle
               </Text>
               <TextInput
                 style={[
-                  styles.input,
+                  styles.codeInput,
                   {
                     backgroundColor: colors.surface,
                     color: colors.text,
-                    borderColor: errors.circleName ? colors.error : colors.border,
+                    borderColor: errors.code ? colors.error : colors.border,
                   },
                 ]}
-                placeholder="Ex: Cercle familial, Amis de la mosquée..."
+                placeholder="XXXX-XXXX"
                 placeholderTextColor={colors.textSecondary}
-                value={circleName}
-                onChangeText={text => {
-                  setCircleName(text);
-                  if (errors.circleName) setErrors(prev => ({ ...prev, circleName: undefined }));
-                }}
-                maxLength={50}
+                value={code}
+                onChangeText={handleCodeChange}
+                maxLength={9}
+                autoCapitalize="characters"
+                autoCorrect={false}
                 autoFocus
+                returnKeyType="next"
+                onSubmitEditing={() => nicknameRef.current?.focus()}
               />
-              <View style={styles.inputFooter}>
-                {errors.circleName ? (
-                  <Text style={[styles.errorText, { color: colors.error }]}>
-                    {errors.circleName}
-                  </Text>
-                ) : (
-                  <Text style={[styles.charCount, { color: colors.textSecondary }]}>
-                    {circleName.length}/50
-                  </Text>
-                )}
-              </View>
+              {errors.code && (
+                <Text style={[styles.errorText, { color: colors.error }]}>
+                  {errors.code}
+                </Text>
+              )}
             </View>
 
             {/* Champ Pseudo */}
@@ -213,6 +199,7 @@ export const CreateCircleScreen: React.FC = () => {
                 Ton pseudo
               </Text>
               <TextInput
+                ref={nicknameRef}
                 style={[
                   styles.input,
                   {
@@ -229,6 +216,8 @@ export const CreateCircleScreen: React.FC = () => {
                   if (errors.nickname) setErrors(prev => ({ ...prev, nickname: undefined }));
                 }}
                 maxLength={20}
+                returnKeyType="done"
+                onSubmitEditing={handleSubmit}
               />
               <View style={styles.inputFooter}>
                 {errors.nickname ? (
@@ -243,57 +232,11 @@ export const CreateCircleScreen: React.FC = () => {
               </View>
             </View>
 
-            {/* Champ Date limite */}
-            <View style={styles.inputGroup}>
-              <Text style={[styles.label, { color: colors.text }]}>
-                Date limite de la Khatma
-              </Text>
-              <Pressable
-                style={[
-                  styles.dateButton,
-                  {
-                    backgroundColor: colors.surface,
-                    borderColor: errors.expiresAt ? colors.error : colors.border,
-                  },
-                ]}
-                onPress={() => setShowDatePicker(true)}
-              >
-                <Ionicons name="calendar-outline" size={22} color={colors.primary} />
-                <View style={styles.dateTextContainer}>
-                  <Text style={[styles.dateText, { color: colors.text }]}>
-                    {formatDate(expiresAt)}
-                  </Text>
-                  <Text style={[styles.daysText, { color: colors.textSecondary }]}>
-                    Dans {daysFromNow} jour{daysFromNow > 1 ? 's' : ''}
-                  </Text>
-                </View>
-                <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
-              </Pressable>
-              {errors.expiresAt && (
-                <Text style={[styles.errorText, { color: colors.error, marginTop: Spacing.xs }]}>
-                  {errors.expiresAt}
-                </Text>
-              )}
-            </View>
-
-            {/* DatePicker */}
-            {showDatePicker && (
-              <DateTimePicker
-                value={expiresAt}
-                mode="date"
-                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                minimumDate={minDate}
-                maximumDate={maxDate}
-                onChange={handleDateChange}
-                locale="fr-FR"
-              />
-            )}
-
-            {/* Info sur le cercle */}
+            {/* Info */}
             <View style={[styles.infoCard, { backgroundColor: colors.surface }, Shadows.small]}>
               <Ionicons name="information-circle-outline" size={20} color={colors.primary} />
               <Text style={[styles.infoText, { color: colors.textSecondary }]}>
-                En tant qu'organisateur, tu pourras inviter jusqu'à 29 personnes et gérer les attributions des Juz.
+                Demande le code à l'organisateur du cercle. Il se trouve sur son écran de cercle.
               </Text>
             </View>
           </View>
@@ -315,8 +258,8 @@ export const CreateCircleScreen: React.FC = () => {
               <ActivityIndicator color="#fff" />
             ) : (
               <>
-                <Ionicons name="add-circle" size={22} color="#fff" />
-                <Text style={styles.submitButtonText}>Créer le Cercle</Text>
+                <Ionicons name="enter" size={22} color="#fff" />
+                <Text style={styles.submitButtonText}>Rejoindre</Text>
               </>
             )}
           </Pressable>
@@ -358,9 +301,27 @@ const styles = StyleSheet.create({
   headerSpacer: {
     width: 44,
   },
-  form: {
+  illustration: {
+    alignItems: 'center',
     paddingHorizontal: Spacing.screenHorizontal,
     paddingTop: Spacing.lg,
+    paddingBottom: Spacing.xl,
+  },
+  illustrationIcon: {
+    width: 88,
+    height: 88,
+    borderRadius: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Spacing.md,
+  },
+  illustrationText: {
+    fontSize: 15,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  form: {
+    paddingHorizontal: Spacing.screenHorizontal,
     gap: Spacing.xl,
   },
   inputGroup: {
@@ -369,6 +330,16 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 15,
     fontWeight: '600',
+  },
+  codeInput: {
+    height: 64,
+    borderRadius: Spacing.radiusMd,
+    borderWidth: 1,
+    paddingHorizontal: Spacing.lg,
+    fontSize: 28,
+    fontWeight: '700',
+    letterSpacing: 3,
+    textAlign: 'center',
   },
   input: {
     height: 52,
@@ -386,26 +357,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 13,
-  },
-  dateButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 60,
-    borderRadius: Spacing.radiusMd,
-    borderWidth: 1,
-    paddingHorizontal: Spacing.lg,
-    gap: Spacing.md,
-  },
-  dateTextContainer: {
-    flex: 1,
-  },
-  dateText: {
-    fontSize: 15,
-    fontWeight: '500',
-  },
-  daysText: {
-    fontSize: 13,
-    marginTop: 2,
   },
   infoCard: {
     flexDirection: 'row',
@@ -445,4 +396,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateCircleScreen;
+export default JoinCircleScreen;

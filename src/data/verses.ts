@@ -172,9 +172,18 @@ function dateSeedHash(dateStr: string): number {
   return Math.abs(hash);
 }
 
+/** Construit la date locale au format YYYY-MM-DD (heure locale, pas UTC) */
+function getLocalDateStr(): string {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
 /** Retourne un verset pseudo-aléatoire basé sur la date du jour */
 export const getVerseOfTheDay = (): VerseOfTheDay => {
-  const dateStr = new Date().toISOString().slice(0, 10);
+  const dateStr = getLocalDateStr();
   const globalIndex = dateSeedHash(dateStr) % 6236;
 
   // Trouver la sourate et le verset correspondant à l'index global

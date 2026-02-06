@@ -4,11 +4,16 @@
  */
 
 import React, { useState, useCallback, createContext, useContext, useEffect } from 'react';
-import { View, StyleSheet, BackHandler, Alert } from 'react-native';
+import { View, StyleSheet, BackHandler } from 'react-native';
 import {
   CircleScreen,
   CreateCircleScreen,
   CircleCreatedScreen,
+  JoinCircleScreen,
+  ManageAssignmentsScreen,
+  MyReadingScreen,
+  CircleEndedScreen,
+  JuzReaderScreen,
 } from '../screens/Circle';
 import type { Circle, CircleMember } from '../types/circle.types';
 
@@ -18,7 +23,11 @@ type CircleRoute =
   | { name: 'CreateCircle' }
   | { name: 'CircleCreated'; params: { circle: Circle; membership: CircleMember } }
   | { name: 'JoinCircle' }
-  | { name: 'CircleDashboard'; params: { circleId: string } };
+  | { name: 'CircleDashboard'; params: { circleId: string } }
+  | { name: 'ManageAssignments'; params: { circleId: string } }
+  | { name: 'MyReading'; params: { circleId: string } }
+  | { name: 'CircleEnded'; params: { circleName: string; completedJuz: number; totalJuz: number; reason: string } }
+  | { name: 'JuzReader'; params: { circleId: string; juzNumber: number } };
 
 // Contexte de navigation Cercle
 interface CircleNavigationContextType {
@@ -114,17 +123,22 @@ export const CircleNavigator: React.FC = () => {
         return <CircleCreatedScreen />;
 
       case 'JoinCircle':
-        // Placeholder pour l'écran de rejoindre (à implémenter dans une phase future)
-        Alert.alert(
-          'Bientôt disponible',
-          'La fonctionnalité pour rejoindre un cercle sera disponible prochainement.',
-          [{ text: 'OK', onPress: goBack }]
-        );
-        return <CircleScreen />;
+        return <JoinCircleScreen />;
 
       case 'CircleDashboard':
-        // Pour l'instant, retourne à l'écran principal qui affiche le dashboard
         return <CircleScreen />;
+
+      case 'ManageAssignments':
+        return <ManageAssignmentsScreen />;
+
+      case 'MyReading':
+        return <MyReadingScreen />;
+
+      case 'CircleEnded':
+        return <CircleEndedScreen />;
+
+      case 'JuzReader':
+        return <JuzReaderScreen />;
 
       default:
         return <CircleScreen />;

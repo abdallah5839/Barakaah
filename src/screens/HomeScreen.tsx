@@ -92,8 +92,20 @@ export const HomeScreen: React.FC = () => {
     }, [deviceReady, deviceId, loadUserCircle])
   );
 
-  // Date du jour pour déclencher le recalcul à minuit
-  const todayDateStr = new Date().toISOString().slice(0, 10);
+  // Date locale du jour — état réactif pour déclencher le recalcul quand la date change
+  const getLocalDate = () => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  };
+  const [todayDateStr, setTodayDateStr] = useState(getLocalDate);
+
+  // Mettre à jour la date quand l'écran reprend le focus (ex: lendemain)
+  useFocusEffect(
+    useCallback(() => {
+      const current = getLocalDate();
+      setTodayDateStr(prev => prev !== current ? current : prev);
+    }, [])
+  );
 
   // Dua du jour (basée sur la date)
   const duaOfTheDay = useMemo(() => getDuaOfTheDay(), [todayDateStr]);

@@ -10,3 +10,4 @@ export { VerseItem } from './VerseItem';
 export { ToggleButton } from './ToggleButton';
 export { SurahPicker } from './SurahPicker';
 export { AudioPlayer } from './AudioPlayer';
+export { TextControls, SurahBanner } from './Quran';

@@ -73,7 +73,7 @@ export const CircleCreatedScreen: React.FC = () => {
 
   // Aller au dashboard du cercle
   const goToDashboard = useCallback(() => {
-    // Reset la navigation pour revenir à l'écran principal du cercle
+    // Reset la navigation pour aller au dashboard
     reset([{ name: 'CircleMain' }]);
   }, [reset]);
 

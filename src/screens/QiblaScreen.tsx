@@ -18,6 +18,7 @@ import {
   Alert,
   Dimensions,
   ScrollView,
+  Platform,
 } from 'react-native';
 import { Magnetometer } from 'expo-sensors';
 import * as Location from 'expo-location';
@@ -127,6 +128,37 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
   const headingSubscription = useRef<any>(null);
   const mounted = useRef(true);
 
+  // Démarrer le magnétomètre brut (fiable sur Android)
+  const startMagnetometer = async (): Promise<boolean> => {
+    try {
+      const isAvailable = await Magnetometer.isAvailableAsync();
+      if (!isAvailable) return false;
+
+      Magnetometer.setUpdateInterval(100);
+      headingSubscription.current = Magnetometer.addListener((data) => {
+        if (!mounted.current) return;
+        // atan2(x, y) donne 0° quand le haut du téléphone pointe au nord magnétique
+        let fieldAngle = Math.atan2(data.x, data.y);
+        fieldAngle = (fieldAngle * 180) / Math.PI;
+        fieldAngle = (fieldAngle + 360) % 360;
+        const angle = (360 - fieldAngle) % 360;
+
+        // Filtre anti-jitter : ignorer les variations < 1°
+        let diff = angle - lastHeadingRef.current;
+        if (diff > 180) diff -= 360;
+        if (diff < -180) diff += 360;
+        if (Math.abs(diff) < 1) return;
+        lastHeadingRef.current = angle;
+
+        setHeading(angle);
+      });
+      console.log('🧭 [Qibla] Magnétomètre démarré');
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   // Setup unique : permissions → heading (rapide) → GPS position (lent)
   useEffect(() => {
     const setup = async () => {
@@ -142,56 +174,63 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
       // 2. Démarrer le cap IMMÉDIATEMENT (avant le GPS qui est lent)
       let headingStarted = false;
 
-      // Essai A : Location.watchHeadingAsync (fusion capteurs, vrai nord)
-      if (permissionGranted) {
-        try {
-          const sub = await Location.watchHeadingAsync((data) => {
-            if (!mounted.current) return;
-            const h = data.trueHeading >= 0 ? data.trueHeading : data.magHeading;
+      if (Platform.OS === 'android') {
+        // Sur Android : utiliser le magnétomètre directement
+        // Location.watchHeadingAsync est peu fiable sur Android (ne délivre souvent aucune donnée)
+        headingStarted = await startMagnetometer();
 
-            // Filtre anti-jitter : ignorer les variations < 1°
-            let diff = h - lastHeadingRef.current;
-            if (diff > 180) diff -= 360;
-            if (diff < -180) diff += 360;
-            if (Math.abs(diff) < 1) return;
-            lastHeadingRef.current = h;
-
-            setHeading(h);
-          });
-          headingSubscription.current = sub;
-          headingStarted = true;
-        } catch {
-          // Fallback vers magnétomètre brut
-        }
-      }
-
-      // Essai B : Magnétomètre brut (fallback)
-      if (!headingStarted) {
-        try {
-          const isAvailable = await Magnetometer.isAvailableAsync();
-          if (isAvailable) {
-            Magnetometer.setUpdateInterval(100);
-            headingSubscription.current = Magnetometer.addListener((data) => {
+        // Fallback : tenter Location.watchHeadingAsync si le magnétomètre échoue
+        if (!headingStarted && permissionGranted) {
+          try {
+            const sub = await Location.watchHeadingAsync((data) => {
               if (!mounted.current) return;
-              let fieldAngle = Math.atan2(data.x, data.y);
-              fieldAngle = (fieldAngle * 180) / Math.PI;
-              fieldAngle = (fieldAngle + 360) % 360;
-              const angle = (360 - fieldAngle) % 360;
+              const h = data.trueHeading >= 0 ? data.trueHeading : data.magHeading;
 
-              // Filtre anti-jitter : ignorer les variations < 1°
-              let diff = angle - lastHeadingRef.current;
+              let diff = h - lastHeadingRef.current;
               if (diff > 180) diff -= 360;
               if (diff < -180) diff += 360;
               if (Math.abs(diff) < 1) return;
-              lastHeadingRef.current = angle;
+              lastHeadingRef.current = h;
 
-              setHeading(angle);
+              setHeading(h);
             });
+            headingSubscription.current = sub;
             headingStarted = true;
+          } catch {
+            // Aucun capteur disponible
           }
-        } catch {
-          // Pas de capteur disponible
         }
+      } else {
+        // Sur iOS : Location.watchHeadingAsync fonctionne bien (fusion capteurs, vrai nord)
+        if (permissionGranted) {
+          try {
+            const sub = await Location.watchHeadingAsync((data) => {
+              if (!mounted.current) return;
+              const h = data.trueHeading >= 0 ? data.trueHeading : data.magHeading;
+
+              let diff = h - lastHeadingRef.current;
+              if (diff > 180) diff -= 360;
+              if (diff < -180) diff += 360;
+              if (Math.abs(diff) < 1) return;
+              lastHeadingRef.current = h;
+
+              setHeading(h);
+            });
+            headingSubscription.current = sub;
+            headingStarted = true;
+          } catch {
+            // Fallback vers magnétomètre brut
+          }
+        }
+
+        // Fallback iOS : magnétomètre brut
+        if (!headingStarted) {
+          headingStarted = await startMagnetometer();
+        }
+      }
+
+      if (!headingStarted) {
+        console.warn('⚠️ [Qibla] Aucun capteur de boussole disponible');
       }
 
       // 3. Position GPS (peut prendre plusieurs secondes)

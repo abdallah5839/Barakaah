@@ -1,8 +1,10 @@
 /**
  * Écran Coran (Lecteur)
- * Affichage des versets avec toggles arabe/français/phonétique
- * Audio Mishary Rashid Alafasy via EveryAyah.com
- * Optimisé : FlatList virtualisée, loading indicator, mémoïsation
+ * Design aligné sur JuzReaderScreen :
+ *   - Header fixe avec SurahPicker + TextControls
+ *   - SurahBanner dans la FlatList
+ *   - VerseItem avec arabicFontSize dynamique
+ *   - Barre de lecture flottante avec prev/next/pause/stop + auto-advance
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
@@ -21,7 +23,7 @@ import { Audio } from 'expo-av';
 import { useTheme } from '../contexts';
 import { Spacing, Typography } from '../constants';
 import { getVersesBySurah, surahs } from '../data';
-import { SurahPicker, ToggleButton, VerseItem } from '../components';
+import { SurahPicker, VerseItem, TextControls, SurahBanner } from '../components';
 import type { Verse } from '../data';
 
 // --- Audio helpers ---
@@ -43,7 +45,8 @@ export const CoranScreen: React.FC = () => {
   // États des toggles d'affichage
   const [showArabic, setShowArabic] = useState(true);
   const [showFrench, setShowFrench] = useState(true);
-  const [showPhonetic, setShowPhonetic] = useState(true);
+  const [showPhonetic, setShowPhonetic] = useState(false);
+  const [arabicFontSize, setArabicFontSize] = useState(24);
 
   // Versets de la sourate actuelle + état de chargement
   const [verses, setVerses] = useState<Verse[]>(getVersesBySurah(1));
@@ -68,9 +71,9 @@ export const CoranScreen: React.FC = () => {
     Audio.setAudioModeAsync({
       playsInSilentModeIOS: true,
       staysActiveInBackground: false,
+      shouldDuckAndroid: true,
     });
     return () => {
-      // Nettoyage à la destruction
       if (soundRef.current) {
         soundRef.current.unloadAsync();
         soundRef.current = null;
@@ -81,7 +84,6 @@ export const CoranScreen: React.FC = () => {
   // Charger les versets quand la sourate change
   useEffect(() => {
     setIsLoading(true);
-    // Stopper l'audio en cours si on change de sourate
     stopAudio();
 
     const task = InteractionManager.runAfterInteractions(() => {
@@ -149,7 +151,6 @@ export const CoranScreen: React.FC = () => {
       soundRef.current = sound;
       setIsBuffering(false);
     } catch {
-      // Erreur réseau / URL invalide → reset silencieux
       playingVerseRef.current = null;
       setPlayingVerse(null);
       setIsBuffering(false);
@@ -163,20 +164,16 @@ export const CoranScreen: React.FC = () => {
     }
     setIsBuffering(status.isBuffering ?? false);
 
-    // Verset terminé → passer au suivant
     if (status.didJustFinish) {
       const currentVerse = playingVerseRef.current;
       const allVerses = versesRef.current;
       if (currentVerse !== null && currentVerse < allVerses.length) {
         playVerse(currentVerse + 1);
       } else {
-        // Dernier verset : arrêter
         stopAudio();
       }
     }
   }, [playVerse, stopAudio]);
-
-  // --- Handlers pour VerseItem ---
 
   const handleVersePlay = useCallback((verseNumber: number) => {
     playVerse(verseNumber);
@@ -192,32 +189,27 @@ export const CoranScreen: React.FC = () => {
       showArabic={showArabic}
       showFrench={showFrench}
       showPhonetic={showPhonetic}
+      arabicFontSize={arabicFontSize}
       isPlaying={playingVerse === item.number && !isPaused}
       isBuffering={playingVerse === item.number && isBuffering}
       onPlay={handleVersePlay}
     />
-  ), [showArabic, showFrench, showPhonetic, playingVerse, isPaused, isBuffering, handleVersePlay]);
+  ), [showArabic, showFrench, showPhonetic, arabicFontSize, playingVerse, isPaused, isBuffering, handleVersePlay]);
 
-  // Clé unique pour chaque verset
   const keyExtractor = useCallback((item: Verse) => String(item.number), []);
 
-  // En-tête de la sourate
+  // En-tête de la sourate (dans la FlatList)
   const ListHeader = useCallback(() => {
     if (!currentSurah) return null;
+    const info = `${currentSurah.versesCount} versets \u2022 ${currentSurah.revelationType === 'mecquoise' ? 'Mecquoise' : 'Médinoise'}`;
     return (
-      <View style={styles.surahHeader}>
-        <Text style={[styles.surahArabicName, { color: colors.primary }]}>
-          {currentSurah.arabicName}
-        </Text>
-        <Text style={[styles.surahFrenchName, { color: colors.text }]}>
-          {currentSurah.frenchName}
-        </Text>
-        <Text style={[styles.surahInfo, { color: colors.textSecondary }]}>
-          {currentSurah.versesCount} versets • {currentSurah.revelationType === 'mecquoise' ? 'Mecquoise' : 'Médinoise'}
-        </Text>
-      </View>
+      <SurahBanner
+        arabicName={currentSurah.arabicName}
+        frenchName={currentSurah.frenchName}
+        subtitle={info}
+      />
     );
-  }, [currentSurah, colors]);
+  }, [currentSurah]);
 
   // Message si tout est désactivé
   const ListEmpty = useCallback(() => {
@@ -237,39 +229,27 @@ export const CoranScreen: React.FC = () => {
     <View style={{ height: playingVerse !== null ? 100 : Spacing['4xl'] }} />
   ), [playingVerse]);
 
-  // Nom du verset en cours de lecture pour la barre
-  const playingVerseInfo = playingVerse !== null
-    ? verses.find(v => v.number === playingVerse)
-    : null;
-
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      {/* Sélecteur de sourate */}
+      {/* ===== FIXED HEADER ===== */}
       <SurahPicker
         selectedSurah={selectedSurah}
         onSelectSurah={setSelectedSurah}
       />
 
-      {/* Barre de toggles */}
-      <View style={styles.togglesContainer}>
-        <ToggleButton
-          label="عربي"
-          isActive={showArabic}
-          onToggle={() => setShowArabic(!showArabic)}
-        />
-        <ToggleButton
-          label="FR"
-          isActive={showFrench}
-          onToggle={() => setShowFrench(!showFrench)}
-        />
-        <ToggleButton
-          label="Phonétique"
-          isActive={showPhonetic}
-          onToggle={() => setShowPhonetic(!showPhonetic)}
-        />
-      </View>
+      <TextControls
+        showArabic={showArabic}
+        showFrench={showFrench}
+        showPhonetic={showPhonetic}
+        arabicFontSize={arabicFontSize}
+        onToggleArabic={() => setShowArabic(v => !v)}
+        onToggleFrench={() => setShowFrench(v => !v)}
+        onTogglePhonetic={() => setShowPhonetic(v => !v)}
+        onDecreaseFontSize={() => setArabicFontSize(s => Math.max(20, s - 2))}
+        onIncreaseFontSize={() => setArabicFontSize(s => Math.min(36, s + 2))}
+      />
 
-      {/* Indicateur de chargement */}
+      {/* ===== VERSE LIST ===== */}
       {isLoading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={colors.primary} />
@@ -278,7 +258,6 @@ export const CoranScreen: React.FC = () => {
           </Text>
         </View>
       ) : (
-        /* Liste des versets virtualisée */
         <FlatList
           ref={flatListRef}
           data={verses}
@@ -293,14 +272,13 @@ export const CoranScreen: React.FC = () => {
           maxToRenderPerBatch={10}
           windowSize={5}
           removeClippedSubviews={true}
-          extraData={{ showArabic, showFrench, showPhonetic, playingVerse, isPaused, isBuffering }}
+          extraData={{ showArabic, showFrench, showPhonetic, arabicFontSize, playingVerse, isPaused, isBuffering }}
         />
       )}
 
-      {/* Barre de lecture flottante */}
+      {/* ===== FLOATING AUDIO PLAYER BAR ===== */}
       {playingVerse !== null && (
         <View style={[styles.playerBar, { backgroundColor: colors.surface, borderTopColor: colors.border }]}>
-          {/* Info verset */}
           <View style={styles.playerInfo}>
             <Text style={[styles.playerVerseNumber, { color: colors.primary }]} numberOfLines={1}>
               Verset {playingVerse}
@@ -312,9 +290,7 @@ export const CoranScreen: React.FC = () => {
             )}
           </View>
 
-          {/* Contrôles */}
           <View style={styles.playerControls}>
-            {/* Verset précédent */}
             <Pressable
               onPress={() => playingVerse > 1 && playVerse(playingVerse - 1)}
               style={({ pressed }) => [styles.playerSmallBtn, { opacity: pressed ? 0.5 : (playingVerse > 1 ? 1 : 0.3) }]}
@@ -324,7 +300,6 @@ export const CoranScreen: React.FC = () => {
               <Ionicons name="play-skip-back" size={20} color={colors.text} />
             </Pressable>
 
-            {/* Play / Pause */}
             <Pressable
               onPress={() => playVerse(playingVerse)}
               style={({ pressed }) => [
@@ -340,7 +315,6 @@ export const CoranScreen: React.FC = () => {
               )}
             </Pressable>
 
-            {/* Verset suivant */}
             <Pressable
               onPress={() => playingVerse < verses.length && playVerse(playingVerse + 1)}
               style={({ pressed }) => [styles.playerSmallBtn, { opacity: pressed ? 0.5 : (playingVerse < verses.length ? 1 : 0.3) }]}
@@ -350,7 +324,6 @@ export const CoranScreen: React.FC = () => {
               <Ionicons name="play-skip-forward" size={20} color={colors.text} />
             </Pressable>
 
-            {/* Stop */}
             <Pressable
               onPress={stopAudio}
               style={({ pressed }) => [styles.playerSmallBtn, { opacity: pressed ? 0.5 : 1 }]}
@@ -369,14 +342,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  togglesContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.screenHorizontal,
-    gap: 8,
-  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -389,24 +354,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: Spacing.screenHorizontal,
   },
-  surahHeader: {
-    alignItems: 'center',
-    paddingVertical: Spacing['2xl'],
-    marginBottom: Spacing.lg,
-  },
-  surahArabicName: {
-    fontSize: Typography.sizes['3xl'],
-    fontWeight: Typography.weights.bold,
-    marginBottom: Spacing.sm,
-  },
-  surahFrenchName: {
-    fontSize: Typography.sizes.xl,
-    fontWeight: Typography.weights.semibold,
-    marginBottom: Spacing.xs,
-  },
-  surahInfo: {
-    fontSize: Typography.sizes.sm,
-  },
   noContentContainer: {
     alignItems: 'center',
     paddingVertical: Spacing['4xl'],
@@ -415,8 +362,7 @@ const styles = StyleSheet.create({
     fontSize: Typography.sizes.md,
     textAlign: 'center',
   },
-
-  // --- Barre de lecture flottante ---
+  // --- Floating audio player bar ---
   playerBar: {
     position: 'absolute',
     bottom: 0,
