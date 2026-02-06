@@ -40,8 +40,11 @@ import { PrayerTimes, Coordinates, CalculationMethod, CalculationParameters } fr
 
 // Import du module Dua
 import { DuaProvider, ThemeProvider as DuaThemeProvider } from './src/contexts';
+import { DeviceProvider } from './src/contexts/DeviceContext';
 import { DuaNavigator } from './src/navigation';
 import { QiblaScreen, CalendrierHijriScreen, AboutScreen, DownloadsScreen } from './src/screens';
+import { CircleNavigator } from './src/navigation/CircleNavigator';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -230,7 +233,7 @@ const usePrayerTimesRealtime = (latitude: number, longitude: number, timezone: s
 };
 
 // ===== TYPES =====
-type ScreenName = 'home' | 'coran' | 'prieres' | 'ramadan' | 'dua' | 'settings' | 'qibla' | 'calendrier' | 'about' | 'downloads';
+type ScreenName = 'home' | 'coran' | 'prieres' | 'ramadan' | 'dua' | 'settings' | 'qibla' | 'calendrier' | 'about' | 'downloads' | 'cercle';
 
 // Titres des écrans pour le header
 const SCREEN_TITLES: Record<ScreenName, string> = {
@@ -244,6 +247,7 @@ const SCREEN_TITLES: Record<ScreenName, string> = {
   calendrier: 'Calendrier Hijri',
   about: 'À propos',
   downloads: 'Téléchargements',
+  cercle: 'Cercle de Lecture',
 };
 
 interface Bookmark {
@@ -1207,6 +1211,82 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
   const { streak, lastRead, settings } = useSettings();
   const ramadanInfo = getRamadanInfo();
 
+  // État du cercle de l'utilisateur
+  const [userCircle, setUserCircle] = useState<{
+    circle: { id: string; name: string; completed_juz: number; expires_at: string };
+    membership: { nickname: string };
+  } | null>(null);
+
+  // ===== TEST CONNEXION SUPABASE + DEVICE ID (TEMPORAIRE) =====
+  useEffect(() => {
+    const testAll = async () => {
+      try {
+        // 1. Test Device ID
+        const { getDeviceId } = await import('./src/services/deviceService');
+        const deviceId = await getDeviceId();
+        console.log('📱 [Test] Device ID:', deviceId);
+
+        // 2. Test Supabase
+        const { supabase, isSupabaseConfigured } = await import('./src/services/supabase');
+
+        if (!isSupabaseConfigured()) {
+          console.log('⚠️ [Supabase] Non configuré - vérifiez le fichier .env');
+          return;
+        }
+
+        console.log('🔄 [Supabase] Test de connexion...');
+        const startTime = Date.now();
+
+        const { error } = await supabase
+          .from('circles')
+          .select('count', { count: 'exact', head: true });
+
+        const latency = Date.now() - startTime;
+
+        if (error) {
+          if (error.message.includes('does not exist') || error.code === '42P01') {
+            console.log(`✅ [Supabase] Connexion OK (${latency}ms) - Tables non créées`);
+            console.log('📋 [Supabase] Exécutez le SQL dans supabase/migrations/001_create_circle_tables.sql');
+          } else {
+            console.error('❌ [Supabase] Erreur:', error.message);
+          }
+        } else {
+          console.log(`✅ [Supabase] Connexion établie (${latency}ms) - Tables OK`);
+
+          // 3. Test checkUserCircle (seulement si tables OK)
+          const { checkUserCircle } = await import('./src/services/circleService');
+          const userCircle = await checkUserCircle(deviceId);
+
+          if (userCircle) {
+            console.log('🔵 [Test] Utilisateur dans cercle:', userCircle.circle.name);
+          } else {
+            console.log('⚪ [Test] Utilisateur sans cercle (normal)');
+          }
+        }
+      } catch (err: any) {
+        console.error('❌ [Test] Erreur:', err.message);
+      }
+    };
+
+    testAll();
+  }, []);
+
+  // Charger le cercle de l'utilisateur
+  useEffect(() => {
+    const loadCircle = async () => {
+      try {
+        const { getDeviceId } = await import('./src/services/deviceService');
+        const { checkUserCircle } = await import('./src/services/circleService');
+        const deviceId = await getDeviceId();
+        const result = await checkUserCircle(deviceId);
+        setUserCircle(result);
+      } catch (error) {
+        console.log('Erreur chargement cercle:', error);
+      }
+    };
+    loadCircle();
+  }, []);
+
   // Utiliser le hook temps réel pour les horaires de prière
   const { nextPrayer, countdown, currentTime } = usePrayerTimesRealtime(
     settings.latitude || DEFAULT_LATITUDE,
@@ -1414,6 +1494,48 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
             </PressableScale>
           </FadeInView>
         )}
+
+        {/* Cercle de Lecture Card */}
+        <FadeInView delay={360}>
+          <PressableScale onPress={() => onNavigate('cercle')}>
+            <GlassCard colors={colors} style={styles.circleHomeCard}>
+              <View style={[styles.circleHomeIcon, { backgroundColor: colors.primary + '20' }]}>
+                <Ionicons name="people" size={24} color={colors.primary} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.circleHomeTitle, { color: colors.text }]}>
+                  {userCircle ? userCircle.circle.name : 'Cercle de Lecture'}
+                </Text>
+                {userCircle ? (
+                  <>
+                    <View style={styles.circleHomeProgressRow}>
+                      <Text style={[styles.circleHomeSubtitle, { color: colors.textSecondary }]}>
+                        {userCircle.circle.completed_juz}/30 Juz
+                      </Text>
+                      <Text style={[styles.circleHomeDays, { color: colors.textSecondary }]}>
+                        {(() => {
+                          const d = Math.ceil((new Date(userCircle.circle.expires_at).getTime() - Date.now()) / 86400000);
+                          return d > 0 ? `${d}j restant${d > 1 ? 's' : ''}` : 'Expiré';
+                        })()}
+                      </Text>
+                    </View>
+                    <View style={[styles.circleHomeMiniBar, { backgroundColor: colors.border }]}>
+                      <View style={[styles.circleHomeMiniBarFill, {
+                        backgroundColor: colors.primary,
+                        width: `${Math.round((userCircle.circle.completed_juz / 30) * 100)}%`,
+                      }]} />
+                    </View>
+                  </>
+                ) : (
+                  <Text style={[styles.circleHomeSubtitle, { color: colors.textSecondary }]}>
+                    Lisez le Coran en famille
+                  </Text>
+                )}
+              </View>
+              <Ionicons name="chevron-forward" size={24} color={colors.textSecondary} />
+            </GlassCard>
+          </PressableScale>
+        </FadeInView>
 
         {/* Ramadan Card - Affichee si pendant le Ramadan */}
         {ramadanInfo.status === 'during' && (
@@ -3905,6 +4027,10 @@ const PlaceholderScreen = ({ title, icon, gradient }: { title: string; icon: str
 // ===== TAB BAR =====
 const TabBar = ({ current, onNav }: { current: ScreenName; onNav: (s: ScreenName) => void }) => {
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
+
+  // Padding bottom dynamique : prend en compte la zone safe sur Android et iOS
+  const bottomPadding = Math.max(insets.bottom, Platform.OS === 'ios' ? 20 : 8);
 
   const tabs: { name: ScreenName; icon: string; label: string }[] = [
     { name: 'home', icon: 'home-outline', label: 'Accueil' },
@@ -3916,7 +4042,7 @@ const TabBar = ({ current, onNav }: { current: ScreenName; onNav: (s: ScreenName
   ];
 
   return (
-    <View style={[styles.tabBar, { backgroundColor: colors.surface, borderTopColor: colors.border, shadowColor: '#000', shadowOffset: { width: 0, height: -2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 10 }]}>
+    <View style={[styles.tabBar, { backgroundColor: colors.surface, borderTopColor: colors.border, shadowColor: '#000', shadowOffset: { width: 0, height: -2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 10, paddingBottom: bottomPadding, height: 57 + bottomPadding }]}>
       {tabs.map(tab => {
         const focused = current === tab.name;
         return (
@@ -3924,9 +4050,9 @@ const TabBar = ({ current, onNav }: { current: ScreenName; onNav: (s: ScreenName
             <Ionicons
               name={(focused ? tab.icon.replace('-outline', '') : tab.icon) as any}
               size={24}
-              color={focused ? colors.primary : colors.textMuted}
+              color={focused ? colors.primary : colors.textSecondary}
             />
-            <Text style={[styles.tabLabel, { color: focused ? colors.primary : colors.textMuted }]}>{tab.label}</Text>
+            <Text style={[styles.tabLabel, { color: focused ? colors.primary : colors.textSecondary }]}>{tab.label}</Text>
             {focused && <View style={[styles.tabIndicator, { backgroundColor: colors.primary }]} />}
           </PressableScale>
         );
@@ -3984,6 +4110,18 @@ const AppContent = () => {
       case 'qibla': return <QiblaScreen navigation={{ goBack }} isDark={isDark} />;
       case 'calendrier': return <CalendrierHijriScreen navigation={{ goBack }} isDark={isDark} />;
       case 'about': return <AboutScreen navigation={{ goBack }} isDark={isDark} />;
+      case 'cercle': return (
+        <DuaThemeProvider>
+          <View style={{ flex: 1 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 }}>
+              <Pressable onPress={goBack} style={{ padding: 8 }}>
+                <Ionicons name="arrow-back" size={24} color={isDark ? '#FFF' : '#000'} />
+              </Pressable>
+            </View>
+            <CircleNavigator />
+          </View>
+        </DuaThemeProvider>
+      );
       case 'downloads': return <DownloadsScreen navigation={{ goBack }} isDark={isDark} />;
     }
   };
@@ -4001,13 +4139,17 @@ const AppContent = () => {
 
 export default function App() {
   return (
-    <SettingsProvider>
-      <ThemeProvider>
-        <DuaProvider>
-          <AppContent />
-        </DuaProvider>
-      </ThemeProvider>
-    </SettingsProvider>
+    <SafeAreaProvider>
+      <DeviceProvider>
+        <SettingsProvider>
+          <ThemeProvider>
+            <DuaProvider>
+              <AppContent />
+            </DuaProvider>
+          </ThemeProvider>
+        </SettingsProvider>
+      </DeviceProvider>
+    </SafeAreaProvider>
   );
 }
 
@@ -4056,6 +4198,16 @@ const styles = StyleSheet.create({
   lastReadTitle: { fontSize: 14, fontWeight: '600' },
   lastReadText: { fontSize: 16, fontWeight: '500', marginTop: 2 },
   lastReadTime: { fontSize: 12, marginTop: 2 },
+
+  // Circle Home Card
+  circleHomeCard: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
+  circleHomeIcon: { width: 48, height: 48, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
+  circleHomeTitle: { fontSize: 14, fontWeight: '600' },
+  circleHomeSubtitle: { fontSize: 13, marginTop: 2 },
+  circleHomeProgressRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 2 },
+  circleHomeDays: { fontSize: 12 },
+  circleHomeMiniBar: { height: 4, borderRadius: 2, marginTop: 6, overflow: 'hidden' as const },
+  circleHomeMiniBarFill: { height: '100%', borderRadius: 2 },
 
   // Glass Card
   glassCard: { borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.08, shadowRadius: 8, elevation: 4 },
@@ -4121,10 +4273,10 @@ const styles = StyleSheet.create({
   quickLabel: { color: '#FFF', marginTop: 8, fontSize: 14, fontWeight: '600' },
 
   // Tab Bar - centrage parfait
-  tabBar: { flexDirection: 'row', justifyContent: 'space-around', borderTopWidth: 1, height: Platform.OS === 'ios' ? 85 : 65, paddingBottom: Platform.OS === 'ios' ? 20 : 8, paddingTop: 8, paddingHorizontal: 0 },
+  tabBar: { flexDirection: 'row', justifyContent: 'space-around', borderTopWidth: 1, paddingTop: 8, paddingHorizontal: 0 },
   tabBtn: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 4 },
   tabLabel: { fontSize: 10, marginTop: 4, fontWeight: '500', textAlign: 'center' },
-  tabIndicator: { position: 'absolute', bottom: Platform.OS === 'ios' ? 4 : 2, width: 4, height: 4, borderRadius: 2 },
+  tabIndicator: { position: 'absolute', bottom: 2, width: 4, height: 4, borderRadius: 2 },
 
   // Coran Screen
   screenTitle: { fontSize: 14, fontWeight: '600', textAlign: 'center', marginTop: Platform.OS === 'android' ? 0 : 40, letterSpacing: 1, textTransform: 'uppercase' },

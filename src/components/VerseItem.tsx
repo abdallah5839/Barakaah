@@ -19,6 +19,7 @@ interface VerseItemProps {
   isPlaying?: boolean;
   isBuffering?: boolean;
   onPlay?: (verseNumber: number) => void;
+  arabicFontSize?: number;
 }
 
 const VerseItemInner: React.FC<VerseItemProps> = ({
@@ -29,6 +30,7 @@ const VerseItemInner: React.FC<VerseItemProps> = ({
   isPlaying = false,
   isBuffering = false,
   onPlay,
+  arabicFontSize,
 }) => {
   const { colors } = useTheme();
 
@@ -68,7 +70,11 @@ const VerseItemInner: React.FC<VerseItemProps> = ({
       {/* Contenu du verset */}
       <View style={styles.content}>
         {showArabic && (
-          <Text style={[styles.arabicText, { color: colors.text }]}>
+          <Text style={[
+            styles.arabicText,
+            { color: colors.text },
+            arabicFontSize != null && { fontSize: arabicFontSize, lineHeight: arabicFontSize * 2 },
+          ]}>
             {verse.arabic}
           </Text>
         )}
