@@ -23,37 +23,15 @@ import {
 import { Magnetometer } from 'expo-sensors';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../contexts';
 import { Spacing, Typography, Shadows } from '../constants';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const COMPASS_SIZE = Math.min(SCREEN_WIDTH * 0.78, 320);
 
-// Coordonnées de la Kaaba (Mecque)
 const KAABA_COORDS = {
   latitude: 21.4225,
   longitude: 39.8262,
-};
-
-// Couleurs
-const Colors = {
-  light: {
-    primary: '#059669',
-    secondary: '#D4AF37',
-    background: '#FAFAFA',
-    surface: '#FFFFFF',
-    text: '#1A1A1A',
-    textSecondary: '#6B7280',
-    border: '#E5E7EB',
-  },
-  dark: {
-    primary: '#10B981',
-    secondary: '#FBBF24',
-    background: '#0F172A',
-    surface: '#1E293B',
-    text: '#F1F5F9',
-    textSecondary: '#94A3B8',
-    border: '#334155',
-  },
 };
 
 interface QiblaScreenProps {
@@ -106,8 +84,8 @@ const getCardinalDirection = (angle: number): string => {
   return directions[index];
 };
 
-export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = false }) => {
-  const colors = isDark ? Colors.dark : Colors.light;
+export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark: _isDark = false }) => {
+  const { colors } = useTheme();
 
   // États
   const [heading, setHeading] = useState(0);
@@ -327,11 +305,13 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
-      <View style={[styles.header, { borderBottomColor: colors.border }]}>
+      <View style={[styles.header, { borderBottomColor: colors.separator }]}>
         <Pressable onPress={goBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={colors.text} />
+          <Ionicons name="arrow-back" size={22} color={colors.text} />
         </Pressable>
-        <Text style={[styles.headerTitle, { color: colors.text }]}>Direction Qibla</Text>
+        <View style={styles.headerCenter}>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>Direction Qibla</Text>
+        </View>
         <View style={styles.headerSpacer} />
       </View>
 
@@ -474,8 +454,8 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
         {/* Informations */}
         <View style={styles.infoContainer}>
           <View style={[styles.infoCard, { backgroundColor: colors.surface }, Shadows.small]}>
-            <View style={[styles.infoIconContainer, { backgroundColor: colors.primary + '15' }]}>
-              <Ionicons name="navigate" size={24} color={colors.primary} />
+            <View style={[styles.infoIconContainer, { backgroundColor: colors.primaryLight }]}>
+              <Ionicons name="navigate" size={22} color={colors.primary} />
             </View>
             <View style={styles.infoContent}>
               <Text style={[styles.infoLabel, { color: colors.textSecondary }]}>Distance</Text>
@@ -484,8 +464,8 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
           </View>
 
           <View style={[styles.infoCard, { backgroundColor: colors.surface }, Shadows.small]}>
-            <View style={[styles.infoIconContainer, { backgroundColor: colors.secondary + '15' }]}>
-              <Ionicons name="compass" size={24} color={colors.secondary} />
+            <View style={[styles.infoIconContainer, { backgroundColor: colors.secondaryLight }]}>
+              <Ionicons name="compass" size={22} color={colors.secondary} />
             </View>
             <View style={styles.infoContent}>
               <Text style={[styles.infoLabel, { color: colors.textSecondary }]}>Direction</Text>
@@ -533,11 +513,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  headerTitle: {
+  headerCenter: {
     flex: 1,
+    alignItems: 'center',
+  },
+  headerTitle: {
     fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.bold,
-    textAlign: 'center',
+    fontWeight: '700',
   },
   headerSpacer: {
     width: 44,

@@ -1,7 +1,5 @@
 /**
- * Composant NextPrayerCard
- * Affiche la prochaine prière avec un design mis en avant (gradient)
- * Avec countdown temps réel et animation si urgente (< 5 min)
+ * NextPrayerCard — Prochaine prière avec gradient vert et accent doré
  */
 
 import React, { useEffect, useRef } from 'react';
@@ -26,134 +24,142 @@ export const NextPrayerCard: React.FC<NextPrayerCardProps> = ({
   const { colors, isDark } = useTheme();
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
-  // Animation de pulsation si moins de 5 minutes
   useEffect(() => {
     if (countdown.isUrgent) {
       const pulse = Animated.loop(
         Animated.sequence([
           Animated.timing(pulseAnim, {
-            toValue: 1.05,
-            duration: 500,
+            toValue: 1.03,
+            duration: 600,
             easing: Easing.inOut(Easing.ease),
             useNativeDriver: true,
           }),
           Animated.timing(pulseAnim, {
             toValue: 1,
-            duration: 500,
+            duration: 600,
             easing: Easing.inOut(Easing.ease),
             useNativeDriver: true,
           }),
         ])
       );
       pulse.start();
-
       return () => pulse.stop();
     } else {
       pulseAnim.setValue(1);
     }
   }, [countdown.isUrgent, pulseAnim]);
 
-  if (!prayer) {
-    return null;
-  }
+  if (!prayer) return null;
 
-  // Couleurs du gradient selon le thème et l'urgence
-  const getGradientColors = (): readonly [string, string, ...string[]] => {
-    if (countdown.isUrgent) {
-      // Rouge/orange pour l'urgence
-      return isDark
-        ? ['#F97316', '#EA580C'] // Orange (dark mode)
-        : ['#EA580C', '#C2410C']; // Orange foncé (light mode)
-    }
-    return isDark
-      ? ['#10B981', '#059669'] // Vert clair vers vert foncé (dark mode)
-      : ['#059669', '#047857']; // Vert foncé vers plus foncé (light mode)
-  };
+  const gradientColors: [string, string] = countdown.isUrgent
+    ? [colors.prayerUrgentStart, colors.prayerUrgentEnd]
+    : [colors.prayerGradientStart, colors.prayerGradientEnd];
 
   return (
     <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
-      <LinearGradient
-        colors={getGradientColors()}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={[styles.container, Shadows.large]}
-      >
-        <View style={styles.header}>
-          <Ionicons name="time-outline" size={24} color="#FFFFFF" />
-          <Text style={styles.label}>Prochaine prière</Text>
-          {countdown.isUrgent && (
-            <View style={styles.urgentBadge}>
-              <Ionicons name="alert-circle" size={14} color="#FFFFFF" />
-              <Text style={styles.urgentText}>Bientôt!</Text>
+      <View style={[styles.outerWrap, Shadows.medium]}>
+        <LinearGradient
+          colors={gradientColors}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.container}
+        >
+          {/* Gold accent line at top */}
+          <View style={styles.goldAccent} />
+
+          <View style={styles.header}>
+            <View style={styles.headerIcon}>
+              <Ionicons name="time-outline" size={18} color="rgba(255,255,255,0.9)" />
             </View>
-          )}
-        </View>
-
-        <View style={styles.content}>
-          <View style={styles.prayerInfo}>
-            <Text style={styles.prayerName}>{prayer.nameFrench}</Text>
-            <Text style={styles.prayerArabic}>{prayer.nameArabic}</Text>
+            <Text style={styles.label}>Prochaine prière</Text>
+            {countdown.isUrgent && (
+              <View style={styles.urgentBadge}>
+                <Ionicons name="alert-circle" size={13} color="#FFF" />
+                <Text style={styles.urgentText}>Bientôt</Text>
+              </View>
+            )}
           </View>
 
-          <View style={styles.timeInfo}>
-            <Text style={styles.time}>{prayer.timeString}</Text>
-            <Text style={[styles.countdown, countdown.isUrgent && styles.urgentCountdown]}>
-              {countdownString}
-            </Text>
+          <View style={styles.content}>
+            <View style={styles.prayerInfo}>
+              <Text style={styles.prayerName}>{prayer.nameFrench}</Text>
+              <Text style={styles.prayerArabic}>{prayer.nameArabic}</Text>
+            </View>
+            <View style={styles.timeInfo}>
+              <Text style={styles.time}>{prayer.timeString}</Text>
+              <Text style={[styles.countdown, countdown.isUrgent && styles.urgentCountdown]}>
+                {countdownString}
+              </Text>
+            </View>
           </View>
-        </View>
 
-        {/* Barre de progression visuelle */}
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBar}>
-            <View
-              style={[
-                styles.progressFill,
-                {
-                  // Calculer le pourcentage (max 6h = 21600 secondes)
-                  width: `${Math.min(100, ((21600 - countdown.totalSeconds) / 21600) * 100)}%`,
-                },
-              ]}
-            />
+          <View style={styles.progressContainer}>
+            <View style={styles.progressBar}>
+              <View
+                style={[
+                  styles.progressFill,
+                  { width: `${Math.min(100, ((21600 - countdown.totalSeconds) / 21600) * 100)}%` },
+                ]}
+              />
+            </View>
           </View>
-        </View>
-      </LinearGradient>
+        </LinearGradient>
+      </View>
     </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    borderRadius: Spacing.radiusXl,
-    padding: Spacing['2xl'],
+  outerWrap: {
     marginHorizontal: Spacing.screenHorizontal,
     marginVertical: Spacing.md,
+    borderRadius: Spacing.radiusXl,
+    overflow: 'hidden',
+  },
+  container: {
+    padding: Spacing['2xl'],
+    paddingTop: Spacing.lg,
+  },
+  goldAccent: {
+    height: 3,
+    backgroundColor: '#D4AF37',
+    borderRadius: 2,
+    marginBottom: Spacing.md,
+    opacity: 0.6,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: Spacing.lg,
   },
+  headerIcon: {
+    width: 30,
+    height: 30,
+    borderRadius: 10,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   label: {
     fontSize: Typography.sizes.sm,
-    color: 'rgba(255, 255, 255, 0.9)',
+    color: 'rgba(255,255,255,0.9)',
     marginLeft: Spacing.sm,
-    fontWeight: Typography.weights.medium,
+    fontWeight: '500',
     flex: 1,
   },
   urgentBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
     borderRadius: Spacing.radiusFull,
+    gap: 4,
   },
   urgentText: {
-    fontSize: Typography.sizes.xs,
-    color: '#FFFFFF',
-    fontWeight: Typography.weights.bold,
-    marginLeft: Spacing.xs,
+    fontSize: 11,
+    color: '#FFF',
+    fontWeight: '700',
   },
   content: {
     flexDirection: 'row',
@@ -164,45 +170,45 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   prayerName: {
-    fontSize: Typography.sizes['2xl'],
-    fontWeight: Typography.weights.bold,
-    color: '#FFFFFF',
-    marginBottom: Spacing.xs,
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#FFF',
+    marginBottom: 4,
   },
   prayerArabic: {
     fontSize: Typography.sizes.lg,
-    color: 'rgba(255, 255, 255, 0.85)',
+    color: 'rgba(255,255,255,0.8)',
   },
   timeInfo: {
     alignItems: 'flex-end',
   },
   time: {
-    fontSize: Typography.sizes['3xl'],
-    fontWeight: Typography.weights.bold,
-    color: '#FFFFFF',
-    marginBottom: Spacing.xs,
+    fontSize: 30,
+    fontWeight: '800',
+    color: '#FFF',
+    marginBottom: 4,
   },
   countdown: {
     fontSize: Typography.sizes.md,
-    color: 'rgba(255, 255, 255, 0.9)',
-    fontWeight: Typography.weights.semibold,
+    color: 'rgba(255,255,255,0.9)',
+    fontWeight: '600',
   },
   urgentCountdown: {
     fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.bold,
+    fontWeight: '800',
   },
   progressContainer: {
     marginTop: Spacing.lg,
   },
   progressBar: {
     height: 4,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    backgroundColor: 'rgba(255,255,255,0.25)',
     borderRadius: 2,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: 'rgba(255,255,255,0.8)',
     borderRadius: 2,
   },
 });

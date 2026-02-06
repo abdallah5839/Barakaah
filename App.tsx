@@ -554,28 +554,30 @@ const getSpecialDayDescription = (ramadanDay: number): string | null => {
 
 const Colors = {
   light: {
-    primary: '#059669',
-    primaryDark: '#047857',
+    primary: '#16a34a',
+    primaryDark: '#166534',
     secondary: '#D4AF37',
-    background: '#FAFAFA',
+    secondaryLight: '#F4E4BA',
+    background: '#FFFFFF',
     backgroundGradient: ['#FFFFFF', '#F0FDF4'] as const,
-    surface: '#FFFFFF',
+    surface: '#F9FAFB',
     surfaceElevated: 'rgba(255, 255, 255, 0.95)',
-    text: '#1A1A1A',
+    text: '#1F2937',
     textSecondary: '#6B7280',
     textMuted: '#9CA3AF',
     border: '#E5E7EB',
     borderLight: 'rgba(229, 231, 235, 0.5)',
     glassBg: 'rgba(255, 255, 255, 0.85)',
     glassStroke: 'rgba(255, 255, 255, 0.5)',
-    success: '#22C55E',
-    error: '#EF4444',
-    prayerCardGradient: ['#059669', '#047857', '#065F46'] as const,
+    success: '#16a34a',
+    error: '#DC2626',
+    prayerCardGradient: ['#16a34a', '#166534', '#14532d'] as const,
   },
   dark: {
-    primary: '#10B981',
-    primaryDark: '#059669',
+    primary: '#22c55e',
+    primaryDark: '#16a34a',
     secondary: '#FBBF24',
+    secondaryLight: '#78350F',
     background: '#0F172A',
     backgroundGradient: ['#0F172A', '#1E293B'] as const,
     surface: '#1E293B',
@@ -587,9 +589,9 @@ const Colors = {
     borderLight: 'rgba(51, 65, 85, 0.5)',
     glassBg: 'rgba(30, 41, 59, 0.85)',
     glassStroke: 'rgba(255, 255, 255, 0.1)',
-    success: '#22C55E',
+    success: '#22c55e',
     error: '#EF4444',
-    prayerCardGradient: ['#10B981', '#059669', '#047857'] as const,
+    prayerCardGradient: ['#22c55e', '#16a34a', '#166534'] as const,
   },
 };
 
@@ -4272,11 +4274,11 @@ const styles = StyleSheet.create({
   quickCard: { height: 100, borderRadius: 20, alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 8, elevation: 5 },
   quickLabel: { color: '#FFF', marginTop: 8, fontSize: 14, fontWeight: '600' },
 
-  // Tab Bar - centrage parfait
+  // Tab Bar - design luxueux
   tabBar: { flexDirection: 'row', justifyContent: 'space-around', borderTopWidth: 1, paddingTop: 8, paddingHorizontal: 0 },
   tabBtn: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 4 },
-  tabLabel: { fontSize: 10, marginTop: 4, fontWeight: '500', textAlign: 'center' },
-  tabIndicator: { position: 'absolute', bottom: 2, width: 4, height: 4, borderRadius: 2 },
+  tabLabel: { fontSize: 10, marginTop: 3, fontWeight: '600', textAlign: 'center', letterSpacing: 0.2 },
+  tabIndicator: { position: 'absolute', bottom: 2, width: 20, height: 3, borderRadius: 2 },
 
   // Coran Screen
   screenTitle: { fontSize: 14, fontWeight: '600', textAlign: 'center', marginTop: Platform.OS === 'android' ? 0 : 40, letterSpacing: 1, textTransform: 'uppercase' },

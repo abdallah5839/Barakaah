@@ -1,7 +1,6 @@
 /**
- * SurahBanner - Bandeau d'en-tête d'une sourate
- * Affiche le nom arabe, le nom français, et des infos optionnelles.
- * Réutilisé par CoranScreen (en ListHeader) et JuzReaderScreen (séparateur de sourate).
+ * SurahBanner — Bandeau d'en-tête d'une sourate avec design luxueux
+ * Accent doré, calligraphie arabe mise en valeur
  */
 
 import React from 'react';
@@ -12,7 +11,6 @@ import { Spacing } from '../../constants';
 interface SurahBannerProps {
   arabicName: string;
   frenchName: string;
-  /** Ligne d'info supplémentaire (ex: "286 versets • Médinoise" ou "N°2") */
   subtitle?: string;
 }
 
@@ -24,8 +22,11 @@ export const SurahBanner: React.FC<SurahBannerProps> = ({
   const { colors } = useTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.primary + '10' }]}>
-      <Text style={[styles.arabicName, { color: colors.primary }]}>
+    <View style={[styles.container, { backgroundColor: colors.secondaryLight + '40' }]}>
+      {/* Gold accent line */}
+      <View style={[styles.goldLine, { backgroundColor: colors.secondary }]} />
+
+      <Text style={[styles.arabicName, { color: colors.secondary }]}>
         {arabicName}
       </Text>
       <Text style={[styles.frenchName, { color: colors.text }]}>
@@ -36,6 +37,11 @@ export const SurahBanner: React.FC<SurahBannerProps> = ({
           {subtitle}
         </Text>
       ) : null}
+
+      {/* Bismillah */}
+      <Text style={[styles.bismillah, { color: colors.secondary + 'AA' }]}>
+        ﷽
+      </Text>
     </View>
   );
 };
@@ -43,13 +49,19 @@ export const SurahBanner: React.FC<SurahBannerProps> = ({
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    paddingVertical: Spacing.lg,
+    paddingVertical: Spacing.xl,
     marginTop: Spacing.lg,
     marginBottom: Spacing.sm,
-    borderRadius: Spacing.radiusMd,
+    borderRadius: Spacing.radiusLg,
+  },
+  goldLine: {
+    width: 40,
+    height: 3,
+    borderRadius: 2,
+    marginBottom: Spacing.md,
   },
   arabicName: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: '700',
     marginBottom: 4,
   },
@@ -60,6 +72,10 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 12,
     marginTop: 2,
+  },
+  bismillah: {
+    fontSize: 28,
+    marginTop: Spacing.md,
   },
 });
 

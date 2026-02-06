@@ -1,6 +1,5 @@
 /**
- * Composant Card réutilisable
- * Card avec ombre et border-radius selon le design system
+ * Card réutilisable — design luxueux avec coins arrondis 16px
  */
 
 import React, { ReactNode } from 'react';
@@ -12,7 +11,7 @@ interface CardProps {
   children: ReactNode;
   style?: ViewStyle;
   onPress?: () => void;
-  variant?: 'default' | 'elevated' | 'outlined';
+  variant?: 'default' | 'elevated' | 'outlined' | 'gold';
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -26,18 +25,13 @@ export const Card: React.FC<CardProps> = ({
   const getVariantStyle = (): ViewStyle => {
     switch (variant) {
       case 'elevated':
-        return {
-          ...Shadows.medium,
-        };
+        return { ...Shadows.medium };
       case 'outlined':
-        return {
-          borderWidth: 1,
-          borderColor: colors.border,
-        };
+        return { borderWidth: 1, borderColor: colors.border };
+      case 'gold':
+        return { ...Shadows.small, borderWidth: 1, borderColor: colors.secondary + '40' };
       default:
-        return {
-          ...Shadows.small,
-        };
+        return { ...Shadows.small };
     }
   };
 
@@ -68,7 +62,7 @@ export const Card: React.FC<CardProps> = ({
 
 const styles = StyleSheet.create({
   pressed: {
-    opacity: 0.9,
+    opacity: 0.92,
     transform: [{ scale: 0.98 }],
   },
 });

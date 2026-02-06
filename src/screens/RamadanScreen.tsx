@@ -1,6 +1,5 @@
 /**
- * Écran Ramadan
- * Affiche les informations et duas du Ramadan
+ * Écran Ramadan — design luxueux avec croissant doré et touches islamiques
  */
 
 import React, { useMemo } from 'react';
@@ -14,20 +13,18 @@ import {
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { useTheme } from '../contexts';
 import { Spacing, Typography, Shadows } from '../constants';
+import { duas } from '../data';
 
-// Calcul de la largeur des cards en grille (2 colonnes avec gap)
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const CARD_GAP = Spacing.md;
 const SCREEN_PADDING = Spacing.screenHorizontal;
 const FEATURE_CARD_WIDTH = (SCREEN_WIDTH - (SCREEN_PADDING * 2) - CARD_GAP) / 2;
-import { Card } from '../components';
-import { duas, getDuasByCategory } from '../data';
 
-// Type pour la navigation
 type RootTabParamList = {
   Home: undefined;
   Coran: undefined;
@@ -35,14 +32,12 @@ type RootTabParamList = {
   Ramadan: undefined;
   Dua: undefined;
 };
-
 type NavigationProp = BottomTabNavigationProp<RootTabParamList, 'Ramadan'>;
 
 export const RamadanScreen: React.FC = () => {
   const { colors } = useTheme();
   const navigation = useNavigation<NavigationProp>();
 
-  // Duas liées au Ramadan
   const ramadanDuas = useMemo(() => {
     return duas.filter(
       dua =>
@@ -52,54 +47,54 @@ export const RamadanScreen: React.FC = () => {
     );
   }, []);
 
-  // Navigation vers l'onglet Dua
-  const goToDuaTab = () => {
-    navigation.navigate('Dua');
-  };
+  const goToDuaTab = () => navigation.navigate('Dua');
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={[styles.iconContainer, { backgroundColor: colors.secondary + '20' }]}>
-            <Ionicons name="moon" size={48} color={colors.secondary} />
-          </View>
-          <Text style={[styles.title, { color: colors.text }]}>
-            Ramadan Mubarak
-          </Text>
-          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            Le mois béni de la miséricorde
-          </Text>
-        </View>
-
-        {/* Informations sur le module */}
-        <View style={styles.section}>
-          <Card variant="outlined">
-            <View style={styles.infoCard}>
-              <Ionicons name="information-circle-outline" size={24} color={colors.primary} />
-              <View style={styles.infoContent}>
-                <Text style={[styles.infoTitle, { color: colors.text }]}>
-                  Module en cours de développement
-                </Text>
-                <Text style={[styles.infoText, { color: colors.textSecondary }]}>
-                  Les fonctionnalités complètes du Ramadan (calendrier, horaires Suhur/Iftar, compteur de jours) seront bientôt disponibles.
-                </Text>
-              </View>
+        {/* ===== HEADER WITH GRADIENT ===== */}
+        <LinearGradient
+          colors={[colors.ramadanGradientStart, colors.ramadanGradientEnd] as [string, string]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.headerGradient}
+        >
+          <View style={styles.headerContent}>
+            <View style={styles.crescentWrap}>
+              <Ionicons name="moon" size={44} color="#D4AF37" />
             </View>
-          </Card>
+            <Text style={styles.headerTitle}>Ramadan Mubarak</Text>
+            <Text style={styles.headerSubtitle}>Le mois béni de la miséricorde</Text>
+            {/* Gold accent line */}
+            <View style={styles.headerGoldLine} />
+          </View>
+        </LinearGradient>
+
+        {/* ===== INFO CARD ===== */}
+        <View style={styles.section}>
+          <View style={[styles.infoCard, { backgroundColor: colors.surface }, Shadows.small]}>
+            <View style={[styles.infoIconWrap, { backgroundColor: colors.secondaryLight }]}>
+              <Ionicons name="information-circle" size={20} color={colors.secondary} />
+            </View>
+            <View style={styles.infoContent}>
+              <Text style={[styles.infoTitle, { color: colors.text }]}>
+                Module en cours de développement
+              </Text>
+              <Text style={[styles.infoText, { color: colors.textSecondary }]}>
+                Calendrier, horaires Suhur/Iftar et compteur de jours bientôt disponibles.
+              </Text>
+            </View>
+          </View>
         </View>
 
-        {/* Section Duas du Ramadan */}
+        {/* ===== DUAS DU RAMADAN ===== */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={[styles.sectionTitle, { color: colors.text }]}>
               Duas du Ramadan
             </Text>
-            <Pressable onPress={goToDuaTab}>
-              <Text style={[styles.seeAllText, { color: colors.primary }]}>
-                Voir tout
-              </Text>
+            <Pressable onPress={goToDuaTab} hitSlop={12}>
+              <Text style={[styles.seeAllText, { color: colors.primary }]}>Voir tout</Text>
             </Pressable>
           </View>
 
@@ -111,79 +106,58 @@ export const RamadanScreen: React.FC = () => {
                   styles.duaCard,
                   { backgroundColor: colors.surface },
                   Shadows.small,
-                  pressed && { opacity: 0.9 },
+                  pressed && { opacity: 0.9, transform: [{ scale: 0.98 }] },
                 ]}
                 onPress={goToDuaTab}
               >
                 <View style={styles.duaCardContent}>
-                  <View style={[styles.duaIcon, { backgroundColor: colors.secondary + '20' }]}>
-                    <Ionicons name="hand-left-outline" size={20} color={colors.secondary} />
+                  <View style={[styles.duaIcon, { backgroundColor: colors.secondaryLight }]}>
+                    <Ionicons name="hand-left-outline" size={18} color={colors.secondary} />
                   </View>
                   <View style={styles.duaInfo}>
-                    <Text style={[styles.duaArabic, { color: colors.text }]}>
+                    <Text style={[styles.duaArabic, { color: colors.text }]} numberOfLines={1}>
                       {dua.arabicName}
                     </Text>
-                    <Text style={[styles.duaFrench, { color: colors.textSecondary }]}>
+                    <Text style={[styles.duaFrench, { color: colors.textSecondary }]} numberOfLines={1}>
                       {dua.frenchName}
                     </Text>
                   </View>
-                  <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
+                  <View style={[styles.chevronWrap, { backgroundColor: colors.primaryLight }]}>
+                    <Ionicons name="chevron-forward" size={14} color={colors.primary} />
+                  </View>
                 </View>
               </Pressable>
             ))}
           </View>
         </View>
 
-        {/* Fonctionnalités à venir */}
+        {/* ===== FEATURES GRID ===== */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
             Bientôt disponible
           </Text>
 
           <View style={styles.featuresGrid}>
-            <View style={[styles.featureCard, { backgroundColor: colors.surface }]}>
-              <Ionicons name="calendar-outline" size={28} color={colors.primary} />
-              <Text style={[styles.featureTitle, { color: colors.text }]}>
-                Calendrier
-              </Text>
-              <Text style={[styles.featureDesc, { color: colors.textSecondary }]}>
-                Suivi des jours
-              </Text>
-            </View>
-
-            <View style={[styles.featureCard, { backgroundColor: colors.surface }]}>
-              <Ionicons name="sunny-outline" size={28} color={colors.secondary} />
-              <Text style={[styles.featureTitle, { color: colors.text }]}>
-                Suhur
-              </Text>
-              <Text style={[styles.featureDesc, { color: colors.textSecondary }]}>
-                Heure du repas
-              </Text>
-            </View>
-
-            <View style={[styles.featureCard, { backgroundColor: colors.surface }]}>
-              <Ionicons name="moon-outline" size={28} color={colors.accent} />
-              <Text style={[styles.featureTitle, { color: colors.text }]}>
-                Iftar
-              </Text>
-              <Text style={[styles.featureDesc, { color: colors.textSecondary }]}>
-                Rupture du jeûne
-              </Text>
-            </View>
-
-            <View style={[styles.featureCard, { backgroundColor: colors.surface }]}>
-              <Ionicons name="flame-outline" size={28} color={colors.error} />
-              <Text style={[styles.featureTitle, { color: colors.text }]}>
-                Compteur
-              </Text>
-              <Text style={[styles.featureDesc, { color: colors.textSecondary }]}>
-                Jours de jeûne
-              </Text>
-            </View>
+            {[
+              { icon: 'calendar-outline' as const, title: 'Calendrier', desc: 'Suivi des jours', color: colors.primary },
+              { icon: 'sunny-outline' as const, title: 'Suhur', desc: 'Heure du repas', color: colors.secondary },
+              { icon: 'moon-outline' as const, title: 'Iftar', desc: 'Rupture du jeûne', color: colors.ramadanGradientStart },
+              { icon: 'flame-outline' as const, title: 'Compteur', desc: 'Jours de jeûne', color: colors.error },
+            ].map((item) => (
+              <View
+                key={item.title}
+                style={[styles.featureCard, { backgroundColor: colors.surface }, Shadows.small]}
+              >
+                <View style={[styles.featureIconWrap, { backgroundColor: item.color + '15' }]}>
+                  <Ionicons name={item.icon} size={24} color={item.color} />
+                </View>
+                <Text style={[styles.featureTitle, { color: colors.text }]}>{item.title}</Text>
+                <Text style={[styles.featureDesc, { color: colors.textSecondary }]}>{item.desc}</Text>
+              </View>
+            ))}
           </View>
         </View>
 
-        {/* Espacement en bas */}
         <View style={styles.bottomSpacer} />
       </ScrollView>
     </SafeAreaView>
@@ -194,32 +168,50 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    alignItems: 'center',
+
+  // --- Header gradient ---
+  headerGradient: {
     paddingTop: Spacing['3xl'],
-    paddingBottom: Spacing.xl,
+    paddingBottom: Spacing['2xl'],
     paddingHorizontal: Spacing.screenHorizontal,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
   },
-  iconContainer: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-    justifyContent: 'center',
+  headerContent: {
     alignItems: 'center',
+  },
+  crescentWrap: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: Spacing.lg,
   },
-  title: {
-    fontSize: Typography.sizes['2xl'],
-    fontWeight: Typography.weights.bold,
-    marginBottom: Spacing.xs,
+  headerTitle: {
+    fontSize: 26,
+    fontWeight: '800',
+    color: '#FFF',
+    marginBottom: 4,
   },
-  subtitle: {
+  headerSubtitle: {
     fontSize: Typography.sizes.md,
-    textAlign: 'center',
+    color: 'rgba(255,255,255,0.85)',
   },
+  headerGoldLine: {
+    width: 48,
+    height: 3,
+    borderRadius: 2,
+    backgroundColor: '#D4AF37',
+    marginTop: Spacing.lg,
+    opacity: 0.7,
+  },
+
+  // --- Sections ---
   section: {
     paddingHorizontal: Spacing.screenHorizontal,
-    marginBottom: Spacing.xl,
+    marginTop: Spacing.xl,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -229,33 +221,48 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.semibold,
+    fontWeight: '700',
+    marginBottom: Spacing.md,
   },
   seeAllText: {
     fontSize: Typography.sizes.sm,
-    fontWeight: Typography.weights.medium,
+    fontWeight: '600',
+    marginBottom: Spacing.md,
   },
+
+  // --- Info card ---
   infoCard: {
     flexDirection: 'row',
+    padding: Spacing.lg,
+    borderRadius: Spacing.radiusLg,
     gap: Spacing.md,
+  },
+  infoIconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   infoContent: {
     flex: 1,
   },
   infoTitle: {
     fontSize: Typography.sizes.md,
-    fontWeight: Typography.weights.semibold,
-    marginBottom: Spacing.xs,
+    fontWeight: '600',
+    marginBottom: 4,
   },
   infoText: {
     fontSize: Typography.sizes.sm,
     lineHeight: Typography.sizes.sm * 1.5,
   },
+
+  // --- Duas ---
   duasContainer: {
     gap: Spacing.sm,
   },
   duaCard: {
-    borderRadius: Spacing.radiusMd,
+    borderRadius: Spacing.radiusLg,
     overflow: 'hidden',
   },
   duaCardContent: {
@@ -267,7 +274,7 @@ const styles = StyleSheet.create({
   duaIcon: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -276,12 +283,21 @@ const styles = StyleSheet.create({
   },
   duaArabic: {
     fontSize: Typography.sizes.md,
-    fontWeight: Typography.weights.semibold,
-    marginBottom: Spacing.xs,
+    fontWeight: '700',
+    marginBottom: 2,
   },
   duaFrench: {
     fontSize: Typography.sizes.sm,
   },
+  chevronWrap: {
+    width: 28,
+    height: 28,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  // --- Features grid ---
   featuresGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -292,19 +308,27 @@ const styles = StyleSheet.create({
     padding: Spacing.lg,
     borderRadius: Spacing.radiusLg,
     alignItems: 'center',
-    minHeight: 110, // Hauteur minimale pour uniformité
-    ...Shadows.small,
+    minHeight: 110,
+  },
+  featureIconWrap: {
+    width: 48,
+    height: 48,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   featureTitle: {
     fontSize: Typography.sizes.md,
-    fontWeight: Typography.weights.semibold,
+    fontWeight: '600',
     marginTop: Spacing.sm,
-    marginBottom: Spacing.xs,
+    marginBottom: 2,
   },
   featureDesc: {
-    fontSize: Typography.sizes.sm,
+    fontSize: Typography.sizes.xs,
     textAlign: 'center',
   },
+
+  // --- Bottom ---
   bottomSpacer: {
     height: Spacing['4xl'],
   },
