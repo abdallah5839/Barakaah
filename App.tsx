@@ -556,46 +556,56 @@ const Colors = {
   light: {
     primary: '#16a34a',
     primaryDark: '#166534',
+    primaryDeep: '#0F4C35',
     secondary: '#D4AF37',
     secondaryLight: '#F4E4BA',
-    background: '#FFFFFF',
-    backgroundGradient: ['#FFFFFF', '#F0FDF4'] as const,
-    surface: '#F9FAFB',
-    surfaceElevated: 'rgba(255, 255, 255, 0.95)',
-    text: '#1F2937',
+    secondaryDark: '#B8960C',
+    cream: '#FBF9F3',
+    background: '#F9FAFB',
+    backgroundGradient: ['#0F4C35', '#166534', '#F9FAFB'] as const,
+    headerGradient: ['#0F4C35', '#166534'] as const,
+    surface: '#FFFFFF',
+    surfaceElevated: 'rgba(255, 255, 255, 0.97)',
+    text: '#1A1A2E',
     textSecondary: '#6B7280',
     textMuted: '#9CA3AF',
     border: '#E5E7EB',
     borderLight: 'rgba(229, 231, 235, 0.5)',
-    glassBg: 'rgba(255, 255, 255, 0.85)',
-    glassStroke: 'rgba(255, 255, 255, 0.5)',
+    glassBg: 'rgba(255, 255, 255, 0.92)',
+    glassStroke: 'rgba(255, 255, 255, 0.6)',
     success: '#16a34a',
     error: '#DC2626',
-    prayerCardGradient: ['#16a34a', '#166534', '#14532d'] as const,
+    prayerCardGradient: ['#0F4C35', '#166534', '#16a34a'] as const,
+    qiblaGradient: ['#0E7490', '#0891B2'] as const,
   },
   dark: {
     primary: '#22c55e',
     primaryDark: '#16a34a',
+    primaryDeep: '#0A3D2B',
     secondary: '#FBBF24',
     secondaryLight: '#78350F',
+    secondaryDark: '#D97706',
+    cream: '#1E293B',
     background: '#0F172A',
-    backgroundGradient: ['#0F172A', '#1E293B'] as const,
+    backgroundGradient: ['#0A1628', '#0F172A', '#1E293B'] as const,
+    headerGradient: ['#0A1628', '#1E293B'] as const,
     surface: '#1E293B',
-    surfaceElevated: 'rgba(30, 41, 59, 0.95)',
+    surfaceElevated: 'rgba(30, 41, 59, 0.97)',
     text: '#F1F5F9',
     textSecondary: '#94A3B8',
     textMuted: '#64748B',
     border: '#334155',
     borderLight: 'rgba(51, 65, 85, 0.5)',
-    glassBg: 'rgba(30, 41, 59, 0.85)',
-    glassStroke: 'rgba(255, 255, 255, 0.1)',
+    glassBg: 'rgba(30, 41, 59, 0.92)',
+    glassStroke: 'rgba(255, 255, 255, 0.08)',
     success: '#22c55e',
     error: '#EF4444',
-    prayerCardGradient: ['#22c55e', '#16a34a', '#166534'] as const,
+    prayerCardGradient: ['#0A3D2B', '#16a34a', '#22c55e'] as const,
+    qiblaGradient: ['#155E75', '#0E7490'] as const,
   },
 };
 
-type ThemeColors = typeof Colors.light;
+type ThemeColors = typeof Colors.light & typeof Colors.dark;
 
 // ===== CONTEXTS =====
 interface SettingsContextType {
@@ -815,7 +825,7 @@ const SettingsProvider = ({ children }: { children: ReactNode }) => {
 const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const { settings, updateSettings } = useSettings();
   const isDark = settings.themeMode === 'dark' || (settings.themeMode === 'auto' && false);
-  const colors = isDark ? Colors.dark : Colors.light;
+  const colors = (isDark ? Colors.dark : Colors.light) as ThemeColors;
 
   const toggleTheme = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -903,9 +913,51 @@ const PulseView = ({ children, style }: { children: ReactNode; style?: any }) =>
   );
 };
 
+const ShimmerGold = ({ children, style }: { children: ReactNode; style?: any }) => {
+  const shimmer = useRef(new Animated.Value(0.85)).current;
+
+  useEffect(() => {
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(shimmer, { toValue: 1, duration: 1500, useNativeDriver: true }),
+        Animated.timing(shimmer, { toValue: 0.85, duration: 1500, useNativeDriver: true }),
+      ])
+    );
+    loop.start();
+    return () => loop.stop();
+  }, []);
+
+  return (
+    <Animated.View style={[{ opacity: shimmer }, style]}>
+      {children}
+    </Animated.View>
+  );
+};
+
+const ScaleInView = ({ children, delay = 0, style }: { children: ReactNode; delay?: number; style?: any }) => {
+  const scaleAnim = useRef(new Animated.Value(0.9)).current;
+  const opacityAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      Animated.parallel([
+        Animated.spring(scaleAnim, { toValue: 1, tension: 50, friction: 7, useNativeDriver: true }),
+        Animated.timing(opacityAnim, { toValue: 1, duration: 300, useNativeDriver: true }),
+      ]).start();
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
+  return (
+    <Animated.View style={[{ opacity: opacityAnim, transform: [{ scale: scaleAnim }] }, style]}>
+      {children}
+    </Animated.View>
+  );
+};
+
 // ===== UI COMPONENTS =====
-const GlassCard = ({ children, style, colors: c }: { children: ReactNode; style?: any; colors: ThemeColors }) => (
-  <View style={[styles.glassCard, { backgroundColor: c.glassBg, borderColor: c.glassStroke }, style]}>
+const GlassCard = ({ children, style, colors: c, gold }: { children: ReactNode; style?: any; colors: ThemeColors; gold?: boolean }) => (
+  <View style={[styles.glassCard, { backgroundColor: c.glassBg, borderColor: gold ? c.secondary + '40' : c.glassStroke }, gold && { shadowColor: c.secondary, shadowOpacity: 0.08 }, style]}>
     {children}
   </View>
 );
@@ -949,11 +1001,11 @@ const CustomHeader = ({ title, showBackButton, onBack, rightIcon, onRightPress }
   const { colors } = useTheme();
 
   return (
-    <View style={[headerStyles.container, { backgroundColor: colors.surface, borderBottomColor: colors.border }]}>
+    <View style={[headerStyles.container, { backgroundColor: colors.surface, borderBottomColor: colors.border + '40' }]}>
       <View style={headerStyles.leftSection}>
         {showBackButton ? (
           <PressableScale onPress={onBack} style={headerStyles.backButton}>
-            <Ionicons name="chevron-back" size={28} color={colors.primary} />
+            <Ionicons name="chevron-back" size={24} color={colors.primary} />
           </PressableScale>
         ) : (
           <View style={headerStyles.backPlaceholder} />
@@ -1187,6 +1239,63 @@ const getSurahVerses = (surahNumber: number) => {
   return verses;
 };
 
+// ===== DAILY VERSE (deterministic based on date) =====
+const DAILY_VERSE_LIKED_KEY = 'barakaah_daily_verse_liked';
+
+// Total Quran verses = 6236. Build a cumulative index per surah for O(1) lookup.
+const surahCumulativeVerses: number[] = [];
+let _cumTotal = 0;
+for (const s of surahsMetadata) {
+  surahCumulativeVerses.push(_cumTotal);
+  _cumTotal += s.totalVerses;
+}
+// TOTAL_QURAN_VERSES already declared above (6236)
+
+interface DailyVerse {
+  surahNumber: number;
+  surahName: string;
+  surahNameAr: string;
+  verseNumber: number;
+  arabic: string;
+  french: string;
+}
+
+const getDailyVerse = (): DailyVerse => {
+  // Deterministic index based on date: same day = same verse
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff = now.getTime() - start.getTime();
+  const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+  // Mix in the year so the cycle doesn't repeat each year
+  const seed = dayOfYear + now.getFullYear() * 367;
+  const globalIndex = ((seed * 2654435761) >>> 0) % TOTAL_QURAN_VERSES;
+
+  // Find which surah this global index falls into
+  let surahIdx = 0;
+  for (let i = 0; i < surahCumulativeVerses.length; i++) {
+    if (i + 1 < surahCumulativeVerses.length && globalIndex >= surahCumulativeVerses[i + 1]) {
+      continue;
+    }
+    surahIdx = i;
+    break;
+  }
+  const surahNumber = surahIdx + 1;
+  const verseIndex = globalIndex - surahCumulativeVerses[surahIdx];
+
+  const surahMeta = surahsMetadata[surahIdx];
+  const verses = getSurahVerses(surahNumber);
+  const verse = verses[verseIndex] || verses[0];
+
+  return {
+    surahNumber,
+    surahName: surahMeta.nameTransliteration,
+    surahNameAr: surahMeta.nameArabic,
+    verseNumber: verse.num,
+    arabic: verse.ar,
+    french: verse.fr,
+  };
+};
+
 // ===== NAVIGATION CONTEXT =====
 interface NavigationContextType {
   navigate: (screen: ScreenName) => void;
@@ -1212,6 +1321,52 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
   const { colors, toggleTheme, isDark } = useTheme();
   const { streak, lastRead, settings } = useSettings();
   const ramadanInfo = getRamadanInfo();
+
+  // ===== VERSET DU JOUR =====
+  const dailyVerse = useMemo(() => getDailyVerse(), []);
+  const [isDailyVerseLiked, setIsDailyVerseLiked] = useState(false);
+
+  // Charger l'état "liké" depuis AsyncStorage
+  useEffect(() => {
+    const loadLikedState = async () => {
+      try {
+        const data = await AsyncStorage.getItem(DAILY_VERSE_LIKED_KEY);
+        if (data) {
+          const parsed = JSON.parse(data);
+          // Check if it's the same verse (same day)
+          if (parsed.surahNumber === dailyVerse.surahNumber && parsed.verseNumber === dailyVerse.verseNumber) {
+            setIsDailyVerseLiked(true);
+          }
+        }
+      } catch {}
+    };
+    loadLikedState();
+  }, [dailyVerse]);
+
+  const handleDailyVerseLike = useCallback(async () => {
+    const newLiked = !isDailyVerseLiked;
+    setIsDailyVerseLiked(newLiked);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    try {
+      if (newLiked) {
+        await AsyncStorage.setItem(DAILY_VERSE_LIKED_KEY, JSON.stringify({
+          surahNumber: dailyVerse.surahNumber,
+          verseNumber: dailyVerse.verseNumber,
+          surahName: dailyVerse.surahName,
+          arabic: dailyVerse.arabic,
+          french: dailyVerse.french,
+          likedAt: new Date().toISOString(),
+        }));
+      } else {
+        await AsyncStorage.removeItem(DAILY_VERSE_LIKED_KEY);
+      }
+    } catch {}
+  }, [isDailyVerseLiked, dailyVerse]);
+
+  const handleDailyVerseShare = useCallback(async () => {
+    const text = `${dailyVerse.arabic}\n\n"${dailyVerse.french}"\n\nSourate ${dailyVerse.surahName} (${dailyVerse.surahNumber}:${dailyVerse.verseNumber})\n\n- Partagé depuis l'app Barakaah`;
+    try { await Share.share({ message: text }); } catch {}
+  }, [dailyVerse]);
 
   // État du cercle de l'utilisateur
   const [userCircle, setUserCircle] = useState<{
@@ -1401,331 +1556,559 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
   const fmt = (n: number) => n.toString().padStart(2, '0');
   const prayerCountdownStr = `Dans ${fmt(countdown.h)}h ${fmt(countdown.m)}min ${fmt(countdown.s)}s`;
 
-  return (
-    <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-      <LinearGradient colors={colors.backgroundGradient} style={StyleSheet.absoluteFill} />
+  // Progress bar percentage
+  const streakPct = Math.min(100, (streak.todayVersesRead / streak.dailyGoal) * 100);
 
-      <View style={styles.screenContent}>
-        {/* Header */}
-        <FadeInView delay={100} style={styles.header}>
+  return (
+    <ScrollView style={{ flex: 1, backgroundColor: colors.background }} showsVerticalScrollIndicator={false}>
+      {/* ===== PREMIUM HEADER WITH GRADIENT ===== */}
+      <LinearGradient colors={colors.headerGradient} style={homeStyles.headerGradient}>
+        <FadeInView delay={50} style={homeStyles.headerTop}>
           <View>
-            <Text style={[styles.appTitle, { color: colors.text }]}>Barakaah</Text>
-            <Text style={[styles.appSubtitle, { color: colors.textSecondary }]}>{settings.city} - {currentTime}</Text>
-          </View>
-          <PressableScale onPress={toggleTheme}>
-            <View style={[styles.themeBtn, { backgroundColor: colors.surface }]}>
-              <Ionicons name={isDark ? 'sunny' : 'moon'} size={22} color={colors.primary} />
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+              <Text style={homeStyles.logoText}>Barakaah</Text>
+              <Text style={{ fontSize: 18, color: colors.secondary }}>☪</Text>
             </View>
-          </PressableScale>
+            <Text style={{ fontSize: 18, color: colors.secondary, fontWeight: '500', marginTop: 2 }}>بركة</Text>
+          </View>
+          <View style={{ flexDirection: 'row', gap: 10 }}>
+            <PressableScale onPress={toggleTheme}>
+              <View style={homeStyles.headerIconBtn}>
+                <Ionicons name={isDark ? 'sunny' : 'moon'} size={20} color={colors.secondary} />
+              </View>
+            </PressableScale>
+            <PressableScale onPress={() => onNavigate('settings')}>
+              <View style={homeStyles.headerIconBtn}>
+                <Ionicons name="settings-outline" size={20} color="rgba(255,255,255,0.8)" />
+              </View>
+            </PressableScale>
+          </View>
         </FadeInView>
 
-        {/* Prayer Card - Dynamique */}
+        <FadeInView delay={100} style={homeStyles.headerInfo}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <Ionicons name="location-outline" size={14} color="rgba(255,255,255,0.7)" />
+            <Text style={homeStyles.headerCity}>{settings.city}, {settings.country}</Text>
+          </View>
+          <View style={homeStyles.headerDateRow}>
+            <ShimmerGold>
+              <View style={homeStyles.hijriBadge}>
+                <Ionicons name="moon" size={11} color={colors.secondary} />
+                <Text style={[homeStyles.hijriBadgeText, { color: colors.secondary }]}>
+                  {ramadanInfo.hijriDay} {ramadanInfo.hijriMonthName} {ramadanInfo.hijriYear}
+                </Text>
+              </View>
+            </ShimmerGold>
+            <Text style={homeStyles.headerGregorian}>
+              {new Date().toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })}
+            </Text>
+          </View>
+        </FadeInView>
+      </LinearGradient>
+
+      {/* ===== QUICK ACCESS ICONS ===== */}
+      <FadeInView delay={150}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={homeStyles.quickAccessRow}>
+          {[
+            { name: 'prieres' as ScreenName, label: 'Prieres', icon: 'moon-outline', bg: [colors.primary, colors.primaryDark] },
+            { name: 'coran' as ScreenName, label: 'Coran', icon: 'book-outline', bg: [colors.primary, '#0F4C35'] },
+            { name: 'qibla' as ScreenName, label: 'Qibla', icon: 'compass-outline', bg: ['#0891B2', '#0E7490'] },
+            { name: 'dua' as ScreenName, label: 'Dua', icon: 'hand-right-outline', bg: [colors.secondary, colors.secondaryDark] },
+            { name: 'ramadan' as ScreenName, label: 'Ramadan', icon: 'sparkles-outline', bg: ['#7C3AED', '#4C1D95'] },
+          ].map((item, i) => (
+            <ScaleInView key={item.name} delay={150 + i * 60}>
+              <PressableScale onPress={() => onNavigate(item.name)} style={homeStyles.quickAccessItem}>
+                <LinearGradient colors={item.bg as [string, string]} style={homeStyles.quickAccessCircle} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+                  <Ionicons name={item.icon as any} size={24} color="#FFF" />
+                </LinearGradient>
+                <Text style={[homeStyles.quickAccessLabel, { color: colors.text }]}>{item.label}</Text>
+              </PressableScale>
+            </ScaleInView>
+          ))}
+        </ScrollView>
+      </FadeInView>
+
+      <View style={homeStyles.cardsContainer}>
+        {/* ===== HERO PRAYER CARD ===== */}
         {nextPrayer && (
           <FadeInView delay={200}>
             <PressableScale onPress={() => onNavigate('prieres')}>
-              <LinearGradient colors={colors.prayerCardGradient} style={styles.prayerCard} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-                <View style={styles.prayerCardContent}>
-                  <View style={styles.prayerCardHeader}>
-                    <PulseView>
-                      <View style={styles.prayerIconCircle}>
-                        <Ionicons name={nextPrayer.icon as any} size={24} color="#FFF" />
+              <View style={homeStyles.prayerCardWrapper}>
+                <LinearGradient colors={colors.prayerCardGradient} style={homeStyles.prayerCard} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+                  {/* Gold accent top */}
+                  <ShimmerGold><View style={homeStyles.prayerGoldLine} /></ShimmerGold>
+                  <View style={homeStyles.prayerCardInner}>
+                    <Text style={homeStyles.prayerLabelText}>PROCHAINE PRIERE</Text>
+                    <View style={homeStyles.prayerMainRow}>
+                      <PulseView>
+                        <View style={homeStyles.prayerBigIcon}>
+                          <Ionicons name={nextPrayer.icon as any} size={32} color="#FFF" />
+                        </View>
+                      </PulseView>
+                      <View style={homeStyles.prayerInfo}>
+                        <Text style={homeStyles.prayerNameText}>{nextPrayer.name}</Text>
+                        <Text style={homeStyles.prayerNameAr}>{nextPrayer.ar}</Text>
                       </View>
-                    </PulseView>
-                    <Text style={styles.prayerLabel}>PROCHAINE PRIERE</Text>
+                      <Text style={homeStyles.prayerTimeText}>{nextPrayer.time}</Text>
+                    </View>
+                    {/* Progress bar */}
+                    <View style={homeStyles.prayerProgressTrack}>
+                      <View style={[homeStyles.prayerProgressFill, { width: `${Math.max(5, Math.min(100, ((24 * 60 - countdown.h * 60 - countdown.m) / (24 * 60)) * 100))}%` }]} />
+                      <View style={[homeStyles.prayerProgressDot, { left: `${Math.max(2, Math.min(98, ((24 * 60 - countdown.h * 60 - countdown.m) / (24 * 60)) * 100))}%` }]} />
+                    </View>
+                    <View style={homeStyles.prayerCountdownRow}>
+                      <Ionicons name="time-outline" size={14} color="rgba(255,255,255,0.7)" />
+                      <Text style={homeStyles.prayerCountdownText}>{prayerCountdownStr}</Text>
+                    </View>
                   </View>
-                  <Text style={styles.prayerName}>{nextPrayer.name}</Text>
-                  <Text style={styles.prayerNameAr}>{nextPrayer.ar}</Text>
-                  <Text style={styles.prayerTime}>{nextPrayer.time}</Text>
-                  <Text style={styles.countdown}>{prayerCountdownStr}</Text>
-                </View>
-              </LinearGradient>
+                </LinearGradient>
+              </View>
             </PressableScale>
           </FadeInView>
         )}
 
-        {/* Streak Card */}
+        {/* ===== READING STREAK CARD ===== */}
         <FadeInView delay={300}>
-          <GlassCard colors={colors} style={styles.streakCard}>
-            <View style={styles.streakHeader}>
-              <View style={styles.streakFlame}>
-                <Text style={styles.flameEmoji}>🔥</Text>
-                <Text style={[styles.streakNumber, { color: colors.text }]}>{streak.currentStreak}</Text>
+          <PressableScale onPress={() => onNavigate('coran')}>
+            <View style={[homeStyles.card, { backgroundColor: colors.surface }]}>
+              <View style={homeStyles.cardHeaderRow}>
+                <View style={[homeStyles.cardIconBox, { backgroundColor: colors.secondary + '18' }]}>
+                  <Text style={{ fontSize: 22 }}>📖</Text>
+                </View>
+                <Text style={[homeStyles.cardTitle, { color: colors.text }]}>Ta Lecture Aujourd'hui</Text>
               </View>
-              <View style={{ flex: 1, marginLeft: 16 }}>
-                <Text style={[styles.streakTitle, { color: colors.text }]}>Chaine de lecture</Text>
-                <Text style={[styles.streakSubtitle, { color: colors.textSecondary }]}>
-                  {streak.todayVersesRead}/{streak.dailyGoal} versets aujourd'hui
+              <View style={homeStyles.readingStatsRow}>
+                <View style={[homeStyles.streakBadge, { backgroundColor: streak.currentStreak > 0 ? '#FEF3C7' : colors.border + '40' }]}>
+                  <Text style={{ fontSize: 16 }}>🔥</Text>
+                  <Text style={[homeStyles.streakBadgeText, { color: streak.currentStreak > 0 ? '#B45309' : colors.textMuted }]}>
+                    Jour {streak.currentStreak}
+                  </Text>
+                </View>
+                <Text style={[homeStyles.readingCount, { color: colors.text }]}>
+                  {streak.todayVersesRead}/{streak.dailyGoal} <Text style={{ color: colors.textSecondary, fontSize: 13 }}>versets</Text>
                 </Text>
-                <View style={styles.progressBar}>
-                  <View style={[styles.progressFill, { width: `${Math.min(100, (streak.todayVersesRead / streak.dailyGoal) * 100)}%`, backgroundColor: colors.primary }]} />
-                </View>
               </View>
+              {/* Progress bar */}
+              <View style={[homeStyles.readingProgressTrack, { backgroundColor: colors.border + '40' }]}>
+                <LinearGradient
+                  colors={[colors.primary, colors.secondary] as [string, string]}
+                  start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+                  style={[homeStyles.readingProgressFill, { width: `${streakPct}%` }]}
+                />
+              </View>
+              <Text style={[homeStyles.readingPct, { color: colors.textMuted }]}>{Math.round(streakPct)}%</Text>
+              {/* Last read */}
+              {lastRead && (
+                <View style={[homeStyles.lastReadRow, { borderTopColor: colors.border + '40' }]}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[homeStyles.lastReadLabel, { color: colors.textSecondary }]}>Derniere lecture</Text>
+                    <Text style={[homeStyles.lastReadSurah, { color: colors.text }]}>
+                      {lastRead.surahName} - v.{lastRead.verseNumber}
+                    </Text>
+                    <Text style={[homeStyles.lastReadAgo, { color: colors.textMuted }]}>{getTimeAgo(lastRead.timestamp)}</Text>
+                  </View>
+                  <View style={[homeStyles.readBtn, { backgroundColor: colors.primary }]}>
+                    <Text style={homeStyles.readBtnText}>Lire</Text>
+                    <Ionicons name="arrow-forward" size={14} color="#FFF" />
+                  </View>
+                </View>
+              )}
             </View>
-            <View style={styles.streakStats}>
-              <View style={styles.streakStat}>
-                <Text style={[styles.statValue, { color: colors.primary }]}>{streak.longestStreak}</Text>
-                <Text style={[styles.statLabel, { color: colors.textMuted }]}>Record</Text>
-              </View>
-              <View style={styles.streakStat}>
-                <Text style={[styles.statValue, { color: colors.primary }]}>{streak.totalDaysRead}</Text>
-                <Text style={[styles.statLabel, { color: colors.textMuted }]}>Jours total</Text>
-              </View>
-            </View>
-          </GlassCard>
-        </FadeInView>
-
-        {/* Last Read Card */}
-        {lastRead && (
-          <FadeInView delay={350}>
-            <PressableScale onPress={() => onNavigate('coran')}>
-              <GlassCard colors={colors} style={styles.lastReadCard}>
-                <View style={[styles.lastReadIcon, { backgroundColor: colors.primary + '20' }]}>
-                  <Ionicons name="book" size={24} color={colors.primary} />
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={[styles.lastReadTitle, { color: colors.text }]}>Derniere lecture</Text>
-                  <Text style={[styles.lastReadText, { color: colors.textSecondary }]}>
-                    {lastRead.surahName} - Verset {lastRead.verseNumber}
-                  </Text>
-                  <Text style={[styles.lastReadTime, { color: colors.textMuted }]}>
-                    {getTimeAgo(lastRead.timestamp)}
-                  </Text>
-                </View>
-                <Ionicons name="chevron-forward" size={24} color={colors.textMuted} />
-              </GlassCard>
-            </PressableScale>
-          </FadeInView>
-        )}
-
-        {/* Cercle de Lecture Card */}
-        <FadeInView delay={360}>
-          <PressableScale onPress={() => onNavigate('cercle')}>
-            <GlassCard colors={colors} style={styles.circleHomeCard}>
-              <View style={[styles.circleHomeIcon, { backgroundColor: colors.primary + '20' }]}>
-                <Ionicons name="people" size={24} color={colors.primary} />
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text style={[styles.circleHomeTitle, { color: colors.text }]}>
-                  {userCircle ? userCircle.circle.name : 'Cercle de Lecture'}
-                </Text>
-                {userCircle ? (
-                  <>
-                    <View style={styles.circleHomeProgressRow}>
-                      <Text style={[styles.circleHomeSubtitle, { color: colors.textSecondary }]}>
-                        {userCircle.circle.completed_juz}/30 Juz
-                      </Text>
-                      <Text style={[styles.circleHomeDays, { color: colors.textSecondary }]}>
-                        {(() => {
-                          const d = Math.ceil((new Date(userCircle.circle.expires_at).getTime() - Date.now()) / 86400000);
-                          return d > 0 ? `${d}j restant${d > 1 ? 's' : ''}` : 'Expiré';
-                        })()}
-                      </Text>
-                    </View>
-                    <View style={[styles.circleHomeMiniBar, { backgroundColor: colors.border }]}>
-                      <View style={[styles.circleHomeMiniBarFill, {
-                        backgroundColor: colors.primary,
-                        width: `${Math.round((userCircle.circle.completed_juz / 30) * 100)}%`,
-                      }]} />
-                    </View>
-                  </>
-                ) : (
-                  <Text style={[styles.circleHomeSubtitle, { color: colors.textSecondary }]}>
-                    Lisez le Coran en famille
-                  </Text>
-                )}
-              </View>
-              <Ionicons name="chevron-forward" size={24} color={colors.textSecondary} />
-            </GlassCard>
           </PressableScale>
         </FadeInView>
 
-        {/* Ramadan Card - Affichee si pendant le Ramadan */}
-        {ramadanInfo.status === 'during' && (
-          <FadeInView delay={380}>
-            <PressableScale onPress={() => onNavigate('ramadan')}>
-              <LinearGradient
-                colors={RamadanColors.cardGradient}
-                style={styles.ramadanHomeCard}
-              >
-                <View style={styles.ramadanHomeContent}>
-                  <View style={styles.ramadanHomeHeader}>
-                    <Text style={styles.ramadanHomeEmoji}>🌙</Text>
-                    <View>
-                      <Text style={styles.ramadanHomeTitle}>RAMADAN</Text>
-                      <Text style={styles.ramadanHomeDay}>Jour {ramadanInfo.ramadanDay}/{RAMADAN_DAYS}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.ramadanHomeCountdown}>
-                    <Text style={styles.ramadanHomeLabel}>Iftar dans</Text>
-                    <Text style={styles.ramadanHomeTime}>
-                      {iftarCountdown.h.toString().padStart(2, '0')}:
-                      {iftarCountdown.m.toString().padStart(2, '0')}:
-                      {iftarCountdown.s.toString().padStart(2, '0')}
-                    </Text>
-                  </View>
+        {/* ===== VERSE OF THE DAY ===== */}
+        <FadeInView delay={350}>
+          <View style={[homeStyles.verseCard, { backgroundColor: colors.cream, borderColor: colors.secondary + '35' }]}>
+            {/* Ornamental top */}
+            <ShimmerGold>
+              <View style={homeStyles.verseOrnamentRow}>
+                <View style={[homeStyles.verseDash, { backgroundColor: colors.secondary + '50' }]} />
+                <Ionicons name="sparkles" size={12} color={colors.secondary} />
+                <Text style={[homeStyles.verseSectionLabel, { color: colors.secondary }]}>VERSET DU JOUR</Text>
+                <Ionicons name="sparkles" size={12} color={colors.secondary} />
+                <View style={[homeStyles.verseDash, { backgroundColor: colors.secondary + '50' }]} />
+              </View>
+            </ShimmerGold>
+            <Text style={[homeStyles.verseArabicText, { color: colors.text }]}>
+              {dailyVerse.arabic}
+            </Text>
+            <View style={[homeStyles.verseDivider, { backgroundColor: colors.secondary + '30' }]} />
+            <Text style={[homeStyles.verseFrenchText, { color: colors.textSecondary }]}>
+              "{dailyVerse.french}"
+            </Text>
+            <Text style={[homeStyles.verseRefText, { color: colors.secondary }]}>
+              Sourate {dailyVerse.surahName} ({dailyVerse.surahNumber}:{dailyVerse.verseNumber})
+            </Text>
+            <View style={homeStyles.verseActions}>
+              <PressableScale onPress={handleDailyVerseShare}>
+                <View style={[homeStyles.verseActionBtn, { backgroundColor: colors.secondary + '15' }]}>
+                  <Ionicons name="share-outline" size={18} color={colors.secondary} />
                 </View>
-                <Ionicons name="chevron-forward" size={24} color="rgba(255,255,255,0.8)" />
-              </LinearGradient>
-            </PressableScale>
-          </FadeInView>
-        )}
-
-        {/* Ramadan Countdown Card - Affichee si avant Ramadan */}
-        {(ramadanInfo.status === 'before' || ramadanInfo.status === 'after') && (
-          <FadeInView delay={380}>
-            <PressableScale onPress={() => onNavigate('ramadan')}>
-              <LinearGradient
-                colors={['#4C1D95', '#6D28D9']}
-                style={styles.ramadanHomeCard}
-              >
-                <View style={styles.ramadanHomeContent}>
-                  <Text style={styles.ramadanHomeEmoji}>🌙</Text>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.ramadanHomeTitle}>RAMADAN {ramadanInfo.hijriYear}</Text>
-                    <Text style={styles.ramadanHomeDay}>
-                      Dans {ramadanInfo.daysUntilRamadan} jours
-                    </Text>
-                  </View>
+              </PressableScale>
+              <PressableScale onPress={handleDailyVerseLike}>
+                <View style={[homeStyles.verseActionBtn, { backgroundColor: isDailyVerseLiked ? '#EF444420' : colors.secondary + '15' }]}>
+                  <Ionicons name={isDailyVerseLiked ? 'heart' : 'heart-outline'} size={18} color={isDailyVerseLiked ? '#EF4444' : colors.secondary} />
                 </View>
-                <Ionicons name="chevron-forward" size={24} color="rgba(255,255,255,0.8)" />
-              </LinearGradient>
-            </PressableScale>
-          </FadeInView>
-        )}
-
-        {/* Date Card */}
-        <FadeInView delay={400}>
-          <GlassCard colors={colors} style={styles.dateCard}>
-            <View style={[styles.dateIcon, { backgroundColor: colors.primary + '20' }]}>
-              <Ionicons name="calendar-outline" size={24} color={colors.primary} />
+              </PressableScale>
             </View>
-            <View>
-              <Text style={[styles.dateText, { color: colors.text }]}>
-                {new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-              </Text>
-              <Text style={[styles.hijriText, { color: colors.secondary }]}>
-                {ramadanInfo.hijriDay} {ramadanInfo.hijriMonthName} {ramadanInfo.hijriYear}
-              </Text>
-            </View>
-          </GlassCard>
+          </View>
         </FadeInView>
 
-        {/* Qibla Card */}
-        <FadeInView delay={420}>
-          <PressableScale onPress={() => onNavigate('qibla')}>
-            <LinearGradient
-              colors={['#0891B2', '#06B6D4']}
-              style={styles.qiblaHomeCard}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-            >
-              <View style={styles.qiblaHomeContent}>
-                <View style={styles.qiblaHomeLeft}>
-                  <View style={styles.qiblaHomeMiniCompass}>
-                    <View style={[styles.qiblaHomeNeedle, { transform: [{ rotate: `${qiblaData.angle}deg` }] }]}>
-                      <View style={styles.qiblaHomeNeedleArrow} />
-                    </View>
-                    <Text style={styles.qiblaHomeKaaba}>🕋</Text>
+        {/* ===== RAMADAN CARD ===== */}
+        {ramadanInfo.status === 'during' ? (
+          <FadeInView delay={400}>
+            <PressableScale onPress={() => onNavigate('ramadan')}>
+              <LinearGradient colors={['#312E81', '#4C1D95', '#6D28D9']} style={homeStyles.ramadanCard} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+                <View style={homeStyles.ramadanHeader}>
+                  <Text style={{ fontSize: 28 }}>🌙</Text>
+                  <View style={{ flex: 1, marginLeft: 12 }}>
+                    <Text style={homeStyles.ramadanTitle}>RAMADAN</Text>
+                    <Text style={homeStyles.ramadanSubtitle}>Jour {ramadanInfo.ramadanDay}/{RAMADAN_DAYS}</Text>
                   </View>
                 </View>
-                <View style={styles.qiblaHomeRight}>
-                  <Text style={styles.qiblaHomeLabel}>DIRECTION QIBLA</Text>
-                  <Text style={styles.qiblaHomeAngle}>{qiblaData.angle}°</Text>
-                  <Text style={styles.qiblaHomeDistance}>{qiblaData.distance.toLocaleString()} km</Text>
+                <View style={homeStyles.ramadanCountdownRow}>
+                  {[
+                    { val: fmt(iftarCountdown.h), label: 'hrs' },
+                    { val: fmt(iftarCountdown.m), label: 'min' },
+                    { val: fmt(iftarCountdown.s), label: 'sec' },
+                  ].map((t, i) => (
+                    <React.Fragment key={i}>
+                      {i > 0 && <Text style={homeStyles.ramadanColon}>:</Text>}
+                      <View style={homeStyles.ramadanDigitBox}>
+                        <Text style={homeStyles.ramadanDigit}>{t.val}</Text>
+                        <Text style={homeStyles.ramadanDigitLabel}>{t.label}</Text>
+                      </View>
+                    </React.Fragment>
+                  ))}
                 </View>
+                <Text style={homeStyles.ramadanIftarLabel}>Iftar dans</Text>
+              </LinearGradient>
+            </PressableScale>
+          </FadeInView>
+        ) : (
+          <FadeInView delay={400}>
+            <PressableScale onPress={() => onNavigate('ramadan')}>
+              <LinearGradient colors={['#312E81', '#4C1D95', '#6D28D9']} style={homeStyles.ramadanCard} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+                <View style={homeStyles.ramadanHeader}>
+                  <Text style={{ fontSize: 28 }}>🌙</Text>
+                  <View style={{ flex: 1, marginLeft: 12 }}>
+                    <Text style={homeStyles.ramadanTitle}>RAMADAN {ramadanInfo.hijriYear}</Text>
+                    <Text style={homeStyles.ramadanSubtitle}>Dans {ramadanInfo.daysUntilRamadan} jours</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={22} color="rgba(255,255,255,0.6)" />
+                </View>
+              </LinearGradient>
+            </PressableScale>
+          </FadeInView>
+        )}
+
+        {/* ===== CIRCLE DE LECTURE ===== */}
+        <FadeInView delay={450}>
+          <PressableScale onPress={() => onNavigate('cercle')}>
+            <View style={[homeStyles.card, { backgroundColor: colors.surface }]}>
+              <View style={homeStyles.cardHeaderRow}>
+                <View style={[homeStyles.cardIconBox, { backgroundColor: colors.secondary + '18' }]}>
+                  <Ionicons name="people" size={20} color={colors.secondary} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={[homeStyles.cardTitle, { color: colors.text }]}>
+                    {userCircle ? userCircle.circle.name : 'Cercle de Lecture'}
+                  </Text>
+                  {!userCircle && <Text style={[homeStyles.cardSubtitle, { color: colors.textSecondary }]}>Lisez le Coran en famille</Text>}
+                </View>
+                <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
               </View>
-              <Ionicons name="chevron-forward" size={24} color="rgba(255,255,255,0.8)" />
+              {userCircle && (
+                <>
+                  <View style={homeStyles.circleProgressRow}>
+                    <Text style={[homeStyles.circleJuzText, { color: colors.text }]}>{userCircle.circle.completed_juz}/30 Juz</Text>
+                    <Text style={[homeStyles.circleDaysText, { color: colors.textSecondary }]}>
+                      {(() => {
+                        const d = Math.ceil((new Date(userCircle.circle.expires_at).getTime() - Date.now()) / 86400000);
+                        return d > 0 ? `${d}j restant${d > 1 ? 's' : ''}` : 'Expire';
+                      })()}
+                    </Text>
+                  </View>
+                  <View style={[homeStyles.circleBarTrack, { backgroundColor: colors.border + '40' }]}>
+                    <LinearGradient
+                      colors={[colors.primary, colors.secondary] as [string, string]}
+                      start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+                      style={[homeStyles.circleBarFill, { width: `${Math.round((userCircle.circle.completed_juz / 30) * 100)}%` }]}
+                    />
+                  </View>
+                </>
+              )}
+            </View>
+          </PressableScale>
+        </FadeInView>
+
+        {/* ===== QIBLA COMPACT CARD ===== */}
+        <FadeInView delay={500}>
+          <PressableScale onPress={() => onNavigate('qibla')}>
+            <LinearGradient colors={colors.qiblaGradient} style={homeStyles.qiblaCard} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+              <View style={homeStyles.qiblaMiniCompass}>
+                <View style={[homeStyles.qiblaNeedle, { transform: [{ rotate: `${qiblaData.angle}deg` }] }]}>
+                  <View style={homeStyles.qiblaNeedleArrow} />
+                </View>
+                <Text style={{ fontSize: 16 }}>🕋</Text>
+              </View>
+              <View style={{ flex: 1, marginLeft: 14 }}>
+                <Text style={homeStyles.qiblaLabel}>DIRECTION QIBLA</Text>
+                <Text style={homeStyles.qiblaAngle}>{qiblaData.angle}° NE</Text>
+              </View>
+              <Text style={homeStyles.qiblaDistance}>{qiblaData.distance.toLocaleString()} km</Text>
             </LinearGradient>
           </PressableScale>
         </FadeInView>
 
-        {/* Calendar Card */}
-        <FadeInView delay={440}>
+        {/* ===== CALENDAR HIJRI ===== */}
+        <FadeInView delay={550}>
           <PressableScale onPress={() => onNavigate('calendrier')}>
-            <GlassCard colors={colors} style={styles.calendarHomeCard}>
-              <View style={styles.calendarHomeHeader}>
-                <View style={[styles.calendarHomeIcon, { backgroundColor: colors.secondary + '20' }]}>
-                  <Ionicons name="calendar" size={20} color={colors.secondary} />
+            <View style={[homeStyles.card, { backgroundColor: colors.surface }]}>
+              <View style={homeStyles.cardHeaderRow}>
+                <View style={[homeStyles.cardIconBox, { backgroundColor: colors.secondary + '18' }]}>
+                  <Ionicons name="calendar" size={18} color={colors.secondary} />
                 </View>
-                <Text style={[styles.calendarHomeTitle, { color: colors.text }]}>Calendrier Hijri</Text>
-                <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
+                <Text style={[homeStyles.cardTitle, { color: colors.text }]}>
+                  {ramadanInfo.hijriMonthName} {ramadanInfo.hijriYear}
+                </Text>
+                <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
               </View>
-
-              {/* Mini Week View */}
-              <View style={styles.calendarHomeWeek}>
+              <View style={homeStyles.calendarWeekRow}>
                 {weekDays.map((day, idx) => (
-                  <View
-                    key={idx}
-                    style={[
-                      styles.calendarHomeDay,
-                      day.isToday && { backgroundColor: colors.primary }
-                    ]}
-                  >
-                    <Text style={[
-                      styles.calendarHomeDayName,
-                      { color: day.isToday ? '#FFF' : colors.textMuted }
-                    ]}>
-                      {day.dayName}
-                    </Text>
-                    <Text style={[
-                      styles.calendarHomeDayNum,
-                      { color: day.isToday ? '#FFF' : colors.text }
-                    ]}>
-                      {day.hijriDay}
-                    </Text>
+                  <View key={idx} style={[homeStyles.calendarDayCell, day.isToday && [homeStyles.calendarDayToday, { backgroundColor: colors.secondary }]]}>
+                    <Text style={[homeStyles.calendarDayName, { color: day.isToday ? '#FFF' : colors.textMuted }]}>{day.dayName}</Text>
+                    <Text style={[homeStyles.calendarDayNum, { color: day.isToday ? '#FFF' : colors.text }]}>{day.hijriDay}</Text>
                   </View>
                 ))}
               </View>
-            </GlassCard>
+            </View>
           </PressableScale>
         </FadeInView>
 
-        {/* Verse Card */}
-        <FadeInView delay={450}>
-          <GlassCard colors={colors} style={styles.verseCard}>
-            <View style={styles.verseTitleRow}>
-              <Ionicons name="sparkles" size={16} color={colors.secondary} />
-              <Text style={[styles.verseTitle, { color: colors.secondary }]}> VERSET DU JOUR </Text>
-              <Ionicons name="sparkles" size={16} color={colors.secondary} />
-            </View>
-            <View style={[styles.verseLine, { backgroundColor: colors.secondary }]} />
-            <Text style={[styles.verseArabic, { color: colors.text }]}>وَإِلَى اللَّهِ الْمَصِيرُ</Text>
-            <View style={[styles.verseLine, { backgroundColor: colors.secondary }]} />
-            <Text style={[styles.verseTranslation, { color: colors.textSecondary }]}>
-              "Et c'est vers Allah que se fait le retour final."
-            </Text>
-            <Text style={[styles.verseRef, { color: colors.textMuted }]}>Sourate Al-Baqarah (2:285)</Text>
-          </GlassCard>
-        </FadeInView>
-
-        {/* Quick Access */}
-        <FadeInView delay={500}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Acces rapides</Text>
-        </FadeInView>
-
-        <View style={styles.quickGrid}>
-          {[
-            { name: 'coran' as ScreenName, label: 'Coran', icon: 'book-outline', gradient: ['#059669', '#047857'] as const },
-            { name: 'prieres' as ScreenName, label: 'Prieres', icon: 'compass-outline', gradient: ['#3B82F6', '#2563EB'] as const },
-            { name: 'ramadan' as ScreenName, label: 'Ramadan', icon: 'moon-outline', gradient: ['#8B5CF6', '#7C3AED'] as const },
-            { name: 'dua' as ScreenName, label: 'Dua', icon: 'hand-right-outline', gradient: ['#F59E0B', '#D97706'] as const },
-          ].map((item, i) => (
-            <FadeInView key={item.name} delay={550 + i * 50} style={styles.quickCardWrapper}>
-              <PressableScale onPress={() => onNavigate(item.name)}>
-                <LinearGradient colors={item.gradient} style={styles.quickCard}>
-                  <Ionicons name={item.icon as any} size={36} color="#FFF" />
-                  <Text style={styles.quickLabel}>{item.label}</Text>
-                </LinearGradient>
-              </PressableScale>
-            </FadeInView>
-          ))}
-        </View>
-
-        <View style={{ height: 120 }} />
+        <View style={{ height: 100 }} />
       </View>
     </ScrollView>
   );
 };
+
+// ===== HOME STYLES =====
+const homeStyles = StyleSheet.create({
+  // Header gradient area
+  headerGradient: { paddingTop: Platform.OS === 'android' ? 44 : 20, paddingBottom: 20, paddingHorizontal: 20 },
+  headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 },
+  logoText: { fontSize: 28, fontWeight: '800', color: '#FFFFFF', letterSpacing: 0.5 },
+  headerIconBtn: { width: 40, height: 40, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.12)', alignItems: 'center', justifyContent: 'center' },
+  headerInfo: { marginTop: 4 },
+  headerCity: { fontSize: 13, color: 'rgba(255,255,255,0.7)' },
+  headerDateRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 8 },
+  hijriBadge: { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: 'rgba(212,175,55,0.15)', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20, borderWidth: 1, borderColor: 'rgba(212,175,55,0.25)' },
+  hijriBadgeText: { fontSize: 12, fontWeight: '600' },
+  headerGregorian: { fontSize: 12, color: 'rgba(255,255,255,0.5)' },
+
+  // Quick Access
+  quickAccessRow: { paddingHorizontal: 16, paddingVertical: 16, gap: 20 },
+  quickAccessItem: { alignItems: 'center', width: 64 },
+  quickAccessCircle: { width: 56, height: 56, borderRadius: 18, alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.15, shadowRadius: 6, elevation: 4 },
+  quickAccessLabel: { fontSize: 11, fontWeight: '600', marginTop: 8, textAlign: 'center' },
+
+  // Cards container
+  cardsContainer: { paddingHorizontal: 16 },
+
+  // Generic card
+  card: { borderRadius: 20, padding: 18, marginBottom: 14, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 10, elevation: 3 },
+  cardHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 4 },
+  cardIconBox: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  cardTitle: { flex: 1, fontSize: 15, fontWeight: '700' },
+  cardSubtitle: { fontSize: 12, marginTop: 2 },
+
+  // Prayer Hero Card
+  prayerCardWrapper: { borderRadius: 24, overflow: 'hidden', marginBottom: 14, borderWidth: 2, borderColor: 'rgba(212,175,55,0.4)', shadowColor: '#0F4C35', shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.25, shadowRadius: 12, elevation: 8 },
+  prayerCard: { padding: 20, paddingTop: 0 },
+  prayerGoldLine: { height: 3, backgroundColor: '#D4AF37', borderRadius: 2, alignSelf: 'center', width: 50, marginTop: 12, marginBottom: 16 },
+  prayerCardInner: { alignItems: 'center' },
+  prayerLabelText: { fontSize: 10, fontWeight: '700', color: 'rgba(255,255,255,0.7)', letterSpacing: 2, marginBottom: 14 },
+  prayerMainRow: { flexDirection: 'row', alignItems: 'center', width: '100%', marginBottom: 16 },
+  prayerBigIcon: { width: 56, height: 56, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.15)', alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: 'rgba(212,175,55,0.4)' },
+  prayerInfo: { flex: 1, marginLeft: 16 },
+  prayerNameText: { fontSize: 22, fontWeight: '800', color: '#FFF' },
+  prayerNameAr: { fontSize: 16, color: 'rgba(255,255,255,0.7)', marginTop: 2 },
+  prayerTimeText: { fontSize: 36, fontWeight: '800', color: '#FFF', fontVariant: ['tabular-nums'] as any },
+  prayerProgressTrack: { width: '100%', height: 4, borderRadius: 2, backgroundColor: 'rgba(255,255,255,0.15)', marginBottom: 12 },
+  prayerProgressFill: { height: '100%', borderRadius: 2, backgroundColor: 'rgba(212,175,55,0.7)' },
+  prayerProgressDot: { position: 'absolute', top: -4, width: 12, height: 12, borderRadius: 6, backgroundColor: '#D4AF37', borderWidth: 2, borderColor: '#FFF' },
+  prayerCountdownRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  prayerCountdownText: { fontSize: 13, color: 'rgba(255,255,255,0.8)', fontWeight: '500' },
+
+  // Reading/Streak Card
+  readingStatsRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, marginBottom: 10 },
+  streakBadge: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10, paddingVertical: 5, borderRadius: 12 },
+  streakBadgeText: { fontSize: 13, fontWeight: '700' },
+  readingCount: { fontSize: 18, fontWeight: '800' },
+  readingProgressTrack: { height: 8, borderRadius: 4, overflow: 'hidden', marginBottom: 6 },
+  readingProgressFill: { height: '100%', borderRadius: 4 },
+  readingPct: { fontSize: 11, textAlign: 'right', fontWeight: '600' },
+  lastReadRow: { flexDirection: 'row', alignItems: 'center', marginTop: 14, paddingTop: 14, borderTopWidth: 1 },
+  lastReadLabel: { fontSize: 11, fontWeight: '500' },
+  lastReadSurah: { fontSize: 15, fontWeight: '700', marginTop: 2 },
+  lastReadAgo: { fontSize: 11, marginTop: 2 },
+  readBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, paddingVertical: 10, borderRadius: 12 },
+  readBtnText: { color: '#FFF', fontSize: 13, fontWeight: '700' },
+
+  // Verse Card
+  verseCard: { borderRadius: 20, padding: 24, marginBottom: 14, borderWidth: 1, alignItems: 'center' },
+  verseOrnamentRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 20 },
+  verseDash: { flex: 1, height: 1 },
+  verseSectionLabel: { fontSize: 10, fontWeight: '700', letterSpacing: 2 },
+  verseArabicText: { fontSize: 28, lineHeight: 48, textAlign: 'center', fontFamily: Platform.OS === 'ios' ? 'Geeza Pro' : 'serif' },
+  verseDivider: { width: 40, height: 1.5, borderRadius: 1, marginVertical: 16 },
+  verseFrenchText: { fontSize: 15, textAlign: 'center', fontStyle: 'italic', lineHeight: 24, paddingHorizontal: 8 },
+  verseRefText: { fontSize: 12, fontWeight: '600', marginTop: 14 },
+  verseActions: { flexDirection: 'row', gap: 12, marginTop: 16 },
+  verseActionBtn: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+
+  // Ramadan
+  ramadanCard: { borderRadius: 20, padding: 20, marginBottom: 14, shadowColor: '#4C1D95', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 10, elevation: 5 },
+  ramadanHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 16 },
+  ramadanTitle: { fontSize: 11, fontWeight: '700', color: 'rgba(255,255,255,0.8)', letterSpacing: 2 },
+  ramadanSubtitle: { fontSize: 17, fontWeight: '700', color: '#FFF', marginTop: 2 },
+  ramadanCountdownRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start', marginBottom: 8 },
+  ramadanDigitBox: { alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 12, paddingHorizontal: 16, paddingVertical: 8, minWidth: 64 },
+  ramadanDigit: { fontSize: 28, fontWeight: '800', color: '#FFF', fontVariant: ['tabular-nums'] as any },
+  ramadanDigitLabel: { fontSize: 9, color: 'rgba(255,255,255,0.5)', fontWeight: '600', marginTop: 2, letterSpacing: 1 },
+  ramadanColon: { fontSize: 24, fontWeight: '800', color: 'rgba(255,255,255,0.4)', marginHorizontal: 6, marginTop: 6 },
+  ramadanIftarLabel: { textAlign: 'center', fontSize: 12, color: 'rgba(255,255,255,0.6)', fontWeight: '600', letterSpacing: 1 },
+
+  // Circle
+  circleProgressRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, marginBottom: 8 },
+  circleJuzText: { fontSize: 14, fontWeight: '700' },
+  circleDaysText: { fontSize: 12 },
+  circleBarTrack: { height: 6, borderRadius: 3, overflow: 'hidden' },
+  circleBarFill: { height: '100%', borderRadius: 3 },
+
+  // Qibla compact
+  qiblaCard: { borderRadius: 16, padding: 16, marginBottom: 14, flexDirection: 'row', alignItems: 'center' },
+  qiblaMiniCompass: { width: 48, height: 48, borderRadius: 24, backgroundColor: 'rgba(255,255,255,0.15)', alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.2)' },
+  qiblaNeedle: { position: 'absolute', width: 3, height: 22, alignItems: 'center' },
+  qiblaNeedleArrow: { width: 0, height: 0, borderLeftWidth: 5, borderRightWidth: 5, borderBottomWidth: 12, borderLeftColor: 'transparent', borderRightColor: 'transparent', borderBottomColor: '#FFF' },
+  qiblaLabel: { fontSize: 9, fontWeight: '700', color: 'rgba(255,255,255,0.6)', letterSpacing: 1 },
+  qiblaAngle: { fontSize: 20, fontWeight: '800', color: '#FFF', marginTop: 2 },
+  qiblaDistance: { fontSize: 12, color: 'rgba(255,255,255,0.7)', fontWeight: '500' },
+
+  // Calendar
+  calendarWeekRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
+  calendarDayCell: { width: 38, height: 52, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  calendarDayToday: { shadowColor: '#D4AF37', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 6, elevation: 4 },
+  calendarDayName: { fontSize: 10, fontWeight: '600', marginBottom: 4 },
+  calendarDayNum: { fontSize: 15, fontWeight: '700' },
+});
+
+// ===== MEMOIZED VERSE CARD =====
+type VerseCardProps = {
+  verse: { num: number; ar: string; fr: string; ph: string };
+  colors: any;
+  showArabic: boolean;
+  showTranslation: boolean;
+  showPhonetic: boolean;
+  arabicFontSize: number;
+  bookmarked: boolean;
+  bookmarkColor?: string;
+  favorited: boolean;
+  isCurrentAudio: boolean;
+  onBookmark: (num: number) => void;
+  onPlay: (num: number) => void;
+  onFavorite: (v: { num: number; ar: string; fr: string }) => void;
+  onShare: (v: { num: number; ar: string; fr: string }) => void;
+  onLayout: (num: number, y: number) => void;
+};
+
+const VerseCard = React.memo(({ verse, colors, showArabic, showTranslation, showPhonetic, arabicFontSize, bookmarked, bookmarkColor, favorited, isCurrentAudio, onBookmark, onPlay, onFavorite, onShare, onLayout }: VerseCardProps) => (
+  <View onLayout={(e) => onLayout(verse.num, e.nativeEvent.layout.y)}>
+    <View style={[
+      coranStyles.verseCard,
+      { backgroundColor: colors.surface },
+      bookmarked && { borderLeftWidth: 4, borderLeftColor: bookmarkColor },
+      isCurrentAudio && { borderColor: colors.primary + '30', borderWidth: 1 }
+    ]}>
+      <View style={coranStyles.verseHeader}>
+        <View style={[coranStyles.verseBadge, { borderColor: colors.secondary }]}>
+          <Text style={[coranStyles.verseNumText, { color: colors.secondary }]}>{verse.num}</Text>
+        </View>
+        <PressableScale onPress={() => onBookmark(verse.num)}>
+          <Ionicons
+            name={bookmarked ? 'bookmark' : 'bookmark-outline'}
+            size={22}
+            color={bookmarked ? bookmarkColor : colors.textMuted}
+          />
+        </PressableScale>
+      </View>
+
+      {showArabic && (
+        <Text style={[coranStyles.arabicText, { color: colors.text, fontSize: arabicFontSize }]}>
+          {verse.ar}
+        </Text>
+      )}
+      {showTranslation && (
+        <Text style={[coranStyles.frenchText, { color: colors.textSecondary }]}>{verse.fr}</Text>
+      )}
+      {showPhonetic && (
+        <Text style={[coranStyles.phoneticText, { color: colors.textMuted }]}>{verse.ph}</Text>
+      )}
+
+      <View style={coranStyles.verseActions}>
+        <PressableScale onPress={() => onPlay(verse.num)}>
+          <View style={[coranStyles.playBtn, { backgroundColor: isCurrentAudio ? colors.primary : colors.primary + '15' }]}>
+            <Ionicons
+              name={isCurrentAudio ? 'pause' : 'play'}
+              size={18}
+              color={isCurrentAudio ? '#FFF' : colors.primary}
+            />
+          </View>
+        </PressableScale>
+        <PressableScale onPress={() => onFavorite(verse)}>
+          <Ionicons
+            name={favorited ? 'heart' : 'heart-outline'}
+            size={20}
+            color={favorited ? '#EF4444' : colors.textMuted}
+          />
+        </PressableScale>
+        <PressableScale onPress={() => onShare(verse)}>
+          <Ionicons name="share-outline" size={20} color={colors.textMuted} />
+        </PressableScale>
+      </View>
+    </View>
+  </View>
+));
+
+// ===== MEMOIZED TOGGLE =====
+const CoranToggle = React.memo(({ label, active, colors, onPress }: { label: string; active: boolean; colors: any; onPress: () => void }) => (
+  <PressableScale onPress={onPress} style={{ width: 105 }}>
+    <LinearGradient
+      colors={active ? [colors.primary, colors.primaryDark] : [colors.surface, colors.surface]}
+      style={[styles.toggleBtn, { borderColor: active ? colors.primary : colors.border, width: '100%' }]}
+    >
+      <Text style={{ color: active ? '#FFF' : colors.text, fontSize: 13, fontWeight: '600', textAlign: 'center' }}>{label}</Text>
+    </LinearGradient>
+  </PressableScale>
+));
+
+// ===== MEMOIZED SURAH MODAL ITEM =====
+const SurahModalItem = React.memo(({ item, isSelected, colors, onSelect }: { item: any; isSelected: boolean; colors: any; onSelect: (item: any) => void }) => (
+  <PressableScale onPress={() => onSelect(item)}>
+    <View style={[coranStyles.surahItem, { borderBottomColor: colors.border + '30', backgroundColor: isSelected ? colors.primary + '08' : 'transparent' }]}>
+      <View style={[coranStyles.surahItemNum, { borderColor: isSelected ? colors.primary : colors.secondary }]}>
+        <Text style={{ color: isSelected ? colors.primary : colors.secondary, fontSize: 13, fontWeight: '700' }}>{item.number}</Text>
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text style={[coranStyles.surahItemName, { color: colors.text }]}>{item.name}</Text>
+        <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{item.versesCount} versets</Text>
+      </View>
+      <Text style={{ color: colors.secondary, fontSize: 17, fontWeight: '500' }}>{item.nameAr}</Text>
+      {isSelected && <Ionicons name="checkmark-circle" size={20} color={colors.primary} style={{ marginLeft: 8 }} />}
+    </View>
+  </PressableScale>
+));
 
 // ===== CORAN SCREEN =====
 const CoranScreen = () => {
@@ -1736,8 +2119,8 @@ const CoranScreen = () => {
   const [currentSurah, setCurrentSurah] = useState(SURAHS[0]);
   const hasRestoredPosition = useRef(false);
 
-  // Suivi de la position de lecture au scroll
-  const scrollRef = useRef<ScrollView>(null);
+  // FlatList ref for scroll control
+  const flatListRef = useRef<FlatList>(null);
   const versePositions = useRef<Record<number, number>>({});
   const versePositionsSurah = useRef(0);
   const [currentVisibleVerse, setCurrentVisibleVerse] = useState(1);
@@ -1757,32 +2140,21 @@ const CoranScreen = () => {
   // Charger les versets lus du jour depuis AsyncStorage
   useEffect(() => {
     const loadTodayReadVerses = async () => {
-      console.log('📚 [LOAD] Démarrage chargement versets lus...');
       try {
         const today = new Date().toISOString().split('T')[0];
         const data = await AsyncStorage.getItem(STORAGE_KEYS.TODAY_READ_VERSES);
-        console.log('📚 [LOAD] Data brute:', data);
-
         if (data) {
           const parsed: TodayReadVerses = JSON.parse(data);
-          console.log('📚 [LOAD] Date stockée:', parsed.date, '| Aujourd\'hui:', today);
-
           if (parsed.date === today) {
-            console.log('📚 [LOAD] Même jour - Restauration de', parsed.verses.length, 'versets:', parsed.verses);
             setTodayReadVerses(new Set(parsed.verses));
             readVersesRef.current = new Set(parsed.verses);
           } else {
-            console.log('📚 [LOAD] Nouveau jour - Réinitialisation');
             setTodayReadVerses(new Set());
             readVersesRef.current = new Set();
           }
-        } else {
-          console.log('📚 [LOAD] Aucune donnée stockée');
         }
         todayReadVersesLoaded.current = true;
-        console.log('📚 [LOAD] Chargement terminé, loaded =', todayReadVersesLoaded.current);
       } catch (error) {
-        console.error('📚 [LOAD] Erreur:', error);
         todayReadVersesLoaded.current = true;
       }
     };
@@ -1802,20 +2174,21 @@ const CoranScreen = () => {
     if (!hasRestoredPosition.current && lastRead) {
       const saved = SURAHS.find((s: any) => s.number === lastRead.surahNumber);
       if (saved) {
-        getSurahVerses(lastRead.surahNumber); // pré-remplir le cache
+        getSurahVerses(lastRead.surahNumber);
         needsScrollRestore.current = true;
         setCurrentSurah(saved);
       }
       hasRestoredPosition.current = true;
     }
   }, [lastRead]);
+
   const [showSurahModal, setShowSurahModal] = useState(false);
   const [showBookmarkModal, setShowBookmarkModal] = useState(false);
   const [selectedVerse, setSelectedVerse] = useState<number | null>(null);
   const [bookmarkNote, setBookmarkNote] = useState('');
   const [bookmarkColor, setBookmarkColor] = useState(BOOKMARK_COLORS[0]);
 
-  // Versets de la sourate courante (chargés dynamiquement avec état de chargement)
+  // Versets de la sourate courante (chargés dynamiquement)
   const [currentVerses, setCurrentVerses] = useState<{ num: number; ar: string; fr: string; ph: string }[]>([]);
   const [isLoadingVerses, setIsLoadingVerses] = useState(true);
 
@@ -1860,11 +2233,34 @@ const CoranScreen = () => {
     setCurrentAudioVerse(1);
     setCurrentVisibleVerse(1);
     currentVisibleVerseRef.current = 1;
+    if (flatListRef.current) {
+      flatListRef.current.scrollToOffset({ offset: 0, animated: false });
+    }
   }, [currentSurah]);
+
+  // Pre-compute bookmark and favorite lookup maps for O(1) access
+  const bookmarkMap = useMemo(() => {
+    const map = new Map<number, { color: string; id: string }>();
+    bookmarks.forEach((b: any) => {
+      if (b.surahNumber === currentSurah.number) {
+        map.set(b.verseNumber, { color: b.color, id: b.id });
+      }
+    });
+    return map;
+  }, [bookmarks, currentSurah.number]);
+
+  const favoriteMap = useMemo(() => {
+    const map = new Map<number, string>();
+    favorites.forEach((f: any) => {
+      if (f.surahNumber === currentSurah.number) {
+        map.set(f.verseNumber, f.id);
+      }
+    });
+    return map;
+  }, [favorites, currentSurah.number]);
 
   // Enregistrer la position Y de chaque verset via onLayout
   const onVerseLayout = useCallback((verseNum: number, y: number) => {
-    // Nouvelle sourate → vider les anciennes positions
     if (versePositionsSurah.current !== currentSurah.number) {
       versePositions.current = {};
       versePositionsSurah.current = currentSurah.number;
@@ -1872,51 +2268,43 @@ const CoranScreen = () => {
     versePositions.current[verseNum] = y;
   }, [currentSurah.number]);
 
-  // Scroll vers le verset restauré avec retry
-  const scrollToSavedVerse = useCallback((verseNum: number, attempt: number) => {
-    if (attempt > 12) return;
-    const y = versePositions.current[verseNum];
-    if (y !== undefined && scrollRef.current) {
-      scrollRef.current.scrollTo({ y, animated: true });
-    } else {
-      setTimeout(() => scrollToSavedVerse(verseNum, attempt + 1), 400);
+  // Scroll vers le verset restauré avec retry (FlatList version)
+  const scrollToSavedVerse = useCallback((verseIndex: number, attempt: number) => {
+    if (attempt > 8) return;
+    if (flatListRef.current) {
+      try {
+        flatListRef.current.scrollToIndex({ index: verseIndex, animated: true, viewOffset: 50 });
+      } catch {
+        setTimeout(() => scrollToSavedVerse(verseIndex, attempt + 1), 300);
+      }
     }
   }, []);
 
   // Restaurer la position du verset quand les versets sont chargés
   useEffect(() => {
     if (needsScrollRestore.current && lastRead && lastRead.verseNumber > 1
-        && currentSurah.number === lastRead.surahNumber) {
+        && currentSurah.number === lastRead.surahNumber && currentVerses.length > 0) {
       needsScrollRestore.current = false;
       const target = lastRead.verseNumber;
       setCurrentVisibleVerse(target);
       currentVisibleVerseRef.current = target;
-      setTimeout(() => scrollToSavedVerse(target, 0), 500);
+      const targetIndex = Math.min(target - 1, currentVerses.length - 1);
+      setTimeout(() => scrollToSavedVerse(targetIndex, 0), 400);
     }
   }, [currentVerses]);
 
-  // Détecter le verset visible pendant le scroll
-  const handleScroll = useCallback((event: any) => {
-    const scrollY = event.nativeEvent.contentOffset.y;
-    const offset = scrollY + 150;
-
-    const positions = versePositions.current;
-    let visible = 1;
-    let i = 1;
-    while (positions[i] !== undefined) {
-      if (positions[i] <= offset) {
-        visible = i;
-      } else {
-        break;
+  // Detect visible verse from FlatList viewable items
+  const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
+    if (viewableItems.length > 0) {
+      const firstVisible = viewableItems[0].item;
+      if (firstVisible && firstVisible.num !== currentVisibleVerseRef.current) {
+        currentVisibleVerseRef.current = firstVisible.num;
+        setCurrentVisibleVerse(firstVisible.num);
       }
-      i++;
     }
+  }).current;
 
-    if (visible !== currentVisibleVerseRef.current) {
-      currentVisibleVerseRef.current = visible;
-      setCurrentVisibleVerse(visible);
-    }
-  }, []);
+  const viewabilityConfig = useRef({ viewAreaCoveragePercentThreshold: 30, minimumViewTime: 100 }).current;
 
   // Sauvegarde automatique de la position avec debounce
   useEffect(() => {
@@ -1931,45 +2319,29 @@ const CoranScreen = () => {
     return () => { if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current); };
   }, [currentVisibleVerse, currentSurah]);
 
-  // Tracking versets lus : incrémenter le compteur uniquement pour les nouveaux versets
+  // Tracking versets lus
   useEffect(() => {
     const key = `${currentSurah.number}_${currentVisibleVerse}`;
-    const isLoaded = todayReadVersesLoaded.current;
-    const alreadyRead = readVersesRef.current.has(key);
-    const setSize = readVersesRef.current.size;
+    if (!todayReadVersesLoaded.current) return;
 
-    console.log(`📖 [TRACK] Verset: ${key} | Chargé: ${isLoaded} | Déjà lu: ${alreadyRead} | Total Set: ${setSize}`);
-
-    if (!isLoaded) {
-      console.log('📖 [TRACK] ⏳ Attente chargement...');
-      return;
-    }
-
-    if (!alreadyRead) {
+    if (!readVersesRef.current.has(key)) {
       readVersesRef.current.add(key);
       pendingVersesCountRef.current += 1;
-      console.log(`📖 [TRACK] ✅ NOUVEAU verset ajouté! Pending: ${pendingVersesCountRef.current} | Set: ${readVersesRef.current.size}`);
 
-      // Persister immédiatement les versets lus
       const today = new Date().toISOString().split('T')[0];
       const versesArray = Array.from(readVersesRef.current);
       AsyncStorage.setItem(
         STORAGE_KEYS.TODAY_READ_VERSES,
         JSON.stringify({ date: today, verses: versesArray })
-      ).then(() => {
-        console.log('📖 [TRACK] 💾 Persisté:', versesArray.length, 'versets');
-      });
+      );
 
       if (streakDebounceRef.current) clearTimeout(streakDebounceRef.current);
       streakDebounceRef.current = setTimeout(() => {
         if (pendingVersesCountRef.current > 0) {
-          console.log(`📖 [TRACK] 🔥 updateStreak appelé avec: ${pendingVersesCountRef.current}`);
           updateStreak(pendingVersesCountRef.current);
           pendingVersesCountRef.current = 0;
         }
       }, 2000);
-    } else {
-      console.log(`📖 [TRACK] ⏭️ Verset déjà lu, ignoré`);
     }
   }, [currentVisibleVerse, currentSurah.number]);
 
@@ -1984,14 +2356,13 @@ const CoranScreen = () => {
     };
   }, []);
 
-  const playVerse = async (verseNum: number) => {
+  const playVerse = useCallback(async (verseNum: number) => {
     try {
       if (sound) await sound.unloadAsync();
 
       const surahStr = currentSurah.number.toString().padStart(3, '0');
       const verseStr = verseNum.toString().padStart(3, '0');
       const url = `https://everyayah.com/data/Alafasy_128kbps/${surahStr}${verseStr}.mp3`;
-      console.log('Audio URL:', url);
 
       const { sound: newSound } = await Audio.Sound.createAsync(
         { uri: url },
@@ -2016,60 +2387,48 @@ const CoranScreen = () => {
           }
         }
       });
-
-      // Le tracking des versets lus se fait via le scroll (pas besoin ici)
     } catch (error) {
-      console.error('Error playing audio:', error);
       Alert.alert('Erreur', 'Impossible de charger l\'audio');
     }
-  };
+  }, [sound, currentSurah.number, settings.audioSpeed, currentVerses.length]);
 
-  const togglePlayPause = async () => {
+  const togglePlayPause = useCallback(async () => {
     if (!sound) {
       playVerse(currentVisibleVerse);
       return;
     }
-
     if (isPlaying) {
       await sound.pauseAsync();
     } else {
       await sound.playAsync();
     }
     setIsPlaying(!isPlaying);
-  };
+  }, [sound, isPlaying, currentVisibleVerse, playVerse]);
 
-  const goToPreviousVerse = () => {
+  const goToPreviousVerse = useCallback(() => {
     if (currentVisibleVerse > 1) {
       const newVerse = currentVisibleVerse - 1;
-      const y = versePositions.current[newVerse];
-      if (y !== undefined && scrollRef.current) {
-        scrollRef.current.scrollTo({ y, animated: true });
+      const idx = newVerse - 1;
+      if (flatListRef.current && idx >= 0) {
+        try { flatListRef.current.scrollToIndex({ index: idx, animated: true, viewOffset: 50 }); } catch {}
       }
       playVerse(newVerse);
     }
-  };
+  }, [currentVisibleVerse, playVerse]);
 
-  const goToNextVerse = () => {
+  const goToNextVerse = useCallback(() => {
     if (currentVisibleVerse < currentVerses.length) {
       const newVerse = currentVisibleVerse + 1;
-      const y = versePositions.current[newVerse];
-      if (y !== undefined && scrollRef.current) {
-        scrollRef.current.scrollTo({ y, animated: true });
+      const idx = newVerse - 1;
+      if (flatListRef.current && idx < currentVerses.length) {
+        try { flatListRef.current.scrollToIndex({ index: idx, animated: true, viewOffset: 50 }); } catch {}
       }
       playVerse(newVerse);
     }
-  };
+  }, [currentVisibleVerse, currentVerses.length, playVerse]);
 
-  const isBookmarked = (verseNum: number) => {
-    return bookmarks.some(b => b.surahNumber === currentSurah.number && b.verseNumber === verseNum);
-  };
-
-  const getBookmark = (verseNum: number) => {
-    return bookmarks.find(b => b.surahNumber === currentSurah.number && b.verseNumber === verseNum);
-  };
-
-  const handleBookmarkPress = (verseNum: number) => {
-    const existing = getBookmark(verseNum);
+  const handleBookmarkPress = useCallback((verseNum: number) => {
+    const existing = bookmarkMap.get(verseNum);
     if (existing) {
       removeBookmark(existing.id);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -2079,9 +2438,9 @@ const CoranScreen = () => {
       setBookmarkColor(BOOKMARK_COLORS[0]);
       setShowBookmarkModal(true);
     }
-  };
+  }, [bookmarkMap, removeBookmark]);
 
-  const saveBookmark = () => {
+  const saveBookmark = useCallback(() => {
     if (selectedVerse) {
       addBookmark({
         surahNumber: currentSurah.number,
@@ -2093,21 +2452,12 @@ const CoranScreen = () => {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       setShowBookmarkModal(false);
     }
-  };
+  }, [selectedVerse, currentSurah, bookmarkNote, bookmarkColor, addBookmark]);
 
-  // Favoris
-  const isFavorite = (verseNum: number) => {
-    return favorites.some(f => f.surahNumber === currentSurah.number && f.verseNumber === verseNum);
-  };
-
-  const getFavorite = (verseNum: number) => {
-    return favorites.find(f => f.surahNumber === currentSurah.number && f.verseNumber === verseNum);
-  };
-
-  const toggleFavorite = (verse: { num: number; ar: string; fr: string }) => {
-    const existing = getFavorite(verse.num);
-    if (existing) {
-      removeFavorite(existing.id);
+  const toggleFavorite = useCallback((verse: { num: number; ar: string; fr: string }) => {
+    const existingId = favoriteMap.get(verse.num);
+    if (existingId) {
+      removeFavorite(existingId);
     } else {
       addFavorite({
         surahNumber: currentSurah.number,
@@ -2118,15 +2468,12 @@ const CoranScreen = () => {
       });
     }
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-  };
+  }, [favoriteMap, currentSurah, removeFavorite, addFavorite]);
 
-  // Partage
-  const shareVerse = async (verse: { num: number; ar: string; fr: string }) => {
+  const shareVerse = useCallback(async (verse: { num: number; ar: string; fr: string }) => {
     const text = `Sourate ${currentSurah.name}, Verset ${verse.num}\n\n${verse.ar}\n\n"${verse.fr}"\n\n- Partagé via l'app Barakaah`;
-    try {
-      await Share.share({ message: text });
-    } catch (_) {}
-  };
+    try { await Share.share({ message: text }); } catch {}
+  }, [currentSurah.name]);
 
   const handleGoBack = useCallback(() => {
     if (isPlaying) {
@@ -2154,206 +2501,190 @@ const CoranScreen = () => {
     }
   }, [isPlaying, sound, navigation]);
 
-  const Toggle = ({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) => (
-    <PressableScale onPress={onPress} style={{ width: 105 }}>
-      <LinearGradient
-        colors={active ? [colors.primary, colors.primaryDark] : [colors.surface, colors.surface]}
-        style={[styles.toggleBtn, { borderColor: active ? colors.primary : colors.border, width: '100%' }]}
-      >
-        <Text style={{ color: active ? '#FFF' : colors.text, fontSize: 13, fontWeight: '600', textAlign: 'center' }}>{label}</Text>
-      </LinearGradient>
-    </PressableScale>
-  );
+  // Toggle callbacks (memoized)
+  const toggleArabic = useCallback(() => {
+    if (settings.showArabic && !settings.showTranslation && !settings.showPhonetic) return;
+    updateSettings({ showArabic: !settings.showArabic });
+  }, [settings.showArabic, settings.showTranslation, settings.showPhonetic, updateSettings]);
+
+  const toggleFrancais = useCallback(() => {
+    if (!settings.showArabic && settings.showTranslation && !settings.showPhonetic) return;
+    updateSettings({ showTranslation: !settings.showTranslation });
+  }, [settings.showArabic, settings.showTranslation, settings.showPhonetic, updateSettings]);
+
+  const togglePhonetic = useCallback(() => {
+    if (!settings.showArabic && !settings.showTranslation && settings.showPhonetic) return;
+    updateSettings({ showPhonetic: !settings.showPhonetic });
+  }, [settings.showArabic, settings.showTranslation, settings.showPhonetic, updateSettings]);
+
+  // Surah modal select handler
+  const handleSurahSelect = useCallback((item: any) => {
+    setCurrentSurah(item);
+    setShowSurahModal(false);
+  }, []);
+
+  // FlatList renderItem for verses
+  const renderVerse = useCallback(({ item: v }: { item: { num: number; ar: string; fr: string; ph: string } }) => {
+    const bm = bookmarkMap.get(v.num);
+    return (
+      <VerseCard
+        verse={v}
+        colors={colors}
+        showArabic={settings.showArabic}
+        showTranslation={settings.showTranslation}
+        showPhonetic={settings.showPhonetic}
+        arabicFontSize={settings.arabicFontSize}
+        bookmarked={!!bm}
+        bookmarkColor={bm?.color}
+        favorited={favoriteMap.has(v.num)}
+        isCurrentAudio={currentAudioVerse === v.num && isPlaying}
+        onBookmark={handleBookmarkPress}
+        onPlay={playVerse}
+        onFavorite={toggleFavorite}
+        onShare={shareVerse}
+        onLayout={onVerseLayout}
+      />
+    );
+  }, [colors, settings.showArabic, settings.showTranslation, settings.showPhonetic, settings.arabicFontSize, bookmarkMap, favoriteMap, currentAudioVerse, isPlaying, handleBookmarkPress, playVerse, toggleFavorite, shareVerse, onVerseLayout]);
+
+  const verseKeyExtractor = useCallback((item: { num: number }) => item.num.toString(), []);
+
+  // FlatList renderItem for surah modal
+  const renderSurahItem = useCallback(({ item }: { item: any }) => (
+    <SurahModalItem item={item} isSelected={item.number === currentSurah.number} colors={colors} onSelect={handleSurahSelect} />
+  ), [currentSurah.number, colors, handleSurahSelect]);
+
+  const surahKeyExtractor = useCallback((item: any) => item.number.toString(), []);
+
+  // Skeleton loader
+  const skeletonData = useMemo(() => [0, 1, 2, 3], []);
+
+  // FlatList footer spacer
+  const ListFooter = useMemo(() => <View style={{ height: 180 }} />, []);
 
   return (
-    <View style={{ flex: 1 }}>
-      <LinearGradient colors={colors.backgroundGradient} style={StyleSheet.absoluteFill} />
-
-      <CustomHeader
-        title="Coran"
-        showBackButton={navigation.canGoBack}
-        onBack={handleGoBack}
-      />
-
-      <ScrollView ref={scrollRef} style={{ flex: 1 }} showsVerticalScrollIndicator={false} onScroll={handleScroll} scrollEventThrottle={100}>
-        <View style={styles.screenContentWithHeader}>
-          <FadeInView delay={100}>
-            <Text style={[styles.screenTitle, { color: colors.text }]}>Sourate</Text>
-            <PressableScale onPress={() => setShowSurahModal(true)}>
-              <GlassCard colors={colors} style={styles.surahSelector}>
-                <View>
-                  <Text style={[styles.surahName, { color: colors.text }]}>{currentSurah.name}</Text>
-                  <Text style={[styles.surahNameAr, { color: colors.primary }]}>{currentSurah.nameAr}</Text>
-                </View>
-                <Ionicons name="chevron-down" size={24} color={colors.textSecondary} />
-              </GlassCard>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+      {/* ===== COMPACT HEADER ===== */}
+      <LinearGradient colors={colors.headerGradient} style={coranStyles.headerGradient}>
+        <View style={coranStyles.headerTop}>
+          {navigation.canGoBack && (
+            <PressableScale onPress={handleGoBack}>
+              <View style={coranStyles.backBtn}>
+                <Ionicons name="arrow-back" size={20} color="#FFF" />
+              </View>
             </PressableScale>
-            <Text style={[styles.surahInfo, { color: colors.textSecondary }]}>
-              {currentSurah.versesCount} versets - {currentSurah.type}
-            </Text>
-          </FadeInView>
-
-          <FadeInView delay={200} style={styles.toggleRow}>
-            <Toggle label="Arabe" active={settings.showArabic} onPress={() => {
-              // Empêcher de tout désactiver
-              if (settings.showArabic && !settings.showTranslation && !settings.showPhonetic) return;
-              updateSettings({ showArabic: !settings.showArabic });
-            }} />
-            <Toggle label="Français" active={settings.showTranslation} onPress={() => {
-              if (!settings.showArabic && settings.showTranslation && !settings.showPhonetic) return;
-              updateSettings({ showTranslation: !settings.showTranslation });
-            }} />
-            <Toggle label="Phonétique" active={settings.showPhonetic} onPress={() => {
-              if (!settings.showArabic && !settings.showTranslation && settings.showPhonetic) return;
-              updateSettings({ showPhonetic: !settings.showPhonetic });
-            }} />
-          </FadeInView>
-
-          {isLoadingVerses ? (
-            // Skeleton loader
-            [0, 1, 2, 3].map((k) => (
-              <Animated.View key={k} style={{ opacity: skeletonOpacity, marginBottom: 12 }}>
-                <GlassCard colors={colors} style={styles.verseItemCard}>
-                  <View style={styles.verseHeader}>
-                    <View style={[styles.verseBadge, { backgroundColor: colors.textMuted + '40' }]}>
-                      <Text style={styles.verseNumText}> </Text>
-                    </View>
-                    <View style={{ width: 24, height: 24, borderRadius: 4, backgroundColor: colors.textMuted + '30' }} />
-                  </View>
-                  <View style={{ height: 28, borderRadius: 8, backgroundColor: colors.surface, marginTop: 12, width: '90%', alignSelf: 'flex-end' }} />
-                  <View style={{ height: 16, borderRadius: 6, backgroundColor: colors.surface, marginTop: 10, width: '70%' }} />
-                  <View style={{ flexDirection: 'row', gap: 12, marginTop: 14 }}>
-                    <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: colors.textMuted + '20' }} />
-                    <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: colors.textMuted + '20', alignSelf: 'center' }} />
-                    <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: colors.textMuted + '20', alignSelf: 'center' }} />
-                  </View>
-                </GlassCard>
-              </Animated.View>
-            ))
-          ) : (
-            currentVerses.map((v, i) => {
-              const bookmarked = isBookmarked(v.num);
-              const bookmark = getBookmark(v.num);
-
-              return (
-                <View key={v.num} onLayout={(e) => onVerseLayout(v.num, e.nativeEvent.layout.y)}>
-                <FadeInView delay={i < 10 ? 100 + i * 40 : 0}>
-                  <GlassCard
-                    colors={colors}
-                    style={[
-                      styles.verseItemCard,
-                      bookmarked && { borderLeftWidth: 4, borderLeftColor: bookmark?.color }
-                    ]}
-                  >
-                    <View style={styles.verseHeader}>
-                      <View style={[styles.verseBadge, { backgroundColor: colors.primary }]}>
-                        <Text style={styles.verseNumText}>{v.num}</Text>
-                      </View>
-                      <PressableScale onPress={() => handleBookmarkPress(v.num)}>
-                        <Ionicons
-                          name={bookmarked ? 'bookmark' : 'bookmark-outline'}
-                          size={24}
-                          color={bookmarked ? bookmark?.color : colors.textMuted}
-                        />
-                      </PressableScale>
-                    </View>
-
-                    {settings.showArabic && (
-                      <Text style={[styles.verseArabicText, { color: colors.text, fontSize: settings.arabicFontSize }]}>
-                        {v.ar}
-                      </Text>
-                    )}
-                    {settings.showTranslation && (
-                      <Text style={[styles.verseFrenchText, { color: colors.textSecondary }]}>{v.fr}</Text>
-                    )}
-                    {settings.showPhonetic && (
-                      <Text style={[styles.versePhoneticText, { color: colors.textMuted }]}>{v.ph}</Text>
-                    )}
-
-                    <View style={styles.verseActions}>
-                      <PressableScale onPress={() => playVerse(v.num)}>
-                        <View style={[styles.playBtn, { backgroundColor: currentAudioVerse === v.num && isPlaying ? colors.primary : colors.primary + '20' }]}>
-                          <Ionicons
-                            name={currentAudioVerse === v.num && isPlaying ? 'pause' : 'play'}
-                            size={20}
-                            color={currentAudioVerse === v.num && isPlaying ? '#FFF' : colors.primary}
-                          />
-                        </View>
-                      </PressableScale>
-                      <PressableScale onPress={() => toggleFavorite(v)}>
-                        <Ionicons
-                          name={isFavorite(v.num) ? 'heart' : 'heart-outline'}
-                          size={22}
-                          color={isFavorite(v.num) ? '#EF4444' : colors.textMuted}
-                        />
-                      </PressableScale>
-                      <PressableScale onPress={() => shareVerse(v)}>
-                        <Ionicons name="share-outline" size={22} color={colors.textMuted} />
-                      </PressableScale>
-                    </View>
-                  </GlassCard>
-                </FadeInView>
-                </View>
-              );
-            })
           )}
-
-          <View style={{ height: 180 }} />
-        </View>
-      </ScrollView>
-
-      {/* Audio Player Bar */}
-      <View style={[styles.audioBar, { backgroundColor: colors.surface, borderTopColor: colors.border }]}>
-        <View style={styles.audioProgress}>
-          <View style={[styles.audioProgressFill, { width: `${audioProgress * 100}%`, backgroundColor: colors.primary }]} />
-        </View>
-        <View style={styles.audioControls}>
-          <PressableScale onPress={goToPreviousVerse}>
-            <Ionicons name="play-skip-back" size={28} color={colors.text} />
-          </PressableScale>
-          <PressableScale onPress={togglePlayPause}>
-            <View style={[styles.mainPlayBtn, { backgroundColor: colors.primary }]}>
-              <Ionicons name={isPlaying ? 'pause' : 'play'} size={32} color="#FFF" />
+          <PressableScale onPress={() => setShowSurahModal(true)} style={{ flex: 1 }}>
+            <View style={coranStyles.headerSurahRow}>
+              <Text style={coranStyles.headerSurahFr} numberOfLines={1}>{currentSurah.name}</Text>
+              <Text style={coranStyles.headerSurahAr}>{currentSurah.nameAr}</Text>
+              <Text style={coranStyles.headerVerseCount}>({currentSurah.versesCount}v)</Text>
             </View>
           </PressableScale>
-          <PressableScale onPress={goToNextVerse}>
-            <Ionicons name="play-skip-forward" size={28} color={colors.text} />
+          <PressableScale onPress={() => setShowSurahModal(true)}>
+            <View style={coranStyles.chevronBox}>
+              <Ionicons name="chevron-down" size={16} color="rgba(255,255,255,0.8)" />
+            </View>
           </PressableScale>
         </View>
-        <Text style={[styles.audioVerseText, { color: colors.textSecondary }]}>
+      </LinearGradient>
+
+      {/* ===== TOGGLE BAR ===== */}
+      <View style={[coranStyles.toggleBar, { backgroundColor: colors.surface, borderBottomColor: colors.border + '30' }]}>
+        <CoranToggle label="Arabe" active={settings.showArabic} colors={colors} onPress={toggleArabic} />
+        <CoranToggle label="Francais" active={settings.showTranslation} colors={colors} onPress={toggleFrancais} />
+        <CoranToggle label="Phonetique" active={settings.showPhonetic} colors={colors} onPress={togglePhonetic} />
+      </View>
+
+      {/* ===== VERSES FLATLIST ===== */}
+      {isLoadingVerses ? (
+        <View style={{ padding: 16 }}>
+          {skeletonData.map((k) => (
+            <Animated.View key={k} style={{ opacity: skeletonOpacity, marginBottom: 10 }}>
+              <View style={[coranStyles.verseCard, { backgroundColor: colors.surface }]}>
+                <View style={coranStyles.verseHeader}>
+                  <View style={[coranStyles.verseBadge, { borderColor: colors.textMuted + '40' }]} />
+                  <View style={{ width: 24, height: 24, borderRadius: 4, backgroundColor: colors.textMuted + '30' }} />
+                </View>
+                <View style={{ height: 28, borderRadius: 8, backgroundColor: colors.border + '30', marginTop: 12, width: '90%', alignSelf: 'flex-end' }} />
+                <View style={{ height: 16, borderRadius: 6, backgroundColor: colors.border + '30', marginTop: 10, width: '70%' }} />
+              </View>
+            </Animated.View>
+          ))}
+        </View>
+      ) : (
+        <FlatList
+          ref={flatListRef}
+          data={currentVerses}
+          renderItem={renderVerse}
+          keyExtractor={verseKeyExtractor}
+          contentContainerStyle={{ padding: 16 }}
+          showsVerticalScrollIndicator={false}
+          initialNumToRender={10}
+          maxToRenderPerBatch={8}
+          windowSize={7}
+          removeClippedSubviews={Platform.OS !== 'web'}
+          onViewableItemsChanged={onViewableItemsChanged}
+          viewabilityConfig={viewabilityConfig}
+          ListFooterComponent={ListFooter}
+          onScrollToIndexFailed={(info) => {
+            setTimeout(() => {
+              if (flatListRef.current) {
+                try { flatListRef.current.scrollToIndex({ index: info.index, animated: true }); } catch {}
+              }
+            }, 500);
+          }}
+        />
+      )}
+
+      {/* ===== AUDIO PLAYER BAR ===== */}
+      <View style={[coranStyles.audioBar, { backgroundColor: colors.surface, borderTopColor: colors.border + '30' }]}>
+        <View style={[coranStyles.audioTrack, { backgroundColor: colors.border + '30' }]}>
+          <LinearGradient
+            colors={[colors.primary, colors.secondary] as [string, string]}
+            start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+            style={[coranStyles.audioFill, { width: `${audioProgress * 100}%` }]}
+          />
+        </View>
+        <View style={coranStyles.audioControls}>
+          <PressableScale onPress={goToPreviousVerse}>
+            <Ionicons name="play-skip-back" size={24} color={colors.text} />
+          </PressableScale>
+          <PressableScale onPress={togglePlayPause}>
+            <LinearGradient colors={[colors.primary, colors.primaryDark] as [string, string]} style={coranStyles.mainPlayBtn}>
+              <Ionicons name={isPlaying ? 'pause' : 'play'} size={28} color="#FFF" />
+            </LinearGradient>
+          </PressableScale>
+          <PressableScale onPress={goToNextVerse}>
+            <Ionicons name="play-skip-forward" size={24} color={colors.text} />
+          </PressableScale>
+        </View>
+        <Text style={[coranStyles.audioLabel, { color: colors.textMuted }]}>
           Verset {currentVisibleVerse} / {currentVerses.length}
         </Text>
       </View>
 
-      {/* Surah Modal */}
+      {/* ===== SURAH MODAL ===== */}
       <Modal visible={showSurahModal} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: colors.surface }]}>
-            <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: colors.text }]}>Choisir une sourate</Text>
+        <View style={coranStyles.modalOverlay}>
+          <View style={[coranStyles.modalContent, { backgroundColor: colors.surface }]}>
+            <View style={coranStyles.modalHeader}>
+              <Text style={[coranStyles.modalTitle, { color: colors.text }]}>Choisir une sourate</Text>
               <PressableScale onPress={() => setShowSurahModal(false)}>
-                <Ionicons name="close" size={28} color={colors.text} />
+                <View style={[coranStyles.modalCloseBtn, { backgroundColor: colors.background }]}>
+                  <Ionicons name="close" size={22} color={colors.text} />
+                </View>
               </PressableScale>
             </View>
             <FlatList
               data={SURAHS}
-              keyExtractor={item => item.number.toString()}
-              renderItem={({ item }) => (
-                <PressableScale onPress={() => { setCurrentSurah(item); setShowSurahModal(false); }}>
-                  <View style={[styles.surahItem, { borderBottomColor: colors.border }]}>
-                    <View style={[styles.surahNum, { backgroundColor: colors.primary }]}>
-                      <Text style={styles.surahNumText}>{item.number}</Text>
-                    </View>
-                    <View style={{ flex: 1 }}>
-                      <Text style={[styles.surahItemName, { color: colors.text }]}>{item.name}</Text>
-                      <Text style={[styles.surahItemInfo, { color: colors.textSecondary }]}>
-                        {item.versesCount} versets
-                      </Text>
-                    </View>
-                    <Text style={[styles.surahItemAr, { color: colors.primary }]}>{item.nameAr}</Text>
-                  </View>
-                </PressableScale>
-              )}
+              keyExtractor={surahKeyExtractor}
+              renderItem={renderSurahItem}
+              initialNumToRender={15}
+              maxToRenderPerBatch={10}
+              windowSize={5}
+              removeClippedSubviews={Platform.OS !== 'web'}
+              getItemLayout={(_, index) => ({ length: 60, offset: 60 * index, index })}
             />
           </View>
         </View>
@@ -2414,6 +2745,46 @@ const CoranScreen = () => {
   );
 };
 
+// ===== CORAN STYLES =====
+const coranStyles = StyleSheet.create({
+  headerGradient: { paddingTop: Platform.OS === 'android' ? 44 : 20, paddingBottom: 12, paddingHorizontal: 16 },
+  headerTop: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  backBtn: { width: 36, height: 36, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.12)', alignItems: 'center', justifyContent: 'center' },
+  headerSurahRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  headerSurahFr: { fontSize: 17, fontWeight: '700', color: '#FFF', flexShrink: 1 },
+  headerSurahAr: { fontSize: 17, color: '#D4AF37', fontWeight: '600' },
+  headerVerseCount: { fontSize: 13, color: 'rgba(255,255,255,0.55)', fontWeight: '500' },
+  chevronBox: { width: 30, height: 30, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center' },
+
+  toggleBar: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10, paddingVertical: 12, paddingHorizontal: 16, borderBottomWidth: 0.5 },
+
+  verseCard: { borderRadius: 16, padding: 16, marginBottom: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.04, shadowRadius: 8, elevation: 2 },
+  verseHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 },
+  verseBadge: { width: 36, height: 36, borderRadius: 18, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center' },
+  verseNumText: { fontWeight: '700', fontSize: 13 },
+  arabicText: { textAlign: 'center', marginBottom: 14, lineHeight: 42, fontFamily: Platform.OS === 'ios' ? 'Geeza Pro' : 'serif' },
+  frenchText: { fontSize: 15, textAlign: 'center', lineHeight: 24, marginBottom: 10, paddingHorizontal: 8 },
+  phoneticText: { fontSize: 13, textAlign: 'center', fontStyle: 'italic', lineHeight: 20, marginBottom: 14 },
+  verseActions: { flexDirection: 'row', justifyContent: 'center', gap: 20, alignItems: 'center', paddingTop: 8, borderTopWidth: 0.5, borderTopColor: 'rgba(0,0,0,0.05)' },
+  playBtn: { width: 40, height: 40, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
+
+  audioBar: { borderTopWidth: 0.5, paddingVertical: 10, paddingHorizontal: 20 },
+  audioTrack: { height: 3, borderRadius: 2, overflow: 'hidden', marginBottom: 10 },
+  audioFill: { height: '100%', borderRadius: 2 },
+  audioControls: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 28 },
+  mainPlayBtn: { width: 52, height: 52, borderRadius: 26, alignItems: 'center', justifyContent: 'center' },
+  audioLabel: { textAlign: 'center', marginTop: 6, fontSize: 11, fontWeight: '500' },
+
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
+  modalContent: { borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingTop: 20, paddingHorizontal: 20, maxHeight: '80%' },
+  modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
+  modalTitle: { fontSize: 18, fontWeight: '700' },
+  modalCloseBtn: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
+  surahItem: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 4, borderBottomWidth: 0.5, gap: 12 },
+  surahItemNum: { width: 38, height: 38, borderRadius: 19, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center' },
+  surahItemName: { fontSize: 15, fontWeight: '600' },
+});
+
 // ===== PRIERES SCREEN =====
 const PrieresScreen = () => {
   const { colors } = useTheme();
@@ -2436,95 +2807,198 @@ const PrieresScreen = () => {
   const fmt = (n: number) => n.toString().padStart(2, '0');
   const countdownStr = `Dans ${fmt(countdown.h)}h ${fmt(countdown.m)}min ${fmt(countdown.s)}s`;
 
+  // Progress (how many passed)
+  const passedCount = prayers.filter(p => p.passed).length;
+
   return (
-    <View style={{ flex: 1 }}>
-      <LinearGradient colors={colors.backgroundGradient} style={StyleSheet.absoluteFill} />
-
-      <CustomHeader
-        title="Prières"
-        showBackButton={navigation.canGoBack}
-        onBack={navigation.goBack}
-        rightIcon="settings-outline"
-        onRightPress={() => {}}
-      />
-
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View style={styles.screenContentWithHeader}>
-          <FadeInView delay={100} style={styles.locationHeader}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Ionicons name="location" size={20} color={colors.primary} />
-            <Text style={[styles.cityName, { color: colors.text }]}>{settings.city}, {settings.country}</Text>
-          </View>
-          <View style={[styles.settingsBtn, { backgroundColor: colors.surface }]}>
-            <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{currentTime}</Text>
-          </View>
-        </FadeInView>
-
-        <FadeInView delay={150}>
-          <Text style={[styles.dateSubtext, { color: colors.textSecondary }]}>{formattedDate}</Text>
-        </FadeInView>
-
-        {nextPrayer && (
-          <FadeInView delay={200}>
-            <LinearGradient colors={colors.prayerCardGradient} style={styles.prayerCard}>
-              <View style={styles.prayerCardContent}>
-                <View style={styles.prayerCardHeader}>
-                  <PulseView>
-                    <View style={styles.prayerIconCircle}>
-                      <Ionicons name={nextPrayer.icon as any} size={24} color="#FFF" />
-                    </View>
-                  </PulseView>
-                  <Text style={styles.prayerLabel}>PROCHAINE PRIERE</Text>
+        {/* ===== PREMIUM HEADER ===== */}
+        <LinearGradient colors={colors.headerGradient} style={prieresStyles.headerGradient}>
+          <FadeInView delay={50}>
+            <View style={prieresStyles.headerTop}>
+              {navigation.canGoBack && (
+                <PressableScale onPress={navigation.goBack}>
+                  <View style={prieresStyles.backBtn}>
+                    <Ionicons name="arrow-back" size={20} color="#FFF" />
+                  </View>
+                </PressableScale>
+              )}
+              <View style={{ flex: 1 }}>
+                <Text style={prieresStyles.headerTitle}>Horaires de Priere</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 4 }}>
+                  <Ionicons name="location-outline" size={13} color="rgba(255,255,255,0.7)" />
+                  <Text style={prieresStyles.headerCity}>{settings.city}, {settings.country}</Text>
                 </View>
-                <Text style={styles.prayerName}>{nextPrayer.name}</Text>
-                <Text style={styles.prayerNameAr}>{nextPrayer.ar}</Text>
-                <Text style={styles.prayerTime}>{nextPrayer.time}</Text>
-                <Text style={styles.countdown}>{countdownStr}</Text>
               </View>
-            </LinearGradient>
+              <View style={prieresStyles.timeBox}>
+                <Text style={prieresStyles.timeText}>{currentTime}</Text>
+              </View>
+            </View>
           </FadeInView>
-        )}
 
-        <FadeInView delay={300}>
-          <View style={styles.prayerListHeader}>
-            <Text style={[styles.sectionTitle, { color: colors.text, marginTop: 0 }]}>Horaires du jour</Text>
-            <Text style={[styles.methodBadge, { color: colors.primary, backgroundColor: colors.primary + '20' }]}>
-              Methode {settings.calculationMethod}
+          <FadeInView delay={100}>
+            <View style={prieresStyles.dateRow}>
+              <View style={prieresStyles.hijriBadge}>
+                <Ionicons name="moon" size={11} color={colors.secondary} />
+                <Text style={[prieresStyles.hijriText, { color: colors.secondary }]}>
+                  {(() => {
+                    try {
+                      const h = getAdjustedHijriMoment();
+                      const months = ['Muharram','Safar','Rabi al-Awwal','Rabi al-Thani','Jumada al-Ula','Jumada al-Thani','Rajab','Sha\'ban','Ramadan','Shawwal','Dhu al-Qi\'dah','Dhu al-Hijjah'];
+                      return `${h.iDate()} ${months[h.iMonth()]} ${h.iYear()}`;
+                    } catch { return ''; }
+                  })()}
+                </Text>
+              </View>
+              <Text style={prieresStyles.gregorianText}>{formattedDate}</Text>
+            </View>
+          </FadeInView>
+
+          {/* Next Prayer Hero */}
+          {nextPrayer && (
+            <FadeInView delay={150}>
+              <View style={prieresStyles.nextPrayerCard}>
+                <ShimmerGold><View style={prieresStyles.nextPrayerGoldLine} /></ShimmerGold>
+                <View style={prieresStyles.nextPrayerInner}>
+                  <Text style={prieresStyles.nextPrayerLabel}>PROCHAINE PRIERE</Text>
+                  <View style={prieresStyles.nextPrayerMainRow}>
+                    <PulseView>
+                      <View style={prieresStyles.nextPrayerIcon}>
+                        <Ionicons name={nextPrayer.icon as any} size={28} color="#FFF" />
+                      </View>
+                    </PulseView>
+                    <View style={{ flex: 1, marginLeft: 14 }}>
+                      <Text style={prieresStyles.nextPrayerName}>{nextPrayer.name}</Text>
+                      <Text style={prieresStyles.nextPrayerAr}>{nextPrayer.ar}</Text>
+                    </View>
+                    <Text style={prieresStyles.nextPrayerTime}>{nextPrayer.time}</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                    <Ionicons name="time-outline" size={14} color="rgba(255,255,255,0.7)" />
+                    <Text style={prieresStyles.nextPrayerCountdown}>{countdownStr}</Text>
+                  </View>
+                </View>
+              </View>
+            </FadeInView>
+          )}
+        </LinearGradient>
+
+        {/* ===== PROGRESS BAR ===== */}
+        <FadeInView delay={250}>
+          <View style={prieresStyles.progressSection}>
+            <View style={prieresStyles.progressHeader}>
+              <Text style={[prieresStyles.sectionTitle, { color: colors.text }]}>Horaires du jour</Text>
+              <View style={[prieresStyles.progressBadge, { backgroundColor: colors.primary + '15' }]}>
+                <Text style={[prieresStyles.progressBadgeText, { color: colors.primary }]}>{passedCount}/5</Text>
+              </View>
+            </View>
+            <View style={[prieresStyles.progressTrack, { backgroundColor: colors.border + '40' }]}>
+              <LinearGradient
+                colors={[colors.primary, colors.secondary] as [string, string]}
+                start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+                style={[prieresStyles.progressFill, { width: `${(passedCount / 5) * 100}%` as any }]}
+              />
+            </View>
+            <View style={prieresStyles.methodRow}>
+              <Ionicons name="options-outline" size={12} color={colors.textMuted} />
+              <Text style={[prieresStyles.methodText, { color: colors.textMuted }]}>Methode {settings.calculationMethod}</Text>
+            </View>
+          </View>
+        </FadeInView>
+
+        {/* ===== PRAYER LIST ===== */}
+        <View style={prieresStyles.prayerList}>
+          {prayers.map((p, i) => (
+            <FadeInView key={p.name} delay={300 + i * 80}>
+              <View style={[
+                prieresStyles.prayerRow,
+                { backgroundColor: colors.surface },
+                p.isNext && { borderWidth: 2, borderColor: colors.secondary + '50', shadowColor: colors.primary, shadowOpacity: 0.15, shadowRadius: 12, elevation: 6 },
+                p.passed && { opacity: 0.55 }
+              ]}>
+                <View style={[prieresStyles.prayerIconBox, { backgroundColor: p.isNext ? colors.primary : colors.primary + '12' }]}>
+                  <Ionicons name={p.icon as any} size={20} color={p.isNext ? '#FFF' : colors.primary} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={[prieresStyles.prayerRowName, { color: colors.text }]}>{p.name}</Text>
+                  <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{p.ar}</Text>
+                </View>
+                {p.isNext && (
+                  <View style={[prieresStyles.nextBadge, { backgroundColor: colors.secondary }]}>
+                    <Text style={prieresStyles.nextBadgeText}>SUIVANTE</Text>
+                  </View>
+                )}
+                {p.passed && <Ionicons name="checkmark-circle" size={18} color={colors.success} style={{ marginRight: 8 }} />}
+                <Text style={[prieresStyles.prayerRowTime, { color: p.isNext ? colors.primary : colors.text }]}>{p.time}</Text>
+              </View>
+            </FadeInView>
+          ))}
+        </View>
+
+        {/* ===== NOTE ===== */}
+        <FadeInView delay={700}>
+          <View style={[prieresStyles.noteCard, { backgroundColor: colors.surface }]}>
+            <Ionicons name="information-circle-outline" size={16} color={colors.secondary} />
+            <Text style={[prieresStyles.noteText, { color: colors.textSecondary }]}>
+              Horaires calcules selon la methode Jafari (Teheran). Ajustez via les reglages si necessaire.
             </Text>
           </View>
         </FadeInView>
 
-        {prayers.map((p, i) => (
-          <FadeInView key={p.name} delay={400 + i * 100}>
-            <GlassCard colors={colors} style={[
-              styles.prayerRow,
-              p.isNext && { borderWidth: 2, borderColor: colors.primary },
-              p.passed && { opacity: 0.5 }
-            ]}>
-              <View style={[styles.prayerIconBox, { backgroundColor: p.isNext ? colors.primary : colors.primary + '20' }]}>
-                <Ionicons name={p.icon as any} size={22} color={p.isNext ? '#FFF' : colors.primary} />
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text style={[styles.prayerRowName, { color: colors.text }]}>{p.name}</Text>
-                <Text style={{ color: colors.textSecondary }}>{p.ar}</Text>
-              </View>
-              {p.isNext && (
-                <View style={[styles.nextBadge, { backgroundColor: colors.primary }]}>
-                  <Text style={styles.nextBadgeText}>SUIVANTE</Text>
-                </View>
-              )}
-              {p.passed && <Ionicons name="checkmark-circle" size={20} color={colors.success} style={{ marginRight: 10 }} />}
-              <Text style={[styles.prayerRowTime, { color: p.isNext ? colors.primary : colors.text }]}>{p.time}</Text>
-            </GlassCard>
-          </FadeInView>
-        ))}
-
         <View style={{ height: 120 }} />
-        </View>
       </ScrollView>
     </View>
   );
 };
+
+// ===== PRIERES STYLES =====
+const prieresStyles = StyleSheet.create({
+  headerGradient: { paddingTop: Platform.OS === 'android' ? 44 : 20, paddingBottom: 20, paddingHorizontal: 20 },
+  headerTop: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 12 },
+  backBtn: { width: 40, height: 40, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.12)', alignItems: 'center', justifyContent: 'center' },
+  headerTitle: { fontSize: 22, fontWeight: '800', color: '#FFF' },
+  headerCity: { fontSize: 12, color: 'rgba(255,255,255,0.6)' },
+  timeBox: { backgroundColor: 'rgba(255,255,255,0.12)', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 10 },
+  timeText: { fontSize: 14, fontWeight: '700', color: '#FFF', fontVariant: ['tabular-nums'] as any },
+
+  dateRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 16 },
+  hijriBadge: { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: 'rgba(212,175,55,0.15)', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20, borderWidth: 1, borderColor: 'rgba(212,175,55,0.25)' },
+  hijriText: { fontSize: 11, fontWeight: '600' },
+  gregorianText: { fontSize: 11, color: 'rgba(255,255,255,0.5)' },
+
+  nextPrayerCard: { backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 20, borderWidth: 1, borderColor: 'rgba(212,175,55,0.3)', overflow: 'hidden' },
+  nextPrayerGoldLine: { height: 3, backgroundColor: '#D4AF37', borderRadius: 2, alignSelf: 'center', width: 50, marginTop: 12 },
+  nextPrayerInner: { padding: 18, paddingTop: 14, alignItems: 'center' },
+  nextPrayerLabel: { fontSize: 10, fontWeight: '700', color: 'rgba(255,255,255,0.6)', letterSpacing: 2, marginBottom: 12 },
+  nextPrayerMainRow: { flexDirection: 'row', alignItems: 'center', width: '100%', marginBottom: 12 },
+  nextPrayerIcon: { width: 50, height: 50, borderRadius: 16, backgroundColor: 'rgba(255,255,255,0.12)', alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: 'rgba(212,175,55,0.4)' },
+  nextPrayerName: { fontSize: 20, fontWeight: '800', color: '#FFF' },
+  nextPrayerAr: { fontSize: 14, color: 'rgba(255,255,255,0.6)', marginTop: 2 },
+  nextPrayerTime: { fontSize: 32, fontWeight: '800', color: '#FFF', fontVariant: ['tabular-nums'] as any },
+  nextPrayerCountdown: { fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: '500' },
+
+  progressSection: { paddingHorizontal: 20, paddingTop: 20, paddingBottom: 8 },
+  progressHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
+  sectionTitle: { fontSize: 17, fontWeight: '700' },
+  progressBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20 },
+  progressBadgeText: { fontSize: 12, fontWeight: '700' },
+  progressTrack: { height: 5, borderRadius: 3, overflow: 'hidden', marginBottom: 8 },
+  progressFill: { height: '100%', borderRadius: 3 },
+  methodRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  methodText: { fontSize: 11, fontWeight: '500' },
+
+  prayerList: { paddingHorizontal: 16 },
+  prayerRow: { flexDirection: 'row', alignItems: 'center', padding: 14, marginBottom: 8, borderRadius: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.04, shadowRadius: 8, elevation: 2 },
+  prayerIconBox: { width: 42, height: 42, borderRadius: 14, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
+  prayerRowName: { fontSize: 16, fontWeight: '600' },
+  prayerRowTime: { fontSize: 20, fontWeight: '700' },
+  nextBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8, marginRight: 10 },
+  nextBadgeText: { color: '#FFF', fontSize: 9, fontWeight: '700', letterSpacing: 0.5 },
+
+  noteCard: { flexDirection: 'row', alignItems: 'center', gap: 10, marginHorizontal: 16, padding: 14, borderRadius: 14 },
+  noteText: { flex: 1, fontSize: 11, lineHeight: 16 },
+});
 
 // ===== SETTINGS SCREEN =====
 const SettingsScreen = () => {
@@ -2579,32 +3053,35 @@ const SettingsScreen = () => {
   };
 
   const Section = ({ title, icon, children }: { title: string; icon: string; children: ReactNode }) => (
-    <FadeInView style={styles.settingsSection}>
-      <View style={styles.sectionHeader}>
-        <Ionicons name={icon as any} size={20} color={colors.primary} />
-        <Text style={[styles.sectionHeaderText, { color: colors.text }]}>{title}</Text>
+    <FadeInView style={settingsStyles.section}>
+      <View style={settingsStyles.sectionHeader}>
+        <View style={[settingsStyles.sectionIconBox, { backgroundColor: colors.primary + '12' }]}>
+          <Ionicons name={icon as any} size={16} color={colors.primary} />
+        </View>
+        <Text style={[settingsStyles.sectionTitle, { color: colors.text }]}>{title}</Text>
+        <View style={[settingsStyles.sectionLine, { backgroundColor: colors.border + '40' }]} />
       </View>
-      <GlassCard colors={colors} style={styles.sectionContent}>
+      <View style={[settingsStyles.sectionCard, { backgroundColor: colors.surface }]}>
         {children}
-      </GlassCard>
+      </View>
     </FadeInView>
   );
 
   const SettingRow = ({ label, value, onPress }: { label: string; value?: string; onPress?: () => void }) => (
     <PressableScale onPress={onPress} disabled={!onPress}>
-      <View style={[styles.settingRow, { borderBottomColor: colors.border }]}>
-        <Text style={[styles.settingLabel, { color: colors.text }]} numberOfLines={1}>{label}</Text>
+      <View style={[settingsStyles.row, { borderBottomColor: colors.border + '30' }]}>
+        <Text style={[settingsStyles.rowLabel, { color: colors.text }]} numberOfLines={1}>{label}</Text>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginLeft: 12 }}>
-          {value && <Text style={[styles.settingValue, { color: colors.textSecondary }]} numberOfLines={1} ellipsizeMode="tail">{value}</Text>}
-          {onPress && <Ionicons name="chevron-forward" size={18} color={colors.textMuted} style={{ marginLeft: 6, flexShrink: 0 }} />}
+          {value && <Text style={[settingsStyles.rowValue, { color: colors.textSecondary }]} numberOfLines={1} ellipsizeMode="tail">{value}</Text>}
+          {onPress && <Ionicons name="chevron-forward" size={16} color={colors.textMuted} style={{ marginLeft: 6, flexShrink: 0 }} />}
         </View>
       </View>
     </PressableScale>
   );
 
   const SettingToggle = ({ label, value, onToggle }: { label: string; value: boolean; onToggle: () => void }) => (
-    <View style={[styles.settingRow, { borderBottomColor: colors.border }]}>
-      <Text style={[styles.settingLabel, { color: colors.text }]}>{label}</Text>
+    <View style={[settingsStyles.row, { borderBottomColor: colors.border + '30' }]}>
+      <Text style={[settingsStyles.rowLabel, { color: colors.text }]}>{label}</Text>
       <Switch
         value={value}
         onValueChange={onToggle}
@@ -2615,17 +3092,29 @@ const SettingsScreen = () => {
   );
 
   return (
-    <View style={{ flex: 1 }}>
-      <LinearGradient colors={colors.backgroundGradient} style={StyleSheet.absoluteFill} />
-
-      <CustomHeader
-        title="Paramètres"
-        showBackButton={navigation.canGoBack}
-        onBack={navigation.goBack}
-      />
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+      {/* ===== PREMIUM HEADER ===== */}
+      <LinearGradient colors={colors.headerGradient} style={settingsStyles.headerGradient}>
+        <FadeInView delay={50}>
+          <View style={settingsStyles.headerTop}>
+            {navigation.canGoBack && (
+              <PressableScale onPress={navigation.goBack}>
+                <View style={settingsStyles.backBtn}>
+                  <Ionicons name="arrow-back" size={20} color="#FFF" />
+                </View>
+              </PressableScale>
+            )}
+            <View style={{ flex: 1 }}>
+              <Text style={settingsStyles.headerTitle}>Parametres</Text>
+              <Text style={settingsStyles.headerSubtitle}>Personnalisez votre experience</Text>
+            </View>
+            <Ionicons name="settings" size={22} color={colors.secondary} />
+          </View>
+        </FadeInView>
+      </LinearGradient>
 
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View style={styles.screenContentWithHeader}>
+        <View style={{ padding: 16 }}>
 
         <Section title="LOCALISATION" icon="location-outline">
           <SettingRow
@@ -2641,9 +3130,9 @@ const SettingsScreen = () => {
             value={settings.notificationsEnabled}
             onToggle={() => updateSettings({ notificationsEnabled: !settings.notificationsEnabled })}
           />
-          <View style={[styles.settingRow, { borderBottomColor: colors.border, flexDirection: 'column', alignItems: 'stretch' }]}>
-            <Text style={[styles.settingLabel, { color: colors.text, marginBottom: 10 }]}>Rappel avant prière</Text>
-            <View style={styles.minutesSelector}>
+          <View style={[settingsStyles.row, { borderBottomColor: colors.border, flexDirection: 'column', alignItems: 'stretch' }]}>
+            <Text style={[settingsStyles.rowLabel, { color: colors.text, marginBottom: 10 }]}>Rappel avant prière</Text>
+            <View style={settingsStyles.minutesSelector}>
               {[5, 10, 15].map(min => (
                 <PressableScale
                   key={min}
@@ -2651,7 +3140,7 @@ const SettingsScreen = () => {
                   style={{ flex: 1 }}
                 >
                   <View style={[
-                    styles.minuteBtn,
+                    settingsStyles.minuteBtn,
                     {
                       backgroundColor: settings.notificationMinutes === min ? colors.primary : colors.background,
                       borderColor: colors.border
@@ -2678,13 +3167,13 @@ const SettingsScreen = () => {
         </Section>
 
         <Section title="APPARENCE" icon="color-palette-outline">
-          <View style={[styles.settingRow, { borderBottomColor: colors.border }]}>
-            <Text style={[styles.settingLabel, { color: colors.text }]}>Theme</Text>
-            <View style={styles.themePicker}>
+          <View style={[settingsStyles.row, { borderBottomColor: colors.border }]}>
+            <Text style={[settingsStyles.rowLabel, { color: colors.text }]}>Theme</Text>
+            <View style={settingsStyles.themePicker}>
               {(['light', 'dark', 'auto'] as const).map(mode => (
                 <PressableScale key={mode} onPress={() => updateSettings({ themeMode: mode })}>
                   <View style={[
-                    styles.themeModeBtn,
+                    settingsStyles.themeModeBtn,
                     {
                       backgroundColor: settings.themeMode === mode ? colors.primary : colors.background,
                       borderColor: colors.border
@@ -2700,19 +3189,19 @@ const SettingsScreen = () => {
               ))}
             </View>
           </View>
-          <View style={[styles.settingRow, { borderBottomColor: colors.border, flexDirection: 'column', alignItems: 'stretch' }]}>
+          <View style={[settingsStyles.row, { borderBottomColor: colors.border, flexDirection: 'column', alignItems: 'stretch' }]}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
-              <Text style={[styles.settingLabel, { color: colors.text }]}>Taille texte arabe</Text>
-              <Text style={[styles.settingValue, { color: colors.primary }]}>{settings.arabicFontSize}px</Text>
+              <Text style={[settingsStyles.rowLabel, { color: colors.text }]}>Taille texte arabe</Text>
+              <Text style={[settingsStyles.rowValue, { color: colors.primary }]}>{settings.arabicFontSize}px</Text>
             </View>
-            <View style={styles.sliderRow}>
+            <View style={settingsStyles.sliderRow}>
               <Text style={{ color: colors.textMuted }}>A</Text>
-              <View style={styles.sliderTrack}>
-                <View style={[styles.sliderFill, { width: `${((settings.arabicFontSize - 16) / 24) * 100}%`, backgroundColor: colors.primary }]} />
-                <View style={styles.sliderBtns}>
+              <View style={settingsStyles.sliderTrack}>
+                <View style={[settingsStyles.sliderFill, { width: `${((settings.arabicFontSize - 16) / 24) * 100}%`, backgroundColor: colors.primary }]} />
+                <View style={settingsStyles.sliderBtns}>
                   {[16, 20, 24, 28, 32, 36, 40].map(size => (
                     <PressableScale key={size} onPress={() => updateSettings({ arabicFontSize: size })}>
-                      <View style={[styles.sliderDot, settings.arabicFontSize === size && { backgroundColor: colors.primary }]} />
+                      <View style={[settingsStyles.sliderDot, settings.arabicFontSize === size && { backgroundColor: colors.primary }]} />
                     </PressableScale>
                   ))}
                 </View>
@@ -2747,17 +3236,17 @@ const SettingsScreen = () => {
               updateSettings({ showPhonetic: !settings.showPhonetic });
             }}
           />
-          <View style={[styles.settingRow, { borderBottomColor: colors.border, flexDirection: 'column', alignItems: 'stretch' }]}>
+          <View style={[settingsStyles.row, { borderBottomColor: colors.border, flexDirection: 'column', alignItems: 'stretch' }]}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
-              <Text style={[styles.settingLabel, { color: colors.text }]}>Objectif quotidien (versets)</Text>
-              <Text style={[styles.settingValue, { color: colors.primary }]}>{streak.dailyGoal}</Text>
+              <Text style={[settingsStyles.rowLabel, { color: colors.text }]}>Objectif quotidien (versets)</Text>
+              <Text style={[settingsStyles.rowValue, { color: colors.primary }]}>{streak.dailyGoal}</Text>
             </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: -4 }}>
               <View style={{ flexDirection: 'row', gap: 8, paddingHorizontal: 4 }}>
                 {[5, 10, 20, 30, 50, 100, 200].map(goal => (
                   <PressableScale key={goal} onPress={() => updateDailyGoal(goal)}>
                     <View style={[
-                      styles.goalBtn,
+                      settingsStyles.goalBtn,
                       {
                         backgroundColor: streak.dailyGoal === goal ? colors.primary : colors.background,
                         borderColor: colors.border
@@ -2795,13 +3284,13 @@ const SettingsScreen = () => {
             value={settings.ramadanNotifications}
             onToggle={() => updateSettings({ ramadanNotifications: !settings.ramadanNotifications })}
           />
-          <View style={[styles.settingRow, { borderBottomColor: colors.border, flexDirection: 'column', alignItems: 'stretch' }]}>
-            <Text style={[styles.settingLabel, { color: colors.text, marginBottom: 10 }]}>Rappel avant Iftar</Text>
-            <View style={styles.minutesSelector}>
+          <View style={[settingsStyles.row, { borderBottomColor: colors.border, flexDirection: 'column', alignItems: 'stretch' }]}>
+            <Text style={[settingsStyles.rowLabel, { color: colors.text, marginBottom: 10 }]}>Rappel avant Iftar</Text>
+            <View style={settingsStyles.minutesSelector}>
               {[5, 10, 15, 30].map(min => (
                 <PressableScale key={min} onPress={() => updateSettings({ ramadanIftarReminder: min })} style={{ flex: 1 }}>
                   <View style={[
-                    styles.minuteBtn,
+                    settingsStyles.minuteBtn,
                     {
                       backgroundColor: settings.ramadanIftarReminder === min ? colors.primary : colors.background,
                       borderColor: colors.border
@@ -3002,6 +3491,37 @@ const SettingsScreen = () => {
     </View>
   );
 };
+
+// ===== SETTINGS STYLES =====
+const settingsStyles = StyleSheet.create({
+  headerGradient: { paddingTop: Platform.OS === 'android' ? 44 : 20, paddingBottom: 20, paddingHorizontal: 20 },
+  headerTop: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  backBtn: { width: 40, height: 40, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.12)', alignItems: 'center', justifyContent: 'center' },
+  headerTitle: { fontSize: 22, fontWeight: '800', color: '#FFF' },
+  headerSubtitle: { fontSize: 12, color: 'rgba(255,255,255,0.5)', marginTop: 2 },
+
+  section: { marginBottom: 20 },
+  sectionHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 },
+  sectionIconBox: { width: 28, height: 28, borderRadius: 8, alignItems: 'center', justifyContent: 'center' },
+  sectionTitle: { fontSize: 12, fontWeight: '700', letterSpacing: 1 },
+  sectionLine: { flex: 1, height: 1, marginLeft: 8 },
+  sectionCard: { borderRadius: 16, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.04, shadowRadius: 8, elevation: 2 },
+
+  row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 14, paddingHorizontal: 16, borderBottomWidth: 0.5 },
+  rowLabel: { fontSize: 14, flexShrink: 0 },
+  rowValue: { fontSize: 13, flex: 1, textAlign: 'right' },
+
+  minutesSelector: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
+  minuteBtn: { flex: 1, minWidth: 55, height: 36, borderRadius: 10, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  goalBtn: { width: 44, height: 36, borderRadius: 10, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  themePicker: { flexDirection: 'row', gap: 8 },
+  themeModeBtn: { width: 40, height: 40, borderRadius: 12, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  sliderRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  sliderTrack: { flex: 1, height: 4, backgroundColor: 'rgba(0,0,0,0.1)', borderRadius: 2, position: 'relative' },
+  sliderFill: { position: 'absolute', left: 0, top: 0, height: '100%', borderRadius: 2 },
+  sliderBtns: { position: 'absolute', top: -8, left: 0, right: 0, flexDirection: 'row', justifyContent: 'space-between' },
+  sliderDot: { width: 20, height: 20, borderRadius: 10, backgroundColor: 'rgba(0,0,0,0.2)' },
+});
 
 // ===== RAMADAN SCREEN =====
 const RamadanScreen = () => {
@@ -4027,42 +4547,6 @@ const PlaceholderScreen = ({ title, icon, gradient }: { title: string; icon: str
 };
 
 // ===== TAB BAR =====
-const TabBar = ({ current, onNav }: { current: ScreenName; onNav: (s: ScreenName) => void }) => {
-  const { colors } = useTheme();
-  const insets = useSafeAreaInsets();
-
-  // Padding bottom dynamique : prend en compte la zone safe sur Android et iOS
-  const bottomPadding = Math.max(insets.bottom, Platform.OS === 'ios' ? 20 : 8);
-
-  const tabs: { name: ScreenName; icon: string; label: string }[] = [
-    { name: 'home', icon: 'home-outline', label: 'Accueil' },
-    { name: 'coran', icon: 'book-outline', label: 'Coran' },
-    { name: 'prieres', icon: 'compass-outline', label: 'Prieres' },
-    { name: 'ramadan', icon: 'moon-outline', label: 'Ramadan' },
-    { name: 'dua', icon: 'hand-right-outline', label: 'Dua' },
-    { name: 'settings', icon: 'settings-outline', label: 'Reglages' },
-  ];
-
-  return (
-    <View style={[styles.tabBar, { backgroundColor: colors.surface, borderTopColor: colors.border, shadowColor: '#000', shadowOffset: { width: 0, height: -2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 10, paddingBottom: bottomPadding, height: 57 + bottomPadding }]}>
-      {tabs.map(tab => {
-        const focused = current === tab.name;
-        return (
-          <PressableScale key={tab.name} onPress={() => onNav(tab.name)} style={styles.tabBtn}>
-            <Ionicons
-              name={(focused ? tab.icon.replace('-outline', '') : tab.icon) as any}
-              size={24}
-              color={focused ? colors.primary : colors.textSecondary}
-            />
-            <Text style={[styles.tabLabel, { color: focused ? colors.primary : colors.textSecondary }]}>{tab.label}</Text>
-            {focused && <View style={[styles.tabIndicator, { backgroundColor: colors.primary }]} />}
-          </PressableScale>
-        );
-      })}
-    </View>
-  );
-};
-
 // ===== MAIN APP =====
 const AppContent = () => {
   const { isDark, colors } = useTheme();
@@ -4084,16 +4568,6 @@ const AppContent = () => {
     }
   }, [navigationHistory]);
 
-  const handleTabNav = useCallback((newScreen: ScreenName) => {
-    // When navigating via tab bar, reset history to just home and the new screen
-    if (newScreen === 'home') {
-      setNavigationHistory(['home']);
-    } else {
-      setNavigationHistory(['home', newScreen]);
-    }
-    setScreen(newScreen);
-  }, []);
-
   const navigationContextValue: NavigationContextType = {
     navigate,
     goBack,
@@ -4107,7 +4581,18 @@ const AppContent = () => {
       case 'coran': return <CoranScreen />;
       case 'prieres': return <PrieresScreen />;
       case 'ramadan': return <RamadanScreen />;
-      case 'dua': return <DuaThemeProvider><DuaNavigator /></DuaThemeProvider>;
+      case 'dua': return (
+        <DuaThemeProvider>
+          <View style={{ flex: 1 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 }}>
+              <Pressable onPress={goBack} style={{ padding: 8 }}>
+                <Ionicons name="arrow-back" size={24} color={isDark ? '#FFF' : '#000'} />
+              </Pressable>
+            </View>
+            <DuaNavigator />
+          </View>
+        </DuaThemeProvider>
+      );
       case 'settings': return <SettingsScreen />;
       case 'qibla': return <QiblaScreen navigation={{ goBack }} isDark={isDark} />;
       case 'calendrier': return <CalendrierHijriScreen navigation={{ goBack }} isDark={isDark} />;
@@ -4132,7 +4617,6 @@ const AppContent = () => {
     <NavigationContext.Provider value={navigationContextValue}>
       <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={styles.content}>{renderScreen()}</View>
-        <TabBar current={screen} onNav={handleTabNav} />
         <StatusBar style={isDark ? 'light' : 'dark'} />
       </SafeAreaView>
     </NavigationContext.Provider>
@@ -4159,166 +4643,21 @@ export default function App() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   content: { flex: 1 },
-  screenContent: { padding: 16, paddingTop: Platform.OS === 'android' ? 40 : 16 },
-  screenContentWithHeader: { padding: 16, paddingTop: 12 },
 
-  // Header
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
-  appTitle: { fontSize: 24, fontWeight: '800' },
-  appSubtitle: { fontSize: 13, marginTop: 2 },
-  themeBtn: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 },
-
-  // Prayer Card
-  prayerCard: { borderRadius: 16, padding: 16, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.12, shadowRadius: 8, elevation: 6 },
-  prayerCardContent: { alignItems: 'center' },
-  prayerCardHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
-  prayerIconCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center', marginRight: 8 },
-  prayerLabel: { color: 'rgba(255,255,255,0.9)', fontSize: 11, fontWeight: '600', letterSpacing: 1 },
-  prayerName: { color: '#FFF', fontSize: 24, fontWeight: '800' },
-  prayerNameAr: { color: 'rgba(255,255,255,0.8)', fontSize: 16, marginTop: 2 },
-  prayerTime: { color: '#FFF', fontSize: 40, fontWeight: '800', marginVertical: 6 },
+  // Countdown (used by CountdownComponent)
   countdown: { color: 'rgba(255,255,255,0.9)', fontSize: 13 },
 
-  // Streak Card
-  streakCard: { marginBottom: 12 },
-  streakHeader: { flexDirection: 'row', alignItems: 'center' },
-  streakFlame: { alignItems: 'center' },
-  flameEmoji: { fontSize: 40 },
-  streakNumber: { fontSize: 24, fontWeight: '800', marginTop: -8 },
-  streakTitle: { fontSize: 18, fontWeight: '700' },
-  streakSubtitle: { fontSize: 14, marginTop: 4 },
-  progressBar: { height: 6, backgroundColor: 'rgba(0,0,0,0.1)', borderRadius: 3, marginTop: 8, overflow: 'hidden' },
-  progressFill: { height: '100%', borderRadius: 3 },
-  streakStats: { flexDirection: 'row', marginTop: 16, paddingTop: 16, borderTopWidth: 1, borderTopColor: 'rgba(0,0,0,0.05)' },
-  streakStat: { flex: 1, alignItems: 'center' },
-  statValue: { fontSize: 20, fontWeight: '700' },
-  statLabel: { fontSize: 12, marginTop: 2 },
-
-  // Last Read Card
-  lastReadCard: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  lastReadIcon: { width: 48, height: 48, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
-  lastReadTitle: { fontSize: 14, fontWeight: '600' },
-  lastReadText: { fontSize: 16, fontWeight: '500', marginTop: 2 },
-  lastReadTime: { fontSize: 12, marginTop: 2 },
-
-  // Circle Home Card
-  circleHomeCard: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  circleHomeIcon: { width: 48, height: 48, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
-  circleHomeTitle: { fontSize: 14, fontWeight: '600' },
-  circleHomeSubtitle: { fontSize: 13, marginTop: 2 },
-  circleHomeProgressRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 2 },
-  circleHomeDays: { fontSize: 12 },
-  circleHomeMiniBar: { height: 4, borderRadius: 2, marginTop: 6, overflow: 'hidden' as const },
-  circleHomeMiniBarFill: { height: '100%', borderRadius: 2 },
-
   // Glass Card
-  glassCard: { borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.08, shadowRadius: 8, elevation: 4 },
+  glassCard: { borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.06, shadowRadius: 10, elevation: 4 },
 
-  // Date Card
-  dateCard: { flexDirection: 'row', alignItems: 'center' },
-  dateIcon: { width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
-  dateText: { fontSize: 16, fontWeight: '600' },
-  hijriText: { fontSize: 15, marginTop: 2, fontWeight: '500' },
-
-  // Qibla Home Card
-  qiblaHomeCard: { borderRadius: 16, padding: 16, marginBottom: 12, flexDirection: 'row', alignItems: 'center' },
-  qiblaHomeContent: { flex: 1, flexDirection: 'row', alignItems: 'center' },
-  qiblaHomeLeft: { marginRight: 16 },
-  qiblaHomeMiniCompass: { width: 60, height: 60, borderRadius: 30, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: 'rgba(255,255,255,0.3)' },
-  qiblaHomeNeedle: { position: 'absolute', width: 4, height: 28, alignItems: 'center' },
-  qiblaHomeNeedleArrow: { width: 0, height: 0, borderLeftWidth: 6, borderRightWidth: 6, borderBottomWidth: 14, borderLeftColor: 'transparent', borderRightColor: 'transparent', borderBottomColor: '#FFF' },
-  qiblaHomeKaaba: { fontSize: 20 },
-  qiblaHomeRight: { flex: 1 },
-  qiblaHomeLabel: { fontSize: 10, fontWeight: '700', color: 'rgba(255,255,255,0.8)', letterSpacing: 1 },
-  qiblaHomeAngle: { fontSize: 28, fontWeight: '800', color: '#FFF', marginTop: 2 },
-  qiblaHomeDistance: { fontSize: 13, color: 'rgba(255,255,255,0.9)', marginTop: 2 },
-
-  // Calendar Home Card
-  calendarHomeCard: { paddingVertical: 12, paddingHorizontal: 16 },
-  calendarHomeHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  calendarHomeIcon: { width: 32, height: 32, borderRadius: 8, alignItems: 'center', justifyContent: 'center', marginRight: 10 },
-  calendarHomeTitle: { flex: 1, fontSize: 15, fontWeight: '600' },
-  calendarHomeWeek: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
-  calendarHomeDay: { width: 36, height: 48, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
-  calendarHomeDayName: { fontSize: 10, fontWeight: '600', marginBottom: 4 },
-  calendarHomeDayNum: { fontSize: 14, fontWeight: '700' },
-  calendarHomeEvent: { flexDirection: 'row', alignItems: 'center', padding: 10, borderRadius: 10 },
-  calendarHomeEventDot: { width: 8, height: 8, borderRadius: 4, marginRight: 10 },
-  calendarHomeEventText: { flex: 1, fontSize: 13, fontWeight: '500' },
-  calendarHomeEventDays: { fontSize: 12, fontWeight: '700' },
-
-  // Ramadan Home Card
-  ramadanHomeCard: { borderRadius: 16, padding: 16, marginBottom: 12, flexDirection: 'row', alignItems: 'center' },
-  ramadanHomeContent: { flex: 1, flexDirection: 'row', alignItems: 'center' },
-  ramadanHomeHeader: { flexDirection: 'row', alignItems: 'center', flex: 1 },
-  ramadanHomeEmoji: { fontSize: 32, marginRight: 12 },
-  ramadanHomeTitle: { fontSize: 12, fontWeight: '700', color: 'rgba(255,255,255,0.9)', letterSpacing: 1 },
-  ramadanHomeDay: { fontSize: 16, fontWeight: '700', color: '#FFF', marginTop: 2 },
-  ramadanHomeCountdown: { alignItems: 'flex-end' },
-  ramadanHomeLabel: { fontSize: 11, color: 'rgba(255,255,255,0.7)' },
-  ramadanHomeTime: { fontSize: 20, fontWeight: '800', color: '#FFF', fontVariant: ['tabular-nums'] as any },
-
-  // Verse Card
-  verseCard: { alignItems: 'center', paddingVertical: 24 },
-  verseTitleRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  verseTitle: { fontSize: 12, fontWeight: '700', letterSpacing: 2 },
-  verseLine: { width: 60, height: 2, borderRadius: 1, marginVertical: 12 },
-  verseArabic: { fontSize: 26, textAlign: 'center', lineHeight: 44 },
-  verseTranslation: { fontSize: 15, textAlign: 'center', fontStyle: 'italic', lineHeight: 24, paddingHorizontal: 8, marginTop: 8 },
-  verseRef: { fontSize: 13, marginTop: 12 },
-
-  // Quick Grid
-  sectionTitle: { fontSize: 20, fontWeight: '700', marginTop: 24, marginBottom: 16 },
-  quickGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
-  quickCardWrapper: { width: '48%', marginBottom: 12 },
-  quickCard: { height: 100, borderRadius: 20, alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 8, elevation: 5 },
-  quickLabel: { color: '#FFF', marginTop: 8, fontSize: 14, fontWeight: '600' },
-
-  // Tab Bar - design luxueux
-  tabBar: { flexDirection: 'row', justifyContent: 'space-around', borderTopWidth: 1, paddingTop: 8, paddingHorizontal: 0 },
-  tabBtn: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 4 },
-  tabLabel: { fontSize: 10, marginTop: 3, fontWeight: '600', textAlign: 'center', letterSpacing: 0.2 },
-  tabIndicator: { position: 'absolute', bottom: 2, width: 20, height: 3, borderRadius: 2 },
-
-  // Coran Screen
-  screenTitle: { fontSize: 14, fontWeight: '600', textAlign: 'center', marginTop: Platform.OS === 'android' ? 0 : 40, letterSpacing: 1, textTransform: 'uppercase' },
-  screenTitleLarge: { fontSize: 28, fontWeight: '800', marginBottom: 24, marginTop: Platform.OS === 'android' ? 0 : 40 },
-  surahSelector: { marginTop: 12, marginBottom: 8, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  surahName: { fontSize: 24, fontWeight: '700' },
-  surahNameAr: { fontSize: 20, marginTop: 2 },
-  surahInfo: { textAlign: 'center', fontSize: 14, marginBottom: 20 },
-  toggleRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 12, marginBottom: 24, paddingHorizontal: 16 },
+  // Coran Toggle (used by Toggle component)
   toggleBtn: { height: 44, paddingHorizontal: 20, borderRadius: 10, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-  verseItemCard: { paddingVertical: 20, marginBottom: 8 },
-  verseHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
-  verseBadge: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
-  verseNumText: { color: '#FFF', fontWeight: '700', fontSize: 14 },
-  verseArabicText: { textAlign: 'center', marginBottom: 16, lineHeight: 42 },
-  verseFrenchText: { fontSize: 15, textAlign: 'center', lineHeight: 24, marginBottom: 12, paddingHorizontal: 8 },
-  versePhoneticText: { fontSize: 13, textAlign: 'center', fontStyle: 'italic', lineHeight: 20, marginBottom: 16 },
-  verseActions: { flexDirection: 'row', justifyContent: 'center', gap: 24, alignItems: 'center' },
-  playBtn: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
-
-  // Audio Bar
-  audioBar: { borderTopWidth: 1, paddingVertical: 12, paddingHorizontal: 20 },
-  audioProgress: { height: 3, backgroundColor: 'rgba(0,0,0,0.1)', borderRadius: 2, marginBottom: 12, overflow: 'hidden' },
-  audioProgressFill: { height: '100%', borderRadius: 2 },
-  audioControls: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 32 },
-  mainPlayBtn: { width: 56, height: 56, borderRadius: 28, alignItems: 'center', justifyContent: 'center' },
-  audioVerseText: { textAlign: 'center', marginTop: 8, fontSize: 12 },
 
   // Modals
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
   modalContent: { borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingTop: 20, paddingHorizontal: 20, maxHeight: '80%' },
   modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
   modalTitle: { fontSize: 20, fontWeight: '700' },
-  surahItem: { flexDirection: 'row', alignItems: 'center', paddingVertical: 14, borderBottomWidth: 1 },
-  surahNum: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
-  surahNumText: { color: '#FFF', fontWeight: '700' },
-  surahItemName: { fontSize: 16, fontWeight: '600' },
-  surahItemInfo: { fontSize: 13, marginTop: 2 },
-  surahItemAr: { fontSize: 18 },
-
   // Bookmark Modal
   bookmarkModal: { margin: 20, borderRadius: 20, padding: 24, paddingBottom: 28 },
   bookmarkVerse: { fontSize: 16, marginBottom: 12 },
@@ -4329,45 +4668,6 @@ const styles = StyleSheet.create({
   colorSelected: { borderWidth: 3, borderColor: '#FFF', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 4, elevation: 4 },
   modalButtons: { flexDirection: 'row', gap: 12 },
   modalBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, alignItems: 'center' },
-
-  // Prieres Screen
-  locationHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: Platform.OS === 'android' ? 0 : 40 },
-  cityName: { fontSize: 24, fontWeight: '700', marginLeft: 8 },
-  settingsBtn: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
-  dateSubtext: { fontSize: 14, marginTop: 4, marginBottom: 20 },
-  prayerListHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
-  methodBadge: { fontSize: 11, fontWeight: '600', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
-  prayerRow: { flexDirection: 'row', alignItems: 'center', padding: 12, marginBottom: 8 },
-  prayerIconBox: { width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
-  prayerRowName: { fontSize: 17, fontWeight: '600' },
-  prayerRowTime: { fontSize: 22, fontWeight: '700' },
-  nextBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8, marginRight: 10 },
-  nextBadgeText: { color: '#FFF', fontSize: 10, fontWeight: '700' },
-
-  // Settings Screen
-  settingsSection: { marginBottom: 24 },
-  sectionHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  sectionHeaderText: { fontSize: 13, fontWeight: '700', marginLeft: 8, letterSpacing: 1 },
-  sectionContent: { padding: 0 },
-  settingRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 14, paddingHorizontal: 16, borderBottomWidth: 1 },
-  settingLabel: { fontSize: 15, flexShrink: 0 },
-  settingValue: { fontSize: 14, flex: 1, textAlign: 'right' },
-  adjustmentsGrid: { padding: 16 },
-  adjustmentRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 },
-  adjustmentLabel: { fontSize: 14, width: 70 },
-  adjustmentBtns: { flexDirection: 'row', gap: 8 },
-  adjustBtn: { width: 44, height: 32, borderRadius: 8, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-  minutesSelector: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
-  minuteBtn: { flex: 1, minWidth: 55, height: 36, borderRadius: 8, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-  goalSelector: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
-  goalBtn: { width: 44, height: 36, borderRadius: 8, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-  themePicker: { flexDirection: 'row', gap: 8 },
-  themeModeBtn: { width: 40, height: 40, borderRadius: 12, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-  sliderRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  sliderTrack: { flex: 1, height: 4, backgroundColor: 'rgba(0,0,0,0.1)', borderRadius: 2, position: 'relative' },
-  sliderFill: { position: 'absolute', left: 0, top: 0, height: '100%', borderRadius: 2 },
-  sliderBtns: { position: 'absolute', top: -8, left: 0, right: 0, flexDirection: 'row', justifyContent: 'space-between' },
-  sliderDot: { width: 20, height: 20, borderRadius: 10, backgroundColor: 'rgba(0,0,0,0.2)' },
 
   // Location Modal
   gpsButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 14, borderRadius: 12, marginBottom: 16 },
