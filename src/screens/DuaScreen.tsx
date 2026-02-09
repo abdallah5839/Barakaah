@@ -1,6 +1,6 @@
 /**
- * Écran Dua - Liste des invocations
- * Recherche, catégories, favoris, Duas importantes
+ * Écran Dua — Liste des invocations avec design luxueux
+ * Recherche, catégories avec icônes dorées, favoris étoile dorée
  */
 
 import React, { useState, useCallback, useMemo } from 'react';
@@ -12,19 +12,17 @@ import {
   ScrollView,
   TextInput,
   Pressable,
-  Animated,
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme, useDua } from '../contexts';
 import { Spacing, Typography, Shadows } from '../constants';
 
-// Calcul de la largeur des cards en grille (2 colonnes avec gap)
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const CARD_GAP = Spacing.md;
 const SCREEN_PADDING = Spacing.screenHorizontal;
 const CARD_WIDTH = (SCREEN_WIDTH - (SCREEN_PADDING * 2) - CARD_GAP) / 2;
-import { Card } from '../components';
+
 import {
   duas,
   duaCategories,
@@ -34,7 +32,6 @@ import {
 } from '../data';
 import type { Dua, DuaCategory, DuaCategoryInfo } from '../types';
 
-// Props pour la navigation (à configurer avec Stack Navigator)
 interface DuaScreenProps {
   navigation?: any;
 }
@@ -43,39 +40,28 @@ export const DuaScreen: React.FC<DuaScreenProps> = ({ navigation }) => {
   const { colors } = useTheme();
   const { favorites, isFavorite, toggleFavorite } = useDua();
 
-  // État de recherche
   const [searchQuery, setSearchQuery] = useState('');
   const [showFavorites, setShowFavorites] = useState(true);
 
-  // Duas importantes (prioritaires)
   const importantDuas = useMemo(() => getImportantDuas(), []);
-
-  // Résultats de recherche
   const searchResults = useMemo(() => {
     if (!searchQuery.trim()) return null;
     return searchDuas(searchQuery);
   }, [searchQuery]);
-
-  // Duas favoris
   const favoriteDuas = useMemo(() => {
     return duas.filter(dua => favorites.includes(dua.id));
   }, [favorites]);
 
-  // Navigation vers détail Dua
   const navigateToDuaDetail = useCallback((dua: Dua) => {
-    if (navigation) {
-      navigation.navigate('DuaDetail', { duaId: dua.id });
-    }
+    if (navigation) navigation.navigate('DuaDetail', { duaId: dua.id });
   }, [navigation]);
 
-  // Navigation vers catégorie
   const navigateToCategory = useCallback((category: DuaCategoryInfo) => {
-    if (navigation) {
-      navigation.navigate('DuaCategory', { categoryId: category.id });
-    }
+    if (navigation) navigation.navigate('DuaCategory', { categoryId: category.id });
   }, [navigation]);
 
-  // Rendu d'une card Dua importante
+  // --- Renderers ---
+
   const renderImportantDuaCard = (dua: Dua) => {
     const isInFavorites = isFavorite(dua.id);
     const importanceColor = dua.importance === 'tres-haute' ? colors.secondary : colors.primary;
@@ -85,13 +71,9 @@ export const DuaScreen: React.FC<DuaScreenProps> = ({ navigation }) => {
         key={dua.id}
         style={({ pressed }) => [
           styles.importantCard,
-          {
-            backgroundColor: colors.surface,
-            borderLeftColor: importanceColor,
-            opacity: pressed ? 0.9 : 1,
-            transform: [{ scale: pressed ? 0.98 : 1 }],
-          },
-          Shadows.medium,
+          { backgroundColor: colors.surface, borderLeftColor: importanceColor },
+          Shadows.small,
+          pressed && { opacity: 0.92, transform: [{ scale: 0.98 }] },
         ]}
         onPress={() => navigateToDuaDetail(dua)}
       >
@@ -109,20 +91,17 @@ export const DuaScreen: React.FC<DuaScreenProps> = ({ navigation }) => {
             {dua.occasion}
           </Text>
           <View style={styles.importantCardFooter}>
-            <View style={styles.durationBadge}>
-              <Ionicons name="time-outline" size={14} color={colors.textSecondary} />
+            <View style={[styles.durationBadge, { backgroundColor: colors.separator }]}>
+              <Ionicons name="time-outline" size={13} color={colors.textSecondary} />
               <Text style={[styles.durationText, { color: colors.textSecondary }]}>
                 {dua.duration}
               </Text>
             </View>
-            <Pressable
-              onPress={() => toggleFavorite(dua.id)}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            >
+            <Pressable onPress={() => toggleFavorite(dua.id)} hitSlop={10}>
               <Ionicons
-                name={isInFavorites ? 'heart' : 'heart-outline'}
+                name={isInFavorites ? 'star' : 'star-outline'}
                 size={22}
-                color={isInFavorites ? colors.error : colors.textSecondary}
+                color={isInFavorites ? colors.secondary : colors.textMuted}
               />
             </Pressable>
           </View>
@@ -131,150 +110,121 @@ export const DuaScreen: React.FC<DuaScreenProps> = ({ navigation }) => {
     );
   };
 
-  // Rendu d'une card catégorie
   const renderCategoryCard = (category: DuaCategoryInfo) => {
     const duasCount = getDuasByCategory(category.id).length;
-
     return (
       <Pressable
         key={category.id}
         style={({ pressed }) => [
           styles.categoryCard,
-          {
-            backgroundColor: colors.surface,
-            opacity: pressed ? 0.9 : 1,
-            transform: [{ scale: pressed ? 0.98 : 1 }],
-          },
+          { backgroundColor: colors.surface },
           Shadows.small,
+          pressed && { opacity: 0.9, transform: [{ scale: 0.97 }] },
         ]}
         onPress={() => navigateToCategory(category)}
       >
-        <View style={[styles.categoryIcon, { backgroundColor: category.color + '20' }]}>
-          <Ionicons name={category.icon as any} size={24} color={category.color} />
+        <View style={[styles.categoryIcon, { backgroundColor: category.color + '18' }]}>
+          <Ionicons name={category.icon as any} size={22} color={category.color} />
         </View>
         <Text style={[styles.categoryName, { color: colors.text }]} numberOfLines={2}>
           {category.frenchName}
         </Text>
-        <Text style={[styles.categoryCount, { color: colors.textSecondary }]}>
+        <Text style={[styles.categoryCount, { color: colors.textMuted }]}>
           {duasCount} dua{duasCount > 1 ? 's' : ''}
         </Text>
       </Pressable>
     );
   };
 
-  // Rendu d'une card Dua dans les résultats de recherche
   const renderSearchResultCard = (dua: Dua) => {
     const isInFavorites = isFavorite(dua.id);
-
     return (
       <Pressable
         key={dua.id}
         style={({ pressed }) => [
           styles.searchResultCard,
-          {
-            backgroundColor: colors.surface,
-            opacity: pressed ? 0.9 : 1,
-          },
+          { backgroundColor: colors.surface },
           Shadows.small,
+          pressed && { opacity: 0.9 },
         ]}
         onPress={() => navigateToDuaDetail(dua)}
       >
         <View style={styles.searchResultContent}>
-          <Text style={[styles.searchResultArabic, { color: colors.text }]}>
-            {dua.arabicName}
-          </Text>
-          <Text style={[styles.searchResultFrench, { color: colors.text }]}>
-            {dua.frenchName}
-          </Text>
-          <Text style={[styles.searchResultOccasion, { color: colors.textSecondary }]}>
-            {dua.occasion}
-          </Text>
+          <Text style={[styles.searchResultArabic, { color: colors.text }]}>{dua.arabicName}</Text>
+          <Text style={[styles.searchResultFrench, { color: colors.text }]}>{dua.frenchName}</Text>
+          <Text style={[styles.searchResultOccasion, { color: colors.textSecondary }]}>{dua.occasion}</Text>
         </View>
-        <Pressable
-          onPress={() => toggleFavorite(dua.id)}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
+        <Pressable onPress={() => toggleFavorite(dua.id)} hitSlop={10}>
           <Ionicons
-            name={isInFavorites ? 'heart' : 'heart-outline'}
-            size={22}
-            color={isInFavorites ? colors.error : colors.textSecondary}
+            name={isInFavorites ? 'star' : 'star-outline'}
+            size={20}
+            color={isInFavorites ? colors.secondary : colors.textMuted}
           />
         </Pressable>
       </Pressable>
     );
   };
 
-  // Rendu d'une card favoris
-  const renderFavoriteCard = (dua: Dua) => {
-    return (
-      <Pressable
-        key={dua.id}
-        style={({ pressed }) => [
-          styles.favoriteCard,
-          {
-            backgroundColor: colors.surface,
-            opacity: pressed ? 0.9 : 1,
-          },
-          Shadows.small,
-        ]}
-        onPress={() => navigateToDuaDetail(dua)}
-      >
-        <View style={styles.favoriteCardContent}>
-          <Text style={[styles.favoriteArabic, { color: colors.text }]} numberOfLines={1}>
-            {dua.arabicName}
-          </Text>
-          <Text style={[styles.favoriteFrench, { color: colors.textSecondary }]} numberOfLines={1}>
-            {dua.frenchName}
-          </Text>
-        </View>
-        <Pressable
-          onPress={() => toggleFavorite(dua.id)}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
-          <Ionicons name="heart" size={20} color={colors.error} />
-        </Pressable>
+  const renderFavoriteCard = (dua: Dua) => (
+    <Pressable
+      key={dua.id}
+      style={({ pressed }) => [
+        styles.favoriteCard,
+        { backgroundColor: colors.surface },
+        Shadows.small,
+        pressed && { opacity: 0.9 },
+      ]}
+      onPress={() => navigateToDuaDetail(dua)}
+    >
+      <View style={styles.favoriteCardContent}>
+        <Text style={[styles.favoriteArabic, { color: colors.text }]} numberOfLines={1}>
+          {dua.arabicName}
+        </Text>
+        <Text style={[styles.favoriteFrench, { color: colors.textSecondary }]} numberOfLines={1}>
+          {dua.frenchName}
+        </Text>
+      </View>
+      <Pressable onPress={() => toggleFavorite(dua.id)} hitSlop={10}>
+        <Ionicons name="star" size={18} color={colors.secondary} />
       </Pressable>
-    );
-  };
+    </Pressable>
+  );
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
+        {/* ===== HEADER ===== */}
         <View style={styles.header}>
-          <Text style={[styles.headerTitle, { color: colors.text }]}>
-            Dua & Invocations
-          </Text>
+          <View style={styles.headerTitleRow}>
+            <Text style={[styles.headerTitle, { color: colors.text }]}>
+              Dua & Invocations
+            </Text>
+            <Ionicons name="hand-left" size={20} color={colors.secondary} />
+          </View>
           <Text style={[styles.headerSubtitle, { color: colors.textSecondary }]}>
             Collection de prières chiites
           </Text>
         </View>
 
-        {/* Barre de recherche */}
+        {/* ===== SEARCH ===== */}
         <View style={styles.searchContainer}>
-          <View
-            style={[
-              styles.searchInputContainer,
-              { backgroundColor: colors.surface, borderColor: colors.border },
-            ]}
-          >
-            <Ionicons name="search" size={20} color={colors.textSecondary} />
+          <View style={[styles.searchBar, { backgroundColor: colors.surface }]}>
+            <Ionicons name="search" size={18} color={colors.textMuted} />
             <TextInput
               style={[styles.searchInput, { color: colors.text }]}
               placeholder="Rechercher une dua..."
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={colors.textMuted}
               value={searchQuery}
               onChangeText={setSearchQuery}
             />
             {searchQuery.length > 0 && (
-              <Pressable onPress={() => setSearchQuery('')}>
-                <Ionicons name="close-circle" size={20} color={colors.textSecondary} />
+              <Pressable onPress={() => setSearchQuery('')} hitSlop={8}>
+                <Ionicons name="close-circle" size={18} color={colors.textMuted} />
               </Pressable>
             )}
           </View>
         </View>
 
-        {/* Résultats de recherche */}
         {searchResults !== null ? (
           <View style={styles.section}>
             <Text style={[styles.sectionTitle, { color: colors.text }]}>
@@ -290,20 +240,17 @@ export const DuaScreen: React.FC<DuaScreenProps> = ({ navigation }) => {
           </View>
         ) : (
           <>
-            {/* Duas Importantes */}
+            {/* ===== IMPORTANTES ===== */}
             <View style={styles.section}>
               <Text style={[styles.sectionTitle, { color: colors.text }]}>
                 Duas Importantes
-              </Text>
-              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
-                Les invocations les plus significatives
               </Text>
               <View style={styles.importantDuasContainer}>
                 {importantDuas.map(dua => renderImportantDuaCard(dua))}
               </View>
             </View>
 
-            {/* Catégories */}
+            {/* ===== CATEGORIES ===== */}
             <View style={styles.section}>
               <Text style={[styles.sectionTitle, { color: colors.text }]}>
                 Catégories
@@ -313,7 +260,7 @@ export const DuaScreen: React.FC<DuaScreenProps> = ({ navigation }) => {
               </View>
             </View>
 
-            {/* Favoris */}
+            {/* ===== FAVORIS ===== */}
             {favoriteDuas.length > 0 && (
               <View style={styles.section}>
                 <Pressable
@@ -321,14 +268,14 @@ export const DuaScreen: React.FC<DuaScreenProps> = ({ navigation }) => {
                   onPress={() => setShowFavorites(!showFavorites)}
                 >
                   <View style={styles.favoritesHeaderLeft}>
-                    <Ionicons name="heart" size={20} color={colors.error} />
-                    <Text style={[styles.sectionTitle, { color: colors.text, marginBottom: 0, marginLeft: Spacing.sm }]}>
+                    <Ionicons name="star" size={18} color={colors.secondary} />
+                    <Text style={[styles.favoritesTitle, { color: colors.text }]}>
                       Mes Favoris ({favoriteDuas.length})
                     </Text>
                   </View>
                   <Ionicons
                     name={showFavorites ? 'chevron-up' : 'chevron-down'}
-                    size={20}
+                    size={18}
                     color={colors.textSecondary}
                   />
                 </Pressable>
@@ -342,7 +289,6 @@ export const DuaScreen: React.FC<DuaScreenProps> = ({ navigation }) => {
           </>
         )}
 
-        {/* Espacement en bas */}
         <View style={styles.bottomSpacer} />
       </ScrollView>
     </SafeAreaView>
@@ -353,52 +299,58 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+
+  // --- Header ---
   header: {
     paddingHorizontal: Spacing.screenHorizontal,
     paddingTop: Spacing.xl,
     paddingBottom: Spacing.md,
   },
+  headerTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
   headerTitle: {
-    fontSize: Typography.sizes['2xl'],
-    fontWeight: Typography.weights.bold,
+    fontSize: 24,
+    fontWeight: '800',
   },
   headerSubtitle: {
     fontSize: Typography.sizes.sm,
-    marginTop: Spacing.xs,
+    marginTop: 4,
   },
+
+  // --- Search ---
   searchContainer: {
     paddingHorizontal: Spacing.screenHorizontal,
     marginBottom: Spacing.lg,
   },
-  searchInputContainer: {
+  searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
     borderRadius: Spacing.radiusMd,
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    paddingVertical: 10,
     gap: Spacing.sm,
   },
   searchInput: {
     flex: 1,
     fontSize: Typography.sizes.md,
-    paddingVertical: Spacing.xs,
+    paddingVertical: 2,
   },
+
+  // --- Sections ---
   section: {
     paddingHorizontal: Spacing.screenHorizontal,
     marginBottom: Spacing.xl,
   },
   sectionTitle: {
     fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.semibold,
-    marginBottom: Spacing.xs,
-  },
-  sectionSubtitle: {
-    fontSize: Typography.sizes.sm,
+    fontWeight: '700',
     marginBottom: Spacing.md,
   },
 
-  // Duas Importantes
+  // --- Important duas ---
   importantDuasContainer: {
     gap: Spacing.md,
   },
@@ -422,13 +374,13 @@ const styles = StyleSheet.create({
     marginRight: Spacing.sm,
   },
   importantDuaArabic: {
-    fontSize: Typography.sizes.xl,
-    fontWeight: Typography.weights.bold,
+    fontSize: 18,
+    fontWeight: '700',
   },
   importantDuaFrench: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.semibold,
-    marginBottom: Spacing.xs,
+    fontSize: Typography.sizes.md,
+    fontWeight: '600',
+    marginBottom: 4,
   },
   importantDuaOccasion: {
     fontSize: Typography.sizes.sm,
@@ -442,13 +394,16 @@ const styles = StyleSheet.create({
   durationBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.xs,
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: Spacing.radiusFull,
   },
   durationText: {
-    fontSize: Typography.sizes.sm,
+    fontSize: 12,
   },
 
-  // Catégories
+  // --- Categories ---
   categoriesGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -459,32 +414,32 @@ const styles = StyleSheet.create({
     padding: Spacing.lg,
     borderRadius: Spacing.radiusLg,
     alignItems: 'center',
-    minHeight: 120, // Hauteur minimale pour uniformité
+    minHeight: 110,
   },
   categoryIcon: {
     width: 48,
     height: 48,
-    borderRadius: 24,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.sm,
   },
   categoryName: {
-    fontSize: Typography.sizes.md,
-    fontWeight: Typography.weights.semibold,
+    fontSize: Typography.sizes.sm,
+    fontWeight: '600',
     textAlign: 'center',
-    marginBottom: Spacing.xs,
+    marginBottom: 2,
   },
   categoryCount: {
-    fontSize: Typography.sizes.sm,
+    fontSize: 11,
   },
 
-  // Résultats de recherche
+  // --- Search results ---
   searchResultCard: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: Spacing.lg,
-    borderRadius: Spacing.radiusMd,
+    borderRadius: Spacing.radiusLg,
     marginBottom: Spacing.sm,
   },
   searchResultContent: {
@@ -492,14 +447,14 @@ const styles = StyleSheet.create({
     marginRight: Spacing.md,
   },
   searchResultArabic: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.bold,
-    marginBottom: Spacing.xs,
+    fontSize: 17,
+    fontWeight: '700',
+    marginBottom: 4,
   },
   searchResultFrench: {
     fontSize: Typography.sizes.md,
-    fontWeight: Typography.weights.medium,
-    marginBottom: Spacing.xs,
+    fontWeight: '500',
+    marginBottom: 2,
   },
   searchResultOccasion: {
     fontSize: Typography.sizes.sm,
@@ -510,26 +465,31 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.xl,
   },
 
-  // Favoris
+  // --- Favorites ---
   favoritesHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: Spacing.sm,
+    marginBottom: Spacing.sm,
   },
   favoritesHeaderLeft: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: Spacing.sm,
+  },
+  favoritesTitle: {
+    fontSize: Typography.sizes.lg,
+    fontWeight: '700',
   },
   favoritesContainer: {
-    marginTop: Spacing.sm,
     gap: Spacing.sm,
   },
   favoriteCard: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: Spacing.md,
-    borderRadius: Spacing.radiusMd,
+    borderRadius: Spacing.radiusLg,
   },
   favoriteCardContent: {
     flex: 1,
@@ -537,13 +497,14 @@ const styles = StyleSheet.create({
   },
   favoriteArabic: {
     fontSize: Typography.sizes.md,
-    fontWeight: Typography.weights.semibold,
-    marginBottom: Spacing.xs,
+    fontWeight: '600',
+    marginBottom: 2,
   },
   favoriteFrench: {
     fontSize: Typography.sizes.sm,
   },
 
+  // --- Bottom ---
   bottomSpacer: {
     height: Spacing['4xl'],
   },

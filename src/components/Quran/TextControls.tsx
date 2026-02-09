@@ -1,13 +1,12 @@
 /**
- * TextControls - Barre de contrôles d'affichage du texte
- * Toggles arabe/français/phonétique + boutons A-/A+ pour la taille du texte arabe.
- * Réutilisé par CoranScreen et JuzReaderScreen.
+ * TextControls — Barre de contrôles d'affichage du texte
+ * Design moderne avec pills arrondis et accent doré sur A-/A+
  */
 
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useTheme } from '../../contexts';
-import { Spacing } from '../../constants';
+import { Spacing, Shadows } from '../../constants';
 
 interface TextControlsProps {
   showArabic: boolean;
@@ -34,50 +33,43 @@ export const TextControls: React.FC<TextControlsProps> = ({
 }) => {
   const { colors } = useTheme();
 
+  const Toggle = ({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) => (
+    <Pressable
+      style={[
+        styles.toggle,
+        active
+          ? { backgroundColor: colors.primaryLight }
+          : { backgroundColor: colors.separator },
+      ]}
+      onPress={onPress}
+    >
+      <Text style={[styles.toggleText, { color: active ? colors.primary : colors.textMuted }]}>
+        {label}
+      </Text>
+    </Pressable>
+  );
+
   return (
-    <View style={[styles.container, { backgroundColor: colors.surface, borderBottomColor: colors.border }]}>
-      {/* Toggles */}
+    <View style={[styles.container, { backgroundColor: colors.surface, borderBottomColor: colors.separator }]}>
       <View style={styles.togglesRow}>
-        <Pressable
-          style={[styles.toggle, showArabic && { backgroundColor: colors.primary + '20' }]}
-          onPress={onToggleArabic}
-        >
-          <Text style={[styles.toggleText, { color: showArabic ? colors.primary : colors.textSecondary }]}>
-            عربي
-          </Text>
-        </Pressable>
-        <Pressable
-          style={[styles.toggle, showFrench && { backgroundColor: colors.primary + '20' }]}
-          onPress={onToggleFrench}
-        >
-          <Text style={[styles.toggleText, { color: showFrench ? colors.primary : colors.textSecondary }]}>
-            FR
-          </Text>
-        </Pressable>
-        <Pressable
-          style={[styles.toggle, showPhonetic && { backgroundColor: colors.primary + '20' }]}
-          onPress={onTogglePhonetic}
-        >
-          <Text style={[styles.toggleText, { color: showPhonetic ? colors.primary : colors.textSecondary }]}>
-            Phon.
-          </Text>
-        </Pressable>
+        <Toggle label="عربي" active={showArabic} onPress={onToggleArabic} />
+        <Toggle label="FR" active={showFrench} onPress={onToggleFrench} />
+        <Toggle label="Phon." active={showPhonetic} onPress={onTogglePhonetic} />
       </View>
 
-      {/* Font size */}
       <View style={styles.fontSizeRow}>
         <Pressable
-          style={[styles.fontSizeBtn, { borderColor: colors.border }]}
+          style={[styles.fontSizeBtn, { backgroundColor: colors.secondaryLight }]}
           onPress={onDecreaseFontSize}
         >
-          <Text style={[styles.fontSizeBtnText, { color: colors.text }]}>A-</Text>
+          <Text style={[styles.fontSizeBtnText, { color: colors.secondary }]}>A-</Text>
         </Pressable>
-        <Text style={[styles.fontSizeLabel, { color: colors.textSecondary }]}>{arabicFontSize}</Text>
+        <Text style={[styles.fontSizeLabel, { color: colors.textMuted }]}>{arabicFontSize}</Text>
         <Pressable
-          style={[styles.fontSizeBtn, { borderColor: colors.border }]}
+          style={[styles.fontSizeBtn, { backgroundColor: colors.secondaryLight }]}
           onPress={onIncreaseFontSize}
         >
-          <Text style={[styles.fontSizeBtnText, { color: colors.text }]}>A+</Text>
+          <Text style={[styles.fontSizeBtnText, { color: colors.secondary }]}>A+</Text>
         </Pressable>
       </View>
     </View>
@@ -95,12 +87,12 @@ const styles = StyleSheet.create({
   },
   togglesRow: {
     flexDirection: 'row',
-    gap: Spacing.sm,
+    gap: 6,
   },
   toggle: {
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.xs + 2,
-    borderRadius: Spacing.radiusSm,
+    paddingVertical: 6,
+    borderRadius: Spacing.radiusFull,
   },
   toggleText: {
     fontSize: 13,
@@ -109,19 +101,18 @@ const styles = StyleSheet.create({
   fontSizeRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
+    gap: 6,
   },
   fontSizeBtn: {
     width: 32,
     height: 32,
-    borderRadius: 16,
-    borderWidth: 1,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
   fontSizeBtnText: {
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   fontSizeLabel: {
     fontSize: 12,

@@ -5,7 +5,10 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Colors, ThemeColors, ThemeMode } from '../constants/colors';
+import { Colors, ThemeMode } from '../constants/colors';
+
+// Use a wider type so light/dark values are both assignable
+type ThemeColors = { [K in keyof typeof Colors.light]: string };
 
 // Clé de stockage pour AsyncStorage
 const THEME_STORAGE_KEY = '@barakaah_theme';

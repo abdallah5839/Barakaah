@@ -1,18 +1,22 @@
 /**
- * Composant PrayerCard
- * Affiche une prière individuelle dans la liste
- * Avec indicateurs visuels pour:
- * - Prières passées (grisées avec checkmark)
- * - Prochaine prière (bordure colorée + badge)
- * - Prières futures (style normal)
+ * PrayerCard — Carte individuelle de prière avec design luxueux
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../contexts';
 import { Spacing, Typography, Shadows } from '../constants';
 import type { Prayer } from '../hooks';
+
+const PRAYER_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
+  Fajr: 'sunny-outline',
+  'Lever du soleil': 'sunny',
+  Dhuhr: 'sunny',
+  Asr: 'partly-sunny-outline',
+  Maghrib: 'cloudy-night-outline',
+  Isha: 'moon-outline',
+};
 
 interface PrayerCardProps {
   prayer: Prayer;
@@ -25,117 +29,81 @@ export const PrayerCard: React.FC<PrayerCardProps> = ({
 }) => {
   const { colors } = useTheme();
   const { isPassed, isNext } = prayer;
-
-  const getBackgroundColor = () => {
-    if (isPassed) {
-      return colors.surface + '80'; // 50% d'opacité pour les prières passées
-    }
-    if (isNext) {
-      return colors.primary + '15'; // 15% d'opacité
-    }
-    return colors.surface;
-  };
-
-  const getBorderStyle = () => {
-    if (isNext) {
-      return {
-        borderWidth: 2,
-        borderColor: colors.primary,
-      };
-    }
-    if (isPassed) {
-      return {
-        borderWidth: 1,
-        borderColor: colors.border + '60',
-      };
-    }
-    return {
-      borderWidth: 1,
-      borderColor: colors.border,
-    };
-  };
-
-  const getTextColor = () => {
-    if (isPassed) {
-      return colors.textSecondary;
-    }
-    return colors.text;
-  };
-
-  const getTimeColor = () => {
-    if (isNext) {
-      return colors.primary;
-    }
-    if (isPassed) {
-      return colors.textSecondary;
-    }
-    return colors.text;
-  };
+  const iconName = PRAYER_ICONS[prayer.nameFrench] || 'time-outline';
 
   return (
     <View
       style={[
         styles.container,
+        { backgroundColor: isPassed ? colors.surface + '80' : colors.surface },
         !isPassed && Shadows.small,
-        { backgroundColor: getBackgroundColor() },
-        getBorderStyle(),
-        isPassed && styles.passedContainer,
+        isNext && { borderLeftWidth: 3, borderLeftColor: colors.primary },
+        isPassed && { borderLeftWidth: 3, borderLeftColor: colors.success + '40' },
+        !isNext && !isPassed && { borderLeftWidth: 3, borderLeftColor: 'transparent' },
       ]}
     >
-      <View style={styles.leftContent}>
-        <View style={styles.nameRow}>
-          {isPassed && (
-            <Ionicons
-              name="checkmark-circle"
-              size={18}
-              color={colors.success}
-              style={styles.checkIcon}
-            />
-          )}
-          <Text
-            style={[
-              styles.name,
-              { color: getTextColor() },
-              isPassed && styles.passedText,
-            ]}
-          >
-            {prayer.nameFrench}
-          </Text>
-        </View>
+      <View
+        style={[
+          styles.iconWrap,
+          {
+            backgroundColor: isNext
+              ? colors.primaryLight
+              : isPassed
+                ? colors.success + '15'
+                : colors.separator,
+          },
+        ]}
+      >
+        <Ionicons
+          name={isPassed ? 'checkmark-circle' : iconName}
+          size={20}
+          color={isNext ? colors.primary : isPassed ? colors.success : colors.textSecondary}
+        />
+      </View>
+
+      <View style={styles.nameCol}>
+        <Text
+          style={[
+            styles.name,
+            { color: isPassed ? colors.textMuted : colors.text },
+            isPassed && styles.passedText,
+          ]}
+        >
+          {prayer.nameFrench}
+        </Text>
         <Text
           style={[
             styles.arabic,
-            { color: isPassed ? colors.textSecondary + '80' : colors.textSecondary },
+            { color: isPassed ? colors.textMuted : colors.textSecondary },
           ]}
         >
           {prayer.nameArabic}
         </Text>
       </View>
 
-      <View style={styles.rightContent}>
+      <View style={styles.rightCol}>
         <Text
           style={[
             styles.time,
-            { color: getTimeColor() },
-            isPassed && styles.passedTime,
+            { color: isNext ? colors.primary : isPassed ? colors.textMuted : colors.text },
           ]}
         >
           {prayer.timeString}
         </Text>
         {isNext && countdown && (
-          <Text style={[styles.countdownLabel, { color: colors.primary }]}>
-            Dans {countdown}
-          </Text>
+          <View style={[styles.badge, { backgroundColor: colors.primaryLight }]}>
+            <Text style={[styles.badgeText, { color: colors.primary }]}>
+              Dans {countdown}
+            </Text>
+          </View>
         )}
         {isNext && !countdown && (
-          <Text style={[styles.nextLabel, { color: colors.primary }]}>
-            Prochaine
-          </Text>
+          <View style={[styles.badge, { backgroundColor: colors.primaryLight }]}>
+            <Text style={[styles.badgeText, { color: colors.primary }]}>Prochaine</Text>
+          </View>
         )}
         {isPassed && (
-          <Text style={[styles.passedLabel, { color: colors.success }]}>
-            Terminée
-          </Text>
+          <Text style={[styles.passedLabel, { color: colors.success }]}>Terminée</Text>
         )}
       </View>
     </View>
@@ -145,62 +113,54 @@ export const PrayerCard: React.FC<PrayerCardProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     padding: Spacing.lg,
-    minHeight: 72, // Hauteur minimum pour une bonne lisibilité
     borderRadius: Spacing.radiusMd,
     marginBottom: Spacing.sm,
+    gap: Spacing.md,
   },
-  passedContainer: {
-    opacity: 0.85,
+  iconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  leftContent: {
+  nameCol: {
     flex: 1,
   },
-  nameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  checkIcon: {
-    marginRight: Spacing.xs,
-  },
   name: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.semibold,
-    marginBottom: Spacing.xs,
+    fontSize: Typography.sizes.md,
+    fontWeight: '600',
+    marginBottom: 2,
   },
   passedText: {
     textDecorationLine: 'line-through',
-    textDecorationStyle: 'solid',
   },
   arabic: {
-    fontSize: Typography.sizes.md,
+    fontSize: Typography.sizes.sm,
   },
-  rightContent: {
+  rightCol: {
     alignItems: 'flex-end',
   },
   time: {
     fontSize: Typography.sizes.xl,
-    fontWeight: Typography.weights.bold,
+    fontWeight: '700',
   },
-  passedTime: {
-    fontSize: Typography.sizes.lg,
+  badge: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: Spacing.radiusFull,
+    marginTop: 4,
   },
-  nextLabel: {
-    fontSize: Typography.sizes.xs,
-    fontWeight: Typography.weights.medium,
-    marginTop: Spacing.xs,
-  },
-  countdownLabel: {
-    fontSize: Typography.sizes.xs,
-    fontWeight: Typography.weights.semibold,
-    marginTop: Spacing.xs,
+  badgeText: {
+    fontSize: 11,
+    fontWeight: '600',
   },
   passedLabel: {
-    fontSize: Typography.sizes.xs,
-    fontWeight: Typography.weights.medium,
-    marginTop: Spacing.xs,
+    fontSize: 11,
+    fontWeight: '500',
+    marginTop: 4,
   },
 });
 

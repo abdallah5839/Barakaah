@@ -1,6 +1,6 @@
 /**
- * Composant SurahPicker
- * Sélecteur déroulant pour choisir une sourate
+ * SurahPicker — Sélecteur de sourate avec design luxueux
+ * Numéro dans un cercle à bordure dorée, noms arabe/français élégants
  */
 
 import React, { useState } from 'react';
@@ -37,62 +37,74 @@ export const SurahPicker: React.FC<SurahPickerProps> = ({
     setModalVisible(false);
   };
 
-  const renderSurahItem = ({ item }: { item: Surah }) => (
-    <Pressable
-      onPress={() => handleSelect(item)}
-      style={[
-        styles.surahItem,
-        {
-          backgroundColor:
-            item.number === selectedSurah
-              ? colors.primary + '15'
-              : colors.surface,
-        },
-      ]}
-    >
-      <View style={[styles.surahNumber, { backgroundColor: colors.primary }]}>
-        <Text style={styles.surahNumberText}>{item.number}</Text>
-      </View>
-      <View style={styles.surahInfo}>
-        <Text style={[styles.surahName, { color: colors.text }]}>
-          {item.frenchName}
-        </Text>
-        <Text style={[styles.surahArabic, { color: colors.textSecondary }]}>
-          {item.arabicName} • {item.versesCount} versets
-        </Text>
-      </View>
-      {item.number === selectedSurah && (
-        <Ionicons name="checkmark-circle" size={24} color={colors.primary} />
-      )}
-    </Pressable>
-  );
+  const renderSurahItem = ({ item }: { item: Surah }) => {
+    const isSelected = item.number === selectedSurah;
+    return (
+      <Pressable
+        onPress={() => handleSelect(item)}
+        style={({ pressed }) => [
+          styles.surahItem,
+          { backgroundColor: isSelected ? colors.primaryLight : colors.surface },
+          pressed && { opacity: 0.85, transform: [{ scale: 0.99 }] },
+        ]}
+      >
+        {/* Gold-bordered number circle */}
+        <View style={[styles.surahNumberCircle, { borderColor: colors.secondary }]}>
+          <Text style={[styles.surahNumberText, { color: colors.secondary }]}>
+            {item.number}
+          </Text>
+        </View>
+
+        <View style={styles.surahInfo}>
+          <Text style={[styles.surahArabicName, { color: colors.text }]}>
+            {item.arabicName}
+          </Text>
+          <Text style={[styles.surahFrenchName, { color: colors.textSecondary }]}>
+            {item.frenchName}
+          </Text>
+        </View>
+
+        <View style={styles.surahMeta}>
+          <Text style={[styles.surahVerseCount, { color: colors.textMuted }]}>
+            {item.versesCount} v.
+          </Text>
+          {isSelected && (
+            <Ionicons name="checkmark-circle" size={20} color={colors.primary} />
+          )}
+        </View>
+      </Pressable>
+    );
+  };
 
   return (
     <>
-      {/* Bouton de sélection */}
       <Pressable
         onPress={() => setModalVisible(true)}
-        style={[
+        style={({ pressed }) => [
           styles.selector,
           Shadows.small,
-          { backgroundColor: colors.surface, borderColor: colors.border },
+          { backgroundColor: colors.surface },
+          pressed && { opacity: 0.9 },
         ]}
       >
-        <View style={styles.selectorContent}>
-          <Text style={[styles.selectorNumber, { color: colors.primary }]}>
-            {selectedSurah}.
-          </Text>
-          <Text style={[styles.selectorName, { color: colors.text }]}>
-            {currentSurah?.frenchName}
-          </Text>
-          <Text style={[styles.selectorArabic, { color: colors.textSecondary }]}>
-            ({currentSurah?.arabicName})
+        <View style={[styles.selectorNumberCircle, { borderColor: colors.secondary }]}>
+          <Text style={[styles.selectorNumberText, { color: colors.secondary }]}>
+            {selectedSurah}
           </Text>
         </View>
-        <Ionicons name="chevron-down" size={20} color={colors.textSecondary} />
+        <View style={styles.selectorTextCol}>
+          <Text style={[styles.selectorArabic, { color: colors.text }]}>
+            {currentSurah?.arabicName}
+          </Text>
+          <Text style={[styles.selectorFrench, { color: colors.textSecondary }]}>
+            {currentSurah?.frenchName}
+          </Text>
+        </View>
+        <View style={[styles.selectorChevron, { backgroundColor: colors.primaryLight }]}>
+          <Ionicons name="chevron-down" size={18} color={colors.primary} />
+        </View>
       </Pressable>
 
-      {/* Modal avec liste des sourates */}
       <Modal
         visible={isModalVisible}
         animationType="slide"
@@ -100,22 +112,27 @@ export const SurahPicker: React.FC<SurahPickerProps> = ({
         onRequestClose={() => setModalVisible(false)}
       >
         <SafeAreaView style={[styles.modal, { backgroundColor: colors.background }]}>
-          {/* Header du modal */}
           <View style={[styles.modalHeader, { borderBottomColor: colors.border }]}>
             <Text style={[styles.modalTitle, { color: colors.text }]}>
               Choisir une sourate
             </Text>
-            <Pressable onPress={() => setModalVisible(false)}>
-              <Ionicons name="close" size={28} color={colors.text} />
+            <Pressable
+              onPress={() => setModalVisible(false)}
+              style={[styles.modalCloseBtn, { backgroundColor: colors.surface }]}
+              hitSlop={8}
+            >
+              <Ionicons name="close" size={22} color={colors.text} />
             </Pressable>
           </View>
 
-          {/* Liste des sourates */}
           <FlatList
             data={surahs}
             renderItem={renderSurahItem}
             keyExtractor={(item) => item.number.toString()}
             contentContainerStyle={styles.listContent}
+            ItemSeparatorComponent={() => (
+              <View style={[styles.separator, { backgroundColor: colors.separator }]} />
+            )}
             initialScrollIndex={selectedSurah > 5 ? selectedSurah - 3 : 0}
             getItemLayout={(_, index) => ({
               length: 72,
@@ -130,35 +147,48 @@ export const SurahPicker: React.FC<SurahPickerProps> = ({
 };
 
 const styles = StyleSheet.create({
+  // --- Selector button ---
   selector: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: Spacing.lg,
-    minHeight: 56, // Zone tactile confortable
-    borderRadius: Spacing.radiusMd,
-    borderWidth: 1,
+    padding: Spacing.md,
+    borderRadius: Spacing.radiusLg,
     marginHorizontal: Spacing.screenHorizontal,
     marginVertical: Spacing.md,
+    gap: Spacing.md,
   },
-  selectorContent: {
-    flexDirection: 'row',
+  selectorNumberCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 2,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  selectorNumberText: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  selectorTextCol: {
     flex: 1,
   },
-  selectorNumber: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.bold,
-    marginRight: Spacing.sm,
-  },
-  selectorName: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.semibold,
-    marginRight: Spacing.sm,
-  },
   selectorArabic: {
-    fontSize: Typography.sizes.md,
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 2,
   },
+  selectorFrench: {
+    fontSize: 13,
+  },
+  selectorChevron: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  // --- Modal ---
   modal: {
     flex: 1,
   },
@@ -171,43 +201,61 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: Typography.sizes.xl,
-    fontWeight: Typography.weights.bold,
+    fontWeight: '700',
+  },
+  modalCloseBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   listContent: {
     paddingVertical: Spacing.sm,
   },
+  separator: {
+    height: 1,
+    marginHorizontal: Spacing.lg,
+  },
+
+  // --- Surah item ---
   surahItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: Spacing.lg,
-    minHeight: 64, // Zone tactile confortable pour chaque item
-    marginHorizontal: Spacing.md,
-    marginVertical: Spacing.xs,
-    borderRadius: Spacing.radiusMd,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    minHeight: 72,
+    gap: Spacing.md,
   },
-  surahNumber: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+  surahNumberCircle: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    borderWidth: 1.5,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: Spacing.md,
   },
   surahNumberText: {
-    color: '#FFFFFF',
-    fontSize: Typography.sizes.sm,
-    fontWeight: Typography.weights.bold,
+    fontSize: 13,
+    fontWeight: '700',
   },
   surahInfo: {
     flex: 1,
   },
-  surahName: {
-    fontSize: Typography.sizes.md,
-    fontWeight: Typography.weights.semibold,
-    marginBottom: Spacing.xs,
+  surahArabicName: {
+    fontSize: 17,
+    fontWeight: '700',
+    marginBottom: 2,
   },
-  surahArabic: {
-    fontSize: Typography.sizes.sm,
+  surahFrenchName: {
+    fontSize: 13,
+  },
+  surahMeta: {
+    alignItems: 'flex-end',
+    gap: 4,
+  },
+  surahVerseCount: {
+    fontSize: 12,
   },
 });
 

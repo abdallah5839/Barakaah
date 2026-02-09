@@ -1,9 +1,9 @@
 /**
  * Écran Home (Accueil)
- * Dashboard principal de l'application Barakaah
+ * Dashboard principal — design luxueux moderne avec touches islamiques
  */
 
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -14,8 +14,11 @@ import {
   RefreshControl,
   Platform,
   Modal,
+  Animated,
+  Easing,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { useTheme } from '../contexts';
@@ -23,13 +26,12 @@ import { useDevice } from '../contexts/DeviceContext';
 import { Spacing, Typography, Shadows, APP_NAME } from '../constants';
 import { formatDateFrench, getHijriDate } from '../utils';
 import { usePrayerTimes } from '../hooks';
-import { Card, NextPrayerCard, QuickAccessCard } from '../components';
+import { NextPrayerCard } from '../components';
 import { getDuaOfTheDay, getVerseOfTheDay } from '../data';
 import { checkUserCircle } from '../services/circleService';
 import { CircleNavigator } from '../navigation/CircleNavigator';
 import type { Circle, CircleMember } from '../types/circle.types';
 
-// Type pour la navigation
 type RootTabParamList = {
   Home: undefined;
   Coran: undefined;
@@ -37,8 +39,60 @@ type RootTabParamList = {
   Ramadan: undefined;
   Dua: undefined;
 };
-
 type NavigationProp = BottomTabNavigationProp<RootTabParamList, 'Home'>;
+
+// --- Animated Card wrapper ---
+const AnimatedCard: React.FC<{
+  children: React.ReactNode;
+  delay?: number;
+  onPress?: () => void;
+  style?: any;
+}> = ({ children, delay = 0, onPress, style }) => {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(18)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 400,
+        delay,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 400,
+        delay,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
+
+  const animStyle = {
+    opacity: fadeAnim,
+    transform: [{ translateY: slideAnim }],
+  };
+
+  if (onPress) {
+    return (
+      <Animated.View style={animStyle}>
+        <Pressable
+          onPress={onPress}
+          style={({ pressed }) => [
+            style,
+            pressed && { opacity: 0.92, transform: [{ scale: 0.98 }] },
+          ]}
+        >
+          {children}
+        </Pressable>
+      </Animated.View>
+    );
+  }
+
+  return <Animated.View style={[animStyle, style]}>{children}</Animated.View>;
+};
 
 export const HomeScreen: React.FC = () => {
   const { colors, toggleTheme, isDark } = useTheme();
@@ -46,7 +100,33 @@ export const HomeScreen: React.FC = () => {
   const { deviceId, isReady: deviceReady } = useDevice();
   const [refreshing, setRefreshing] = useState(false);
 
-  // État du cercle de l'utilisateur
+  // Crescent moon animation
+  const crescentRotate = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(crescentRotate, {
+          toValue: 1,
+          duration: 3000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(crescentRotate, {
+          toValue: 0,
+          duration: 3000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, []);
+
+  const crescentInterpolate = crescentRotate.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['-8deg', '8deg'],
+  });
+
+  // Circle state
   const [userCircle, setUserCircle] = useState<{
     circle: Circle;
     membership: CircleMember;
@@ -54,7 +134,6 @@ export const HomeScreen: React.FC = () => {
   const [circleLoading, setCircleLoading] = useState(true);
   const [showCircleModal, setShowCircleModal] = useState(false);
 
-  // Utiliser le hook pour les horaires de prière (mise à jour chaque seconde)
   const {
     nextPrayer,
     countdown,
@@ -63,7 +142,6 @@ export const HomeScreen: React.FC = () => {
     refresh,
   } = usePrayerTimes();
 
-  // Charger le cercle de l'utilisateur
   const loadUserCircle = useCallback(async () => {
     if (!deviceId) return;
     try {
@@ -76,30 +154,23 @@ export const HomeScreen: React.FC = () => {
     }
   }, [deviceId]);
 
-  // Charger le cercle au montage
   useEffect(() => {
-    if (deviceReady && deviceId) {
-      loadUserCircle();
-    }
+    if (deviceReady && deviceId) loadUserCircle();
   }, [deviceReady, deviceId, loadUserCircle]);
 
-  // Recharger le cercle quand l'écran reprend le focus
   useFocusEffect(
     useCallback(() => {
-      if (deviceReady && deviceId) {
-        loadUserCircle();
-      }
+      if (deviceReady && deviceId) loadUserCircle();
     }, [deviceReady, deviceId, loadUserCircle])
   );
 
-  // Date locale du jour — état réactif pour déclencher le recalcul quand la date change
+  // Date locale
   const getLocalDate = () => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   };
   const [todayDateStr, setTodayDateStr] = useState(getLocalDate);
 
-  // Mettre à jour la date quand l'écran reprend le focus (ex: lendemain)
   useFocusEffect(
     useCallback(() => {
       const current = getLocalDate();
@@ -107,10 +178,9 @@ export const HomeScreen: React.FC = () => {
     }, [])
   );
 
-  // Dua du jour (basée sur la date)
   const duaOfTheDay = useMemo(() => getDuaOfTheDay(), [todayDateStr]);
+  const verseOfTheDay = useMemo(() => getVerseOfTheDay(), [todayDateStr]);
 
-  // Rafraîchir les données
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     refresh();
@@ -118,61 +188,65 @@ export const HomeScreen: React.FC = () => {
     setRefreshing(false);
   }, [refresh, loadUserCircle]);
 
-  // Verset du jour (basé sur la date - recalculé quand la date change)
-  const verseOfTheDay = useMemo(() => {
-    console.log('📖 Calcul verset du jour pour:', todayDateStr);
-    const verse = getVerseOfTheDay();
-    console.log('📖 Verset sélectionné:', verse.surahName, 'v.', verse.verseNumber);
-    return verse;
-  }, [todayDateStr]);
+  const goToDuaTab = () => navigation.navigate('Dua');
 
-  // Navigation vers l'onglet Dua
-  const goToDuaTab = () => {
-    navigation.navigate('Dua');
-  };
+  const circleProgress = userCircle
+    ? Math.round((userCircle.circle.completed_juz / 30) * 100)
+    : 0;
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
         }
       >
-        {/* Header */}
-        <View style={styles.header}>
-          <View>
-            <Text style={[styles.appName, { color: colors.text }]}>{APP_NAME}</Text>
-            <Text style={[styles.currentTime, { color: colors.textSecondary }]}>
-              {currentTimeAbidjan}
-            </Text>
+        {/* ===== HEADER ===== */}
+        <AnimatedCard delay={0}>
+          <View style={styles.header}>
+            <View style={styles.headerLeft}>
+              <View style={styles.headerTitleRow}>
+                <Text style={[styles.appName, { color: colors.primaryDark }]}>
+                  {APP_NAME}
+                </Text>
+                <Animated.View style={{ transform: [{ rotate: crescentInterpolate }], marginLeft: 8 }}>
+                  <Ionicons name="moon" size={22} color={colors.secondary} />
+                </Animated.View>
+              </View>
+              <Text style={[styles.headerSubtitle, { color: colors.textSecondary }]}>
+                {currentTimeAbidjan}
+              </Text>
+            </View>
+            <Pressable
+              onPress={toggleTheme}
+              style={[styles.themeButton, { backgroundColor: colors.surface }]}
+            >
+              <Ionicons
+                name={isDark ? 'sunny-outline' : 'moon-outline'}
+                size={22}
+                color={colors.secondary}
+              />
+            </Pressable>
           </View>
-          <Pressable onPress={toggleTheme} style={styles.themeButton}>
-            <Ionicons
-              name={isDark ? 'sunny-outline' : 'moon-outline'}
-              size={26}
-              color={colors.text}
-            />
-          </Pressable>
-        </View>
+        </AnimatedCard>
 
-        {/* Card prochaine prière avec countdown temps réel */}
-        <NextPrayerCard
-          prayer={nextPrayer}
-          countdown={countdown}
-          countdownString={countdownString}
-        />
+        {/* ===== PROCHAINE PRIERE ===== */}
+        <AnimatedCard delay={50}>
+          <NextPrayerCard
+            prayer={nextPrayer}
+            countdown={countdown}
+            countdownString={countdownString}
+          />
+        </AnimatedCard>
 
-        {/* Date du jour */}
-        <Card style={styles.dateCard}>
+        {/* ===== DATE DU JOUR ===== */}
+        <AnimatedCard delay={100} style={[styles.dateCard, { backgroundColor: colors.surface }, Shadows.small]}>
           <View style={styles.dateContainer}>
-            <Ionicons
-              name="calendar-outline"
-              size={22}
-              color={colors.primary}
-              style={styles.dateIcon}
-            />
-            <View>
+            <View style={[styles.dateIconWrap, { backgroundColor: colors.secondaryLight }]}>
+              <Ionicons name="calendar" size={20} color={colors.secondary} />
+            </View>
+            <View style={styles.dateTexts}>
               <Text style={[styles.dateGregorian, { color: colors.text }]}>
                 {formatDateFrench()}
               </Text>
@@ -181,15 +255,41 @@ export const HomeScreen: React.FC = () => {
               </Text>
             </View>
           </View>
-        </Card>
+        </AnimatedCard>
 
-        {/* Dua du jour */}
-        <View style={styles.sectionContainer}>
+        {/* ===== VERSET DU JOUR ===== */}
+        <AnimatedCard delay={150} style={styles.sectionContainer}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            Verset du jour
+          </Text>
+          <View style={[styles.verseCard, { backgroundColor: colors.surface }, Shadows.small]}>
+            <View style={[styles.verseGoldBar, { backgroundColor: colors.secondary }]} />
+            <View style={styles.verseContent}>
+              <Text style={[styles.verseArabic, { color: colors.text }]}>
+                {verseOfTheDay.arabic}
+              </Text>
+              <View style={[styles.verseDivider, { backgroundColor: colors.secondary + '30' }]} />
+              <Text style={[styles.verseFrench, { color: colors.textSecondary }]}>
+                {verseOfTheDay.french}
+              </Text>
+              <View style={styles.verseRefRow}>
+                <View style={[styles.verseRefBadge, { backgroundColor: colors.primaryLight }]}>
+                  <Text style={[styles.verseRefText, { color: colors.primary }]}>
+                    {verseOfTheDay.surahName} - Verset {verseOfTheDay.verseNumber}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </AnimatedCard>
+
+        {/* ===== DUA DU JOUR ===== */}
+        <AnimatedCard delay={200} style={styles.sectionContainer}>
           <View style={styles.sectionHeader}>
             <Text style={[styles.sectionTitle, { color: colors.text }]}>
               Dua du jour
             </Text>
-            <Pressable onPress={goToDuaTab}>
+            <Pressable onPress={goToDuaTab} hitSlop={12}>
               <Text style={[styles.seeAllText, { color: colors.primary }]}>
                 Voir tout
               </Text>
@@ -201,126 +301,112 @@ export const HomeScreen: React.FC = () => {
               styles.duaCard,
               { backgroundColor: colors.surface },
               Shadows.small,
-              pressed && { opacity: 0.9, transform: [{ scale: 0.98 }] },
+              pressed && { opacity: 0.92, transform: [{ scale: 0.98 }] },
             ]}
           >
             <View style={styles.duaCardContent}>
-              <View style={[styles.duaIconContainer, { backgroundColor: colors.primary + '20' }]}>
-                <Ionicons name="hand-left" size={24} color={colors.primary} />
+              <View style={[styles.duaIconContainer, { backgroundColor: colors.secondaryLight }]}>
+                <Ionicons name="hand-left" size={22} color={colors.secondary} />
               </View>
               <View style={styles.duaInfo}>
-                <Text style={[styles.duaArabicName, { color: colors.text }]}>
+                <Text style={[styles.duaArabicName, { color: colors.text }]} numberOfLines={1}>
                   {duaOfTheDay.arabicName}
                 </Text>
-                <Text style={[styles.duaFrenchName, { color: colors.text }]}>
+                <Text style={[styles.duaFrenchName, { color: colors.text }]} numberOfLines={1}>
                   {duaOfTheDay.frenchName}
                 </Text>
-                <Text style={[styles.duaOccasion, { color: colors.textSecondary }]}>
+                <Text style={[styles.duaOccasion, { color: colors.textSecondary }]} numberOfLines={1}>
                   {duaOfTheDay.occasion}
                 </Text>
               </View>
-              <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
+              <View style={[styles.chevronWrap, { backgroundColor: colors.primaryLight }]}>
+                <Ionicons name="chevron-forward" size={16} color={colors.primary} />
+              </View>
             </View>
           </Pressable>
-        </View>
+        </AnimatedCard>
 
-        {/* Verset du jour */}
-        <View style={styles.sectionContainer}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            Verset du jour
-          </Text>
-          <Card variant="outlined">
-            <Text style={[styles.verseArabic, { color: colors.text }]}>
-              {verseOfTheDay.arabic}
-            </Text>
-            <Text style={[styles.verseText, { color: colors.text }]}>
-              {verseOfTheDay.french}
-            </Text>
-            <Text style={[styles.verseReference, { color: colors.textSecondary }]}>
-              {verseOfTheDay.surahName} - Verset {verseOfTheDay.verseNumber}
-            </Text>
-          </Card>
-        </View>
-
-        {/* Carte Cercle de Lecture */}
-        <View style={styles.sectionContainer}>
-          <Pressable
-            onPress={() => setShowCircleModal(true)}
-            style={({ pressed }) => [
-              styles.circleCard,
-              { backgroundColor: colors.surface },
-              Shadows.small,
-              pressed && { opacity: 0.9, transform: [{ scale: 0.98 }] },
-            ]}
-          >
-            <View style={styles.circleCardContent}>
-              <View style={[styles.circleIconContainer, { backgroundColor: colors.primary + '20' }]}>
-                <Ionicons name="people" size={24} color={colors.primary} />
-              </View>
-              <View style={styles.circleInfo}>
-                {userCircle ? (
-                  <>
-                    <Text style={[styles.circleTitle, { color: colors.text }]}>
-                      {userCircle.circle.name}
-                    </Text>
-                    <Text style={[styles.circleSubtitle, { color: colors.textSecondary }]}>
-                      {userCircle.circle.completed_juz}/30 Juz ({Math.round((userCircle.circle.completed_juz / 30) * 100)}%)
-                    </Text>
-                  </>
-                ) : (
-                  <>
-                    <Text style={[styles.circleTitle, { color: colors.text }]}>
-                      Cercle de Lecture
-                    </Text>
-                    <Text style={[styles.circleSubtitle, { color: colors.textSecondary }]}>
-                      Lisez le Coran en famille
-                    </Text>
-                  </>
-                )}
-              </View>
-              <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
+        {/* ===== CERCLE DE LECTURE ===== */}
+        <AnimatedCard delay={250} onPress={() => setShowCircleModal(true)} style={[styles.circleCard, { backgroundColor: colors.surface }, Shadows.small]}>
+          <View style={styles.circleCardContent}>
+            <View style={[styles.circleIconContainer, { backgroundColor: colors.secondaryLight }]}>
+              <Ionicons name="people" size={22} color={colors.secondary} />
             </View>
-          </Pressable>
-        </View>
+            <View style={styles.circleInfo}>
+              {userCircle ? (
+                <>
+                  <Text style={[styles.circleTitle, { color: colors.text }]} numberOfLines={1}>
+                    {userCircle.circle.name}
+                  </Text>
+                  <Text style={[styles.circleSubtitle, { color: colors.textSecondary }]}>
+                    {userCircle.circle.completed_juz}/30 Juz
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Text style={[styles.circleTitle, { color: colors.text }]}>
+                    Cercle de Lecture
+                  </Text>
+                  <Text style={[styles.circleSubtitle, { color: colors.textSecondary }]}>
+                    Lisez le Coran en famille
+                  </Text>
+                </>
+              )}
+              {userCircle && (
+                <View style={[styles.circleProgressTrack, { backgroundColor: colors.border }]}>
+                  <LinearGradient
+                    colors={[colors.secondary, colors.secondaryDark] as [string, string]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={[styles.circleProgressFill, { width: `${circleProgress}%` as any }]}
+                  />
+                </View>
+              )}
+            </View>
+            <View style={[styles.chevronWrap, { backgroundColor: colors.primaryLight }]}>
+              <Ionicons name="chevron-forward" size={16} color={colors.primary} />
+            </View>
+          </View>
+        </AnimatedCard>
 
-        {/* Accès rapides */}
-        <View style={styles.sectionContainer}>
+        {/* ===== ACCES RAPIDES ===== */}
+        <AnimatedCard delay={300} style={styles.sectionContainer}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
             Accès rapides
           </Text>
-          <View style={styles.quickAccessGrid}>
-            <View style={styles.quickAccessRow}>
-              <QuickAccessCard
-                icon="book-outline"
-                label="Coran"
-                onPress={() => navigation.navigate('Coran')}
-              />
-              <QuickAccessCard
-                icon="time-outline"
-                label="Prières"
-                onPress={() => navigation.navigate('Prieres')}
-              />
-            </View>
-            <View style={styles.quickAccessRow}>
-              <QuickAccessCard
-                icon="moon-outline"
-                label="Ramadan"
-                onPress={() => navigation.navigate('Ramadan')}
-              />
-              <QuickAccessCard
-                icon="hand-left-outline"
-                label="Dua"
-                onPress={() => navigation.navigate('Dua')}
-              />
-            </View>
+          <View style={styles.quickGrid}>
+            {([
+              { icon: 'book-outline' as const, label: 'Coran', tab: 'Coran' as const, gradient: [colors.primary, colors.primaryDark] },
+              { icon: 'time-outline' as const, label: 'Prières', tab: 'Prieres' as const, gradient: [colors.primary, colors.primaryDark] },
+              { icon: 'moon-outline' as const, label: 'Ramadan', tab: 'Ramadan' as const, gradient: [colors.ramadanGradientStart, colors.ramadanGradientEnd] },
+              { icon: 'hand-left-outline' as const, label: 'Dua', tab: 'Dua' as const, gradient: [colors.secondary, colors.secondaryDark] },
+            ]).map((item) => (
+              <Pressable
+                key={item.tab}
+                onPress={() => navigation.navigate(item.tab)}
+                style={({ pressed }) => [
+                  styles.quickItem,
+                  { backgroundColor: colors.surface },
+                  Shadows.small,
+                  pressed && { transform: [{ scale: 0.96 }], opacity: 0.9 },
+                ]}
+              >
+                <LinearGradient
+                  colors={item.gradient as [string, string]}
+                  style={styles.quickIconWrap}
+                >
+                  <Ionicons name={item.icon} size={24} color="#FFF" />
+                </LinearGradient>
+                <Text style={[styles.quickLabel, { color: colors.text }]}>{item.label}</Text>
+              </Pressable>
+            ))}
           </View>
-        </View>
+        </AnimatedCard>
 
-        {/* Espacement en bas */}
         <View style={styles.bottomSpacer} />
       </ScrollView>
 
-      {/* Modal Cercle de Lecture */}
+      {/* ===== MODAL CERCLE ===== */}
       <Modal
         visible={showCircleModal}
         animationType="slide"
@@ -328,16 +414,15 @@ export const HomeScreen: React.FC = () => {
         onRequestClose={() => setShowCircleModal(false)}
       >
         <SafeAreaView style={[styles.modalContainer, { backgroundColor: colors.background }]}>
-          {/* Header du modal avec bouton fermer */}
           <View style={[styles.modalHeader, { borderBottomColor: colors.border }]}>
             <Pressable
               onPress={() => setShowCircleModal(false)}
               style={[styles.modalCloseButton, { backgroundColor: colors.surface }]}
+              hitSlop={8}
             >
-              <Ionicons name="close" size={24} color={colors.text} />
+              <Ionicons name="close" size={22} color={colors.text} />
             </Pressable>
           </View>
-          {/* Contenu du module Cercle */}
           <CircleNavigator />
         </SafeAreaView>
       </Modal>
@@ -349,49 +434,73 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+
+  // --- Header ---
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Spacing.screenHorizontal,
-    paddingTop: Spacing.lg,
-    paddingBottom: Spacing.md,
+    paddingTop: Spacing.xl,
+    paddingBottom: Spacing.sm,
+  },
+  headerLeft: {
+    flex: 1,
+  },
+  headerTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   appName: {
-    fontSize: Typography.sizes['2xl'],
-    fontWeight: Typography.weights.bold,
+    fontSize: 28,
+    fontWeight: '800',
+    letterSpacing: -0.5,
   },
-  currentTime: {
+  headerSubtitle: {
     fontSize: Typography.sizes.sm,
-    marginTop: Spacing.xs,
+    marginTop: 4,
   },
   themeButton: {
-    padding: Spacing.sm,
-    minWidth: 44,
-    minHeight: 44,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  // --- Date ---
   dateCard: {
     marginHorizontal: Spacing.screenHorizontal,
-    marginVertical: Spacing.md,
+    marginTop: Spacing.md,
+    borderRadius: Spacing.radiusLg,
+    padding: Spacing.lg,
   },
   dateContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  dateIcon: {
+  dateIconWrap: {
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: Spacing.md,
+  },
+  dateTexts: {
+    flex: 1,
   },
   dateGregorian: {
     fontSize: Typography.sizes.md,
-    fontWeight: Typography.weights.semibold,
-    marginBottom: Spacing.xs,
+    fontWeight: '600',
+    marginBottom: 2,
   },
   dateHijri: {
     fontSize: Typography.sizes.sm,
-    fontWeight: Typography.weights.medium,
+    fontWeight: '600',
   },
+
+  // --- Sections ---
   sectionContainer: {
     paddingHorizontal: Spacing.screenHorizontal,
     marginTop: Spacing.xl,
@@ -404,14 +513,60 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.semibold,
+    fontWeight: '700',
     marginBottom: Spacing.md,
   },
   seeAllText: {
     fontSize: Typography.sizes.sm,
-    fontWeight: Typography.weights.medium,
+    fontWeight: '600',
     marginBottom: Spacing.md,
   },
+
+  // --- Verse of the day ---
+  verseCard: {
+    borderRadius: Spacing.radiusLg,
+    overflow: 'hidden',
+    flexDirection: 'row',
+  },
+  verseGoldBar: {
+    width: 4,
+  },
+  verseContent: {
+    flex: 1,
+    padding: Spacing.lg,
+  },
+  verseArabic: {
+    fontSize: 22,
+    lineHeight: 40,
+    textAlign: 'right',
+    fontFamily: Platform.OS === 'ios' ? 'Geeza Pro' : 'serif',
+    marginBottom: Spacing.md,
+  },
+  verseDivider: {
+    height: 1,
+    marginBottom: Spacing.md,
+  },
+  verseFrench: {
+    fontSize: Typography.sizes.md,
+    fontStyle: 'italic',
+    lineHeight: Typography.sizes.md * 1.7,
+    marginBottom: Spacing.md,
+  },
+  verseRefRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  verseRefBadge: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xs,
+    borderRadius: Spacing.radiusFull,
+  },
+  verseRefText: {
+    fontSize: Typography.sizes.xs,
+    fontWeight: '600',
+  },
+
+  // --- Dua ---
   duaCard: {
     borderRadius: Spacing.radiusLg,
     overflow: 'hidden',
@@ -425,7 +580,7 @@ const styles = StyleSheet.create({
   duaIconContainer: {
     width: 48,
     height: 48,
-    borderRadius: 24,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -433,46 +588,23 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   duaArabicName: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.bold,
-    marginBottom: Spacing.xs,
+    fontSize: Typography.sizes.md,
+    fontWeight: '700',
+    marginBottom: 2,
   },
   duaFrenchName: {
-    fontSize: Typography.sizes.md,
-    fontWeight: Typography.weights.medium,
-    marginBottom: Spacing.xs,
+    fontSize: Typography.sizes.sm,
+    fontWeight: '500',
+    marginBottom: 2,
   },
   duaOccasion: {
-    fontSize: Typography.sizes.sm,
+    fontSize: Typography.sizes.xs,
   },
-  verseArabic: {
-    fontSize: 22,
-    lineHeight: 36,
-    textAlign: 'right',
-    fontFamily: Platform.OS === 'ios' ? 'Geeza Pro' : 'serif',
-    marginBottom: Spacing.sm,
-  },
-  verseText: {
-    fontSize: Typography.sizes.md,
-    fontStyle: 'italic',
-    lineHeight: Typography.sizes.md * 1.6,
-    marginBottom: Spacing.sm,
-  },
-  verseReference: {
-    fontSize: Typography.sizes.sm,
-    textAlign: 'right',
-  },
-  quickAccessGrid: {
-    marginTop: Spacing.xs,
-  },
-  quickAccessRow: {
-    flexDirection: 'row',
-  },
-  bottomSpacer: {
-    height: Spacing['4xl'],
-  },
-  // Styles pour la carte Cercle
+
+  // --- Circle ---
   circleCard: {
+    marginHorizontal: Spacing.screenHorizontal,
+    marginTop: Spacing.xl,
     borderRadius: Spacing.radiusLg,
     overflow: 'hidden',
   },
@@ -485,7 +617,7 @@ const styles = StyleSheet.create({
   circleIconContainer: {
     width: 48,
     height: 48,
-    borderRadius: 24,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -494,13 +626,68 @@ const styles = StyleSheet.create({
   },
   circleTitle: {
     fontSize: Typography.sizes.md,
-    fontWeight: Typography.weights.semibold,
-    marginBottom: Spacing.xs,
+    fontWeight: '600',
+    marginBottom: 2,
   },
   circleSubtitle: {
     fontSize: Typography.sizes.sm,
+    marginBottom: 6,
   },
-  // Styles pour le modal
+  circleProgressTrack: {
+    height: 6,
+    borderRadius: 3,
+    overflow: 'hidden',
+    marginTop: 4,
+  },
+  circleProgressFill: {
+    height: '100%',
+    borderRadius: 3,
+  },
+
+  // --- Chevron ---
+  chevronWrap: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  // --- Quick Access ---
+  quickGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.md,
+  },
+  quickItem: {
+    width: '47%' as any,
+    flexGrow: 1,
+    borderRadius: Spacing.radiusLg,
+    padding: Spacing.lg,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 100,
+  },
+  quickIconWrap: {
+    width: 48,
+    height: 48,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Spacing.sm,
+  },
+  quickLabel: {
+    fontSize: Typography.sizes.sm,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+
+  // --- Bottom ---
+  bottomSpacer: {
+    height: Spacing['4xl'],
+  },
+
+  // --- Modal ---
   modalContainer: {
     flex: 1,
   },
