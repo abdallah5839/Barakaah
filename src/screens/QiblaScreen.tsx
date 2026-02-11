@@ -213,6 +213,11 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
   }, []);
 
   // Toggle AR mode — button always visible, permission checked on tap
+  const switchToAR = useCallback(() => {
+    setViewMode('ar');
+    AsyncStorage.setItem(QIBLA_VIEW_MODE_KEY, 'ar').catch(() => {});
+  }, []);
+
   const handleToggleAR = useCallback(async () => {
     if (viewMode === 'ar') {
       setViewMode('2d');
@@ -222,28 +227,32 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
 
     // Already granted — go straight to AR
     if (cameraPermissionGranted.current) {
-      setViewMode('ar');
-      AsyncStorage.setItem(QIBLA_VIEW_MODE_KEY, 'ar').catch(() => {});
+      switchToAR();
       return;
     }
 
-    // Request permission — no hardware check, only permissions
-    const { status } = await requestCameraPermissionsAsync();
-    if (status === 'granted') {
+    // Request permission
+    try {
+      const { status } = await requestCameraPermissionsAsync();
+      if (status === 'granted') {
+        cameraPermissionGranted.current = true;
+        switchToAR();
+      } else {
+        Alert.alert(
+          '📷 Accès caméra requis',
+          'Pour utiliser le mode AR Qibla, Sakina a besoin d\'accéder à votre caméra. Vous pouvez autoriser l\'accès dans les Réglages.',
+          [
+            { text: 'Plus tard', style: 'cancel' },
+            { text: 'Ouvrir Réglages', onPress: () => Linking.openSettings() },
+          ],
+        );
+      }
+    } catch {
+      // Permission API failed (e.g. Expo Go) — open AR anyway, CameraView will handle it
       cameraPermissionGranted.current = true;
-      setViewMode('ar');
-      AsyncStorage.setItem(QIBLA_VIEW_MODE_KEY, 'ar').catch(() => {});
-    } else {
-      Alert.alert(
-        '📷 Accès caméra requis',
-        'Pour utiliser le mode AR Qibla, Sakina a besoin d\'accéder à votre caméra. Vous pouvez autoriser l\'accès dans les Réglages.',
-        [
-          { text: 'Plus tard', style: 'cancel' },
-          { text: 'Ouvrir Réglages', onPress: () => Linking.openSettings() },
-        ],
-      );
+      switchToAR();
     }
-  }, [viewMode]);
+  }, [viewMode, switchToAR]);
 
   // Native-driven Animated.Value — no JS bridge per frame
   const compassRotationAnim = useRef(new Animated.Value(0)).current;
