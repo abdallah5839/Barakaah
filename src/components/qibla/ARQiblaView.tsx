@@ -4,7 +4,7 @@
  * calibration banner, info bar, and haptic feedback.
  */
 
-import React, { useState, useEffect, useRef, Component, type ReactNode } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -15,17 +15,7 @@ import {
   StatusBar,
   Easing,
 } from 'react-native';
-import { CameraView } from 'expo-camera';
-
-// ErrorBoundary to catch CameraView native module crashes (Expo Go)
-class CameraBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
-  state = { hasError: false };
-  static getDerivedStateFromError() { return { hasError: true }; }
-  render() {
-    if (this.state.hasError) return null;
-    return this.props.children;
-  }
-}
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Magnetometer } from 'expo-sensors';
 import * as Location from 'expo-location';
 import * as Haptics from 'expo-haptics';
@@ -59,6 +49,16 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
 }) => {
   const [deviceHeading, setDeviceHeading] = useState(0);
   const [needsCalibration, setNeedsCalibration] = useState(false);
+  const [cameraReady, setCameraReady] = useState(false);
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const [permission, requestPermission] = useCameraPermissions();
+
+  // Request camera permission on mount if not already granted
+  useEffect(() => {
+    if (!permission?.granted) {
+      requestPermission();
+    }
+  }, [permission?.granted]);
 
   const mounted = useRef(true);
   const headingSubscription = useRef<any>(null);
@@ -186,16 +186,32 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      {/* Camera — wrapped in error boundary for Expo Go fallback */}
-      <CameraBoundary>
+      {/* Camera feed */}
+      {permission?.granted && (
         <CameraView
           style={StyleSheet.absoluteFill}
           facing="back"
+          onCameraReady={() => setCameraReady(true)}
+          onMountError={(e) => setCameraError(e.message)}
         />
-      </CameraBoundary>
+      )}
 
       {/* Darkened overlay for better contrast */}
       <View style={styles.darkOverlay} />
+
+      {/* Camera status indicator (hidden once camera is ready) */}
+      {!cameraReady && (
+        <View style={styles.cameraStatus}>
+          <Ionicons name="camera" size={32} color="rgba(255,255,255,0.3)" />
+          <Text style={styles.cameraStatusText}>
+            {cameraError
+              ? `Caméra indisponible: ${cameraError}`
+              : !permission?.granted
+                ? 'Autorisation caméra requise'
+                : 'Chargement caméra…'}
+          </Text>
+        </View>
+      )}
 
       {/* Calibration banner */}
       {needsCalibration && (
@@ -270,6 +286,18 @@ const styles = StyleSheet.create({
   darkOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0,0,0,0.15)',
+  },
+  cameraStatus: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+  },
+  cameraStatusText: {
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: 13,
+    textAlign: 'center',
+    paddingHorizontal: 40,
   },
   calibBanner: {
     position: 'absolute',

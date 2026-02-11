@@ -23,7 +23,7 @@ import {
 } from 'react-native';
 import Svg, { Polygon, Circle as SvgCircle, Defs, LinearGradient as SvgGradient, Stop, Line } from 'react-native-svg';
 import { Magnetometer } from 'expo-sensors';
-import { getCameraPermissionsAsync, requestCameraPermissionsAsync } from 'expo-camera';
+import { Camera } from 'expo-camera';
 import * as Location from 'expo-location';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -200,7 +200,7 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
   useEffect(() => {
     const checkSaved = async () => {
       try {
-        const permResult = await getCameraPermissionsAsync();
+        const permResult = await Camera.getCameraPermissionsAsync();
         if (permResult.granted) {
           cameraPermissionGranted.current = true;
           // Restore saved AR mode only if permission already granted
@@ -233,7 +233,7 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
 
     // Request permission
     try {
-      const { status } = await requestCameraPermissionsAsync();
+      const { status } = await Camera.requestCameraPermissionsAsync();
       if (status === 'granted') {
         cameraPermissionGranted.current = true;
         switchToAR();
