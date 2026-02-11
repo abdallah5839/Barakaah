@@ -19,15 +19,18 @@ import {
   Dimensions,
   ScrollView,
   Platform,
+  Linking,
 } from 'react-native';
 import Svg, { Polygon, Circle as SvgCircle, Defs, LinearGradient as SvgGradient, Stop, Line } from 'react-native-svg';
 import { Magnetometer } from 'expo-sensors';
+import { Camera } from 'expo-camera';
 import * as Location from 'expo-location';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../constants/colors';
 import { Spacing, Typography, Shadows } from '../constants';
+import { ARQiblaView } from '../components/qibla/ARQiblaView';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const COMPASS_SIZE = Math.min(SCREEN_WIDTH * 0.78, 320);
@@ -38,10 +41,14 @@ const KAABA_COORDS = {
 };
 
 const QIBLA_CACHE_KEY = 'sakina_qibla_position';
+const QIBLA_VIEW_MODE_KEY = 'qibla_view_mode';
 
 // Default coords (Abidjan)
 const DEFAULT_LAT = 5.3600;
 const DEFAULT_LON = -4.0083;
+
+const GOLD = '#D4AF37';
+const GOLD_LIGHT = '#F4E4BA';
 
 interface QiblaScreenProps {
   navigation?: any;
@@ -186,6 +193,66 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
   const [locationName, setLocationName] = useState('Abidjan, Côte d\'Ivoire');
   const [isCalibrating, setIsCalibrating] = useState(false);
   const [facingQibla, setFacingQibla] = useState(false);
+  const [viewMode, setViewMode] = useState<'2d' | 'ar'>('2d');
+  const cameraPermissionGranted = useRef(false);
+
+  // Preload: check if permission already granted + restore saved mode
+  useEffect(() => {
+    const checkSaved = async () => {
+      try {
+        const permResult = await Camera.getCameraPermissionsAsync();
+        if (permResult.granted) {
+          cameraPermissionGranted.current = true;
+          // Restore saved AR mode only if permission already granted
+          const saved = await AsyncStorage.getItem(QIBLA_VIEW_MODE_KEY);
+          if (saved === 'ar') setViewMode('ar');
+        }
+      } catch {}
+    };
+    checkSaved();
+  }, []);
+
+  // Toggle AR mode — button always visible, permission checked on tap
+  const switchToAR = useCallback(() => {
+    setViewMode('ar');
+    AsyncStorage.setItem(QIBLA_VIEW_MODE_KEY, 'ar').catch(() => {});
+  }, []);
+
+  const handleToggleAR = useCallback(async () => {
+    if (viewMode === 'ar') {
+      setViewMode('2d');
+      AsyncStorage.setItem(QIBLA_VIEW_MODE_KEY, '2d').catch(() => {});
+      return;
+    }
+
+    // Already granted — go straight to AR
+    if (cameraPermissionGranted.current) {
+      switchToAR();
+      return;
+    }
+
+    // Request permission
+    try {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      if (status === 'granted') {
+        cameraPermissionGranted.current = true;
+        switchToAR();
+      } else {
+        Alert.alert(
+          '📷 Accès caméra requis',
+          'Pour utiliser le mode AR Qibla, Sakina a besoin d\'accéder à votre caméra. Vous pouvez autoriser l\'accès dans les Réglages.',
+          [
+            { text: 'Plus tard', style: 'cancel' },
+            { text: 'Ouvrir Réglages', onPress: () => Linking.openSettings() },
+          ],
+        );
+      }
+    } catch {
+      // Permission API failed (e.g. Expo Go) — open AR anyway, CameraView will handle it
+      cameraPermissionGranted.current = true;
+      switchToAR();
+    }
+  }, [viewMode, switchToAR]);
 
   // Native-driven Animated.Value — no JS bridge per frame
   const compassRotationAnim = useRef(new Animated.Value(0)).current;
@@ -488,9 +555,6 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
     }
   }, [facingQibla]);
 
-  const GOLD = '#D4AF37';
-  const GOLD_LIGHT = '#F4E4BA';
-
   return (
     <SafeAreaView style={[qStyles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
@@ -501,9 +565,28 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
         <View style={qStyles.headerCenter}>
           <Text style={[qStyles.headerTitle, { color: colors.text }]}>Direction Qibla</Text>
         </View>
-        <View style={qStyles.headerSpacer} />
+        <Pressable onPress={handleToggleAR} style={qStyles.arToggleButton}>
+          <Ionicons
+            name={viewMode === 'ar' ? 'compass-outline' : 'camera-outline'}
+            size={22}
+            color={GOLD}
+          />
+        </Pressable>
       </View>
 
+      {/* AR Mode */}
+      {viewMode === 'ar' ? (
+        <ARQiblaView
+          onClose={() => {
+            setViewMode('2d');
+            AsyncStorage.setItem(QIBLA_VIEW_MODE_KEY, '2d').catch(() => {});
+          }}
+          qiblaAngle={qiblaAngle}
+          distance={distance}
+          locationName={locationName}
+          isDark={isDark}
+        />
+      ) : (
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         {/* Localisation */}
         <View style={qStyles.locationContainer}>
@@ -675,6 +758,7 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
 
         <View style={{ height: 40 }} />
       </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
@@ -705,8 +789,12 @@ const qStyles = StyleSheet.create({
     fontSize: Typography.sizes.lg,
     fontWeight: '700',
   },
-  headerSpacer: {
+  arToggleButton: {
     width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   locationContainer: {
     flexDirection: 'row',
