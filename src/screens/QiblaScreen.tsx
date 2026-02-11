@@ -194,35 +194,25 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
   const [isCalibrating, setIsCalibrating] = useState(false);
   const [facingQibla, setFacingQibla] = useState(false);
   const [viewMode, setViewMode] = useState<'2d' | 'ar'>('2d');
-  const [isARAvailable, setIsARAvailable] = useState(false);
   const cameraPermissionGranted = useRef(false);
 
-  // Check camera availability + load saved preference on mount
+  // Preload: check if permission already granted + restore saved mode
   useEffect(() => {
-    const checkAR = async () => {
+    const checkSaved = async () => {
       try {
-        // Check if camera hardware exists by querying permission status
-        // (getCameraPermissionsAsync works even without asking — just checks status)
         const permResult = await getCameraPermissionsAsync();
-        // If we get a result at all, camera hardware is available
-        setIsARAvailable(true);
         if (permResult.granted) {
           cameraPermissionGranted.current = true;
+          // Restore saved AR mode only if permission already granted
+          const saved = await AsyncStorage.getItem(QIBLA_VIEW_MODE_KEY);
+          if (saved === 'ar') setViewMode('ar');
         }
-        // Load saved preference only if AR is available
-        const saved = await AsyncStorage.getItem(QIBLA_VIEW_MODE_KEY);
-        if (saved === 'ar' && permResult.granted) {
-          setViewMode('ar');
-        }
-      } catch {
-        // Camera not available on this device
-        setIsARAvailable(false);
-      }
+      } catch {}
     };
-    checkAR();
+    checkSaved();
   }, []);
 
-  // Toggle AR mode with permission flow
+  // Toggle AR mode — button always visible, permission checked on tap
   const handleToggleAR = useCallback(async () => {
     if (viewMode === 'ar') {
       setViewMode('2d');
@@ -244,17 +234,8 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
         cameraPermissionGranted.current = true;
         setViewMode('ar');
         AsyncStorage.setItem(QIBLA_VIEW_MODE_KEY, 'ar').catch(() => {});
-      } else if (!canAskAgain) {
-        // System won't show prompt again — redirect to Settings
-        Alert.alert(
-          '📷 Permission requise',
-          'L\'accès à la caméra est nécessaire pour le mode AR Qibla. Souhaitez-vous autoriser l\'accès dans les paramètres ?',
-          [
-            { text: 'Plus tard', style: 'cancel' },
-            { text: 'Paramètres', onPress: () => Linking.openSettings() },
-          ],
-        );
       } else {
+        // Permission denied — offer to open Settings
         Alert.alert(
           '📷 Permission requise',
           'L\'accès à la caméra est nécessaire pour le mode AR Qibla. Souhaitez-vous autoriser l\'accès dans les paramètres ?',
@@ -265,8 +246,11 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
         );
       }
     } catch {
-      // Should not happen since isARAvailable is true, but safety net
-      setIsARAvailable(false);
+      Alert.alert(
+        '📷 Caméra non disponible',
+        'Votre appareil ne supporte pas le mode AR. La boussole 2D reste disponible.',
+        [{ text: 'Compris' }],
+      );
     }
   }, [viewMode]);
 
@@ -581,17 +565,13 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
         <View style={qStyles.headerCenter}>
           <Text style={[qStyles.headerTitle, { color: colors.text }]}>Direction Qibla</Text>
         </View>
-        {isARAvailable ? (
-          <Pressable onPress={handleToggleAR} style={qStyles.arToggleButton}>
-            <Ionicons
-              name={viewMode === 'ar' ? 'compass-outline' : 'videocam-outline'}
-              size={20}
-              color={GOLD}
-            />
-          </Pressable>
-        ) : (
-          <View style={qStyles.arToggleButton} />
-        )}
+        <Pressable onPress={handleToggleAR} style={qStyles.arToggleButton}>
+          <Ionicons
+            name={viewMode === 'ar' ? 'compass-outline' : 'camera-outline'}
+            size={22}
+            color={GOLD}
+          />
+        </Pressable>
       </View>
 
       {/* AR Mode */}
