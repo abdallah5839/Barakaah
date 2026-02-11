@@ -4,7 +4,7 @@
  * calibration banner, info bar, and haptic feedback.
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Component, type ReactNode } from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,16 @@ import {
   Easing,
 } from 'react-native';
 import { CameraView } from 'expo-camera';
+
+// ErrorBoundary to catch CameraView native module crashes (Expo Go)
+class CameraBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  render() {
+    if (this.state.hasError) return null;
+    return this.props.children;
+  }
+}
 import { Magnetometer } from 'expo-sensors';
 import * as Location from 'expo-location';
 import * as Haptics from 'expo-haptics';
@@ -137,8 +147,8 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
           lastAngleRef.current = h;
 
           sampleCount.current++;
-          if (sampleCount.current > 30 && !sensorReady) {
-            setSensorReady(true);
+          if (sampleCount.current > 30 && !calibratedRef.current) {
+            calibratedRef.current = true;
             setNeedsCalibration(false);
           }
 
@@ -146,7 +156,6 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
         });
         headingSubscription.current = sub;
       } catch {
-        // No sensor available at all — keep calibration banner visible
         setNeedsCalibration(true);
       }
     };
@@ -177,11 +186,13 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      {/* Camera */}
-      <CameraView
-        style={StyleSheet.absoluteFill}
-        facing="back"
-      />
+      {/* Camera — wrapped in error boundary for Expo Go fallback */}
+      <CameraBoundary>
+        <CameraView
+          style={StyleSheet.absoluteFill}
+          facing="back"
+        />
+      </CameraBoundary>
 
       {/* Darkened overlay for better contrast */}
       <View style={styles.darkOverlay} />
