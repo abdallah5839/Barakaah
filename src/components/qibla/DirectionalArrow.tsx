@@ -1,7 +1,8 @@
 /**
  * DirectionalArrow — SVG directional arrow overlay for AR Qibla mode.
  * Gold gradient arrow with precision circle that changes color based on alignment.
- * Animated rotation + pulse when aligned.
+ * Rotation is driven by a parent Animated.Value (direct setValue, zero latency).
+ * Pulse animation when aligned.
  */
 
 import React, { useEffect, useRef } from 'react';
@@ -18,9 +19,9 @@ const ARROW_SIZE = 160;
 const CIRCLE_SIZE = 180;
 
 interface DirectionalArrowProps {
-  /** Rotation in degrees (qiblaAngle - deviceHeading) */
-  rotation: number;
-  /** Absolute offset from Qibla in degrees (0-180) */
+  /** Animated.Value driven by parent — direct setValue() from sensor, no animation delay */
+  rotationAnim: Animated.Value;
+  /** Absolute offset from Qibla in degrees (0-180) — for color/pulse (throttled) */
   offset: number;
 }
 
@@ -36,25 +37,12 @@ const getCircleOpacity = (offset: number): number => {
   return 0.4;
 };
 
-const AnimatedSvgCircle = Animated.createAnimatedComponent(SvgCircle);
-
-export const DirectionalArrow: React.FC<DirectionalArrowProps> = React.memo(({ rotation, offset }) => {
-  const rotateAnim = useRef(new Animated.Value(rotation)).current;
+export const DirectionalArrow: React.FC<DirectionalArrowProps> = React.memo(({ rotationAnim, offset }) => {
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const pulseLoop = useRef<Animated.CompositeAnimation | null>(null);
   const isAligned = offset < 5;
 
-  // Smooth rotation with spring physics
-  useEffect(() => {
-    Animated.spring(rotateAnim, {
-      toValue: rotation,
-      useNativeDriver: true,
-      tension: 60,
-      friction: 12,
-    }).start();
-  }, [rotation]);
-
-  // Pulse when aligned
+  // Pulse when aligned (visual effect — doesn't need high fps)
   useEffect(() => {
     if (isAligned) {
       pulseLoop.current = Animated.loop(
@@ -71,7 +59,8 @@ export const DirectionalArrow: React.FC<DirectionalArrowProps> = React.memo(({ r
     return () => { pulseLoop.current?.stop(); };
   }, [isAligned]);
 
-  const rotateInterpolation = rotateAnim.interpolate({
+  // Direct interpolation from parent's Animated.Value — ZERO animation latency
+  const rotateInterpolation = rotationAnim.interpolate({
     inputRange: [-3600, 0, 3600],
     outputRange: ['-3600deg', '0deg', '3600deg'],
   });

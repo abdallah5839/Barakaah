@@ -2,9 +2,13 @@
  * ARQiblaView — Camera-based AR view for Qibla direction.
  * Shows live camera feed with a directional gold arrow overlay,
  * calibration banner, info bar, and haptic feedback.
+ *
+ * Performance: Heading drives Animated.Value via direct setValue() —
+ * bypasses React state for the arrow rotation (zero latency, ~60fps).
+ * EMA smoothing + gyroscope fusion for fluid, jitter-free tracking.
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -16,13 +20,19 @@ import {
   Easing,
 } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { Magnetometer } from 'expo-sensors';
+import { Magnetometer, Gyroscope } from 'expo-sensors';
 import * as Location from 'expo-location';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { DirectionalArrow } from './DirectionalArrow';
 
 const GOLD = '#D4AF37';
+
+/** EMA smoothing factor (0-1). Higher = more responsive, lower = smoother. */
+const EMA_ALPHA = 0.55;
+
+/** Gyroscope trust in complementary filter (0-1). Higher = trust gyro more. */
+const GYRO_ALPHA = 0.97;
 
 const getCardinalDirection = (angle: number): string => {
   const directions = [
@@ -47,27 +57,90 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
   locationName,
   isDark = false,
 }) => {
-  const [deviceHeading, setDeviceHeading] = useState(0);
-  const [needsCalibration, setNeedsCalibration] = useState(false);
+  // --- Camera ---
   const [cameraReady, setCameraReady] = useState(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [permission, requestPermission] = useCameraPermissions();
 
-  // Request camera permission on mount if not already granted
   useEffect(() => {
     if (!permission?.granted) {
       requestPermission();
     }
   }, [permission?.granted]);
 
+  // --- Calibration state (only updates once) ---
+  const [needsCalibration, setNeedsCalibration] = useState(false);
+
+  // --- Throttled UI state (circle color, badges, info — ~12fps) ---
+  const [absOffset, setAbsOffset] = useState(180);
+
+  // --- Animated.Value for arrow rotation — driven by direct setValue() ---
+  const relativeAngleAnim = useRef(new Animated.Value(0)).current;
+
+  // --- Refs (no re-renders) ---
   const mounted = useRef(true);
   const headingSubscription = useRef<any>(null);
+  const gyroSubscription = useRef<any>(null);
+  const qiblaAngleRef = useRef(qiblaAngle);
+  const smoothedHeadingRef = useRef(0);
+  const prevRelativeRef = useRef(0);
   const lastAngleRef = useRef(0);
   const qiblaHapticFired = useRef(false);
   const sampleCount = useRef(0);
   const calibratedRef = useRef(false);
+  const lastUiUpdateRef = useRef(0);
+  const lastGyroTimeRef = useRef(0);
+  const fusedHeadingRef = useRef(0);
+  const hasGyro = useRef(false);
 
-  // Calibration banner animation — rotating icon
+  // Track qiblaAngle prop changes
+  useEffect(() => {
+    qiblaAngleRef.current = qiblaAngle;
+  }, [qiblaAngle]);
+
+  // --- Core heading handler: EMA smooth → relative angle → setValue() ---
+  const applyHeading = useCallback((rawAngle: number) => {
+    // EMA smoothing (circular, handles 0/360 wraparound)
+    let emaDiff = rawAngle - smoothedHeadingRef.current;
+    if (emaDiff > 180) emaDiff -= 360;
+    if (emaDiff < -180) emaDiff += 360;
+    smoothedHeadingRef.current = ((smoothedHeadingRef.current + EMA_ALPHA * emaDiff) + 360) % 360;
+
+    const heading = smoothedHeadingRef.current;
+
+    // Compute relative angle (qibla - heading)
+    let rel = qiblaAngleRef.current - heading;
+    if (rel > 180) rel -= 360;
+    if (rel < -180) rel += 360;
+
+    // Cumulative rotation — avoid 360→0 jumps
+    let relDiff = rel - prevRelativeRef.current;
+    if (relDiff > 180) relDiff -= 360;
+    if (relDiff < -180) relDiff += 360;
+    const target = prevRelativeRef.current + relDiff;
+    prevRelativeRef.current = target;
+
+    // DIRECT setValue — zero latency, no animation scheduling
+    relativeAngleAnim.setValue(target);
+
+    // Haptic on Qibla alignment (<5°) — fire once
+    const offset = Math.abs(rel);
+    if (offset < 5 && !qiblaHapticFired.current) {
+      qiblaHapticFired.current = true;
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    } else if (offset >= 5) {
+      qiblaHapticFired.current = false;
+    }
+
+    // Throttled UI update (~12fps for circle color, badges)
+    const now = Date.now();
+    if (now - lastUiUpdateRef.current > 80) {
+      lastUiUpdateRef.current = now;
+      setAbsOffset(offset);
+    }
+  }, [relativeAngleAnim]);
+
+  // --- Calibration banner animation ---
   const calibRotateAnim = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     if (needsCalibration) {
@@ -90,47 +163,78 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
     outputRange: ['0deg', '360deg'],
   });
 
-  // Compute relative rotation for the arrow
-  let relativeAngle = qiblaAngle - deviceHeading;
-  if (relativeAngle > 180) relativeAngle -= 360;
-  if (relativeAngle < -180) relativeAngle += 360;
-  const absOffset = Math.abs(relativeAngle);
-
-  // Start heading sensor
+  // --- Start sensors ---
   useEffect(() => {
-    // Show calibration hint initially — hide once we get stable readings
     setNeedsCalibration(true);
 
     const startSensors = async () => {
+      // --- Gyroscope (Solution 3): fast rotation tracking ---
+      try {
+        const gyroAvailable = await Gyroscope.isAvailableAsync();
+        if (gyroAvailable) {
+          hasGyro.current = true;
+          Gyroscope.setUpdateInterval(16);
+          gyroSubscription.current = Gyroscope.addListener((data) => {
+            if (!mounted.current) return;
+
+            const now = Date.now();
+            const dt = (now - lastGyroTimeRef.current) / 1000;
+            lastGyroTimeRef.current = now;
+
+            // Skip first reading or stale data
+            if (dt > 0.1 || dt <= 0) return;
+
+            // Z-axis = yaw rotation (rad/s → deg/s), integrate
+            const yawDeg = data.z * (180 / Math.PI) * dt;
+            fusedHeadingRef.current = ((fusedHeadingRef.current - yawDeg) + 360) % 360;
+
+            // Apply immediately — gyro is ultra-responsive
+            applyHeading(fusedHeadingRef.current);
+          });
+        }
+      } catch {}
+
+      // --- Magnetometer: absolute heading (corrects gyro drift) ---
       const magAvailable = await Magnetometer.isAvailableAsync();
       if (magAvailable) {
         Magnetometer.setUpdateInterval(16);
         headingSubscription.current = Magnetometer.addListener((data) => {
           if (!mounted.current) return;
 
-          // Detect poor calibration: very weak field magnitude
+          // Skip weak field readings
           const magnitude = Math.sqrt(data.x * data.x + data.y * data.y + data.z * data.z);
-          if (magnitude < 10) return; // Skip garbage readings
+          if (magnitude < 10) return;
 
           let fieldAngle = Math.atan2(data.x, data.y);
           fieldAngle = (fieldAngle * 180) / Math.PI;
           fieldAngle = (fieldAngle + 360) % 360;
           const angle = (360 - fieldAngle) % 360;
 
+          // Light jitter filter
           let diff = angle - lastAngleRef.current;
           if (diff > 180) diff -= 360;
           if (diff < -180) diff += 360;
-          if (Math.abs(diff) < 0.5) return;
+          if (Math.abs(diff) < 0.3) return;
           lastAngleRef.current = angle;
 
+          // Calibration check
           sampleCount.current++;
-          // After ~30 stable samples, consider calibrated
           if (sampleCount.current > 30 && !calibratedRef.current) {
             calibratedRef.current = true;
             setNeedsCalibration(false);
           }
 
-          setDeviceHeading(angle);
+          if (hasGyro.current) {
+            // Complementary filter: correct fused heading toward magnetometer
+            let correction = angle - fusedHeadingRef.current;
+            if (correction > 180) correction -= 360;
+            if (correction < -180) correction += 360;
+            fusedHeadingRef.current = ((fusedHeadingRef.current + (1 - GYRO_ALPHA) * correction) + 360) % 360;
+            // Gyro callback handles applyHeading
+          } else {
+            // No gyro — magnetometer drives heading directly
+            applyHeading(angle);
+          }
         });
         return;
       }
@@ -143,7 +247,7 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
           let diff = h - lastAngleRef.current;
           if (diff > 180) diff -= 360;
           if (diff < -180) diff += 360;
-          if (Math.abs(diff) < 0.5) return;
+          if (Math.abs(diff) < 0.3) return;
           lastAngleRef.current = h;
 
           sampleCount.current++;
@@ -152,7 +256,7 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
             setNeedsCalibration(false);
           }
 
-          setDeviceHeading(h);
+          applyHeading(h);
         });
         headingSubscription.current = sub;
       } catch {
@@ -165,18 +269,9 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
     return () => {
       mounted.current = false;
       headingSubscription.current?.remove();
+      gyroSubscription.current?.remove();
     };
-  }, []);
-
-  // Haptic on Qibla alignment (<5°) — single fire
-  useEffect(() => {
-    if (absOffset < 5 && !qiblaHapticFired.current) {
-      qiblaHapticFired.current = true;
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    } else if (absOffset >= 5) {
-      qiblaHapticFired.current = false;
-    }
-  }, [absOffset]);
+  }, [applyHeading]);
 
   const precisionLabel = needsCalibration
     ? '🧭 Calibration nécessaire'
@@ -236,9 +331,9 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
         </Pressable>
       </View>
 
-      {/* Directional Arrow (centered) */}
+      {/* Directional Arrow (centered) — driven by Animated.Value */}
       <View style={styles.arrowContainer}>
-        <DirectionalArrow rotation={relativeAngle} offset={absOffset} />
+        <DirectionalArrow rotationAnim={relativeAngleAnim} offset={absOffset} />
 
         {/* Aligned badge */}
         {absOffset < 5 && (
