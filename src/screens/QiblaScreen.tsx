@@ -227,29 +227,20 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
       return;
     }
 
-    // Request permission
-    try {
-      const { status, canAskAgain } = await requestCameraPermissionsAsync();
-      if (status === 'granted') {
-        cameraPermissionGranted.current = true;
-        setViewMode('ar');
-        AsyncStorage.setItem(QIBLA_VIEW_MODE_KEY, 'ar').catch(() => {});
-      } else {
-        // Permission denied — offer to open Settings
-        Alert.alert(
-          '📷 Permission requise',
-          'L\'accès à la caméra est nécessaire pour le mode AR Qibla. Souhaitez-vous autoriser l\'accès dans les paramètres ?',
-          [
-            { text: 'Plus tard', style: 'cancel' },
-            { text: 'Paramètres', onPress: () => Linking.openSettings() },
-          ],
-        );
-      }
-    } catch {
+    // Request permission — no hardware check, only permissions
+    const { status } = await requestCameraPermissionsAsync();
+    if (status === 'granted') {
+      cameraPermissionGranted.current = true;
+      setViewMode('ar');
+      AsyncStorage.setItem(QIBLA_VIEW_MODE_KEY, 'ar').catch(() => {});
+    } else {
       Alert.alert(
-        '📷 Caméra non disponible',
-        'Votre appareil ne supporte pas le mode AR. La boussole 2D reste disponible.',
-        [{ text: 'Compris' }],
+        '📷 Accès caméra requis',
+        'Pour utiliser le mode AR Qibla, Sakina a besoin d\'accéder à votre caméra. Vous pouvez autoriser l\'accès dans les Réglages.',
+        [
+          { text: 'Plus tard', style: 'cancel' },
+          { text: 'Ouvrir Réglages', onPress: () => Linking.openSettings() },
+        ],
       );
     }
   }, [viewMode]);
