@@ -38,7 +38,7 @@ import {
 import { Circle, CircleMember, CircleAssignment } from '../../types/circle.types';
 
 // Clé de cache AsyncStorage pour les données du cercle
-const CIRCLE_CACHE_KEY = 'barakaah_circle_cache';
+const CIRCLE_CACHE_KEY = 'sakina_circle_cache';
 
 // Couleurs uniques par membre pour les avatars
 const MEMBER_COLORS = [
@@ -297,8 +297,8 @@ export const CircleScreen: React.FC = () => {
     const shareCircle = async () => {
       try {
         await Share.share({
-          message: `Rejoins mon cercle de lecture du Coran sur Barakaah ! Code : ${userCircle.circle.code}`,
-          title: `Rejoins ${userCircle.circle.name} sur Barakaah`,
+          message: `Rejoins mon cercle de lecture du Coran sur Sakina ! Code : ${userCircle.circle.code}`,
+          title: `Rejoins ${userCircle.circle.name} sur Sakina`,
         });
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       } catch (error: any) {

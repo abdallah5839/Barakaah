@@ -1,7 +1,7 @@
 /**
  * QiblaScreen - Boussole de direction vers la Qibla (Mecque)
- * Animations fluides via Animated.Value + useNativeDriver (thread natif).
- * Capteur magnétomètre à 16ms (~60fps).
+ * Animations ultra-fluides via Animated.Value + setValue() direct (zéro latence).
+ * Capteur magnétomètre à 8ms (~120fps).
  * Le disque entier (N/S/E/W + graduations) tourne avec le magnétomètre
  * pour que N pointe toujours vers le nord magnétique réel.
  * La flèche Qibla est sur le disque et pointe dans la bonne direction absolue.
@@ -20,8 +20,11 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
+import Svg, { Polygon, Circle as SvgCircle, Defs, LinearGradient as SvgGradient, Stop, Line } from 'react-native-svg';
 import { Magnetometer } from 'expo-sensors';
 import * as Location from 'expo-location';
+import * as Haptics from 'expo-haptics';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../constants/colors';
 import { Spacing, Typography, Shadows } from '../constants';
@@ -33,6 +36,12 @@ const KAABA_COORDS = {
   latitude: 21.4225,
   longitude: 39.8262,
 };
+
+const QIBLA_CACHE_KEY = 'sakina_qibla_position';
+
+// Default coords (Abidjan)
+const DEFAULT_LAT = 5.3600;
+const DEFAULT_LON = -4.0083;
 
 interface QiblaScreenProps {
   navigation?: any;
@@ -87,36 +96,70 @@ const getCardinalDirection = (angle: number): string => {
 // Pre-computed tick marks (static, never changes)
 const TICK_MARKS = [...Array(72)].map((_, i) => {
   const deg = i * 5;
-  const isMajor = deg % 90 === 0;
-  const isMinor = deg % 45 === 0 && !isMajor;
-  const tickHeight = isMajor ? 16 : isMinor ? 10 : 6;
-  const radius = COMPASS_SIZE / 2 - 14;
+  const isCardinal = deg % 90 === 0;
+  const is30 = deg % 30 === 0 && !isCardinal;
+  const is10 = deg % 10 === 0 && !isCardinal && !is30;
+  const tickHeight = isCardinal ? 14 : is30 ? 10 : is10 ? 7 : 4;
+  const tickWidth = isCardinal ? 2 : is30 ? 1.5 : 1;
+  const outerRadius = COMPASS_SIZE / 2 - 8;
   const rad = (deg * Math.PI) / 180;
-  const x = Math.sin(rad) * radius;
-  const y = -Math.cos(rad) * radius;
-  return { deg, isMajor, isMinor, tickHeight, x, y };
+  const outerX = Math.sin(rad) * outerRadius;
+  const outerY = -Math.cos(rad) * outerRadius;
+  const innerX = Math.sin(rad) * (outerRadius - tickHeight);
+  const innerY = -Math.cos(rad) * (outerRadius - tickHeight);
+  return { deg, isCardinal, is30, tickWidth, outerX, outerY, innerX, innerY };
+});
+
+// Degree labels at 30° intervals (except cardinals)
+const DEGREE_LABELS = [30, 60, 120, 150, 210, 240, 300, 330].map(deg => {
+  const labelRadius = COMPASS_SIZE / 2 - 28;
+  const rad = (deg * Math.PI) / 180;
+  const x = Math.sin(rad) * labelRadius;
+  const y = -Math.cos(rad) * labelRadius;
+  return { deg, x, y };
 });
 
 // Static compass elements extracted to avoid re-renders
-const CompassTicks = React.memo(({ textColor, borderColor }: { textColor: string; borderColor: string }) => (
-  <>
-    {TICK_MARKS.map((tick, i) => (
-      <View
-        key={i}
-        style={{
-          position: 'absolute',
-          width: tick.isMajor ? 3 : 1.5,
-          height: tick.tickHeight,
-          backgroundColor: tick.isMajor ? textColor : borderColor,
-          borderRadius: 1,
-          left: COMPASS_SIZE / 2 - (tick.isMajor ? 1.5 : 0.75) + tick.x,
-          top: COMPASS_SIZE / 2 - tick.tickHeight / 2 + tick.y,
-          transform: [{ rotate: `${tick.deg}deg` }],
-        }}
-      />
-    ))}
-  </>
-));
+const CompassTicks = React.memo(({ mutedColor, borderColor }: { mutedColor: string; borderColor: string }) => {
+  const center = COMPASS_SIZE / 2;
+  return (
+    <>
+      {/* SVG tick marks for crisp rendering */}
+      <Svg width={COMPASS_SIZE} height={COMPASS_SIZE} style={StyleSheet.absoluteFill}>
+        {TICK_MARKS.map((tick, i) => (
+          <Line
+            key={i}
+            x1={center + tick.outerX}
+            y1={center + tick.outerY}
+            x2={center + tick.innerX}
+            y2={center + tick.innerY}
+            stroke={tick.isCardinal ? mutedColor : borderColor}
+            strokeWidth={tick.tickWidth}
+            strokeLinecap="round"
+          />
+        ))}
+      </Svg>
+      {/* Degree labels */}
+      {DEGREE_LABELS.map(label => (
+        <Text
+          key={label.deg}
+          style={{
+            position: 'absolute',
+            left: center - 12 + label.x,
+            top: center - 7 + label.y,
+            width: 24,
+            textAlign: 'center',
+            fontSize: 9,
+            fontWeight: '500',
+            color: borderColor,
+          }}
+        >
+          {label.deg}
+        </Text>
+      ))}
+    </>
+  );
+});
 
 // Static info cards
 const InfoCard = React.memo(({ icon, iconColor, iconBg, label, value, cardBg, textColor, secondaryColor }: any) => (
@@ -134,10 +177,13 @@ const InfoCard = React.memo(({ icon, iconColor, iconBg, label, value, cardBg, te
 export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = false }) => {
   const colors = isDark ? Colors.dark : Colors.light;
 
-  // Static state (set once after GPS)
-  const [qiblaAngle, setQiblaAngle] = useState(0);
-  const [distance, setDistance] = useState(0);
-  const [locationName, setLocationName] = useState('Chargement...');
+  // Pre-compute default qibla angle so compass is usable immediately
+  const defaultQibla = calculateQiblaAngle(DEFAULT_LAT, DEFAULT_LON);
+
+  // Static state (updated when GPS arrives)
+  const [qiblaAngle, setQiblaAngle] = useState(defaultQibla);
+  const [distance, setDistance] = useState(calculateDistance(DEFAULT_LAT, DEFAULT_LON));
+  const [locationName, setLocationName] = useState('Abidjan, Côte d\'Ivoire');
   const [isCalibrating, setIsCalibrating] = useState(false);
   const [facingQibla, setFacingQibla] = useState(false);
 
@@ -146,13 +192,19 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
 
   // Track cumulative rotation to avoid 360->0 jumps
   const prevSmooth = useRef(0);
-  const qiblaAngleRef = useRef(0);
+  const qiblaAngleRef = useRef(defaultQibla);
   // Throttle facingQibla state updates to avoid re-renders
   const lastFacingRef = useRef(false);
 
   // Subscription ref
   const headingSubscription = useRef<any>(null);
   const mounted = useRef(true);
+
+  // Haptic tracking refs — all refs to avoid re-renders on every sensor tick
+  const lastCardinalRef = useRef<number | null>(null);   // last cardinal that triggered haptic
+  const lastTickDegRef = useRef(0);                       // last 15° tick that triggered haptic
+  const hapticCooldownRef = useRef(0);                    // timestamp of last haptic
+  const qiblaHapticFiredRef = useRef(false);              // whether qibla haptic already fired
 
   // Interpolations (computed once, stable references)
   const compassRotation = compassRotationAnim.interpolate({
@@ -174,15 +226,51 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
     const target = prevSmooth.current + diff;
     prevSmooth.current = target;
 
-    // Animate on native thread — 80ms fast timing, no setState
-    Animated.timing(compassRotationAnim, {
-      toValue: target,
-      duration: 80,
-      useNativeDriver: true,
-    }).start();
+    // Direct setValue — zero latency, no animation scheduling overhead
+    compassRotationAnim.setValue(target);
 
-    // Check facing Qibla (±15°) — only setState if changed
+    const now = Date.now();
+
+    // === Haptic: Qibla alignment (±5°) ===
     const relativeQibla = ((qiblaAngleRef.current - angle) % 360 + 360) % 360;
+    const isFacingQibla = relativeQibla < 5 || relativeQibla > 355;
+    if (isFacingQibla && !qiblaHapticFiredRef.current) {
+      qiblaHapticFiredRef.current = true;
+      hapticCooldownRef.current = now;
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    } else if (!isFacingQibla) {
+      qiblaHapticFiredRef.current = false;
+    }
+
+    // === Haptic: Cardinal points N/E/S/W (±2°) ===
+    const cardinals = [0, 90, 180, 270];
+    let hitCardinal: number | null = null;
+    for (const c of cardinals) {
+      let d = angle - c;
+      if (d > 180) d -= 360;
+      if (d < -180) d += 360;
+      if (Math.abs(d) <= 2) { hitCardinal = c; break; }
+    }
+    if (hitCardinal !== null && hitCardinal !== lastCardinalRef.current && now - hapticCooldownRef.current > 100) {
+      lastCardinalRef.current = hitCardinal;
+      hapticCooldownRef.current = now;
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    } else if (hitCardinal === null) {
+      lastCardinalRef.current = null;
+    }
+
+    // === Haptic: Rotation ticks every 15° ===
+    const currentTick = Math.round(angle / 15) * 15;
+    if (currentTick !== lastTickDegRef.current && now - hapticCooldownRef.current > 80) {
+      lastTickDegRef.current = currentTick;
+      hapticCooldownRef.current = now;
+      // Soft tick — only if not already firing a cardinal or qibla haptic
+      if (hitCardinal === null && !isFacingQibla) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      }
+    }
+
+    // Update facingQibla state (broader ±15° zone for UI badge)
     const isFacing = relativeQibla < 15 || relativeQibla > 345;
     if (isFacing !== lastFacingRef.current) {
       lastFacingRef.current = isFacing;
@@ -196,8 +284,8 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
       const isAvailable = await Magnetometer.isAvailableAsync();
       if (!isAvailable) return false;
 
-      // 16ms = ~60fps sensor updates
-      Magnetometer.setUpdateInterval(16);
+      // 8ms = ~120fps sensor updates for ultra-fluid response
+      Magnetometer.setUpdateInterval(8);
 
       let lastAngle = 0;
 
@@ -209,11 +297,11 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
         fieldAngle = (fieldAngle + 360) % 360;
         const angle = (360 - fieldAngle) % 360;
 
-        // Light jitter filter: skip changes < 0.5°
+        // Light jitter filter: skip changes < 0.3°
         let diff = angle - lastAngle;
         if (diff > 180) diff -= 360;
         if (diff < -180) diff += 360;
-        if (Math.abs(diff) < 0.5) return;
+        if (Math.abs(diff) < 0.3) return;
         lastAngle = angle;
 
         updateHeading(angle);
@@ -224,20 +312,31 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
     }
   }, [updateHeading]);
 
-  // Setup: permissions → heading → GPS
+  // Setup: parallel — magnetometer starts instantly, GPS runs in background
   useEffect(() => {
-    const setup = async () => {
-      let permissionGranted = false;
+    // 1) Load cached position immediately (synchronous-ish, before any await)
+    const loadCachedPosition = async () => {
       try {
-        const { status } = await Location.requestForegroundPermissionsAsync();
-        permissionGranted = status === 'granted';
+        const cached = await AsyncStorage.getItem(QIBLA_CACHE_KEY);
+        if (cached && mounted.current) {
+          const { lat, lon, city } = JSON.parse(cached);
+          const qa = calculateQiblaAngle(lat, lon);
+          qiblaAngleRef.current = qa;
+          setQiblaAngle(qa);
+          setDistance(calculateDistance(lat, lon));
+          setLocationName(city || 'Position enregistrée');
+        }
       } catch {}
+    };
 
+    // 2) Start heading sensor (magnetometer or Location.watchHeading)
+    const startHeading = async (permissionGranted: boolean) => {
       let headingStarted = false;
 
       if (Platform.OS === 'android') {
+        // Android: prefer raw magnetometer (no permission needed)
         headingStarted = await startMagnetometer();
-
+        // Fallback to Location heading if magnetometer unavailable
         if (!headingStarted && permissionGranted) {
           try {
             let lastAngle = 0;
@@ -247,15 +346,15 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
               let diff = h - lastAngle;
               if (diff > 180) diff -= 360;
               if (diff < -180) diff += 360;
-              if (Math.abs(diff) < 0.5) return;
+              if (Math.abs(diff) < 0.3) return;
               lastAngle = h;
               updateHeading(h);
             });
             headingSubscription.current = sub;
-            headingStarted = true;
           } catch {}
         }
       } else {
+        // iOS: prefer Location heading (uses trueHeading with GPS correction)
         if (permissionGranted) {
           try {
             let lastAngle = 0;
@@ -265,7 +364,7 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
               let diff = h - lastAngle;
               if (diff > 180) diff -= 360;
               if (diff < -180) diff += 360;
-              if (Math.abs(diff) < 0.5) return;
+              if (Math.abs(diff) < 0.3) return;
               lastAngle = h;
               updateHeading(h);
             });
@@ -273,43 +372,66 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
             headingStarted = true;
           } catch {}
         }
-
+        // Fallback to raw magnetometer
         if (!headingStarted) {
-          headingStarted = await startMagnetometer();
+          await startMagnetometer();
         }
       }
+    };
 
-      // GPS position
-      let lat = 5.3600;
-      let lon = -4.0083;
-      let city = 'Abidjan, Côte d\'Ivoire';
+    // 3) Fetch fresh GPS and update qibla (runs in parallel)
+    const fetchGPS = async () => {
+      try {
+        const loc = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.Balanced, // faster fix than High
+        });
+        const lat = loc.coords.latitude;
+        const lon = loc.coords.longitude;
 
-      if (permissionGranted) {
+        let city = 'Position actuelle';
         try {
-          const loc = await Location.getCurrentPositionAsync({
-            accuracy: Location.Accuracy.High,
-          });
-          lat = loc.coords.latitude;
-          lon = loc.coords.longitude;
-
-          try {
-            const [address] = await Location.reverseGeocodeAsync({ latitude: lat, longitude: lon });
-            if (address) {
-              city = `${address.city || address.region}, ${address.country}`;
-            }
-          } catch {
-            city = 'Position actuelle';
+          const [address] = await Location.reverseGeocodeAsync({ latitude: lat, longitude: lon });
+          if (address) {
+            city = `${address.city || address.region}, ${address.country}`;
           }
         } catch {}
+
+        if (mounted.current) {
+          const qa = calculateQiblaAngle(lat, lon);
+          qiblaAngleRef.current = qa;
+          setQiblaAngle(qa);
+          setDistance(calculateDistance(lat, lon));
+          setLocationName(city);
+        }
+
+        // Cache for next launch
+        try {
+          await AsyncStorage.setItem(QIBLA_CACHE_KEY, JSON.stringify({ lat, lon, city }));
+        } catch {}
+      } catch {}
+    };
+
+    // Execute: cache first, then magnetometer + GPS in parallel
+    const setup = async () => {
+      // Load cache immediately (updates qibla if available)
+      await loadCachedPosition();
+
+      // Start magnetometer right away on Android (no permission needed)
+      if (Platform.OS === 'android') {
+        startMagnetometer();
       }
 
-      if (mounted.current) {
-        const qa = calculateQiblaAngle(lat, lon);
-        qiblaAngleRef.current = qa;
-        setLocationName(city);
-        setQiblaAngle(qa);
-        setDistance(calculateDistance(lat, lon));
-      }
+      // Request permission (needed for iOS heading + GPS on both platforms)
+      let permissionGranted = false;
+      try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        permissionGranted = status === 'granted';
+      } catch {}
+
+      // Launch heading and GPS in parallel — don't await one before the other
+      const headingPromise = startHeading(permissionGranted);
+      const gpsPromise = permissionGranted ? fetchGPS() : Promise.resolve();
+      await Promise.all([headingPromise, gpsPromise]);
     };
 
     setup();
@@ -339,10 +461,35 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
   }, [navigation]);
 
   // Qibla marker position (static, computed from qiblaAngle)
-  const markerRadius = COMPASS_SIZE / 2 - 22;
+  const markerRadius = COMPASS_SIZE / 2 - 26;
   const markerRad = (qiblaAngle * Math.PI) / 180;
   const markerX = Math.sin(markerRad) * markerRadius;
   const markerY = -Math.cos(markerRad) * markerRadius;
+
+  // Needle geometry (SVG)
+  const needleCenter = COMPASS_SIZE / 2;
+  const needleTip = 32;           // distance from edge for the tip
+  const needleBack = needleCenter + 24; // tail extends slightly past center
+  const needleHalfWidth = 5;
+
+  // Pulse animation for center when facing Qibla
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    if (facingQibla) {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(pulseAnim, { toValue: 1.08, duration: 800, useNativeDriver: true }),
+          Animated.timing(pulseAnim, { toValue: 1, duration: 800, useNativeDriver: true }),
+        ]),
+      ).start();
+    } else {
+      pulseAnim.stopAnimation();
+      pulseAnim.setValue(1);
+    }
+  }, [facingQibla]);
+
+  const GOLD = '#D4AF37';
+  const GOLD_LIGHT = '#F4E4BA';
 
   return (
     <SafeAreaView style={[qStyles.container, { backgroundColor: colors.background }]}>
@@ -360,67 +507,107 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         {/* Localisation */}
         <View style={qStyles.locationContainer}>
-          <Ionicons name="location" size={20} color={colors.primary} />
+          <Ionicons name="location" size={18} color={colors.primary} />
           <Text style={[qStyles.locationText, { color: colors.text }]}>{locationName}</Text>
         </View>
 
-        {/* Indicateur fixe en haut */}
+        {/* Indicateur fixe en haut — triangle doré */}
         <View style={qStyles.topIndicatorContainer}>
-          <View style={[qStyles.topIndicator, { borderTopColor: facingQibla ? colors.secondary : colors.primary }]} />
+          <Svg width={24} height={16}>
+            <Polygon
+              points="12,0 0,16 24,16"
+              fill={facingQibla ? GOLD : colors.primary}
+            />
+          </Svg>
         </View>
 
         {/* Boussole */}
         <View style={qStyles.compassContainer}>
+          {/* Outer glow ring when facing Qibla */}
+          {facingQibla && (
+            <View style={[qStyles.compassGlow, { borderColor: GOLD + '30' }]} />
+          )}
+
           <Animated.View
             style={[
               qStyles.compassOuter,
               {
-                borderColor: facingQibla ? colors.secondary : colors.border,
-                backgroundColor: colors.surface,
+                borderColor: facingQibla ? GOLD : (isDark ? colors.border : '#E5E7EB'),
+                backgroundColor: isDark ? colors.surface : '#FFFFFF',
                 transform: [{ rotate: compassRotation }],
               },
             ]}
           >
-            {/* Graduations (memoized) */}
-            <CompassTicks textColor={colors.text} borderColor={colors.border} />
+            {/* Graduations (memoized SVG) */}
+            <CompassTicks mutedColor={isDark ? colors.textMuted : '#9CA3AF'} borderColor={isDark ? colors.border : '#D1D5DB'} />
 
             {/* Points cardinaux */}
-            <Text style={[qStyles.cardinalN, { color: '#E53E3E' }]}>N</Text>
-            <Text style={[qStyles.cardinalE, { color: colors.textSecondary }]}>E</Text>
-            <Text style={[qStyles.cardinalS, { color: colors.textSecondary }]}>S</Text>
-            <Text style={[qStyles.cardinalW, { color: colors.textSecondary }]}>W</Text>
+            <Text style={[qStyles.cardinalN, { color: '#DC2626' }]}>N</Text>
+            <Text style={[qStyles.cardinalE, { color: isDark ? colors.textSecondary : '#6B7280' }]}>E</Text>
+            <Text style={[qStyles.cardinalS, { color: isDark ? colors.textSecondary : '#6B7280' }]}>S</Text>
+            <Text style={[qStyles.cardinalW, { color: isDark ? colors.textSecondary : '#6B7280' }]}>W</Text>
 
-            {/* Flèche Qibla */}
-            <View
-              style={[
-                qStyles.qiblaArrowWrapper,
-                { transform: [{ rotate: `${qiblaAngle}deg` }] },
-              ]}
-            >
-              <View style={qStyles.qiblaArrowTop}>
-                <View style={[qStyles.qiblaArrowHead, { borderBottomColor: colors.secondary }]} />
-                <View style={[qStyles.qiblaArrowBody, { backgroundColor: colors.secondary }]} />
-              </View>
-              <View style={qStyles.qiblaArrowBottom}>
-                <View style={[qStyles.qiblaArrowTail, { backgroundColor: colors.secondary + '30' }]} />
-              </View>
+            {/* SVG Needle — elegant tapered shape */}
+            <View style={qStyles.needleWrapper} pointerEvents="none">
+              <Svg width={COMPASS_SIZE} height={COMPASS_SIZE} style={StyleSheet.absoluteFill}>
+                <Defs>
+                  <SvgGradient id="needleGold" x1="0" y1="0" x2="0" y2="1">
+                    <Stop offset="0" stopColor="#F5D76E" />
+                    <Stop offset="0.5" stopColor={GOLD} />
+                    <Stop offset="1" stopColor="#B8960C" />
+                  </SvgGradient>
+                  <SvgGradient id="needleTail" x1="0" y1="0" x2="0" y2="1">
+                    <Stop offset="0" stopColor={isDark ? '#555' : '#C0C0C0'} />
+                    <Stop offset="1" stopColor={isDark ? '#333' : '#9CA3AF'} />
+                  </SvgGradient>
+                </Defs>
+                {/* Rotate the whole needle group around center */}
+                <Polygon
+                  points={`${needleCenter},${needleTip} ${needleCenter - needleHalfWidth},${needleCenter} ${needleCenter + needleHalfWidth},${needleCenter}`}
+                  fill="url(#needleGold)"
+                  rotation={qiblaAngle}
+                  origin={`${needleCenter}, ${needleCenter}`}
+                />
+                <Polygon
+                  points={`${needleCenter},${needleBack} ${needleCenter - needleHalfWidth + 1},${needleCenter} ${needleCenter + needleHalfWidth - 1},${needleCenter}`}
+                  fill="url(#needleTail)"
+                  rotation={qiblaAngle}
+                  origin={`${needleCenter}, ${needleCenter}`}
+                />
+                {/* Tiny center pin */}
+                <SvgCircle cx={needleCenter} cy={needleCenter} r={4} fill={GOLD} />
+                <SvgCircle cx={needleCenter} cy={needleCenter} r={2} fill="#FFF" />
+              </Svg>
             </View>
 
-            {/* Kaaba marker */}
+            {/* Kaaba marker — elegant gold dot with halo */}
             <View
               style={[
                 qStyles.qiblaMarker,
                 {
-                  left: COMPASS_SIZE / 2 - 14 + markerX,
-                  top: COMPASS_SIZE / 2 - 14 + markerY,
+                  left: COMPASS_SIZE / 2 - 16 + markerX,
+                  top: COMPASS_SIZE / 2 - 16 + markerY,
                 },
               ]}
             >
-              <Text style={qStyles.qiblaMarkerText}>🕋</Text>
+              <View style={[qStyles.markerHalo, { backgroundColor: GOLD + '20' }]}>
+                <View style={[qStyles.markerDot, { backgroundColor: GOLD }]}>
+                  <Text style={qStyles.markerIcon}>🕋</Text>
+                </View>
+              </View>
             </View>
 
-            {/* Centre du disque */}
-            <View style={[qStyles.compassCenter, { backgroundColor: colors.primary }]}>
+            {/* Centre du disque — green with gold ring */}
+            <Animated.View
+              style={[
+                qStyles.compassCenter,
+                {
+                  backgroundColor: colors.primary,
+                  borderColor: GOLD,
+                  transform: [{ scale: pulseAnim }],
+                },
+              ]}
+            >
               <Animated.View
                 style={{
                   alignItems: 'center',
@@ -430,12 +617,13 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
                 <Text style={qStyles.compassCenterAngle}>{Math.round(qiblaAngle)}°</Text>
                 <Text style={qStyles.compassCenterLabel}>Qibla</Text>
               </Animated.View>
-            </View>
+            </Animated.View>
           </Animated.View>
 
           {/* Badge "Face à la Qibla" */}
           {facingQibla && (
-            <View style={[qStyles.facingBadge, { backgroundColor: colors.secondary }]}>
+            <View style={[qStyles.facingBadge, { backgroundColor: GOLD }]}>
+              <Ionicons name="checkmark-circle" size={16} color="#FFF" style={{ marginRight: 6 }} />
               <Text style={qStyles.facingBadgeText}>Face à la Qibla</Text>
             </View>
           )}
@@ -462,8 +650,8 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
           />
           <InfoCard
             icon="compass"
-            iconColor={colors.secondary}
-            iconBg={colors.secondaryLight}
+            iconColor={GOLD}
+            iconBg={GOLD_LIGHT + '40'}
             label="Direction"
             value={`${getCardinalDirection(qiblaAngle)} (${Math.round(qiblaAngle)}°)`}
             cardBg={colors.surface}
@@ -524,137 +712,142 @@ const qStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: Spacing.md,
+    paddingVertical: Spacing.sm,
     gap: Spacing.xs,
   },
   locationText: {
-    fontSize: Typography.sizes.md,
+    fontSize: Typography.sizes.sm,
     fontWeight: Typography.weights.medium,
   },
   topIndicatorContainer: {
     alignItems: 'center',
-    marginBottom: -8,
+    marginBottom: -6,
     zIndex: 10,
-  },
-  topIndicator: {
-    width: 0,
-    height: 0,
-    borderLeftWidth: 10,
-    borderRightWidth: 10,
-    borderTopWidth: 14,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
   },
   compassContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: Spacing.md,
   },
+  compassGlow: {
+    position: 'absolute',
+    width: COMPASS_SIZE + 16,
+    height: COMPASS_SIZE + 16,
+    borderRadius: (COMPASS_SIZE + 16) / 2,
+    borderWidth: 4,
+  },
   compassOuter: {
     width: COMPASS_SIZE,
     height: COMPASS_SIZE,
     borderRadius: COMPASS_SIZE / 2,
-    borderWidth: 3,
+    borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 6,
   },
   cardinalN: {
     position: 'absolute',
-    top: 24,
-    fontSize: 22,
+    top: 38,
+    fontSize: 16,
     fontWeight: '800',
+    letterSpacing: 1,
   },
   cardinalE: {
     position: 'absolute',
-    right: 24,
-    fontSize: 18,
+    right: 38,
+    fontSize: 14,
     fontWeight: '600',
   },
   cardinalS: {
     position: 'absolute',
-    bottom: 24,
-    fontSize: 18,
+    bottom: 38,
+    fontSize: 14,
     fontWeight: '600',
   },
   cardinalW: {
     position: 'absolute',
-    left: 24,
-    fontSize: 18,
+    left: 38,
+    fontSize: 14,
     fontWeight: '600',
   },
-  qiblaArrowWrapper: {
+  needleWrapper: {
     position: 'absolute',
     width: COMPASS_SIZE,
     height: COMPASS_SIZE,
-    alignItems: 'center',
-  },
-  qiblaArrowTop: {
-    height: COMPASS_SIZE / 2 - 34,
-    width: 30,
-    alignItems: 'center',
-  },
-  qiblaArrowBottom: {
-    height: COMPASS_SIZE / 2 - 34,
-    width: 30,
-    alignItems: 'center',
-  },
-  qiblaArrowTail: {
-    width: 3,
-    height: COMPASS_SIZE / 2 - 60,
-    borderRadius: 2,
-    marginTop: 4,
-  },
-  qiblaArrowHead: {
-    width: 0,
-    height: 0,
-    borderLeftWidth: 12,
-    borderRightWidth: 12,
-    borderBottomWidth: 20,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-  },
-  qiblaArrowBody: {
-    width: 5,
-    flex: 1,
-    marginTop: -2,
-    borderRadius: 3,
+    zIndex: 5,
   },
   qiblaMarker: {
     position: 'absolute',
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 32,
+    height: 32,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 5,
+    zIndex: 6,
   },
-  qiblaMarkerText: {
-    fontSize: 18,
+  markerHalo: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  markerDot: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#D4AF37',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  markerIcon: {
+    fontSize: 12,
   },
   compassCenter: {
     position: 'absolute',
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 4,
   },
   compassCenterAngle: {
     color: '#FFF',
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '800',
   },
   compassCenterLabel: {
-    color: 'rgba(255,255,255,0.8)',
+    color: 'rgba(255,255,255,0.85)',
     fontSize: 9,
-    fontWeight: '600',
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
   facingBadge: {
-    marginTop: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 14,
     paddingHorizontal: 20,
     paddingVertical: 8,
     borderRadius: 20,
+    shadowColor: '#D4AF37',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 3,
   },
   facingBadgeText: {
     color: '#FFF',

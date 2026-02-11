@@ -1,5 +1,5 @@
 /**
- * Palette de couleurs pour l'application Barakaah
+ * Palette de couleurs pour l'application Sakina
  * Direction artistique : moderne luxueux avec touches islamiques subtiles
  * Mode Clair et Mode Sombre
  */

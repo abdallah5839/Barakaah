@@ -1,5 +1,5 @@
 /**
- * Service de notifications pour l'application Barakaah
+ * Service de notifications pour l'application Sakina
  * Gère les rappels de prière, Iftar et Dua Kumayl
  */
 
@@ -318,7 +318,7 @@ export const sendTestNotification = async (): Promise<void> => {
 
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: '🕌 Test Barakaah',
+      title: '🕌 Test Sakina',
       body: 'Les notifications fonctionnent correctement!',
       data: { type: 'test' },
       sound: Platform.OS === 'ios' ? 'adhan_short.wav' : true,

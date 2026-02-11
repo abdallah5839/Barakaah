@@ -9,7 +9,6 @@ import {
   DuaScreen,
   DuaCategoryScreen,
   DuaDetailScreen,
-  LearningModeScreen,
 } from '../screens';
 import type { DuaCategory } from '../types';
 
@@ -17,8 +16,7 @@ import type { DuaCategory } from '../types';
 type DuaRoute =
   | { name: 'DuaMain' }
   | { name: 'DuaCategory'; params: { categoryId: DuaCategory } }
-  | { name: 'DuaDetail'; params: { duaId: string } }
-  | { name: 'LearningMode'; params: { duaId: string } };
+  | { name: 'DuaDetail'; params: { duaId: string } };
 
 // Contexte de navigation Dua
 interface DuaNavigationContextType {
@@ -40,7 +38,11 @@ export const useDuaNavigation = () => {
 /**
  * Navigateur pour le module Dua
  */
-export const DuaNavigator: React.FC = () => {
+interface DuaNavigatorProps {
+  onGoHome?: () => void;
+}
+
+export const DuaNavigator: React.FC<DuaNavigatorProps> = ({ onGoHome }) => {
   const [routeStack, setRouteStack] = useState<DuaRoute[]>([{ name: 'DuaMain' }]);
 
   const currentRoute = routeStack[routeStack.length - 1];
@@ -90,7 +92,7 @@ export const DuaNavigator: React.FC = () => {
   const renderScreen = () => {
     switch (currentRoute.name) {
       case 'DuaMain':
-        return <DuaScreen navigation={navigation} />;
+        return <DuaScreen navigation={navigation} onGoHome={onGoHome} />;
       case 'DuaCategory':
         return (
           <DuaCategoryScreen
@@ -101,13 +103,6 @@ export const DuaNavigator: React.FC = () => {
       case 'DuaDetail':
         return (
           <DuaDetailScreen
-            navigation={navigation}
-            route={getRoute(currentRoute) as any}
-          />
-        );
-      case 'LearningMode':
-        return (
-          <LearningModeScreen
             navigation={navigation}
             route={getRoute(currentRoute) as any}
           />

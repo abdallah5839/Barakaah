@@ -1,5 +1,5 @@
 /**
- * Écran DuaCategory - Liste des Duas par catégorie
+ * Écran DuaCategory - Liste des Duas par catégorie avec design premium Sakina
  */
 
 import React, { useMemo } from 'react';
@@ -7,10 +7,11 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   Pressable,
+  Animated,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme, useDua } from '../contexts';
 import { Spacing, Typography, Shadows } from '../constants';
@@ -26,11 +27,27 @@ interface DuaCategoryScreenProps {
   };
 }
 
+// ===== PRESSABLE SCALE HELPER =====
+const PressableScale = ({ onPress, children }: { onPress: () => void; children: React.ReactNode }) => {
+  const scale = useMemo(() => new Animated.Value(1), []);
+  return (
+    <Pressable
+      onPressIn={() => Animated.spring(scale, { toValue: 0.97, useNativeDriver: true, speed: 50 }).start()}
+      onPressOut={() => Animated.spring(scale, { toValue: 1, useNativeDriver: true, speed: 50 }).start()}
+      onPress={onPress}
+    >
+      <Animated.View style={{ transform: [{ scale }] }}>
+        {children}
+      </Animated.View>
+    </Pressable>
+  );
+};
+
 export const DuaCategoryScreen: React.FC<DuaCategoryScreenProps> = ({
   navigation,
   route,
 }) => {
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
   const { isFavorite, toggleFavorite } = useDua();
 
   const categoryId = route?.params?.categoryId || 'speciales';
@@ -38,18 +55,18 @@ export const DuaCategoryScreen: React.FC<DuaCategoryScreenProps> = ({
   const categoryDuas = useMemo(() => getDuasByCategory(categoryId), [categoryId]);
 
   const navigateToDuaDetail = (dua: Dua) => {
-    if (navigation) {
-      navigation.navigate('DuaDetail', { duaId: dua.id });
-    }
+    if (navigation) navigation.navigate('DuaDetail', { duaId: dua.id });
   };
 
   const goBack = () => {
-    if (navigation) {
-      navigation.goBack();
-    }
+    if (navigation) navigation.goBack();
   };
 
-  const renderDuaCard = (dua: Dua) => {
+  const headerGradient = isDark
+    ? ['#0F2D1E', '#1a4731', '#0F172A'] as const
+    : ['#0F4C35', '#16a34a', '#166534'] as const;
+
+  const renderDuaCard = (dua: Dua, index: number) => {
     const isInFavorites = isFavorite(dua.id);
     const importanceColor =
       dua.importance === 'tres-haute'
@@ -59,124 +76,94 @@ export const DuaCategoryScreen: React.FC<DuaCategoryScreenProps> = ({
         : colors.textSecondary;
 
     return (
-      <Pressable
-        key={dua.id}
-        style={({ pressed }) => [
-          styles.duaCard,
-          {
-            backgroundColor: colors.surface,
-            opacity: pressed ? 0.9 : 1,
-            transform: [{ scale: pressed ? 0.98 : 1 }],
-          },
-          Shadows.small,
-        ]}
-        onPress={() => navigateToDuaDetail(dua)}
-      >
-        <View style={styles.duaCardContent}>
-          <View style={styles.duaCardHeader}>
-            <View
-              style={[styles.importanceDot, { backgroundColor: importanceColor }]}
-            />
-            <Text style={[styles.duaArabic, { color: colors.text }]}>
-              {dua.arabicName}
-            </Text>
-          </View>
-          <Text style={[styles.duaFrench, { color: colors.text }]}>
-            {dua.frenchName}
-          </Text>
-          <Text style={[styles.duaDescription, { color: colors.textSecondary }]} numberOfLines={2}>
-            {dua.description}
-          </Text>
-          <View style={styles.duaCardFooter}>
-            <View style={styles.duaMeta}>
-              <View style={styles.metaItem}>
-                <Ionicons name="time-outline" size={14} color={colors.textSecondary} />
-                <Text style={[styles.metaText, { color: colors.textSecondary }]}>
-                  {dua.duration}
+      <PressableScale key={dua.id} onPress={() => navigateToDuaDetail(dua)}>
+        <View style={[styles.duaCard, { backgroundColor: colors.surface }, Shadows.small]}>
+          <View style={[styles.duaCardAccent, { backgroundColor: importanceColor }]} />
+          <View style={styles.duaCardContent}>
+            <View style={styles.duaCardHeader}>
+              <View style={[styles.duaNumberBadge, { backgroundColor: (categoryInfo?.color || colors.primary) + '15' }]}>
+                <Text style={[styles.duaNumberText, { color: categoryInfo?.color || colors.primary }]}>{index + 1}</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.duaArabic, { color: colors.text }]}>
+                  {dua.arabicName}
+                </Text>
+                <Text style={[styles.duaFrench, { color: colors.text }]}>
+                  {dua.frenchName}
                 </Text>
               </View>
-              <View style={styles.metaItem}>
-                <Ionicons name="calendar-outline" size={14} color={colors.textSecondary} />
-                <Text style={[styles.metaText, { color: colors.textSecondary }]} numberOfLines={1}>
-                  {dua.occasion}
-                </Text>
+              <Pressable onPress={() => toggleFavorite(dua.id)} hitSlop={10}>
+                <Ionicons
+                  name={isInFavorites ? 'heart' : 'heart-outline'}
+                  size={22}
+                  color={isInFavorites ? '#EF4444' : colors.textMuted}
+                />
+              </Pressable>
+            </View>
+
+            <Text style={[styles.duaDescription, { color: colors.textSecondary }]} numberOfLines={2}>
+              {dua.description}
+            </Text>
+
+            <View style={styles.duaCardFooter}>
+              <View style={[styles.metaBadge, { backgroundColor: colors.primary + '12' }]}>
+                <Ionicons name="time-outline" size={13} color={colors.primary} />
+                <Text style={[styles.metaText, { color: colors.primary }]}>{dua.duration}</Text>
+              </View>
+              <View style={[styles.metaBadge, { backgroundColor: colors.secondary + '12' }]}>
+                <Ionicons name="calendar-outline" size={13} color={colors.secondary} />
+                <Text style={[styles.metaText, { color: colors.secondary }]} numberOfLines={1}>{dua.occasion}</Text>
               </View>
             </View>
-            <Pressable
-              onPress={() => toggleFavorite(dua.id)}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            >
-              <Ionicons
-                name={isInFavorites ? 'heart' : 'heart-outline'}
-                size={22}
-                color={isInFavorites ? colors.error : colors.textSecondary}
-              />
-            </Pressable>
           </View>
         </View>
-      </Pressable>
+      </PressableScale>
     );
   };
 
   if (!categoryInfo) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <Text style={[styles.errorText, { color: colors.error }]}>
           Catégorie non trouvée
         </Text>
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      {/* Header */}
-      <View style={[styles.header, { borderBottomColor: colors.border }]}>
-        <Pressable onPress={goBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={colors.text} />
-        </Pressable>
-        <View style={styles.headerTitleContainer}>
-          <View
-            style={[
-              styles.categoryIconSmall,
-              { backgroundColor: categoryInfo.color + '20' },
-            ]}
-          >
-            <Ionicons
-              name={categoryInfo.icon as any}
-              size={20}
-              color={categoryInfo.color}
-            />
-          </View>
-          <View>
-            <Text style={[styles.headerTitle, { color: colors.text }]}>
-              {categoryInfo.frenchName}
-            </Text>
-            <Text style={[styles.headerSubtitle, { color: colors.textSecondary }]}>
-              {categoryDuas.length} dua{categoryDuas.length > 1 ? 's' : ''}
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* ===== PREMIUM HEADER ===== */}
+        <LinearGradient colors={headerGradient} style={styles.headerGradient}>
+          <Pressable onPress={goBack} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+          </Pressable>
+
+          <View style={styles.headerContent}>
+            <View style={[styles.headerCategoryIcon, { backgroundColor: categoryInfo.color + '25' }]}>
+              <Ionicons name={categoryInfo.icon as any} size={32} color={categoryInfo.color} />
+            </View>
+            <Text style={styles.headerTitle}>{categoryInfo.frenchName}</Text>
+            <Text style={styles.headerArabic}>{categoryInfo.arabicName}</Text>
+            <Text style={styles.headerCount}>
+              {categoryDuas.length} dua{categoryDuas.length > 1 ? 's' : ''} disponible{categoryDuas.length > 1 ? 's' : ''}
             </Text>
           </View>
+
+          <View style={styles.headerDescriptionContainer}>
+            <Text style={styles.headerDescription}>{categoryInfo.description}</Text>
+          </View>
+        </LinearGradient>
+
+        {/* ===== LISTE DES DUAS ===== */}
+        <View style={styles.listContainer}>
+          {categoryDuas.map((dua, index) => renderDuaCard(dua, index))}
         </View>
-        <View style={styles.headerSpacer} />
-      </View>
 
-      {/* Description */}
-      <View style={styles.descriptionContainer}>
-        <Text style={[styles.categoryDescription, { color: colors.textSecondary }]}>
-          {categoryInfo.description}
-        </Text>
-      </View>
-
-      {/* Liste des Duas */}
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {categoryDuas.map(dua => renderDuaCard(dua))}
         <View style={styles.bottomSpacer} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -184,117 +171,141 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+
+  // --- Premium Header ---
+  headerGradient: {
+    paddingTop: 16,
+    paddingBottom: 24,
     paddingHorizontal: Spacing.screenHorizontal,
-    paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
   },
   backButton: {
-    padding: Spacing.sm,
-    marginRight: Spacing.sm,
-    minWidth: 44,
-    minHeight: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerTitleContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  categoryIconSmall: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.12)',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: Spacing.sm,
+    marginBottom: 16,
+  },
+  headerContent: {
+    alignItems: 'center',
+  },
+  headerCategoryIcon: {
+    width: 64,
+    height: 64,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
   },
   headerTitle: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.bold,
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    textAlign: 'center',
   },
-  headerSubtitle: {
-    fontSize: Typography.sizes.sm,
+  headerArabic: {
+    fontSize: 18,
+    color: '#D4AF37',
+    fontWeight: '600',
+    marginTop: 4,
+    textAlign: 'center',
   },
-  headerSpacer: {
-    width: 32,
+  headerCount: {
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.6)',
+    marginTop: 6,
   },
-  descriptionContainer: {
+  headerDescriptionContainer: {
+    marginTop: 16,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderRadius: 12,
+    padding: 14,
+  },
+  headerDescription: {
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.7)',
+    lineHeight: 20,
+    textAlign: 'center',
+  },
+
+  // --- List ---
+  listContainer: {
     paddingHorizontal: Spacing.screenHorizontal,
-    paddingVertical: Spacing.md,
+    paddingTop: 20,
+    gap: 12,
   },
-  categoryDescription: {
-    fontSize: Typography.sizes.sm,
-    lineHeight: Typography.sizes.sm * 1.5,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingHorizontal: Spacing.screenHorizontal,
-  },
+
+  // --- Dua Card ---
   duaCard: {
-    borderRadius: Spacing.radiusLg,
-    marginBottom: Spacing.md,
+    borderRadius: 16,
     overflow: 'hidden',
+    flexDirection: 'row',
+  },
+  duaCardAccent: {
+    width: 4,
   },
   duaCardContent: {
-    padding: Spacing.lg,
+    flex: 1,
+    padding: 16,
   },
   duaCardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.sm,
+    marginBottom: 8,
+    gap: 12,
   },
-  importanceDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: Spacing.sm,
+  duaNumberBadge: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  duaNumberText: {
+    fontSize: 14,
+    fontWeight: '700',
   },
   duaArabic: {
-    fontSize: Typography.sizes.xl,
-    fontWeight: Typography.weights.bold,
+    fontSize: 17,
+    fontWeight: '700',
   },
   duaFrench: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.semibold,
-    marginBottom: Spacing.xs,
+    fontSize: 14,
+    fontWeight: '600',
+    marginTop: 1,
   },
   duaDescription: {
-    fontSize: Typography.sizes.sm,
-    lineHeight: Typography.sizes.sm * 1.5,
-    marginBottom: Spacing.md,
+    fontSize: 13,
+    lineHeight: 19,
+    marginBottom: 12,
   },
   duaCardFooter: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  duaMeta: {
-    flex: 1,
-    flexDirection: 'row',
+    gap: 8,
     flexWrap: 'wrap',
-    gap: Spacing.md,
   },
-  metaItem: {
+  metaBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.xs,
+    gap: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
   },
   metaText: {
-    fontSize: Typography.sizes.sm,
+    fontSize: 12,
+    fontWeight: '500',
   },
+
+  // --- Other ---
   errorText: {
-    fontSize: Typography.sizes.lg,
+    fontSize: 16,
     textAlign: 'center',
-    marginTop: Spacing['4xl'],
+    marginTop: 60,
   },
   bottomSpacer: {
-    height: Spacing['4xl'],
+    height: 40,
   },
 });
 

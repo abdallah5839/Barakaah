@@ -1,23 +1,23 @@
 {
   "expo": {
-    "name": "Barakaah",
-    "slug": "barakaah",
+    "name": "Sakina",
+    "slug": "sakina",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#059669"
+      "backgroundColor": "#0F4C35"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.barakaah.app",
+      "bundleIdentifier": "com.sakina.app",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "L'application a besoin de votre localisation pour calculer les horaires de prière précis et la direction de la Qibla.",
         "NSMotionUsageDescription": "L'application utilise les capteurs de mouvement pour la boussole Qibla."
@@ -25,10 +25,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#059669"
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#0F4C35"
       },
-      "package": "com.barakaah.app",
+      "package": "com.sakina.app",
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
@@ -36,7 +36,7 @@
       ]
     },
     "web": {
-      "favicon": "./assets/favicon.png",
+      "favicon": "./assets/logo.png",
       "bundler": "metro"
     },
     "plugins": [
@@ -47,10 +47,10 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "barakaah-islamic-app"
+        "projectId": "sakina-islamic-app"
       }
     },
-    "owner": "barakaah",
+    "owner": "sakina",
     "description": "Application islamique complète pour la communauté chiite. Coran, Duas, horaires de prière, calendrier Hijri et plus."
   }
 }

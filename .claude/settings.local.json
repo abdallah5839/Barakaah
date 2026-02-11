@@ -54,7 +54,11 @@
       "Bash(git -C \"C:\\\\Users\\\\abdal\\\\Desktop\\\\BARAKAAH\" add package.json package-lock.json src/services/ src/types/circle.types.ts src/data/juzData.ts src/hooks/useSupabaseConnection.ts supabase/)",
       "Bash(git -C \"C:\\\\Users\\\\abdal\\\\Desktop\\\\BARAKAAH\" commit -m \"$\\(cat <<''EOF''\nFeat: Configuration Supabase pour module Cercle de Lecture\n\nPhase 1 - Backend Setup:\n- Add: @supabase/supabase-js et expo-secure-store\n- Add: src/services/supabase.ts \\(client Supabase\\)\n- Add: src/types/circle.types.ts \\(interfaces Circle, Member, Assignment\\)\n- Add: src/data/juzData.ts \\(données des 30 Juz\\)\n- Add: src/hooks/useSupabaseConnection.ts \\(test connexion\\)\n- Add: supabase/migrations/001_create_circle_tables.sql\n\nTables SQL:\n- circles: Cercles de lecture avec code partage XXXX-XXXX\n- circle_members: Membres avec device_id et nickname\n- circle_assignments: Attribution des 30 Juz\n\nFeatures SQL:\n- Triggers auto-création 30 Juz à la création d''un cercle\n- Trigger mise à jour progression automatique\n- RLS policies pour sécurité\n- Fonction génération code unique\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git -C \"C:\\\\Users\\\\abdal\\\\Desktop\\\\BARAKAAH\" push -u origin partage)",
-      "Bash(npx expo export:*)"
+      "Bash(npx expo export:*)",
+      "WebFetch(domain:server6.mp3quran.net)",
+      "WebFetch(domain:archive.org)",
+      "WebFetch(domain:ar.islamway.net)",
+      "WebFetch(domain:doaatv.com)"
     ]
   }
 }

@@ -13,6 +13,7 @@ import {
   Pressable,
   Linking,
   Share,
+  Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Spacing, Typography, Shadows } from '../constants';
@@ -60,9 +61,9 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({ navigation, isDark = f
   const handleShare = async () => {
     try {
       await Share.share({
-        title: 'Barakaah - Application Islamique Chiite',
+        title: 'Sakina - Application Islamique Chiite',
         message:
-          'Découvrez Barakaah, une application complète pour les musulmans chiites. Coran, Duas, horaires de prière et plus encore !\n\nTéléchargez-la maintenant !',
+          'Découvrez Sakina, une application complète pour les musulmans chiites. Coran, Duas, horaires de prière et plus encore !\n\nTéléchargez-la maintenant !',
       });
     } catch (error) {
       console.error('Erreur partage:', error);
@@ -88,12 +89,10 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({ navigation, isDark = f
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Logo et Nom */}
         <View style={styles.logoSection}>
-          <View style={[styles.logoContainer, { backgroundColor: colors.primary }]}>
-            <Text style={styles.logoText}>ب</Text>
-          </View>
-          <Text style={[styles.appName, { color: colors.text }]}>Barakaah</Text>
+          <Image source={require('../../assets/logo.png')} style={styles.logoImage} />
+          <Text style={[styles.appName, { color: colors.text }]}>Sakina</Text>
           <Text style={[styles.appTagline, { color: colors.textSecondary }]}>
-            بركة - Bénédiction
+            سكينة - Sérénité
           </Text>
           <View style={[styles.versionBadge, { backgroundColor: colors.surface }]}>
             <Text style={[styles.versionText, { color: colors.textSecondary }]}>
@@ -105,7 +104,7 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({ navigation, isDark = f
         {/* Description */}
         <View style={[styles.descriptionCard, { backgroundColor: colors.surface }, Shadows.small]}>
           <Text style={[styles.descriptionText, { color: colors.text }]}>
-            Barakaah est une application islamique complète dédiée à la communauté chiite.
+            Sakina est une application islamique complète dédiée à la communauté chiite.
             Elle offre un accès au Saint Coran avec traduction, une collection de Duas
             authentiques, les horaires de prière précis, et de nombreuses autres fonctionnalités
             pour accompagner votre pratique spirituelle quotidienne.
@@ -212,7 +211,7 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({ navigation, isDark = f
 
           <Pressable
             style={[styles.actionButtonOutline, { borderColor: colors.border }]}
-            onPress={() => openLink('mailto:contact@barakaah.app')}
+            onPress={() => openLink('mailto:contact@sakina.app')}
           >
             <Ionicons name="mail" size={20} color={colors.primary} />
             <Text style={[styles.actionButtonOutlineText, { color: colors.text }]}>
@@ -225,7 +224,7 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({ navigation, isDark = f
         <View style={styles.legalSection}>
           <Pressable
             style={styles.legalLink}
-            onPress={() => openLink('https://barakaah.app/privacy')}
+            onPress={() => openLink('https://sakina.app/privacy')}
           >
             <Text style={[styles.legalLinkText, { color: colors.textSecondary }]}>
               Politique de confidentialité
@@ -234,7 +233,7 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({ navigation, isDark = f
           <Text style={[styles.legalSeparator, { color: colors.border }]}>•</Text>
           <Pressable
             style={styles.legalLink}
-            onPress={() => openLink('https://barakaah.app/terms')}
+            onPress={() => openLink('https://sakina.app/terms')}
           >
             <Text style={[styles.legalLinkText, { color: colors.textSecondary }]}>
               Conditions d'utilisation
@@ -248,7 +247,7 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({ navigation, isDark = f
             Développé avec ❤️ pour la communauté
           </Text>
           <Text style={[styles.footerCopyright, { color: colors.textSecondary }]}>
-            © 2024 Barakaah. Tous droits réservés.
+            © 2024 Sakina. Tous droits réservés.
           </Text>
         </View>
 
@@ -340,18 +339,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: Spacing['3xl'],
   },
-  logoContainer: {
+  logoImage: {
     width: 100,
     height: 100,
     borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
     marginBottom: Spacing.lg,
-  },
-  logoText: {
-    fontSize: 48,
-    fontWeight: '700',
-    color: '#FFF',
   },
   appName: {
     fontSize: Typography.sizes['3xl'],

@@ -129,7 +129,7 @@ export const MyReadingScreen: React.FC = () => {
                           text: 'Partager',
                           onPress: () => {
                             Share.share({
-                              message: 'Alhamdulillah ! Notre cercle de lecture a complété une Khatma du Coran sur Barakaah !',
+                              message: 'Alhamdulillah ! Notre cercle de lecture a complété une Khatma du Coran sur Sakina !',
                             });
                           },
                         },

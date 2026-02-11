@@ -58,7 +58,7 @@ const pad3 = (n: number): string => String(n).padStart(3, '0');
 const getAudioUrl = (surahNumber: number, verseNumber: number): string =>
   `https://everyayah.com/data/Alafasy_128kbps/${pad3(surahNumber)}${pad3(verseNumber)}.mp3`;
 
-const BOOKMARK_PREFIX = 'barakaah_juz_bookmark_';
+const BOOKMARK_PREFIX = 'sakina_juz_bookmark_';
 
 const getBookmarkKey = (circleId: string, juzNumber: number): string =>
   `${BOOKMARK_PREFIX}${circleId}_${juzNumber}`;

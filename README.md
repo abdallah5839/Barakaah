@@ -1,4 +1,4 @@
-# Barakaah - Application Coranique Chiite
+# Sakina - Application Coranique Chiite
 
 Application mobile iOS/Android destinée aux musulmans chiites, développée avec React Native et Expo.
 
@@ -23,7 +23,7 @@ Application mobile iOS/Android destinée aux musulmans chiites, développée ave
 
 2. **Installer les dépendances**
 ```bash
-cd BARAKAAH
+cd Sakina
 npm install
 ```
 
@@ -46,7 +46,7 @@ npm run web     # Lance en version web
 ## Structure du projet
 
 ```
-BARAKAAH/
+Sakina/
 ├── App.tsx                    # Point d'entrée de l'application
 ├── app.json                   # Configuration Expo
 ├── package.json               # Dépendances

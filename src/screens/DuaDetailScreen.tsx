@@ -1,27 +1,22 @@
 /**
- * Écran DuaDetail - Affichage détaillé d'une Dua
- * Texte en arabe/français/phonétique avec player audio
+ * Écran DuaDetail - Design premium Sakina
+ * Boutons audio désactivés (Bientôt disponible)
  */
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   Pressable,
   Share,
-  Modal,
-  Alert,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme, useDua } from '../contexts';
-import { Spacing, Typography, Shadows } from '../constants';
+import { Spacing } from '../constants';
 import { getDuaById } from '../data';
-import { AudioPlayer } from '../components';
-import type { Dua, DuaSection } from '../types';
 
 interface DuaDetailScreenProps {
   navigation?: any;
@@ -36,346 +31,139 @@ export const DuaDetailScreen: React.FC<DuaDetailScreenProps> = ({
   navigation,
   route,
 }) => {
-  const { colors } = useTheme();
-  const { isFavorite, toggleFavorite, displayPrefs, updateDisplayPrefs } = useDua();
-  const insets = useSafeAreaInsets();
+  const { colors, isDark } = useTheme();
+  const { isFavorite, toggleFavorite } = useDua();
 
   const duaId = route?.params?.duaId || 'kumayl';
   const dua = useMemo(() => getDuaById(duaId), [duaId]);
 
-  // États locaux
-  const [showMenu, setShowMenu] = useState(false);
-  const [showArabic, setShowArabic] = useState(displayPrefs.showArabic);
-  const [showFrench, setShowFrench] = useState(displayPrefs.showFrench);
-  const [showPhonetic, setShowPhonetic] = useState(displayPrefs.showPhonetic);
-
-  // Navigation
   const goBack = () => {
-    if (navigation) {
-      navigation.goBack();
-    }
+    if (navigation) navigation.goBack();
   };
 
-  const navigateToLearningMode = () => {
-    setShowMenu(false);
-    if (navigation && dua) {
-      navigation.navigate('LearningMode', { duaId: dua.id });
-    }
-  };
-
-  // Toggle préférences et sauvegarder
-  const toggleArabic = useCallback(() => {
-    const newValue = !showArabic;
-    setShowArabic(newValue);
-    updateDisplayPrefs({ showArabic: newValue });
-  }, [showArabic, updateDisplayPrefs]);
-
-  const toggleFrench = useCallback(() => {
-    const newValue = !showFrench;
-    setShowFrench(newValue);
-    updateDisplayPrefs({ showFrench: newValue });
-  }, [showFrench, updateDisplayPrefs]);
-
-  const togglePhonetic = useCallback(() => {
-    const newValue = !showPhonetic;
-    setShowPhonetic(newValue);
-    updateDisplayPrefs({ showPhonetic: newValue });
-  }, [showPhonetic, updateDisplayPrefs]);
-
-  // Partage
   const handleShare = async () => {
     if (!dua) return;
-    setShowMenu(false);
-
-    const text = dua.sections
-      .map(section => {
-        let content = '';
-        if (showArabic) content += section.arabic + '\n\n';
-        if (showFrench) content += section.french + '\n\n';
-        if (showPhonetic) content += section.phonetic + '\n\n';
-        return content;
-      })
-      .join('---\n\n');
-
     try {
       await Share.share({
         title: `${dua.frenchName} - ${dua.arabicName}`,
-        message: `${dua.frenchName} (${dua.arabicName})\n\n${text}\n\nPartagé via Barakaah`,
+        message: `${dua.frenchName} (${dua.arabicName})\n${dua.description}\n\nPartagé via Sakina`,
       });
     } catch (error) {
       console.error('Erreur de partage:', error);
     }
   };
 
-  // Copier dans le presse-papier (via partage)
-  const handleCopy = async () => {
-    if (!dua) return;
-    setShowMenu(false);
-
-    const text = dua.sections
-      .map(section => {
-        let content = '';
-        if (showArabic) content += section.arabic + '\n';
-        if (showFrench) content += section.french + '\n';
-        if (showPhonetic) content += section.phonetic + '\n';
-        return content;
-      })
-      .join('\n---\n');
-
-    // Utiliser Share pour permettre à l'utilisateur de copier
-    try {
-      await Share.share({
-        message: text,
-        title: 'Copier le texte',
-      });
-    } catch (error) {
-      Alert.alert('Erreur', 'Impossible de copier le texte');
-    }
-  };
-
-  // Toggle favori
   const handleToggleFavorite = () => {
-    if (dua) {
-      toggleFavorite(dua.id);
-    }
-    setShowMenu(false);
+    if (dua) toggleFavorite(dua.id);
   };
 
-  // Rendu d'une section de texte
-  const renderSection = (section: DuaSection, index: number) => {
-    return (
-      <View
-        key={section.id}
-        style={[styles.sectionContainer, { borderBottomColor: colors.border }]}
-      >
-        {/* Numéro de section */}
-        <View style={[styles.sectionNumber, { backgroundColor: colors.primary + '20' }]}>
-          <Text style={[styles.sectionNumberText, { color: colors.primary }]}>
-            {index + 1}
-          </Text>
-        </View>
-
-        {/* Texte arabe */}
-        {showArabic && (
-          <Text style={[styles.arabicText, { color: colors.text }]}>
-            {section.arabic}
-          </Text>
-        )}
-
-        {/* Phonétique */}
-        {showPhonetic && (
-          <Text style={[styles.phoneticText, { color: colors.textSecondary }]}>
-            {section.phonetic}
-          </Text>
-        )}
-
-        {/* Traduction française */}
-        {showFrench && (
-          <Text style={[styles.frenchText, { color: colors.text }]}>
-            {section.french}
-          </Text>
-        )}
-      </View>
-    );
-  };
+  const headerGradient = isDark
+    ? ['#0F2D1E', '#1a4731', '#0F172A'] as const
+    : ['#0F4C35', '#16a34a', '#166534'] as const;
 
   if (!dua) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-        <Text style={[styles.errorText, { color: colors.error }]}>
-          Dua non trouvée
-        </Text>
-      </SafeAreaView>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <Text style={[styles.errorText, { color: colors.error }]}>Dua non trouvée</Text>
+      </View>
     );
   }
 
   const isInFavorites = isFavorite(dua.id);
   const importanceColor = dua.importance === 'tres-haute' ? colors.secondary : colors.primary;
+  const importanceLabel = dua.importance === 'tres-haute' ? 'Très importante' : dua.importance === 'haute' ? 'Importante' : 'Recommandée';
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      {/* Header */}
-      <View style={[styles.header, { borderBottomColor: colors.border }]}>
-        <Pressable onPress={goBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={colors.text} />
-        </Pressable>
-        <View style={styles.headerTitleContainer}>
-          <Text style={[styles.headerArabic, { color: colors.text }]} numberOfLines={1}>
-            {dua.arabicName}
-          </Text>
-          <Text style={[styles.headerFrench, { color: colors.textSecondary }]} numberOfLines={1}>
-            {dua.frenchName}
-          </Text>
-        </View>
-        <Pressable onPress={() => setShowMenu(true)} style={styles.menuButton}>
-          <Ionicons name="ellipsis-vertical" size={24} color={colors.text} />
-        </Pressable>
-      </View>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* ===== PREMIUM HEADER ===== */}
+        <LinearGradient colors={headerGradient} style={styles.headerGradient}>
+          <Pressable onPress={goBack} style={styles.headerBtn}>
+            <Ionicons name="arrow-back" size={22} color="#FFFFFF" />
+          </Pressable>
 
-      {/* Info bar */}
-      <View style={[styles.infoBar, { backgroundColor: colors.surface }]}>
-        <View style={styles.infoItem}>
-          <Ionicons name="calendar-outline" size={16} color={colors.textSecondary} />
-          <Text style={[styles.infoText, { color: colors.textSecondary }]}>
-            {dua.occasion}
-          </Text>
-        </View>
-        <View style={styles.infoItem}>
-          <Ionicons name="time-outline" size={16} color={colors.textSecondary} />
-          <Text style={[styles.infoText, { color: colors.textSecondary }]}>
-            {dua.duration}
-          </Text>
-        </View>
-        <View style={[styles.importanceBadge, { backgroundColor: importanceColor + '20' }]}>
-          <Text style={[styles.importanceText, { color: importanceColor }]}>
-            {dua.importance === 'tres-haute' ? 'Très importante' : dua.importance === 'haute' ? 'Importante' : 'Recommandée'}
-          </Text>
-        </View>
-      </View>
+          <View style={styles.headerTitles}>
+            <Text style={styles.headerArabicTitle}>{dua.arabicName}</Text>
+            <Text style={styles.headerFrenchTitle}>{dua.frenchName}</Text>
+          </View>
 
-      {/* Toggles */}
-      <View style={[styles.togglesContainer, { backgroundColor: colors.surface }]}>
-        <Pressable
-          style={[
-            styles.toggleButton,
-            showArabic && { backgroundColor: colors.primary + '20' },
-          ]}
-          onPress={toggleArabic}
-        >
-          <Text
-            style={[
-              styles.toggleText,
-              { color: showArabic ? colors.primary : colors.textSecondary },
-            ]}
-          >
-            عربي
-          </Text>
-        </Pressable>
-        <Pressable
-          style={[
-            styles.toggleButton,
-            showFrench && { backgroundColor: colors.primary + '20' },
-          ]}
-          onPress={toggleFrench}
-        >
-          <Text
-            style={[
-              styles.toggleText,
-              { color: showFrench ? colors.primary : colors.textSecondary },
-            ]}
-          >
-            Français
-          </Text>
-        </Pressable>
-        <Pressable
-          style={[
-            styles.toggleButton,
-            showPhonetic && { backgroundColor: colors.primary + '20' },
-          ]}
-          onPress={togglePhonetic}
-        >
-          <Text
-            style={[
-              styles.toggleText,
-              { color: showPhonetic ? colors.primary : colors.textSecondary },
-            ]}
-          >
-            Phonétique
-          </Text>
-        </Pressable>
-      </View>
+          {/* Info badges */}
+          <View style={styles.infoBadgesRow}>
+            <View style={styles.infoBadge}>
+              <Ionicons name="calendar-outline" size={14} color="rgba(255,255,255,0.8)" />
+              <Text style={styles.infoBadgeText}>{dua.occasion}</Text>
+            </View>
+            <View style={styles.infoBadge}>
+              <Ionicons name="time-outline" size={14} color="rgba(255,255,255,0.8)" />
+              <Text style={styles.infoBadgeText}>{dua.duration}</Text>
+            </View>
+            <View style={[styles.importanceBadge, { backgroundColor: importanceColor + '30' }]}>
+              <Text style={[styles.importanceBadgeText, { color: importanceColor }]}>{importanceLabel}</Text>
+            </View>
+          </View>
+        </LinearGradient>
 
-      {/* Contenu scrollable */}
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Description */}
-        <View style={[styles.descriptionContainer, { backgroundColor: colors.surface }]}>
-          <Text style={[styles.descriptionText, { color: colors.textSecondary }]}>
-            {dua.description}
-          </Text>
-        </View>
+        {/* ===== DESCRIPTION ===== */}
+        <View style={styles.contentContainer}>
+          <View style={[styles.descriptionCard, { backgroundColor: colors.secondary + '10' }]}>
+            <Ionicons name="information-circle-outline" size={18} color={colors.secondary} />
+            <Text style={[styles.descriptionText, { color: colors.textSecondary }]}>
+              {dua.description}
+            </Text>
+          </View>
 
-        {/* Sections de texte */}
-        {dua.sections.map((section, index) => renderSection(section, index))}
+          {/* ===== AUDIO BUTTONS (disabled) ===== */}
+          <View style={styles.audioButtonsContainer}>
+            <View style={styles.disabledAudioButton}>
+              <View style={styles.disabledIconCircle}>
+                <Ionicons name="volume-high-outline" size={26} color="#9CA3AF" />
+              </View>
+              <View style={styles.disabledAudioInfo}>
+                <Text style={styles.disabledAudioLabel}>Écouter en Arabe</Text>
+                <Text style={styles.disabledAudioSublabel}>Bientôt disponible</Text>
+              </View>
+            </View>
 
-        {/* Espace pour le player */}
-        <View style={styles.playerSpacer} />
-      </ScrollView>
+            <View style={styles.disabledAudioButton}>
+              <View style={styles.disabledIconCircle}>
+                <Ionicons name="volume-high-outline" size={26} color="#9CA3AF" />
+              </View>
+              <View style={styles.disabledAudioInfo}>
+                <Text style={styles.disabledAudioLabel}>Écouter en Français</Text>
+                <Text style={styles.disabledAudioSublabel}>Bientôt disponible</Text>
+              </View>
+            </View>
+          </View>
 
-      {/* Player audio fixé en bas avec safe area */}
-      <View style={[
-        styles.playerContainer,
-        { paddingBottom: Math.max(Spacing.lg, insets.bottom) }
-      ]}>
-        <AudioPlayer
-          audioUrl={dua.audioUrl || ''}
-          duaId={dua.id}
-          reciter={dua.reciter}
-        />
-      </View>
-
-      {/* Menu modal */}
-      <Modal
-        visible={showMenu}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowMenu(false)}
-      >
-        <Pressable
-          style={styles.modalOverlay}
-          onPress={() => setShowMenu(false)}
-        >
-          <View style={[styles.menuContainer, { backgroundColor: colors.surface }]}>
+          {/* ===== ACTION BUTTONS ===== */}
+          <View style={styles.actionsRow}>
             <Pressable
-              style={styles.menuItem}
+              style={[styles.actionButton, { backgroundColor: isInFavorites ? '#EF4444' + '12' : colors.surface }]}
               onPress={handleToggleFavorite}
             >
               <Ionicons
                 name={isInFavorites ? 'heart' : 'heart-outline'}
                 size={22}
-                color={isInFavorites ? colors.error : colors.text}
+                color={isInFavorites ? '#EF4444' : colors.textMuted}
               />
-              <Text style={[styles.menuItemText, { color: colors.text }]}>
-                {isInFavorites ? 'Retirer des favoris' : 'Ajouter aux favoris'}
-              </Text>
-            </Pressable>
-
-            <Pressable style={styles.menuItem} onPress={handleShare}>
-              <Ionicons name="share-outline" size={22} color={colors.text} />
-              <Text style={[styles.menuItemText, { color: colors.text }]}>
-                Partager
-              </Text>
-            </Pressable>
-
-            <Pressable style={styles.menuItem} onPress={handleCopy}>
-              <Ionicons name="copy-outline" size={22} color={colors.text} />
-              <Text style={[styles.menuItemText, { color: colors.text }]}>
-                Copier le texte
-              </Text>
-            </Pressable>
-
-            <Pressable style={styles.menuItem} onPress={navigateToLearningMode}>
-              <Ionicons name="school-outline" size={22} color={colors.text} />
-              <Text style={[styles.menuItemText, { color: colors.text }]}>
-                Mode apprentissage
+              <Text style={[styles.actionButtonText, { color: isInFavorites ? '#EF4444' : colors.text }]}>
+                {isInFavorites ? 'Favori' : 'Ajouter'}
               </Text>
             </Pressable>
 
             <Pressable
-              style={[styles.menuItem, styles.menuItemCancel]}
-              onPress={() => setShowMenu(false)}
+              style={[styles.actionButton, { backgroundColor: colors.surface }]}
+              onPress={handleShare}
             >
-              <Text style={[styles.menuItemText, { color: colors.error }]}>
-                Annuler
-              </Text>
+              <Ionicons name="share-outline" size={22} color={colors.primary} />
+              <Text style={[styles.actionButtonText, { color: colors.text }]}>Partager</Text>
             </Pressable>
           </View>
-        </Pressable>
-      </Modal>
-    </SafeAreaView>
+        </View>
+
+        <View style={styles.bottomSpacer} />
+      </ScrollView>
+    </View>
   );
 };
 
@@ -383,175 +171,152 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+
+  // --- Premium Header ---
+  headerGradient: {
+    paddingTop: 16,
+    paddingBottom: 24,
     paddingHorizontal: Spacing.screenHorizontal,
-    paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
   },
-  backButton: {
-    padding: Spacing.sm,
-    marginRight: Spacing.sm,
-    minWidth: 44,
-    minHeight: 44,
-    justifyContent: 'center',
+  headerBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.12)',
     alignItems: 'center',
-  },
-  headerTitleContainer: {
-    flex: 1,
-  },
-  headerArabic: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.bold,
-  },
-  headerFrench: {
-    fontSize: Typography.sizes.sm,
-  },
-  menuButton: {
-    padding: Spacing.sm,
-    marginLeft: Spacing.sm,
-    minWidth: 44,
-    minHeight: 44,
     justifyContent: 'center',
-    alignItems: 'center',
+    marginBottom: 20,
   },
-  infoBar: {
+  headerTitles: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  headerArabicTitle: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  headerFrenchTitle: {
+    fontSize: 17,
+    color: 'rgba(255,255,255,0.8)',
+    fontWeight: '600',
+    marginTop: 6,
+    textAlign: 'center',
+  },
+  infoBadgesRow: {
     flexDirection: 'row',
-    alignItems: 'center',
     flexWrap: 'wrap',
-    gap: Spacing.md,
-    paddingHorizontal: Spacing.screenHorizontal,
-    paddingVertical: Spacing.sm,
+    justifyContent: 'center',
+    gap: 8,
   },
-  infoItem: {
+  infoBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.xs,
+    gap: 4,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 20,
   },
-  infoText: {
-    fontSize: Typography.sizes.sm,
+  infoBadgeText: {
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.8)',
+    fontWeight: '500',
   },
   importanceBadge: {
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
-    borderRadius: Spacing.radiusSm,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 20,
   },
-  importanceText: {
-    fontSize: Typography.sizes.xs,
-    fontWeight: Typography.weights.semibold,
+  importanceBadgeText: {
+    fontSize: 12,
+    fontWeight: '600',
   },
-  togglesContainer: {
+
+  // --- Content ---
+  contentContainer: {
+    paddingHorizontal: Spacing.screenHorizontal,
+    paddingTop: 16,
+  },
+  descriptionCard: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: Spacing.screenHorizontal,
-    paddingVertical: Spacing.sm,
-    gap: 8, // Espacement égal
-  },
-  toggleButton: {
-    flex: 1, // Largeur égale pour tous
-    height: 44, // Hauteur fixe identique
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  toggleText: {
-    fontSize: 14, // Taille IDENTIQUE pour tous
-    fontWeight: '600', // Poids IDENTIQUE
-    textAlign: 'center',
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingHorizontal: Spacing.screenHorizontal,
-    paddingTop: Spacing.md,
-  },
-  descriptionContainer: {
-    padding: Spacing.md,
-    borderRadius: Spacing.radiusMd,
-    marginBottom: Spacing.lg,
+    alignItems: 'flex-start',
+    gap: 10,
+    padding: 14,
+    borderRadius: 12,
+    marginBottom: 20,
   },
   descriptionText: {
-    fontSize: Typography.sizes.sm,
-    lineHeight: Typography.sizes.sm * 1.6,
-  },
-  sectionContainer: {
-    paddingVertical: Spacing.lg,
-    borderBottomWidth: 1,
-  },
-  sectionNumber: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: Spacing.md,
-  },
-  sectionNumberText: {
-    fontSize: Typography.sizes.sm,
-    fontWeight: Typography.weights.bold,
-  },
-  arabicText: {
-    fontSize: Typography.sizes['2xl'],
-    fontWeight: Typography.weights.medium,
-    textAlign: 'right',
-    lineHeight: Typography.sizes['2xl'] * 2,
-    marginBottom: Spacing.md,
-  },
-  phoneticText: {
-    fontSize: Typography.sizes.md,
-    fontStyle: 'italic',
-    lineHeight: Typography.sizes.md * 1.6,
-    marginBottom: Spacing.md,
-  },
-  frenchText: {
-    fontSize: Typography.sizes.md,
-    lineHeight: Typography.sizes.md * 1.6,
-  },
-  playerSpacer: {
-    height: 200,
-  },
-  playerContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    paddingHorizontal: Spacing.screenHorizontal,
-    // paddingBottom géré dynamiquement avec useSafeAreaInsets
-  },
-  modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
+    fontSize: 13,
+    lineHeight: 20,
   },
-  menuContainer: {
-    borderTopLeftRadius: Spacing.radiusXl,
-    borderTopRightRadius: Spacing.radiusXl,
-    paddingTop: Spacing.lg,
-    paddingBottom: Spacing['3xl'],
+
+  // --- Disabled Audio Buttons ---
+  audioButtonsContainer: {
+    gap: 12,
+    marginBottom: 20,
   },
-  menuItem: {
+  disabledAudioButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.lg,
-    gap: Spacing.md,
+    gap: 14,
+    backgroundColor: '#E5E7EB',
+    borderRadius: 16,
+    padding: 18,
+    opacity: 0.6,
   },
-  menuItemText: {
-    fontSize: Typography.sizes.md,
-  },
-  menuItemCancel: {
+  disabledIconCircle: {
+    width: 52,
+    height: 52,
+    borderRadius: 16,
+    backgroundColor: '#D1D5DB',
+    alignItems: 'center',
     justifyContent: 'center',
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(0, 0, 0, 0.1)',
-    marginTop: Spacing.sm,
+  },
+  disabledAudioInfo: {
+    flex: 1,
+  },
+  disabledAudioLabel: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#9CA3AF',
+  },
+  disabledAudioSublabel: {
+    fontSize: 13,
+    color: '#9CA3AF',
+    marginTop: 2,
+  },
+
+  // --- Action Buttons ---
+  actionsRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 20,
+  },
+  actionButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 14,
+    borderRadius: 14,
+  },
+  actionButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+
+  // --- Other ---
+  bottomSpacer: {
+    height: 40,
   },
   errorText: {
-    fontSize: Typography.sizes.lg,
+    fontSize: 16,
     textAlign: 'center',
-    marginTop: Spacing['4xl'],
+    marginTop: 60,
   },
 });
 

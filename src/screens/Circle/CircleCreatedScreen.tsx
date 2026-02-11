@@ -56,11 +56,11 @@ export const CircleCreatedScreen: React.FC = () => {
   // Partager le cercle
   const shareCircle = useCallback(async () => {
     try {
-      const message = `Salam ! Rejoins mon cercle de lecture "${circle.name}" sur Barakaah pour compléter une Khatma ensemble !\n\nCode : ${circle.code}\n\nTélécharge l'app Barakaah et utilise ce code pour nous rejoindre.`;
+      const message = `Salam ! Rejoins mon cercle de lecture "${circle.name}" sur Sakina pour compléter une Khatma ensemble !\n\nCode : ${circle.code}\n\nTélécharge l'app Sakina et utilise ce code pour nous rejoindre.`;
 
       await Share.share({
         message,
-        title: `Rejoins ${circle.name} sur Barakaah`,
+        title: `Rejoins ${circle.name} sur Sakina`,
       });
 
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);

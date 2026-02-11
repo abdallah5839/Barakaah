@@ -1,5 +1,5 @@
 /**
- * Constantes de typographie pour l'application Barakaah
+ * Constantes de typographie pour l'application Sakina
  */
 
 export const Typography = {
