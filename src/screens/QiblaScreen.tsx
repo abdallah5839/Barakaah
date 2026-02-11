@@ -19,10 +19,11 @@ import {
   Dimensions,
   ScrollView,
   Platform,
+  Linking,
 } from 'react-native';
 import Svg, { Polygon, Circle as SvgCircle, Defs, LinearGradient as SvgGradient, Stop, Line } from 'react-native-svg';
 import { Magnetometer } from 'expo-sensors';
-import { requestCameraPermissionsAsync } from 'expo-camera';
+import { getCameraPermissionsAsync, requestCameraPermissionsAsync } from 'expo-camera';
 import * as Location from 'expo-location';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -193,40 +194,79 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
   const [isCalibrating, setIsCalibrating] = useState(false);
   const [facingQibla, setFacingQibla] = useState(false);
   const [viewMode, setViewMode] = useState<'2d' | 'ar'>('2d');
+  const [isARAvailable, setIsARAvailable] = useState(false);
+  const cameraPermissionGranted = useRef(false);
 
-  // Load saved view mode preference
+  // Check camera availability + load saved preference on mount
   useEffect(() => {
-    AsyncStorage.getItem(QIBLA_VIEW_MODE_KEY).then((val) => {
-      if (val === 'ar' || val === '2d') setViewMode(val);
-    }).catch(() => {});
+    const checkAR = async () => {
+      try {
+        // Check if camera hardware exists by querying permission status
+        // (getCameraPermissionsAsync works even without asking — just checks status)
+        const permResult = await getCameraPermissionsAsync();
+        // If we get a result at all, camera hardware is available
+        setIsARAvailable(true);
+        if (permResult.granted) {
+          cameraPermissionGranted.current = true;
+        }
+        // Load saved preference only if AR is available
+        const saved = await AsyncStorage.getItem(QIBLA_VIEW_MODE_KEY);
+        if (saved === 'ar' && permResult.granted) {
+          setViewMode('ar');
+        }
+      } catch {
+        // Camera not available on this device
+        setIsARAvailable(false);
+      }
+    };
+    checkAR();
   }, []);
 
-  // Toggle AR mode with camera permission check
+  // Toggle AR mode with permission flow
   const handleToggleAR = useCallback(async () => {
     if (viewMode === 'ar') {
       setViewMode('2d');
       AsyncStorage.setItem(QIBLA_VIEW_MODE_KEY, '2d').catch(() => {});
       return;
     }
-    // Check camera availability & permission
+
+    // Already granted — go straight to AR
+    if (cameraPermissionGranted.current) {
+      setViewMode('ar');
+      AsyncStorage.setItem(QIBLA_VIEW_MODE_KEY, 'ar').catch(() => {});
+      return;
+    }
+
+    // Request permission
     try {
-      const { status } = await requestCameraPermissionsAsync();
+      const { status, canAskAgain } = await requestCameraPermissionsAsync();
       if (status === 'granted') {
+        cameraPermissionGranted.current = true;
         setViewMode('ar');
         AsyncStorage.setItem(QIBLA_VIEW_MODE_KEY, 'ar').catch(() => {});
+      } else if (!canAskAgain) {
+        // System won't show prompt again — redirect to Settings
+        Alert.alert(
+          '📷 Permission requise',
+          'L\'accès à la caméra est nécessaire pour le mode AR Qibla. Souhaitez-vous autoriser l\'accès dans les paramètres ?',
+          [
+            { text: 'Plus tard', style: 'cancel' },
+            { text: 'Paramètres', onPress: () => Linking.openSettings() },
+          ],
+        );
       } else {
         Alert.alert(
-          '📷 Caméra requise',
-          'L\'accès à la caméra est nécessaire pour le mode AR Qibla. Activez-le dans les paramètres de votre appareil.',
-          [{ text: 'Compris' }],
+          '📷 Permission requise',
+          'L\'accès à la caméra est nécessaire pour le mode AR Qibla. Souhaitez-vous autoriser l\'accès dans les paramètres ?',
+          [
+            { text: 'Plus tard', style: 'cancel' },
+            { text: 'Paramètres', onPress: () => Linking.openSettings() },
+          ],
         );
       }
     } catch {
-      Alert.alert(
-        '📷 Caméra non disponible',
-        'Votre appareil ne supporte pas le mode AR. La boussole 2D reste disponible.',
-        [{ text: 'Compris' }],
-      );
+      // Should not happen since isARAvailable is true, but safety net
+      setIsARAvailable(false);
     }
   }, [viewMode]);
 
@@ -541,13 +581,17 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
         <View style={qStyles.headerCenter}>
           <Text style={[qStyles.headerTitle, { color: colors.text }]}>Direction Qibla</Text>
         </View>
-        <Pressable onPress={handleToggleAR} style={qStyles.arToggleButton}>
-          <Ionicons
-            name={viewMode === 'ar' ? 'compass-outline' : 'videocam-outline'}
-            size={20}
-            color={GOLD}
-          />
-        </Pressable>
+        {isARAvailable ? (
+          <Pressable onPress={handleToggleAR} style={qStyles.arToggleButton}>
+            <Ionicons
+              name={viewMode === 'ar' ? 'compass-outline' : 'videocam-outline'}
+              size={20}
+              color={GOLD}
+            />
+          </Pressable>
+        ) : (
+          <View style={qStyles.arToggleButton} />
+        )}
       </View>
 
       {/* AR Mode */}

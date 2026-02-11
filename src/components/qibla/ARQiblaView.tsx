@@ -1,19 +1,19 @@
 /**
  * ARQiblaView — Camera-based AR view for Qibla direction.
  * Shows live camera feed with a directional gold arrow overlay,
- * info bar (distance, direction, precision), and haptic feedback.
+ * calibration banner, info bar, and haptic feedback.
  */
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
   Animated,
-  Dimensions,
   Platform,
   StatusBar,
+  Easing,
 } from 'react-native';
 import { CameraView } from 'expo-camera';
 import { Magnetometer } from 'expo-sensors';
@@ -22,40 +22,7 @@ import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { DirectionalArrow } from './DirectionalArrow';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-
 const GOLD = '#D4AF37';
-
-const KAABA_COORDS = {
-  latitude: 21.4225,
-  longitude: 39.8262,
-};
-
-const calculateQiblaAngle = (userLat: number, userLon: number): number => {
-  const lat1 = (userLat * Math.PI) / 180;
-  const lon1 = (userLon * Math.PI) / 180;
-  const lat2 = (KAABA_COORDS.latitude * Math.PI) / 180;
-  const lon2 = (KAABA_COORDS.longitude * Math.PI) / 180;
-  const dLon = lon2 - lon1;
-  const y = Math.sin(dLon) * Math.cos(lat2);
-  const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
-  let angle = Math.atan2(y, x);
-  angle = (angle * 180) / Math.PI;
-  return (angle + 360) % 360;
-};
-
-const calculateDistance = (userLat: number, userLon: number): number => {
-  const R = 6371;
-  const lat1 = (userLat * Math.PI) / 180;
-  const lat2 = (KAABA_COORDS.latitude * Math.PI) / 180;
-  const dLat = ((KAABA_COORDS.latitude - userLat) * Math.PI) / 180;
-  const dLon = ((KAABA_COORDS.longitude - userLon) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return Math.round(R * c);
-};
 
 const getCardinalDirection = (angle: number): string => {
   const directions = [
@@ -75,51 +42,83 @@ interface ARQiblaViewProps {
 
 export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
   onClose,
-  qiblaAngle: initialQiblaAngle,
-  distance: initialDistance,
+  qiblaAngle,
+  distance,
   locationName,
   isDark = false,
 }) => {
   const [deviceHeading, setDeviceHeading] = useState(0);
-  const [qiblaAngle] = useState(initialQiblaAngle);
-  const [distance] = useState(initialDistance);
   const [needsCalibration, setNeedsCalibration] = useState(false);
 
   const mounted = useRef(true);
   const headingSubscription = useRef<any>(null);
   const lastAngleRef = useRef(0);
   const qiblaHapticFired = useRef(false);
-  const infoFadeAnim = useRef(new Animated.Value(1)).current;
+  const sampleCount = useRef(0);
+  const calibratedRef = useRef(false);
+
+  // Calibration banner animation — rotating icon
+  const calibRotateAnim = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    if (needsCalibration) {
+      Animated.loop(
+        Animated.timing(calibRotateAnim, {
+          toValue: 1,
+          duration: 2000,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        }),
+      ).start();
+    } else {
+      calibRotateAnim.stopAnimation();
+      calibRotateAnim.setValue(0);
+    }
+  }, [needsCalibration]);
+
+  const calibRotation = calibRotateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
 
   // Compute relative rotation for the arrow
   let relativeAngle = qiblaAngle - deviceHeading;
-  // Normalize to -180..180
   if (relativeAngle > 180) relativeAngle -= 360;
   if (relativeAngle < -180) relativeAngle += 360;
-
-  // Absolute offset for precision circle
   const absOffset = Math.abs(relativeAngle);
 
   // Start heading sensor
   useEffect(() => {
+    // Show calibration hint initially — hide once we get stable readings
+    setNeedsCalibration(true);
+
     const startSensors = async () => {
-      // Try magnetometer first (especially on Android)
       const magAvailable = await Magnetometer.isAvailableAsync();
       if (magAvailable) {
-        Magnetometer.setUpdateInterval(16); // 60fps is enough for AR overlay
+        Magnetometer.setUpdateInterval(16);
         headingSubscription.current = Magnetometer.addListener((data) => {
           if (!mounted.current) return;
+
+          // Detect poor calibration: very weak field magnitude
+          const magnitude = Math.sqrt(data.x * data.x + data.y * data.y + data.z * data.z);
+          if (magnitude < 10) return; // Skip garbage readings
+
           let fieldAngle = Math.atan2(data.x, data.y);
           fieldAngle = (fieldAngle * 180) / Math.PI;
           fieldAngle = (fieldAngle + 360) % 360;
           const angle = (360 - fieldAngle) % 360;
 
-          // Jitter filter
           let diff = angle - lastAngleRef.current;
           if (diff > 180) diff -= 360;
           if (diff < -180) diff += 360;
           if (Math.abs(diff) < 0.5) return;
           lastAngleRef.current = angle;
+
+          sampleCount.current++;
+          // After ~30 stable samples, consider calibrated
+          if (sampleCount.current > 30 && !calibratedRef.current) {
+            calibratedRef.current = true;
+            setNeedsCalibration(false);
+          }
 
           setDeviceHeading(angle);
         });
@@ -136,10 +135,18 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
           if (diff < -180) diff += 360;
           if (Math.abs(diff) < 0.5) return;
           lastAngleRef.current = h;
+
+          sampleCount.current++;
+          if (sampleCount.current > 30 && !sensorReady) {
+            setSensorReady(true);
+            setNeedsCalibration(false);
+          }
+
           setDeviceHeading(h);
         });
         headingSubscription.current = sub;
       } catch {
+        // No sensor available at all — keep calibration banner visible
         setNeedsCalibration(true);
       }
     };
@@ -152,7 +159,7 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
     };
   }, []);
 
-  // Haptic on Qibla alignment (<5°)
+  // Haptic on Qibla alignment (<5°) — single fire
   useEffect(() => {
     if (absOffset < 5 && !qiblaHapticFired.current) {
       qiblaHapticFired.current = true;
@@ -161,16 +168,6 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
       qiblaHapticFired.current = false;
     }
   }, [absOffset]);
-
-  // Fade info bar on fast movement
-  useEffect(() => {
-    // Show info bar
-    Animated.timing(infoFadeAnim, {
-      toValue: 1,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }, [deviceHeading]);
 
   const precisionLabel = needsCalibration
     ? '🧭 Calibration nécessaire'
@@ -188,6 +185,18 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
 
       {/* Darkened overlay for better contrast */}
       <View style={styles.darkOverlay} />
+
+      {/* Calibration banner */}
+      {needsCalibration && (
+        <View style={styles.calibBanner}>
+          <Animated.View style={{ transform: [{ rotate: calibRotation }] }}>
+            <Ionicons name="sync" size={20} color="#FFF" />
+          </Animated.View>
+          <Text style={styles.calibBannerText}>
+            Calibrez votre boussole — Effectuez un mouvement en 8
+          </Text>
+        </View>
+      )}
 
       {/* Header */}
       <View style={styles.header}>
@@ -214,7 +223,7 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
       </View>
 
       {/* Info overlay */}
-      <Animated.View style={[styles.infoOverlay, { opacity: infoFadeAnim }]}>
+      <View style={styles.infoOverlay}>
         <View style={styles.infoRow}>
           <View style={styles.infoItem}>
             <Ionicons name="navigate" size={16} color={GOLD} />
@@ -237,7 +246,7 @@ export const ARQiblaView: React.FC<ARQiblaViewProps> = ({
         <View style={styles.calibrationRow}>
           <Text style={styles.calibrationText}>{precisionLabel}</Text>
         </View>
-      </Animated.View>
+      </View>
     </View>
   );
 };
@@ -250,6 +259,27 @@ const styles = StyleSheet.create({
   darkOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0,0,0,0.15)',
+  },
+  calibBanner: {
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? 100 : 80,
+    left: 20,
+    right: 20,
+    backgroundColor: 'rgba(0,0,0,0.8)',
+    height: 60,
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+    gap: 10,
+    zIndex: 20,
+  },
+  calibBannerText: {
+    color: '#FFF',
+    fontSize: 14,
+    fontWeight: '600',
+    flex: 1,
   },
   header: {
     position: 'absolute',
