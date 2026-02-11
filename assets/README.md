@@ -28,7 +28,7 @@ Créez les fichiers suivants :
 
 ## Création rapide
 
-Pour un développement rapide, vous pouvez créer des images placeholder avec un fond vert (#059669) et le texte "Barakaah".
+Pour un développement rapide, vous pouvez créer des images placeholder avec un fond vert (#059669) et le texte "Sakina".
 
 Utilisez un outil comme :
 - Canva

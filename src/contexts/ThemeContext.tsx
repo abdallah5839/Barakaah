@@ -11,7 +11,7 @@ import { Colors, ThemeMode } from '../constants/colors';
 type ThemeColors = { [K in keyof typeof Colors.light]: string };
 
 // Clé de stockage pour AsyncStorage
-const THEME_STORAGE_KEY = '@barakaah_theme';
+const THEME_STORAGE_KEY = '@sakina_theme';
 
 // Interface du contexte
 interface ThemeContextType {

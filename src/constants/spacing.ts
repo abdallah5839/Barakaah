@@ -1,5 +1,5 @@
 /**
- * Constantes d'espacement pour l'application Barakaah
+ * Constantes d'espacement pour l'application Sakina
  * Système de design cohérent basé sur des multiples de 4
  */
 

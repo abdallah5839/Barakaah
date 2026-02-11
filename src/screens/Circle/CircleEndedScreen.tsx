@@ -42,11 +42,11 @@ export const CircleEndedScreen: React.FC = () => {
     try {
       if (isKhatmaComplete) {
         await Share.share({
-          message: 'Alhamdulillah ! Notre cercle de lecture a complété une Khatma du Coran sur Barakaah !',
+          message: 'Alhamdulillah ! Notre cercle de lecture a complété une Khatma du Coran sur Sakina !',
         });
       } else {
         await Share.share({
-          message: `Notre cercle "${circleName}" a terminé avec ${completedJuz}/30 Juz lus (${percentage}%) sur Barakaah !`,
+          message: `Notre cercle "${circleName}" a terminé avec ${completedJuz}/30 Juz lus (${percentage}%) sur Sakina !`,
         });
       }
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);

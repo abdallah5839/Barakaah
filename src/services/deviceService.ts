@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Crypto from 'expo-crypto';
 
 // Clé de stockage pour l'identifiant de l'appareil
-const DEVICE_ID_KEY = '@barakaah_device_id';
+const DEVICE_ID_KEY = '@sakina_device_id';
 
 /**
  * Génère un UUID v4 unique

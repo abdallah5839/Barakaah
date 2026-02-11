@@ -15,11 +15,11 @@ import {
 
 // Clés AsyncStorage
 const STORAGE_KEYS = {
-  FAVORITES: '@barakaah_dua_favorites',
-  DISPLAY_PREFS: '@barakaah_dua_display_prefs',
-  LEARNING_PROGRESS: '@barakaah_dua_learning_progress',
-  AUDIO_POSITIONS: '@barakaah_dua_audio_positions',
-  KUMAYL_REMINDER: '@barakaah_dua_kumayl_reminder',
+  FAVORITES: '@sakina_dua_favorites',
+  DISPLAY_PREFS: '@sakina_dua_display_prefs',
+  LEARNING_PROGRESS: '@sakina_dua_learning_progress',
+  AUDIO_POSITIONS: '@sakina_dua_audio_positions',
+  KUMAYL_REMINDER: '@sakina_dua_kumayl_reminder',
 };
 
 // Valeurs par défaut

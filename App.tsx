@@ -1,5 +1,5 @@
 /**
- * App.tsx - Barakaah - Application Coranique Chiite Premium
+ * App.tsx - Sakina - Application Coranique Chiite Premium
  * Version 3.0 - Fonctionnalites completes
  */
 
@@ -23,6 +23,7 @@ import {
   InteractionManager,
   Share,
   KeyboardAvoidingView,
+  Image,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -42,7 +43,7 @@ import { PrayerTimes, Coordinates, CalculationMethod, CalculationParameters } fr
 import { DuaProvider, ThemeProvider as DuaThemeProvider } from './src/contexts';
 import { DeviceProvider } from './src/contexts/DeviceContext';
 import { DuaNavigator } from './src/navigation';
-import { QiblaScreen, CalendrierHijriScreen, AboutScreen, DownloadsScreen } from './src/screens';
+import { QiblaScreen, CalendrierHijriScreen, AboutScreen, DownloadsScreen, TasbihScreen } from './src/screens';
 import { CircleNavigator } from './src/navigation/CircleNavigator';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -233,7 +234,7 @@ const usePrayerTimesRealtime = (latitude: number, longitude: number, timezone: s
 };
 
 // ===== TYPES =====
-type ScreenName = 'home' | 'coran' | 'prieres' | 'ramadan' | 'dua' | 'settings' | 'qibla' | 'calendrier' | 'about' | 'downloads' | 'cercle';
+type ScreenName = 'home' | 'coran' | 'prieres' | 'ramadan' | 'dua' | 'settings' | 'qibla' | 'calendrier' | 'about' | 'downloads' | 'cercle' | 'tasbih';
 
 // Titres des écrans pour le header
 const SCREEN_TITLES: Record<ScreenName, string> = {
@@ -248,6 +249,7 @@ const SCREEN_TITLES: Record<ScreenName, string> = {
   about: 'À propos',
   downloads: 'Téléchargements',
   cercle: 'Cercle de Lecture',
+  tasbih: 'Tasbih',
 };
 
 interface Bookmark {
@@ -337,14 +339,14 @@ interface Settings {
 
 // ===== CONSTANTS =====
 const STORAGE_KEYS = {
-  SETTINGS: 'barakaah_settings',
-  BOOKMARKS: 'barakaah_bookmarks',
-  STREAK: 'barakaah_streak',
-  LAST_READ: 'barakaah_lastread',
-  RAMADAN_PROGRESS: 'barakaah_ramadan_progress',
-  RAMADAN_JOURNAL: 'barakaah_ramadan_journal',
-  FAVORITES: 'barakaah_favorites',
-  TODAY_READ_VERSES: 'barakaah_today_read_verses',
+  SETTINGS: 'sakina_settings',
+  BOOKMARKS: 'sakina_bookmarks',
+  STREAK: 'sakina_streak',
+  LAST_READ: 'sakina_lastread',
+  RAMADAN_PROGRESS: 'sakina_ramadan_progress',
+  RAMADAN_JOURNAL: 'sakina_ramadan_journal',
+  FAVORITES: 'sakina_favorites',
+  TODAY_READ_VERSES: 'sakina_today_read_verses',
 };
 
 const DEFAULT_SETTINGS: Settings = {
@@ -1240,7 +1242,7 @@ const getSurahVerses = (surahNumber: number) => {
 };
 
 // ===== DAILY VERSE (deterministic based on date) =====
-const DAILY_VERSE_LIKED_KEY = 'barakaah_daily_verse_liked';
+const DAILY_VERSE_LIKED_KEY = 'sakina_daily_verse_liked';
 
 // Total Quran verses = 6236. Build a cumulative index per surah for O(1) lookup.
 const surahCumulativeVerses: number[] = [];
@@ -1364,7 +1366,7 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
   }, [isDailyVerseLiked, dailyVerse]);
 
   const handleDailyVerseShare = useCallback(async () => {
-    const text = `${dailyVerse.arabic}\n\n"${dailyVerse.french}"\n\nSourate ${dailyVerse.surahName} (${dailyVerse.surahNumber}:${dailyVerse.verseNumber})\n\n- Partagé depuis l'app Barakaah`;
+    const text = `${dailyVerse.arabic}\n\n"${dailyVerse.french}"\n\nSourate ${dailyVerse.surahName} (${dailyVerse.surahNumber}:${dailyVerse.verseNumber})\n\n- Partagé depuis l'app Sakina`;
     try { await Share.share({ message: text }); } catch {}
   }, [dailyVerse]);
 
@@ -1564,12 +1566,12 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
       {/* ===== PREMIUM HEADER WITH GRADIENT ===== */}
       <LinearGradient colors={colors.headerGradient} style={homeStyles.headerGradient}>
         <FadeInView delay={50} style={homeStyles.headerTop}>
-          <View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-              <Text style={homeStyles.logoText}>Barakaah</Text>
-              <Text style={{ fontSize: 18, color: colors.secondary }}>☪</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <Image source={require('./assets/logo.png')} style={{ width: 44, height: 44, borderRadius: 12 }} />
+            <View>
+              <Text style={homeStyles.logoText}>Sakina</Text>
+              <Text style={{ fontSize: 14, color: colors.secondary, fontWeight: '500', marginTop: 1 }}>سكينة</Text>
             </View>
-            <Text style={{ fontSize: 18, color: colors.secondary, fontWeight: '500', marginTop: 2 }}>بركة</Text>
           </View>
           <View style={{ flexDirection: 'row', gap: 10 }}>
             <PressableScale onPress={toggleTheme}>
@@ -1614,6 +1616,7 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
             { name: 'coran' as ScreenName, label: 'Coran', icon: 'book-outline', bg: [colors.primary, '#0F4C35'] },
             { name: 'qibla' as ScreenName, label: 'Qibla', icon: 'compass-outline', bg: ['#0891B2', '#0E7490'] },
             { name: 'dua' as ScreenName, label: 'Dua', icon: 'hand-right-outline', bg: [colors.secondary, colors.secondaryDark] },
+            { name: 'tasbih' as ScreenName, label: 'Tasbih', icon: 'radio-button-on-outline', bg: ['#D4AF37', '#B8860B'] },
             { name: 'ramadan' as ScreenName, label: 'Ramadan', icon: 'sparkles-outline', bg: ['#7C3AED', '#4C1D95'] },
           ].map((item, i) => (
             <ScaleInView key={item.name} delay={150 + i * 60}>
@@ -2029,11 +2032,11 @@ const VerseCard = React.memo(({ verse, colors, showArabic, showTranslation, show
       coranStyles.verseCard,
       { backgroundColor: colors.surface },
       bookmarked && { borderLeftWidth: 4, borderLeftColor: bookmarkColor },
-      isCurrentAudio && { borderColor: colors.primary + '30', borderWidth: 1 }
+      isCurrentAudio && { backgroundColor: colors.primary + '10', borderColor: colors.primary, borderWidth: 1.5 }
     ]}>
       <View style={coranStyles.verseHeader}>
-        <View style={[coranStyles.verseBadge, { borderColor: colors.secondary }]}>
-          <Text style={[coranStyles.verseNumText, { color: colors.secondary }]}>{verse.num}</Text>
+        <View style={[coranStyles.verseBadge, { borderColor: isCurrentAudio ? colors.primary : colors.secondary, backgroundColor: isCurrentAudio ? colors.primary + '15' : 'transparent' }]}>
+          <Text style={[coranStyles.verseNumText, { color: isCurrentAudio ? colors.primary : colors.secondary }]}>{verse.num}</Text>
         </View>
         <PressableScale onPress={() => onBookmark(verse.num)}>
           <Ionicons
@@ -2222,6 +2225,8 @@ const CoranScreen = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentAudioVerse, setCurrentAudioVerse] = useState(1);
   const [audioProgress, setAudioProgress] = useState(0);
+  const autoScrollEnabledRef = useRef(true);
+  const userScrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     return () => {
@@ -2373,12 +2378,22 @@ const CoranScreen = () => {
       setIsPlaying(true);
       setCurrentAudioVerse(verseNum);
 
+      // Auto-scroll to the verse being played
+      if (autoScrollEnabledRef.current && flatListRef.current) {
+        const idx = verseNum - 1;
+        if (idx >= 0 && idx < currentVerses.length) {
+          try { flatListRef.current.scrollToIndex({ index: idx, animated: true, viewPosition: 0.2 }); } catch {}
+        }
+      }
+
       newSound.setOnPlaybackStatusUpdate((status) => {
         if (status.isLoaded) {
           if (status.durationMillis) {
             setAudioProgress(status.positionMillis / status.durationMillis);
           }
           if (status.didJustFinish) {
+            // Re-enable auto-scroll when transitioning to next verse
+            autoScrollEnabledRef.current = true;
             if (verseNum < currentVerses.length) {
               playVerse(verseNum + 1);
             } else {
@@ -2471,7 +2486,7 @@ const CoranScreen = () => {
   }, [favoriteMap, currentSurah, removeFavorite, addFavorite]);
 
   const shareVerse = useCallback(async (verse: { num: number; ar: string; fr: string }) => {
-    const text = `Sourate ${currentSurah.name}, Verset ${verse.num}\n\n${verse.ar}\n\n"${verse.fr}"\n\n- Partagé via l'app Barakaah`;
+    const text = `Sourate ${currentSurah.name}, Verset ${verse.num}\n\n${verse.ar}\n\n"${verse.fr}"\n\n- Partagé via l'app Sakina`;
     try { await Share.share({ message: text }); } catch {}
   }, [currentSurah.name]);
 
@@ -2627,6 +2642,12 @@ const CoranScreen = () => {
           onViewableItemsChanged={onViewableItemsChanged}
           viewabilityConfig={viewabilityConfig}
           ListFooterComponent={ListFooter}
+          onScrollBeginDrag={() => {
+            if (isPlaying) {
+              autoScrollEnabledRef.current = false;
+              if (userScrollTimerRef.current) clearTimeout(userScrollTimerRef.current);
+            }
+          }}
           onScrollToIndexFailed={(info) => {
             setTimeout(() => {
               if (flatListRef.current) {
@@ -3332,7 +3353,7 @@ const SettingsScreen = () => {
         <Section title="A PROPOS" icon="information-circle-outline">
           <SettingRow label="Version" value="1.0.0" />
           <SettingRow
-            label="À propos de Barakaah"
+            label="À propos de Sakina"
             onPress={() => navigation.navigate('about')}
           />
         </Section>
@@ -4584,12 +4605,7 @@ const AppContent = () => {
       case 'dua': return (
         <DuaThemeProvider>
           <View style={{ flex: 1 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 }}>
-              <Pressable onPress={goBack} style={{ padding: 8 }}>
-                <Ionicons name="arrow-back" size={24} color={isDark ? '#FFF' : '#000'} />
-              </Pressable>
-            </View>
-            <DuaNavigator />
+            <DuaNavigator onGoHome={goBack} />
           </View>
         </DuaThemeProvider>
       );
@@ -4610,6 +4626,7 @@ const AppContent = () => {
         </DuaThemeProvider>
       );
       case 'downloads': return <DownloadsScreen navigation={{ goBack }} isDark={isDark} />;
+      case 'tasbih': return <TasbihScreen navigation={{ goBack: () => goBack() }} isDark={isDark} />;
     }
   };
 

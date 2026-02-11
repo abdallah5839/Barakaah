@@ -7,7 +7,7 @@ export * from './typography';
 export * from './spacing';
 
 // Constantes de l'application
-export const APP_NAME = 'Barakaah';
+export const APP_NAME = 'Sakina';
 
 // Coordonnées par défaut (Abidjan, Côte d'Ivoire)
 export const DEFAULT_COORDINATES = {

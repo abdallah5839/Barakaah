@@ -1,6 +1,6 @@
 -- =====================================================
 -- Migration: Création des tables pour le module Cercle de Lecture (Khatma)
--- Application: Barakaah
+-- Application: Sakina
 -- Date: 2026-02
 -- =====================================================
 

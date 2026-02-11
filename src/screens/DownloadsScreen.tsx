@@ -47,9 +47,9 @@ const Colors = {
 
 // Clés de stockage
 const STORAGE_KEYS = {
-  QURAN_DOWNLOADED: '@barakaah_quran_downloaded',
-  DUAS_DOWNLOADED: '@barakaah_duas_downloaded',
-  AUDIO_DOWNLOADED: '@barakaah_audio_downloaded',
+  QURAN_DOWNLOADED: '@sakina_quran_downloaded',
+  DUAS_DOWNLOADED: '@sakina_duas_downloaded',
+  AUDIO_DOWNLOADED: '@sakina_audio_downloaded',
 };
 
 interface DownloadItem {
