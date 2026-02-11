@@ -20,7 +20,8 @@
       "bundleIdentifier": "com.sakina.app",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "L'application a besoin de votre localisation pour calculer les horaires de prière précis et la direction de la Qibla.",
-        "NSMotionUsageDescription": "L'application utilise les capteurs de mouvement pour la boussole Qibla."
+        "NSMotionUsageDescription": "L'application utilise les capteurs de mouvement pour la boussole Qibla.",
+        "NSCameraUsageDescription": "L'application utilise la caméra pour le mode AR de la boussole Qibla."
       }
     },
     "android": {
@@ -32,7 +33,8 @@
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
-        "HIGH_SAMPLING_RATE_SENSORS"
+        "HIGH_SAMPLING_RATE_SENSORS",
+        "CAMERA"
       ]
     },
     "web": {
@@ -43,7 +45,8 @@
       "expo-location",
       "expo-asset",
       "expo-sensors",
-      "expo-notifications"
+      "expo-notifications",
+      "expo-camera"
     ],
     "extra": {
       "eas": {
