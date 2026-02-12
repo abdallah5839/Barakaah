@@ -61,9 +61,9 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({ navigation, isDark = f
   const handleShare = async () => {
     try {
       await Share.share({
-        title: 'Sakina - Application Islamique Chiite',
+        title: 'Sakina - Application Islamique',
         message:
-          'Découvrez Sakina, une application complète pour les musulmans chiites. Coran, Duas, horaires de prière et plus encore !\n\nTéléchargez-la maintenant !',
+          'Découvrez Sakina, une application islamique complète. Coran, Duas, horaires de prière et plus encore !\n\nTéléchargez-la maintenant !',
       });
     } catch (error) {
       console.error('Erreur partage:', error);
@@ -104,7 +104,7 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({ navigation, isDark = f
         {/* Description */}
         <View style={[styles.descriptionCard, { backgroundColor: colors.surface }, Shadows.small]}>
           <Text style={[styles.descriptionText, { color: colors.text }]}>
-            Sakina est une application islamique complète dédiée à la communauté chiite.
+            Sakina est une application islamique complète.
             Elle offre un accès au Saint Coran avec traduction, une collection de Duas
             authentiques, les horaires de prière précis, et de nombreuses autres fonctionnalités
             pour accompagner votre pratique spirituelle quotidienne.
@@ -126,7 +126,7 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({ navigation, isDark = f
             <FeatureItem
               icon="hand-left"
               title="Duas & Invocations"
-              description="Collection de prières chiites authentiques"
+              description="Collection de prières authentiques"
               color={colors.secondary}
               textColor={colors.text}
               textSecondaryColor={colors.textSecondary}
@@ -185,7 +185,7 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({ navigation, isDark = f
             />
             <CreditItem
               title="Textes des Duas"
-              value="Sources chiites traditionnelles"
+              value="Sources traditionnelles authentiques"
               color={colors.text}
               secondaryColor={colors.textSecondary}
             />
@@ -220,34 +220,13 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({ navigation, isDark = f
           </Pressable>
         </View>
 
-        {/* Liens légaux */}
-        <View style={styles.legalSection}>
-          <Pressable
-            style={styles.legalLink}
-            onPress={() => openLink('https://sakina.app/privacy')}
-          >
-            <Text style={[styles.legalLinkText, { color: colors.textSecondary }]}>
-              Politique de confidentialité
-            </Text>
-          </Pressable>
-          <Text style={[styles.legalSeparator, { color: colors.border }]}>•</Text>
-          <Pressable
-            style={styles.legalLink}
-            onPress={() => openLink('https://sakina.app/terms')}
-          >
-            <Text style={[styles.legalLinkText, { color: colors.textSecondary }]}>
-              Conditions d'utilisation
-            </Text>
-          </Pressable>
-        </View>
-
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={[styles.footerText, { color: colors.textSecondary }]}>
             Développé avec ❤️ pour la communauté
           </Text>
           <Text style={[styles.footerCopyright, { color: colors.textSecondary }]}>
-            © 2024 Sakina. Tous droits réservés.
+            © 2026 Sakina. Tous droits réservés.
           </Text>
         </View>
 
@@ -459,23 +438,6 @@ const styles = StyleSheet.create({
   actionButtonOutlineText: {
     fontSize: Typography.sizes.md,
     fontWeight: Typography.weights.semibold,
-  },
-  legalSection: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: Spacing.xl,
-    gap: Spacing.md,
-  },
-  legalLink: {
-    padding: Spacing.xs,
-  },
-  legalLinkText: {
-    fontSize: Typography.sizes.sm,
-    textDecorationLine: 'underline',
-  },
-  legalSeparator: {
-    fontSize: Typography.sizes.sm,
   },
   footer: {
     alignItems: 'center',

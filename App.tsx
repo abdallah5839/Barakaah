@@ -64,6 +64,7 @@ interface PrayerInfo {
   icon: string;
   passed: boolean;
   isNext: boolean;
+  isSunrise: boolean;
 }
 
 interface NextPrayerInfo {
@@ -104,7 +105,7 @@ const calculatePrayerTimesForLocation = (
   longitude: number,
   timezone: string,
   adjustments?: { [key: string]: number }
-): { fajr: string; dhuhr: string; asr: string; maghrib: string; isha: string } => {
+): { fajr: string; sunrise: string; dhuhr: string; asr: string; maghrib: string; isha: string } => {
   const coords = new Coordinates(latitude, longitude);
   const params = createJafariParams(adjustments);
   const now = momentTz().tz(timezone);
@@ -113,6 +114,7 @@ const calculatePrayerTimesForLocation = (
 
   return {
     fajr: momentTz(times.fajr).tz(timezone).format('HH:mm'),
+    sunrise: momentTz(times.sunrise).tz(timezone).format('HH:mm'),
     dhuhr: momentTz(times.dhuhr).tz(timezone).format('HH:mm'),
     asr: momentTz(times.asr).tz(timezone).format('HH:mm'),
     maghrib: momentTz(times.maghrib).tz(timezone).format('HH:mm'),
@@ -132,11 +134,12 @@ const getPrayersWithStatus = (
   const currentTimeStr = now.format('HH:mm:ss');
 
   const prayersList = [
-    { name: 'Sobh', ar: 'الصبح', time: times.fajr, icon: 'sunny-outline' },
-    { name: 'Dohr', ar: 'الظهر', time: times.dhuhr, icon: 'sunny' },
-    { name: 'Asr', ar: 'العصر', time: times.asr, icon: 'partly-sunny-outline' },
-    { name: 'Maghrib', ar: 'المغرب', time: times.maghrib, icon: 'moon-outline' },
-    { name: 'Icha', ar: 'العشاء', time: times.isha, icon: 'cloudy-night-outline' },
+    { name: 'Sobh', ar: 'الصبح', time: times.fajr, icon: 'sunny-outline', isSunrise: false },
+    { name: 'Chourouk', ar: 'الشروق', time: times.sunrise, icon: 'sunny', isSunrise: true },
+    { name: 'Dohr', ar: 'الظهر', time: times.dhuhr, icon: 'sunny', isSunrise: false },
+    { name: 'Asr', ar: 'العصر', time: times.asr, icon: 'partly-sunny-outline', isSunrise: false },
+    { name: 'Maghrib', ar: 'المغرب', time: times.maghrib, icon: 'moon-outline', isSunrise: false },
+    { name: 'Icha', ar: 'العشاء', time: times.isha, icon: 'cloudy-night-outline', isSunrise: false },
   ];
 
   let nextPrayer: NextPrayerInfo | null = null;
@@ -147,7 +150,8 @@ const getPrayersWithStatus = (
     const isPassed = currentTimeStr >= prayerTimeWithSeconds;
     let isNext = false;
 
-    if (!nextPrayer && !isPassed) {
+    // Chourouk n'est jamais "prochaine prière" — c'est une heure informative
+    if (!nextPrayer && !isPassed && !prayer.isSunrise) {
       isNext = true;
       nextPrayer = { name: prayer.name, ar: prayer.ar, time: prayer.time, icon: prayer.icon };
       nextPrayerTime = prayer.time;
@@ -1447,7 +1451,7 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
   }, []);
 
   // Utiliser le hook temps réel pour les horaires de prière
-  const { nextPrayer, countdown, currentTime } = usePrayerTimesRealtime(
+  const { prayers: homePrayers, nextPrayer, countdown, currentTime } = usePrayerTimesRealtime(
     settings.latitude || DEFAULT_LATITUDE,
     settings.longitude || DEFAULT_LONGITUDE,
     settings.timezone || DEFAULT_TIMEZONE,
@@ -1612,12 +1616,12 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
       <FadeInView delay={150}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={homeStyles.quickAccessRow}>
           {[
-            { name: 'prieres' as ScreenName, label: 'Prieres', icon: 'moon-outline', bg: [colors.primary, colors.primaryDark] },
             { name: 'coran' as ScreenName, label: 'Coran', icon: 'book-outline', bg: [colors.primary, '#0F4C35'] },
-            { name: 'qibla' as ScreenName, label: 'Qibla', icon: 'compass-outline', bg: ['#0891B2', '#0E7490'] },
             { name: 'dua' as ScreenName, label: 'Dua', icon: 'hand-right-outline', bg: [colors.secondary, colors.secondaryDark] },
-            { name: 'tasbih' as ScreenName, label: 'Tasbih', icon: 'radio-button-on-outline', bg: ['#D4AF37', '#B8860B'] },
             { name: 'ramadan' as ScreenName, label: 'Ramadan', icon: 'sparkles-outline', bg: ['#7C3AED', '#4C1D95'] },
+            { name: 'qibla' as ScreenName, label: 'Qibla', icon: 'compass-outline', bg: ['#0891B2', '#0E7490'] },
+            { name: 'tasbih' as ScreenName, label: 'Tasbih', icon: 'radio-button-on-outline', bg: ['#D4AF37', '#B8860B'] },
+            { name: 'prieres' as ScreenName, label: 'Prieres', icon: 'moon-outline', bg: [colors.primary, colors.primaryDark] },
           ].map((item, i) => (
             <ScaleInView key={item.name} delay={150 + i * 60}>
               <PressableScale onPress={() => onNavigate(item.name)} style={homeStyles.quickAccessItem}>
@@ -1667,6 +1671,35 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
                 </LinearGradient>
               </View>
             </PressableScale>
+          </FadeInView>
+        )}
+
+        {/* ===== COMPACT PRAYER TIMES ROW ===== */}
+        {homePrayers.length > 0 && (
+          <FadeInView delay={250}>
+            <View style={[homeStyles.card, { backgroundColor: colors.surface, paddingVertical: 12, paddingHorizontal: 10 }]}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-start' }}>
+                {homePrayers.map((p) => (
+                  <View key={p.name} style={{ alignItems: 'center', flex: 1 }}>
+                    <Text style={{
+                      fontSize: 10,
+                      fontWeight: p.isNext ? '700' : '500',
+                      color: p.isSunrise ? colors.secondary : p.isNext ? colors.primary : p.passed ? colors.textMuted : colors.textSecondary,
+                      marginBottom: 3,
+                    }}>
+                      {p.isSunrise ? '☀️' : p.name}
+                    </Text>
+                    <Text style={{
+                      fontSize: 13,
+                      fontWeight: p.isNext ? '800' : '600',
+                      color: p.isSunrise ? colors.secondary : p.isNext ? colors.primary : p.passed ? colors.textMuted : colors.text,
+                    }}>
+                      {p.time}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            </View>
           </FadeInView>
         )}
 
@@ -2828,8 +2861,8 @@ const PrieresScreen = () => {
   const fmt = (n: number) => n.toString().padStart(2, '0');
   const countdownStr = `Dans ${fmt(countdown.h)}h ${fmt(countdown.m)}min ${fmt(countdown.s)}s`;
 
-  // Progress (how many passed)
-  const passedCount = prayers.filter(p => p.passed).length;
+  // Progress (how many passed) — Chourouk ne compte pas
+  const passedCount = prayers.filter(p => p.passed && !p.isSunrise).length;
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
@@ -2921,10 +2954,6 @@ const PrieresScreen = () => {
                 style={[prieresStyles.progressFill, { width: `${(passedCount / 5) * 100}%` as any }]}
               />
             </View>
-            <View style={prieresStyles.methodRow}>
-              <Ionicons name="options-outline" size={12} color={colors.textMuted} />
-              <Text style={[prieresStyles.methodText, { color: colors.textMuted }]}>Methode {settings.calculationMethod}</Text>
-            </View>
           </View>
         </FadeInView>
 
@@ -2936,36 +2965,40 @@ const PrieresScreen = () => {
                 prieresStyles.prayerRow,
                 { backgroundColor: colors.surface },
                 p.isNext && { borderWidth: 2, borderColor: colors.secondary + '50', shadowColor: colors.primary, shadowOpacity: 0.15, shadowRadius: 12, elevation: 6 },
-                p.passed && { opacity: 0.55 }
+                p.passed && !p.isSunrise && { opacity: 0.55 },
+                p.isSunrise && { opacity: 0.8, borderLeftWidth: 3, borderLeftColor: colors.secondary + '60' },
               ]}>
-                <View style={[prieresStyles.prayerIconBox, { backgroundColor: p.isNext ? colors.primary : colors.primary + '12' }]}>
-                  <Ionicons name={p.icon as any} size={20} color={p.isNext ? '#FFF' : colors.primary} />
+                <View style={[prieresStyles.prayerIconBox, {
+                  backgroundColor: p.isSunrise
+                    ? colors.secondary + '20'
+                    : p.isNext ? colors.primary : colors.primary + '12'
+                }]}>
+                  <Ionicons name={p.icon as any} size={20} color={p.isSunrise ? colors.secondary : p.isNext ? '#FFF' : colors.primary} />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={[prieresStyles.prayerRowName, { color: colors.text }]}>{p.name}</Text>
-                  <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{p.ar}</Text>
+                  <Text style={[
+                    p.isSunrise ? { fontSize: 14, fontWeight: '500' as const } : prieresStyles.prayerRowName,
+                    { color: p.isSunrise ? colors.secondary : colors.text }
+                  ]}>{p.name}</Text>
+                  <Text style={{ color: p.isSunrise ? colors.secondary + 'AA' : colors.textSecondary, fontSize: 12 }}>{p.ar}</Text>
                 </View>
                 {p.isNext && (
                   <View style={[prieresStyles.nextBadge, { backgroundColor: colors.secondary }]}>
                     <Text style={prieresStyles.nextBadgeText}>SUIVANTE</Text>
                   </View>
                 )}
-                {p.passed && <Ionicons name="checkmark-circle" size={18} color={colors.success} style={{ marginRight: 8 }} />}
-                <Text style={[prieresStyles.prayerRowTime, { color: p.isNext ? colors.primary : colors.text }]}>{p.time}</Text>
+                {p.isSunrise && (
+                  <Text style={{ fontSize: 10, color: colors.secondary + 'AA', marginRight: 8 }}>Lever du soleil</Text>
+                )}
+                {p.passed && !p.isSunrise && <Ionicons name="checkmark-circle" size={18} color={colors.success} style={{ marginRight: 8 }} />}
+                <Text style={[
+                  p.isSunrise ? { fontSize: 18, fontWeight: '600' as const } : prieresStyles.prayerRowTime,
+                  { color: p.isSunrise ? colors.secondary : p.isNext ? colors.primary : colors.text }
+                ]}>{p.time}</Text>
               </View>
             </FadeInView>
           ))}
         </View>
-
-        {/* ===== NOTE ===== */}
-        <FadeInView delay={700}>
-          <View style={[prieresStyles.noteCard, { backgroundColor: colors.surface }]}>
-            <Ionicons name="information-circle-outline" size={16} color={colors.secondary} />
-            <Text style={[prieresStyles.noteText, { color: colors.textSecondary }]}>
-              Horaires calcules selon la methode Jafari (Teheran). Ajustez via les reglages si necessaire.
-            </Text>
-          </View>
-        </FadeInView>
 
         <View style={{ height: 120 }} />
       </ScrollView>

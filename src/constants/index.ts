@@ -19,12 +19,12 @@ export const DEFAULT_COORDINATES = {
 
 // Noms des prières
 export const PRAYER_NAMES = {
-  fajr: { french: 'Fajr', arabic: 'الفجر' },
-  sunrise: { french: 'Lever du soleil', arabic: 'الشروق' },
-  dhuhr: { french: 'Dhuhr', arabic: 'الظهر' },
+  fajr: { french: 'Sobh', arabic: 'الصبح' },
+  sunrise: { french: 'Chourouk', arabic: 'الشروق' },
+  dhuhr: { french: 'Dohr', arabic: 'الظهر' },
   asr: { french: 'Asr', arabic: 'العصر' },
-  maghrib: { french: 'Maghrib', arabic: 'المغرب' },
-  isha: { french: 'Isha', arabic: 'العشاء' },
+  maghrib: { french: 'Maghreb', arabic: 'المغرب' },
+  isha: { french: 'Icha', arabic: 'العشاء' },
 } as const;
 
 // Jours de la semaine en français

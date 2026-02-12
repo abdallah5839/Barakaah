@@ -10,12 +10,12 @@ import { Spacing, Typography, Shadows } from '../constants';
 import type { Prayer } from '../hooks';
 
 const PRAYER_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
-  Fajr: 'sunny-outline',
-  'Lever du soleil': 'sunny',
-  Dhuhr: 'sunny',
+  Sobh: 'sunny-outline',
+  Chourouk: 'sunny',
+  Dohr: 'sunny',
   Asr: 'partly-sunny-outline',
-  Maghrib: 'cloudy-night-outline',
-  Isha: 'moon-outline',
+  Maghreb: 'cloudy-night-outline',
+  Icha: 'moon-outline',
 };
 
 interface PrayerCardProps {
@@ -29,6 +29,7 @@ export const PrayerCard: React.FC<PrayerCardProps> = ({
 }) => {
   const { colors } = useTheme();
   const { isPassed, isNext } = prayer;
+  const isSunrise = prayer.name === 'sunrise';
   const iconName = PRAYER_ICONS[prayer.nameFrench] || 'time-outline';
 
   return (
@@ -36,37 +37,41 @@ export const PrayerCard: React.FC<PrayerCardProps> = ({
       style={[
         styles.container,
         { backgroundColor: isPassed ? colors.surface + '80' : colors.surface },
-        !isPassed && Shadows.small,
+        !isPassed && !isSunrise && Shadows.small,
+        isSunrise && { opacity: 0.85 },
         isNext && { borderLeftWidth: 3, borderLeftColor: colors.primary },
-        isPassed && { borderLeftWidth: 3, borderLeftColor: colors.success + '40' },
-        !isNext && !isPassed && { borderLeftWidth: 3, borderLeftColor: 'transparent' },
+        isPassed && !isSunrise && { borderLeftWidth: 3, borderLeftColor: colors.success + '40' },
+        isSunrise && { borderLeftWidth: 3, borderLeftColor: colors.secondary + '60' },
+        !isNext && !isPassed && !isSunrise && { borderLeftWidth: 3, borderLeftColor: 'transparent' },
       ]}
     >
       <View
         style={[
           styles.iconWrap,
           {
-            backgroundColor: isNext
-              ? colors.primaryLight
-              : isPassed
-                ? colors.success + '15'
-                : colors.separator,
+            backgroundColor: isSunrise
+              ? colors.secondary + '20'
+              : isNext
+                ? colors.primaryLight
+                : isPassed
+                  ? colors.success + '15'
+                  : colors.separator,
           },
         ]}
       >
         <Ionicons
-          name={isPassed ? 'checkmark-circle' : iconName}
+          name={isPassed && !isSunrise ? 'checkmark-circle' : iconName}
           size={20}
-          color={isNext ? colors.primary : isPassed ? colors.success : colors.textSecondary}
+          color={isSunrise ? colors.secondary : isNext ? colors.primary : isPassed ? colors.success : colors.textSecondary}
         />
       </View>
 
       <View style={styles.nameCol}>
         <Text
           style={[
-            styles.name,
-            { color: isPassed ? colors.textMuted : colors.text },
-            isPassed && styles.passedText,
+            isSunrise ? styles.sunriseName : styles.name,
+            { color: isSunrise ? colors.secondary : isPassed ? colors.textMuted : colors.text },
+            isPassed && !isSunrise && styles.passedText,
           ]}
         >
           {prayer.nameFrench}
@@ -74,7 +79,7 @@ export const PrayerCard: React.FC<PrayerCardProps> = ({
         <Text
           style={[
             styles.arabic,
-            { color: isPassed ? colors.textMuted : colors.textSecondary },
+            { color: isSunrise ? colors.secondary + 'AA' : isPassed ? colors.textMuted : colors.textSecondary },
           ]}
         >
           {prayer.nameArabic}
@@ -84,12 +89,15 @@ export const PrayerCard: React.FC<PrayerCardProps> = ({
       <View style={styles.rightCol}>
         <Text
           style={[
-            styles.time,
-            { color: isNext ? colors.primary : isPassed ? colors.textMuted : colors.text },
+            isSunrise ? styles.sunriseTime : styles.time,
+            { color: isSunrise ? colors.secondary : isNext ? colors.primary : isPassed ? colors.textMuted : colors.text },
           ]}
         >
           {prayer.timeString}
         </Text>
+        {isSunrise && (
+          <Text style={[styles.passedLabel, { color: colors.secondary + 'AA' }]}>Lever du soleil</Text>
+        )}
         {isNext && countdown && (
           <View style={[styles.badge, { backgroundColor: colors.primaryLight }]}>
             <Text style={[styles.badgeText, { color: colors.primary }]}>
@@ -102,7 +110,7 @@ export const PrayerCard: React.FC<PrayerCardProps> = ({
             <Text style={[styles.badgeText, { color: colors.primary }]}>Prochaine</Text>
           </View>
         )}
-        {isPassed && (
+        {isPassed && !isSunrise && (
           <Text style={[styles.passedLabel, { color: colors.success }]}>Terminée</Text>
         )}
       </View>
@@ -134,6 +142,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 2,
   },
+  sunriseName: {
+    fontSize: Typography.sizes.sm,
+    fontWeight: '500',
+    marginBottom: 2,
+  },
   passedText: {
     textDecorationLine: 'line-through',
   },
@@ -146,6 +159,10 @@ const styles = StyleSheet.create({
   time: {
     fontSize: Typography.sizes.xl,
     fontWeight: '700',
+  },
+  sunriseTime: {
+    fontSize: Typography.sizes.lg,
+    fontWeight: '600',
   },
   badge: {
     paddingHorizontal: 8,

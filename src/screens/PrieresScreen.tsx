@@ -40,7 +40,7 @@ export const PrieresScreen: React.FC = () => {
     setRefreshing(false);
   }, [refresh]);
 
-  const passedCount = prayers.filter(p => p.isPassed).length;
+  const passedCount = prayers.filter(p => p.isPassed && p.name !== 'sunrise').length;
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
