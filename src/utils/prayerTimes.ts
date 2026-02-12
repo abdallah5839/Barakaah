@@ -17,7 +17,7 @@ import { DEFAULT_COORDINATES, PRAYER_NAMES } from '../constants';
 const DEFAULT_TIMEZONE = 'Africa/Abidjan';
 
 // Types pour les prières
-export type PrayerName = 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha';
+export type PrayerName = 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 'isha';
 
 export interface Prayer {
   name: PrayerName;
@@ -157,6 +157,13 @@ export const calculatePrayerTimes = (
       timeString: formatTime(prayerTimes.fajr, timezone),
     },
     {
+      name: 'sunrise',
+      nameFrench: PRAYER_NAMES.sunrise.french,
+      nameArabic: PRAYER_NAMES.sunrise.arabic,
+      time: prayerTimes.sunrise,
+      timeString: formatTime(prayerTimes.sunrise, timezone),
+    },
+    {
       name: 'dhuhr',
       nameFrench: PRAYER_NAMES.dhuhr.french,
       nameArabic: PRAYER_NAMES.dhuhr.arabic,
@@ -199,10 +206,14 @@ export const calculatePrayerTimes = (
 
   for (let i = 0; i < prayers.length; i++) {
     const prayerMoment = moment(prayers[i].time).tz(timezone);
-    if (prayerMoment.isAfter(now)) {
+    if (prayerMoment.isAfter(now) && prayers[i].name !== 'sunrise') {
       nextPrayer = prayers[i];
-      if (i > 0) {
-        currentPrayer = prayers[i - 1].name;
+      // Trouver la dernière prière passée (en ignorant sunrise)
+      for (let j = i - 1; j >= 0; j--) {
+        if (prayers[j].name !== 'sunrise') {
+          currentPrayer = prayers[j].name;
+          break;
+        }
       }
       break;
     }

@@ -16,7 +16,7 @@ import { DEFAULT_COORDINATES, PRAYER_NAMES } from '../constants';
 const TIMEZONE = 'Africa/Abidjan';
 
 // Types
-export type PrayerName = 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha';
+export type PrayerName = 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 'isha';
 
 export interface Prayer {
   name: PrayerName;
@@ -106,6 +106,15 @@ export const usePrayerTimes = (): UsePrayerTimesResult => {
         isNext: false,
       },
       {
+        name: 'sunrise',
+        nameFrench: PRAYER_NAMES.sunrise.french,
+        nameArabic: PRAYER_NAMES.sunrise.arabic,
+        time: times.sunrise,
+        timeString: moment(times.sunrise).tz(TIMEZONE).format('HH:mm'),
+        isPassed: false,
+        isNext: false,
+      },
+      {
         name: 'dhuhr',
         nameFrench: PRAYER_NAMES.dhuhr.french,
         nameArabic: PRAYER_NAMES.dhuhr.arabic,
@@ -143,8 +152,9 @@ export const usePrayerTimes = (): UsePrayerTimesResult => {
       },
     ];
 
-    console.log('Horaires calculés:');
-    prayersList.forEach(p => console.log(`  ${p.nameFrench}: ${p.timeString}`));
+    console.log('Horaires calculés (6 dont Chourouk):');
+    prayersList.forEach(p => console.log(`  ${p.nameFrench} (${p.name}): ${p.timeString}`));
+    console.log('Sunrise brut adhan:', times.sunrise);
 
     // Calcul Fajr demain
     const tomorrowDate = new Date(now.year(), now.month(), now.date() + 1);
@@ -189,12 +199,17 @@ export const usePrayerTimes = (): UsePrayerTimesResult => {
       const prayerMoment = moment(prayer.time).tz(TIMEZONE);
       const isPassed = now.isAfter(prayerMoment);
 
+      // Chourouk n'est jamais "prochaine prière" — c'est une heure informative
       let isNext = false;
-      if (!foundNextPrayer && !isPassed) {
+      if (!foundNextPrayer && !isPassed && prayer.name !== 'sunrise') {
         isNext = true;
         foundNextPrayer = { ...prayer, isPassed, isNext: true };
-        if (index > 0) {
-          foundCurrentPrayer = todayPrayers[index - 1].name;
+        // Trouver la dernière prière passée (en ignorant sunrise)
+        for (let j = index - 1; j >= 0; j--) {
+          if (todayPrayers[j].name !== 'sunrise') {
+            foundCurrentPrayer = todayPrayers[j].name;
+            break;
+          }
         }
       }
 

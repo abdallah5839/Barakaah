@@ -135,6 +135,7 @@ export const HomeScreen: React.FC = () => {
   const [showCircleModal, setShowCircleModal] = useState(false);
 
   const {
+    prayers,
     nextPrayer,
     countdown,
     countdownString,
@@ -239,6 +240,40 @@ export const HomeScreen: React.FC = () => {
             countdownString={countdownString}
           />
         </AnimatedCard>
+
+        {/* ===== HORAIRES DU JOUR ===== */}
+        {prayers.length > 0 && (
+          <AnimatedCard delay={75} style={[styles.prayerTimesCard, { backgroundColor: colors.surface }, Shadows.small]}>
+            <View style={styles.prayerTimesRow}>
+              {prayers.map((p) => {
+                const isSunrise = p.name === 'sunrise';
+                return (
+                  <View key={p.name} style={styles.prayerTimeItem}>
+                    <Text style={[
+                      styles.prayerTimeLabel,
+                      { color: isSunrise ? colors.secondary : p.isNext ? colors.primary : p.isPassed ? colors.textMuted : colors.textSecondary },
+                      p.isNext && styles.prayerTimeLabelActive,
+                    ]}>
+                      {isSunrise ? '☀️' : p.nameFrench}
+                    </Text>
+                    <Text style={[
+                      styles.prayerTimeValue,
+                      { color: isSunrise ? colors.secondary : p.isNext ? colors.primary : p.isPassed ? colors.textMuted : colors.text },
+                      p.isNext && styles.prayerTimeValueActive,
+                    ]}>
+                      {p.timeString}
+                    </Text>
+                    {isSunrise && (
+                      <Text style={[styles.prayerTimeSunriseLabel, { color: colors.secondary + 'AA' }]}>
+                        Chourouk
+                      </Text>
+                    )}
+                  </View>
+                );
+              })}
+            </View>
+          </AnimatedCard>
+        )}
 
         {/* ===== DATE DU JOUR ===== */}
         <AnimatedCard delay={100} style={[styles.dateCard, { backgroundColor: colors.surface }, Shadows.small]}>
@@ -466,6 +501,44 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  // --- Prayer times compact row ---
+  prayerTimesCard: {
+    marginHorizontal: Spacing.screenHorizontal,
+    marginTop: Spacing.md,
+    borderRadius: Spacing.radiusLg,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.sm,
+  },
+  prayerTimesRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'flex-start',
+  },
+  prayerTimeItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  prayerTimeLabel: {
+    fontSize: 10,
+    fontWeight: '500',
+    marginBottom: 3,
+  },
+  prayerTimeLabelActive: {
+    fontWeight: '700',
+  },
+  prayerTimeValue: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  prayerTimeValueActive: {
+    fontWeight: '800',
+  },
+  prayerTimeSunriseLabel: {
+    fontSize: 8,
+    fontWeight: '500',
+    marginTop: 1,
   },
 
   // --- Date ---
