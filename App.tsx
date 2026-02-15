@@ -219,10 +219,6 @@ const usePrayerTimesRealtime = (latitude: number, longitude: number, timezone: s
       setNextPrayer(result.nextPrayer);
       setCountdown(result.countdown);
 
-      // Debug log toutes les 10 secondes
-      if (now.second() % 10 === 0) {
-        console.log(`⏱️ ${now.format('HH:mm:ss')} | Prochaine: ${result.nextPrayer?.name} à ${result.nextPrayer?.time} | Dans: ${result.countdown.h}h ${result.countdown.m}min ${result.countdown.s}s`);
-      }
     };
 
     // Mise à jour immédiate
@@ -1380,60 +1376,6 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
     membership: { nickname: string };
   } | null>(null);
 
-  // ===== TEST CONNEXION SUPABASE + DEVICE ID (TEMPORAIRE) =====
-  useEffect(() => {
-    const testAll = async () => {
-      try {
-        // 1. Test Device ID
-        const { getDeviceId } = await import('./src/services/deviceService');
-        const deviceId = await getDeviceId();
-        console.log('📱 [Test] Device ID:', deviceId);
-
-        // 2. Test Supabase
-        const { supabase, isSupabaseConfigured } = await import('./src/services/supabase');
-
-        if (!isSupabaseConfigured()) {
-          console.log('⚠️ [Supabase] Non configuré - vérifiez le fichier .env');
-          return;
-        }
-
-        console.log('🔄 [Supabase] Test de connexion...');
-        const startTime = Date.now();
-
-        const { error } = await supabase
-          .from('circles')
-          .select('count', { count: 'exact', head: true });
-
-        const latency = Date.now() - startTime;
-
-        if (error) {
-          if (error.message.includes('does not exist') || error.code === '42P01') {
-            console.log(`✅ [Supabase] Connexion OK (${latency}ms) - Tables non créées`);
-            console.log('📋 [Supabase] Exécutez le SQL dans supabase/migrations/001_create_circle_tables.sql');
-          } else {
-            console.error('❌ [Supabase] Erreur:', error.message);
-          }
-        } else {
-          console.log(`✅ [Supabase] Connexion établie (${latency}ms) - Tables OK`);
-
-          // 3. Test checkUserCircle (seulement si tables OK)
-          const { checkUserCircle } = await import('./src/services/circleService');
-          const userCircle = await checkUserCircle(deviceId);
-
-          if (userCircle) {
-            console.log('🔵 [Test] Utilisateur dans cercle:', userCircle.circle.name);
-          } else {
-            console.log('⚪ [Test] Utilisateur sans cercle (normal)');
-          }
-        }
-      } catch (err: any) {
-        console.error('❌ [Test] Erreur:', err.message);
-      }
-    };
-
-    testAll();
-  }, []);
-
   // Charger le cercle de l'utilisateur
   useEffect(() => {
     const loadCircle = async () => {
@@ -1444,7 +1386,7 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
         const result = await checkUserCircle(deviceId);
         setUserCircle(result);
       } catch (error) {
-        console.log('Erreur chargement cercle:', error);
+        // Silently fail - circle loading is non-critical
       }
     };
     loadCircle();
@@ -2161,13 +2103,13 @@ const CoranScreen = () => {
   const versePositionsSurah = useRef(0);
   const [currentVisibleVerse, setCurrentVisibleVerse] = useState(1);
   const currentVisibleVerseRef = useRef(1);
-  const saveDebounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const saveDebounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const needsScrollRestore = useRef(false);
 
   // Tracking des versets lus par scroll
   const readVersesRef = useRef<Set<string>>(new Set());
   const pendingVersesCountRef = useRef(0);
-  const streakDebounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const streakDebounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   // Versets lus aujourd'hui (persistés)
   const [todayReadVerses, setTodayReadVerses] = useState<Set<string>>(new Set());

@@ -4,11 +4,11 @@
     "slug": "sakina",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/logo.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#0F4C35"
     },
@@ -20,40 +20,38 @@
       "bundleIdentifier": "com.sakina.app",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "L'application a besoin de votre localisation pour calculer les horaires de prière précis et la direction de la Qibla.",
-        "NSMotionUsageDescription": "L'application utilise les capteurs de mouvement pour la boussole Qibla.",
-        "NSCameraUsageDescription": "L'application utilise la caméra pour le mode AR de la boussole Qibla."
+        "NSMotionUsageDescription": "L'application utilise les capteurs de mouvement pour la boussole Qibla."
       }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0F4C35"
       },
       "package": "com.sakina.app",
+      "versionCode": 1,
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
-        "HIGH_SAMPLING_RATE_SENSORS",
-        "CAMERA"
+        "HIGH_SAMPLING_RATE_SENSORS"
       ]
     },
     "web": {
-      "favicon": "./assets/logo.png",
+      "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
     "plugins": [
       "expo-location",
       "expo-asset",
       "expo-sensors",
-      "expo-notifications",
-      "expo-camera"
+      "expo-notifications"
     ],
+    "owner": "abdallah.sbh",
+    "description": "Application islamique complete. Coran, horaires de priere, Qibla, Tasbih, calendrier Hijri et plus.",
     "extra": {
       "eas": {
-        "projectId": "sakina-islamic-app"
+        "projectId": "3d9fe5d1-9bba-4bf1-acfb-f9fd2b136008"
       }
-    },
-    "owner": "sakina",
-    "description": "Application islamique complète pour la communauté chiite. Coran, Duas, horaires de prière, calendrier Hijri et plus."
+    }
   }
 }
