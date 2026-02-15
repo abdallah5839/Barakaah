@@ -92,7 +92,7 @@ export const DuaNavigator: React.FC<DuaNavigatorProps> = ({ onGoHome }) => {
   const renderScreen = () => {
     switch (currentRoute.name) {
       case 'DuaMain':
-        return <DuaScreen navigation={navigation} onGoHome={onGoHome} />;
+        return <DuaScreen navigation={navigation} />;
       case 'DuaCategory':
         return (
           <DuaCategoryScreen

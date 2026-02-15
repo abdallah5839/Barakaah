@@ -1,559 +1,908 @@
 /**
- * Écran Dua — Liste des invocations avec design premium Sakina
- * Header gradient, cartes catégories dorées, favoris, recherche
+ * DuaScreen - Ecran des invocations (Duas) avec lecteur audio
+ * 3 Duas : Al-Iftitah, Kumayl, Munajat At-Ta'ibin
+ * Design premium uniforme avec le reste de Sakina
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, ReactNode } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
-  TextInput,
   Pressable,
-  Dimensions,
+  ScrollView,
   Animated,
+  Platform,
+  Alert,
+  Share,
+  Dimensions,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme, useDua } from '../contexts';
-import { Spacing, Typography, Shadows } from '../constants';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Audio, AVPlaybackStatus } from 'expo-av';
+import * as Haptics from 'expo-haptics';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SCREEN_WIDTH = Dimensions.get('window').width;
-const CARD_GAP = 12;
-const SCREEN_PADDING = Spacing.screenHorizontal;
-const CARD_WIDTH = (SCREEN_WIDTH - (SCREEN_PADDING * 2) - CARD_GAP) / 2;
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-import {
-  duas,
-  duaCategories,
-  getImportantDuas,
-  searchDuas,
-  getDuasByCategory,
-} from '../data';
-import type { Dua, DuaCategory, DuaCategoryInfo } from '../types';
-
-interface DuaScreenProps {
-  navigation?: any;
-  onGoHome?: () => void;
+// ===== TYPES =====
+interface DuaItem {
+  id: string;
+  name: string;
+  nameAr: string;
+  subtitle: string;
+  description: string;
+  icon: string;
+  audioFile: number; // require() asset module
 }
 
-// ===== PRESSABLE SCALE HELPER =====
-const PressableScale = ({ onPress, style, children }: { onPress: () => void; style?: any; children: React.ReactNode }) => {
-  const scale = useMemo(() => new Animated.Value(1), []);
+interface DuaScreenProps {
+  navigation?: {
+    goBack?: () => void;
+  };
+  isDark?: boolean;
+}
+
+// ===== DONNEES DES 3 DUAS =====
+const DUAS: DuaItem[] = [
+  {
+    id: 'iftitah',
+    name: 'Dua Al-Iftitah',
+    nameAr: '\u062F\u0639\u0627\u0621 \u0627\u0644\u0627\u0641\u062A\u062A\u0627\u062D',
+    subtitle: 'Invocation d\'ouverture',
+    description: 'Recitee pendant le mois de Ramadan',
+    icon: 'moon-outline',
+    audioFile: require('../../assets/sounds/duas/dua-iftitah-fr.m4a'),
+  },
+  {
+    id: 'kumayl',
+    name: 'Dua Kumayl',
+    nameAr: '\u062F\u0639\u0627\u0621 \u0643\u0645\u064A\u0644',
+    subtitle: 'Invocation du jeudi soir',
+    description: 'Transmise par Kumayl ibn Ziyad de l\'Imam Ali (as)',
+    icon: 'star-outline',
+    audioFile: require('../../assets/sounds/duas/dua-kumayl-fr.mp3'),
+  },
+  {
+    id: 'munajat',
+    name: 'Munajat At-Ta\'ibin',
+    nameAr: '\u0645\u0646\u0627\u062C\u0627\u0629 \u0627\u0644\u062A\u0627\u0626\u0628\u064A\u0646',
+    subtitle: 'Entretien intime des repentants',
+    description: 'Imam Zayn Al-Abidin (as) - As-Sahifa As-Sajjadiyya',
+    icon: 'heart-outline',
+    audioFile: require('../../assets/sounds/duas/munajat-taibin-fr.mp3'),
+  },
+];
+
+const FAVORITES_KEY = 'sakina_dua_favorites';
+
+// ===== COULEURS =====
+const LightColors = {
+  background: '#F9FAFB',
+  surface: '#FFFFFF',
+  surfaceAlt: '#F0FDF4',
+  text: '#1A1A1A',
+  textSecondary: '#6B7280',
+  textMuted: '#9CA3AF',
+  border: '#E5E7EB',
+  primary: '#16a34a',
+  primaryDeep: '#0F4C35',
+  primaryDark: '#166534',
+  gold: '#D4AF37',
+  goldDark: '#B8860B',
+  goldBg: 'rgba(212,175,55,0.15)',
+  goldBorder: 'rgba(212,175,55,0.25)',
+  cardShadow: '#000',
+};
+
+const DarkColors = {
+  background: '#0F172A',
+  surface: '#1E293B',
+  surfaceAlt: '#1E293B',
+  text: '#F1F5F9',
+  textSecondary: '#94A3B8',
+  textMuted: '#64748B',
+  border: '#334155',
+  primary: '#16a34a',
+  primaryDeep: '#0F4C35',
+  primaryDark: '#166534',
+  gold: '#D4AF37',
+  goldDark: '#B8860B',
+  goldBg: 'rgba(212,175,55,0.12)',
+  goldBorder: 'rgba(212,175,55,0.2)',
+  cardShadow: '#000',
+};
+
+type ColorScheme = typeof LightColors;
+
+// ===== FADE IN ANIMATION (meme pattern que App.tsx) =====
+const FadeInView = ({ children, delay = 0, style }: { children: ReactNode; delay?: number; style?: any }) => {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(20)).current;
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      Animated.parallel([
+        Animated.timing(fadeAnim, { toValue: 1, duration: 400, useNativeDriver: true }),
+        Animated.timing(slideAnim, { toValue: 0, duration: 400, useNativeDriver: true }),
+      ]).start();
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
   return (
-    <Pressable
-      onPressIn={() => Animated.spring(scale, { toValue: 0.96, useNativeDriver: true, speed: 50 }).start()}
-      onPressOut={() => Animated.spring(scale, { toValue: 1, useNativeDriver: true, speed: 50 }).start()}
-      onPress={onPress}
-    >
-      <Animated.View style={[style, { transform: [{ scale }] }]}>
-        {children}
-      </Animated.View>
-    </Pressable>
+    <Animated.View style={[{ opacity: fadeAnim, transform: [{ translateY: slideAnim }] }, style]}>
+      {children}
+    </Animated.View>
   );
 };
 
-export const DuaScreen: React.FC<DuaScreenProps> = ({ navigation, onGoHome }) => {
-  const { colors, isDark } = useTheme();
-  const { favorites, isFavorite, toggleFavorite } = useDua();
+// ===== COMPOSANT PRINCIPAL =====
+export const DuaScreen: React.FC<DuaScreenProps> = ({ navigation, isDark = false }) => {
+  const colors = isDark ? DarkColors : LightColors;
+  const [selectedDua, setSelectedDua] = useState<DuaItem | null>(null);
+  const [favorites, setFavorites] = useState<string[]>([]);
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showFavorites, setShowFavorites] = useState(true);
+  // Charger favoris
+  useEffect(() => {
+    (async () => {
+      try {
+        const stored = await AsyncStorage.getItem(FAVORITES_KEY);
+        if (stored) setFavorites(JSON.parse(stored));
+      } catch {}
+    })();
+  }, []);
 
-  const importantDuas = useMemo(() => getImportantDuas(), []);
-  const searchResults = useMemo(() => {
-    if (!searchQuery.trim()) return null;
-    return searchDuas(searchQuery);
-  }, [searchQuery]);
-  const favoriteDuas = useMemo(() => {
-    return duas.filter(dua => favorites.includes(dua.id));
-  }, [favorites]);
+  const goBack = useCallback(() => {
+    if (selectedDua) {
+      setSelectedDua(null);
+    } else if (navigation?.goBack) {
+      navigation.goBack();
+    }
+  }, [selectedDua, navigation]);
 
-  const navigateToDuaDetail = useCallback((dua: Dua) => {
-    if (navigation) navigation.navigate('DuaDetail', { duaId: dua.id });
-  }, [navigation]);
-
-  const navigateToCategory = useCallback((category: DuaCategoryInfo) => {
-    if (navigation) navigation.navigate('DuaCategory', { categoryId: category.id });
-  }, [navigation]);
-
-  // Gradient colors for header
-  const headerGradient = isDark
-    ? ['#0F2D1E', '#1a4731', '#0F172A'] as const
-    : ['#0F4C35', '#16a34a', '#166534'] as const;
-
-  // --- Renderers ---
-
-  const renderImportantDuaCard = (dua: Dua) => {
-    const isInFavorites = isFavorite(dua.id);
-    const importanceColor = dua.importance === 'tres-haute' ? colors.secondary : colors.primary;
-
+  if (selectedDua) {
     return (
-      <PressableScale key={dua.id} onPress={() => navigateToDuaDetail(dua)}>
-        <View style={[styles.importantCard, { backgroundColor: colors.surface }, Shadows.small]}>
-          <View style={[styles.importantCardAccent, { backgroundColor: importanceColor }]} />
-          <View style={styles.importantCardContent}>
-            <View style={styles.importantCardHeader}>
-              <View style={[styles.importanceDot, { backgroundColor: importanceColor }]} />
-              <Text style={[styles.importantDuaArabic, { color: colors.text }]}>
-                {dua.arabicName}
-              </Text>
-            </View>
-            <Text style={[styles.importantDuaFrench, { color: colors.text }]}>
-              {dua.frenchName}
-            </Text>
-            <Text style={[styles.importantDuaOccasion, { color: colors.textSecondary }]} numberOfLines={1}>
-              {dua.occasion}
-            </Text>
-            <View style={styles.importantCardFooter}>
-              <View style={[styles.durationBadge, { backgroundColor: colors.primary + '15' }]}>
-                <Ionicons name="time-outline" size={13} color={colors.primary} />
-                <Text style={[styles.durationText, { color: colors.primary }]}>{dua.duration}</Text>
-              </View>
-              <Pressable onPress={() => toggleFavorite(dua.id)} hitSlop={10}>
-                <Ionicons
-                  name={isInFavorites ? 'star' : 'star-outline'}
-                  size={22}
-                  color={isInFavorites ? colors.secondary : colors.textMuted}
-                />
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </PressableScale>
+      <DuaPlayerScreen
+        dua={selectedDua}
+        colors={colors}
+        isDark={isDark}
+        favorites={favorites}
+        setFavorites={setFavorites}
+        onBack={() => setSelectedDua(null)}
+      />
     );
-  };
-
-  const renderCategoryCard = (category: DuaCategoryInfo) => {
-    const duasCount = getDuasByCategory(category.id).length;
-    return (
-      <PressableScale key={category.id} onPress={() => navigateToCategory(category)} style={styles.categoryCardWrapper}>
-        <View style={[styles.categoryCard, { backgroundColor: colors.surface }, Shadows.small]}>
-          <View style={[styles.categoryIcon, { backgroundColor: category.color + '18' }]}>
-            <Ionicons name={category.icon as any} size={24} color={category.color} />
-          </View>
-          <Text style={[styles.categoryName, { color: colors.text }]} numberOfLines={2}>
-            {category.frenchName}
-          </Text>
-          <Text style={[styles.categoryArabicName, { color: colors.secondary }]} numberOfLines={1}>
-            {category.arabicName}
-          </Text>
-          <Text style={[styles.categoryCount, { color: colors.textMuted }]}>
-            {duasCount} dua{duasCount > 1 ? 's' : ''}
-          </Text>
-        </View>
-      </PressableScale>
-    );
-  };
-
-  const renderSearchResultCard = (dua: Dua) => {
-    const isInFavorites = isFavorite(dua.id);
-    return (
-      <PressableScale key={dua.id} onPress={() => navigateToDuaDetail(dua)}>
-        <View style={[styles.searchResultCard, { backgroundColor: colors.surface }, Shadows.small]}>
-          <View style={styles.searchResultContent}>
-            <Text style={[styles.searchResultArabic, { color: colors.text }]}>{dua.arabicName}</Text>
-            <Text style={[styles.searchResultFrench, { color: colors.text }]}>{dua.frenchName}</Text>
-            <Text style={[styles.searchResultOccasion, { color: colors.textSecondary }]}>{dua.occasion}</Text>
-          </View>
-          <Pressable onPress={() => toggleFavorite(dua.id)} hitSlop={10}>
-            <Ionicons
-              name={isInFavorites ? 'star' : 'star-outline'}
-              size={20}
-              color={isInFavorites ? colors.secondary : colors.textMuted}
-            />
-          </Pressable>
-        </View>
-      </PressableScale>
-    );
-  };
-
-  const renderFavoriteCard = (dua: Dua) => (
-    <PressableScale key={dua.id} onPress={() => navigateToDuaDetail(dua)}>
-      <View style={[styles.favoriteCard, { backgroundColor: colors.surface }, Shadows.small]}>
-        <View style={styles.favoriteCardContent}>
-          <Text style={[styles.favoriteArabic, { color: colors.text }]} numberOfLines={1}>
-            {dua.arabicName}
-          </Text>
-          <Text style={[styles.favoriteFrench, { color: colors.textSecondary }]} numberOfLines={1}>
-            {dua.frenchName}
-          </Text>
-        </View>
-        <Pressable onPress={() => toggleFavorite(dua.id)} hitSlop={10}>
-          <Ionicons name="star" size={18} color={colors.secondary} />
-        </Pressable>
-      </View>
-    </PressableScale>
-  );
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* ===== PREMIUM HEADER WITH GRADIENT ===== */}
-        <LinearGradient colors={headerGradient} style={styles.headerGradient}>
-          {onGoHome && (
-            <Pressable onPress={onGoHome} style={styles.backButton}>
-              <Ionicons name="arrow-back" size={22} color="#FFFFFF" />
-            </Pressable>
-          )}
-          <View style={styles.headerContent}>
-            <View>
-              <Text style={styles.headerTitle}>Duas & Invocations</Text>
-              <Text style={styles.headerArabic}>الدعاء</Text>
-            </View>
-            <View style={styles.headerIconContainer}>
-              <Ionicons name="hand-left" size={28} color="#D4AF37" />
-            </View>
+      {/* Header gradient — meme pattern que Prieres/Coran/Home */}
+      <LinearGradient
+        colors={[colors.primaryDeep, colors.primaryDark]}
+        style={styles.headerGradient}
+      >
+        <View style={styles.headerTop}>
+          <Pressable onPress={goBack} style={styles.backBtn}>
+            <Ionicons name="arrow-back" size={22} color="#FFF" />
+          </Pressable>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.headerTitle}>Duas</Text>
           </View>
-          <Text style={styles.headerSubtitle}>Collection de prières chiites authentiques</Text>
-
-          {/* Search inside header */}
-          <View style={styles.searchBar}>
-            <Ionicons name="search" size={18} color="rgba(255,255,255,0.5)" />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Rechercher une dua..."
-              placeholderTextColor="rgba(255,255,255,0.4)"
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-            />
-            {searchQuery.length > 0 && (
-              <Pressable onPress={() => setSearchQuery('')} hitSlop={8}>
-                <Ionicons name="close-circle" size={18} color="rgba(255,255,255,0.5)" />
-              </Pressable>
-            )}
+          <View style={styles.headerArabicBadge}>
+            <Text style={styles.headerArabicText}>{'\u0627\u0644\u062F\u0639\u0627\u0621'}</Text>
           </View>
-        </LinearGradient>
+        </View>
 
-        {searchResults !== null ? (
-          <View style={styles.section}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>
-              Résultats ({searchResults.length})
+        {/* Sous-titre decoratif */}
+        <View style={styles.headerSubRow}>
+          <View style={styles.goldDash} />
+          <Text style={styles.headerSub}>Invocations</Text>
+          <View style={styles.goldDash} />
+        </View>
+      </LinearGradient>
+
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Banniere info — style gold/vert avec bordure gauche */}
+        <FadeInView delay={100} style={{ paddingHorizontal: 16, paddingTop: 20 }}>
+          <View style={[styles.infoBanner, { backgroundColor: colors.goldBg, borderColor: colors.goldBorder }]}>
+            <View style={[styles.infoBannerAccent, { backgroundColor: colors.gold }]} />
+            <Ionicons name="sparkles" size={18} color={colors.gold} style={{ marginRight: 10, marginTop: 1 }} />
+            <Text style={[styles.infoText, { color: colors.textSecondary }]}>
+              Section en developpement. D'autres invocations seront ajoutees prochainement.
             </Text>
-            {searchResults.length > 0 ? (
-              searchResults.map(dua => renderSearchResultCard(dua))
-            ) : (
-              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-                Aucune dua trouvée pour "{searchQuery}"
-              </Text>
-            )}
           </View>
-        ) : (
-          <>
-            {/* ===== IMPORTANTES ===== */}
-            <View style={styles.section}>
-              <View style={styles.sectionTitleRow}>
-                <Ionicons name="diamond" size={16} color={colors.secondary} />
-                <Text style={[styles.sectionTitle, { color: colors.text }]}>
-                  Duas Essentielles
-                </Text>
-              </View>
-              <View style={styles.importantDuasContainer}>
-                {importantDuas.map(dua => renderImportantDuaCard(dua))}
-              </View>
-            </View>
+        </FadeInView>
 
-            {/* ===== CATEGORIES ===== */}
-            <View style={styles.section}>
-              <View style={styles.sectionTitleRow}>
-                <Ionicons name="grid" size={16} color={colors.primary} />
-                <Text style={[styles.sectionTitle, { color: colors.text }]}>
-                  Catégories
-                </Text>
-              </View>
-              <View style={styles.categoriesGrid}>
-                {duaCategories.map(category => renderCategoryCard(category))}
-              </View>
-            </View>
+        {/* Section titre */}
+        <FadeInView delay={150} style={{ paddingHorizontal: 16, marginTop: 20, marginBottom: 12 }}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            {DUAS.length} invocations disponibles
+          </Text>
+        </FadeInView>
 
-            {/* ===== FAVORIS ===== */}
-            {favoriteDuas.length > 0 && (
-              <View style={styles.section}>
-                <Pressable
-                  style={styles.favoritesHeader}
-                  onPress={() => setShowFavorites(!showFavorites)}
-                >
-                  <View style={styles.favoritesHeaderLeft}>
-                    <Ionicons name="star" size={16} color={colors.secondary} />
-                    <Text style={[styles.sectionTitle, { color: colors.text }]}>
-                      Mes Favoris ({favoriteDuas.length})
-                    </Text>
-                  </View>
-                  <Ionicons
-                    name={showFavorites ? 'chevron-up' : 'chevron-down'}
-                    size={18}
-                    color={colors.textSecondary}
-                  />
-                </Pressable>
-                {showFavorites && (
-                  <View style={styles.favoritesContainer}>
-                    {favoriteDuas.map(dua => renderFavoriteCard(dua))}
-                  </View>
-                )}
-              </View>
-            )}
-          </>
-        )}
+        {/* Liste des Duas — cards premium avec ombre */}
+        {DUAS.map((dua, index) => (
+          <FadeInView key={dua.id} delay={200 + index * 80} style={{ paddingHorizontal: 16 }}>
+            <Pressable
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                setSelectedDua(dua);
+              }}
+              style={({ pressed }) => [
+                styles.duaCard,
+                {
+                  backgroundColor: colors.surface,
+                  shadowColor: colors.cardShadow,
+                  transform: [{ scale: pressed ? 0.97 : 1 }],
+                  opacity: pressed ? 0.9 : 1,
+                },
+              ]}
+            >
+              {/* Icon cercle gradient */}
+              <LinearGradient
+                colors={[colors.primaryDeep, colors.primary]}
+                style={styles.duaCardIconCircle}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+              >
+                <Ionicons name={dua.icon as any} size={22} color="#FFF" />
+              </LinearGradient>
 
-        <View style={styles.bottomSpacer} />
+              <View style={styles.duaCardContent}>
+                <View style={styles.duaCardNameRow}>
+                  <Text style={[styles.duaCardTitle, { color: colors.text }]}>{dua.name}</Text>
+                  <Text style={[styles.duaCardAr, { color: colors.gold }]}>{dua.nameAr}</Text>
+                </View>
+                <Text style={[styles.duaCardSubtitle, { color: colors.textSecondary }]}>{dua.subtitle}</Text>
+              </View>
+
+              <View style={[styles.duaCardChevron, { backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)' }]}>
+                <Ionicons name="chevron-forward" size={16} color={colors.textMuted} />
+              </View>
+            </Pressable>
+          </FadeInView>
+        ))}
       </ScrollView>
     </View>
   );
 };
 
+// ===== ECRAN LECTEUR AUDIO =====
+interface DuaPlayerProps {
+  dua: DuaItem;
+  colors: ColorScheme;
+  isDark: boolean;
+  favorites: string[];
+  setFavorites: React.Dispatch<React.SetStateAction<string[]>>;
+  onBack: () => void;
+}
+
+const DuaPlayerScreen: React.FC<DuaPlayerProps> = ({
+  dua,
+  colors,
+  isDark,
+  favorites,
+  setFavorites,
+  onBack,
+}) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [positionMs, setPositionMs] = useState(0);
+  const [durationMs, setDurationMs] = useState(0);
+  const soundRef = useRef<Audio.Sound | null>(null);
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const progressBarWidth = useRef(0);
+  const isFavorite = favorites.includes(dua.id);
+
+  // Callback de mise a jour du statut audio
+  const onPlaybackStatusUpdate = useCallback((status: AVPlaybackStatus) => {
+    if (!status.isLoaded) return;
+    setPositionMs(status.positionMillis || 0);
+    setDurationMs(status.durationMillis || 0);
+    setIsPlaying(status.isPlaying);
+    if (status.didJustFinish) {
+      setIsPlaying(false);
+      setPositionMs(0);
+    }
+  }, []);
+
+  // Configurer le mode audio arriere-plan + precharger la duree
+  useEffect(() => {
+    const setup = async () => {
+      // Mode audio arriere-plan
+      await Audio.setAudioModeAsync({
+        playsInSilentModeIOS: true,
+        staysActiveInBackground: true,
+      });
+
+      // Precharger pour obtenir la duree sans jouer
+      const { sound, status } = await Audio.Sound.createAsync(
+        dua.audioFile,
+        { shouldPlay: false }
+      );
+
+      if (status.isLoaded && status.durationMillis) {
+        setDurationMs(status.durationMillis);
+      }
+
+      // Garder le son pret pour la lecture
+      soundRef.current = sound;
+      sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
+    };
+
+    setup().catch(() => {});
+
+    return () => {
+      if (soundRef.current) {
+        soundRef.current.unloadAsync();
+        soundRef.current = null;
+      }
+    };
+  }, [dua.audioFile, onPlaybackStatusUpdate]);
+
+  // Pulse animation for icon when playing
+  useEffect(() => {
+    if (isPlaying) {
+      const pulse = Animated.loop(
+        Animated.sequence([
+          Animated.timing(pulseAnim, { toValue: 1.06, duration: 1500, useNativeDriver: true }),
+          Animated.timing(pulseAnim, { toValue: 1, duration: 1500, useNativeDriver: true }),
+        ])
+      );
+      pulse.start();
+      return () => pulse.stop();
+    } else {
+      pulseAnim.setValue(1);
+    }
+  }, [isPlaying, pulseAnim]);
+
+  const handlePlayPause = useCallback(async () => {
+    try {
+      if (soundRef.current) {
+        if (isPlaying) {
+          await soundRef.current.pauseAsync();
+        } else {
+          await soundRef.current.playAsync();
+        }
+      } else {
+        // Fallback si le preload a echoue
+        const { sound } = await Audio.Sound.createAsync(
+          dua.audioFile,
+          { shouldPlay: true },
+          onPlaybackStatusUpdate
+        );
+        soundRef.current = sound;
+      }
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    } catch {
+      Alert.alert('Erreur', 'Impossible de lire l\'audio.');
+    }
+  }, [dua.audioFile, isPlaying, onPlaybackStatusUpdate]);
+
+  const handleSeek = useCallback(async (offsetMs: number) => {
+    if (!soundRef.current) return;
+    const newPos = Math.max(0, Math.min(positionMs + offsetMs, durationMs));
+    await soundRef.current.setPositionAsync(newPos);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  }, [positionMs, durationMs]);
+
+  const handleProgressPress = useCallback(async (event: any) => {
+    if (!soundRef.current || durationMs === 0 || progressBarWidth.current === 0) return;
+    const { locationX } = event.nativeEvent;
+    const ratio = Math.max(0, Math.min(locationX / progressBarWidth.current, 1));
+    const newPos = ratio * durationMs;
+    await soundRef.current.setPositionAsync(newPos);
+  }, [durationMs]);
+
+  const toggleFavorite = useCallback(async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    const newFavs = isFavorite
+      ? favorites.filter((f) => f !== dua.id)
+      : [...favorites, dua.id];
+    setFavorites(newFavs);
+    try {
+      await AsyncStorage.setItem(FAVORITES_KEY, JSON.stringify(newFavs));
+    } catch {}
+  }, [isFavorite, favorites, dua.id, setFavorites]);
+
+  const handleShare = useCallback(async () => {
+    try {
+      await Share.share({
+        message: `${dua.name} - ${dua.subtitle}\n${dua.description}\n\nVia l'application Sakina`,
+      });
+    } catch {}
+  }, [dua]);
+
+  const formatTime = (ms: number) => {
+    const totalSec = Math.floor(ms / 1000);
+    const min = Math.floor(totalSec / 60);
+    const sec = totalSec % 60;
+    return `${min}:${sec.toString().padStart(2, '0')}`;
+  };
+
+  const progress = durationMs > 0 ? positionMs / durationMs : 0;
+
+  return (
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      {/* Header gradient */}
+      <LinearGradient
+        colors={[colors.primaryDeep, colors.primaryDark]}
+        style={styles.headerGradient}
+      >
+        <View style={styles.headerTop}>
+          <Pressable onPress={onBack} style={styles.backBtn}>
+            <Ionicons name="arrow-back" size={22} color="#FFF" />
+          </Pressable>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.headerTitle} numberOfLines={1}>{dua.name}</Text>
+          </View>
+          <View style={styles.headerArabicBadge}>
+            <Text style={styles.headerArabicText}>{dua.nameAr}</Text>
+          </View>
+        </View>
+      </LinearGradient>
+
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={styles.playerContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Icone centrale premium avec bordure gold */}
+        <FadeInView delay={100}>
+          <Animated.View
+            style={[
+              styles.playerIconOuter,
+              {
+                borderColor: colors.goldBorder,
+                transform: [{ scale: pulseAnim }],
+              },
+            ]}
+          >
+            <LinearGradient
+              colors={[colors.primaryDeep, colors.primary]}
+              style={styles.playerIconInner}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+            >
+              <Ionicons name={dua.icon as any} size={48} color="#FFF" />
+            </LinearGradient>
+          </Animated.View>
+        </FadeInView>
+
+        {/* Info Dua */}
+        <FadeInView delay={200}>
+          <Text style={[styles.playerSubtitle, { color: colors.text }]}>{dua.subtitle}</Text>
+          <View style={[styles.playerDescBadge, { backgroundColor: colors.goldBg, borderColor: colors.goldBorder }]}>
+            <Text style={[styles.playerDescription, { color: colors.textSecondary }]}>{dua.description}</Text>
+          </View>
+        </FadeInView>
+
+        {/* Barre de progression premium */}
+        <FadeInView delay={300} style={styles.progressContainer}>
+          <Pressable
+            onPress={handleProgressPress}
+            style={styles.progressBarOuter}
+            onLayout={(e) => { progressBarWidth.current = e.nativeEvent.layout.width; }}
+          >
+            <View style={[styles.progressBarBg, { backgroundColor: isDark ? '#334155' : '#E5E7EB' }]}>
+              <LinearGradient
+                colors={[colors.primary, colors.gold]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={[styles.progressBarFill, { width: `${progress * 100}%` }]}
+              />
+            </View>
+            {/* Dot avec halo */}
+            <View
+              style={[
+                styles.progressDotHalo,
+                {
+                  backgroundColor: colors.gold + '30',
+                  left: `${progress * 100}%`,
+                },
+              ]}
+            >
+              <View style={[styles.progressDot, { backgroundColor: colors.gold }]} />
+            </View>
+          </Pressable>
+          <View style={styles.progressTimes}>
+            <Text style={[styles.progressTimeText, { color: colors.textSecondary }]}>
+              {formatTime(positionMs)}
+            </Text>
+            <Text style={[styles.progressTimeText, { color: colors.textSecondary }]}>
+              {durationMs > 0 ? formatTime(durationMs) : '--:--'}
+            </Text>
+          </View>
+        </FadeInView>
+
+        {/* Controles audio premium */}
+        <FadeInView delay={400} style={styles.controlsRow}>
+          <Pressable
+            onPress={() => handleSeek(-15000)}
+            style={({ pressed }) => [
+              styles.controlBtn,
+              { backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', opacity: pressed ? 0.6 : 1 },
+            ]}
+          >
+            <Ionicons name="play-back" size={24} color={colors.text} />
+            <Text style={[styles.controlLabel, { color: colors.textMuted }]}>-15s</Text>
+          </Pressable>
+
+          <Pressable
+            onPress={handlePlayPause}
+            style={({ pressed }) => [
+              styles.playBtnOuter,
+              {
+                borderColor: colors.gold + '40',
+                transform: [{ scale: pressed ? 0.93 : 1 }],
+              },
+            ]}
+          >
+            <LinearGradient
+              colors={[colors.primaryDeep, colors.primary]}
+              style={styles.playBtnInner}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+            >
+              <Ionicons
+                name={isPlaying ? 'pause' : 'play'}
+                size={32}
+                color="#FFF"
+                style={isPlaying ? {} : { marginLeft: 4 }}
+              />
+            </LinearGradient>
+          </Pressable>
+
+          <Pressable
+            onPress={() => handleSeek(15000)}
+            style={({ pressed }) => [
+              styles.controlBtn,
+              { backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', opacity: pressed ? 0.6 : 1 },
+            ]}
+          >
+            <Ionicons name="play-forward" size={24} color={colors.text} />
+            <Text style={[styles.controlLabel, { color: colors.textMuted }]}>+15s</Text>
+          </Pressable>
+        </FadeInView>
+
+        {/* Actions : Favori + Partager */}
+        <FadeInView delay={500} style={styles.actionsRow}>
+          <Pressable
+            onPress={toggleFavorite}
+            style={({ pressed }) => [
+              styles.actionBtn,
+              {
+                backgroundColor: isFavorite
+                  ? (isDark ? 'rgba(239,68,68,0.15)' : 'rgba(239,68,68,0.08)')
+                  : (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)'),
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+          >
+            <Ionicons
+              name={isFavorite ? 'heart' : 'heart-outline'}
+              size={20}
+              color={isFavorite ? '#EF4444' : colors.textSecondary}
+            />
+            <Text style={[styles.actionBtnText, { color: isFavorite ? '#EF4444' : colors.textSecondary }]}>
+              Favori
+            </Text>
+          </Pressable>
+
+          <Pressable
+            onPress={handleShare}
+            style={({ pressed }) => [
+              styles.actionBtn,
+              {
+                backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+          >
+            <Ionicons name="share-outline" size={20} color={colors.textSecondary} />
+            <Text style={[styles.actionBtnText, { color: colors.textSecondary }]}>Partager</Text>
+          </Pressable>
+        </FadeInView>
+      </ScrollView>
+    </View>
+  );
+};
+
+// ===== STYLES =====
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
 
-  // --- Premium Header ---
+  // ===== HEADER (meme pattern que homeStyles/prieresStyles/coranStyles) =====
   headerGradient: {
-    paddingTop: 16,
-    paddingBottom: 24,
-    paddingHorizontal: Spacing.screenHorizontal,
+    paddingTop: Platform.OS === 'android' ? 44 : 20,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
   },
-  backButton: {
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  backBtn: {
     width: 40,
     height: 40,
     borderRadius: 12,
     backgroundColor: 'rgba(255,255,255,0.12)',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 12,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
   },
   headerTitle: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: '800',
-    color: '#FFFFFF',
-    letterSpacing: -0.5,
+    color: '#FFF',
   },
-  headerArabic: {
-    fontSize: 20,
-    color: '#D4AF37',
-    fontWeight: '600',
-    marginTop: 2,
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.7)',
-    marginTop: 4,
-    marginBottom: 16,
-  },
-  headerIconContainer: {
-    width: 52,
-    height: 52,
-    borderRadius: 16,
+  headerArabicBadge: {
     backgroundColor: 'rgba(212,175,55,0.15)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  // --- Search ---
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.12)',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    gap: 10,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 15,
-    color: '#FFFFFF',
-    paddingVertical: 2,
-  },
-
-  // --- Sections ---
-  section: {
-    paddingHorizontal: Spacing.screenHorizontal,
-    marginTop: 24,
-  },
-  sectionTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 14,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-  },
-
-  // --- Important duas ---
-  importantDuasContainer: {
-    gap: 12,
-  },
-  importantCard: {
-    borderRadius: 16,
-    overflow: 'hidden',
-    flexDirection: 'row',
-  },
-  importantCardAccent: {
-    width: 4,
-  },
-  importantCardContent: {
-    flex: 1,
-    padding: 16,
-  },
-  importantCardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 6,
-  },
-  importanceDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: 8,
-  },
-  importantDuaArabic: {
-    fontSize: 18,
-    fontWeight: '700',
-  },
-  importantDuaFrench: {
-    fontSize: 15,
-    fontWeight: '600',
-    marginBottom: 4,
-  },
-  importantDuaOccasion: {
-    fontSize: 13,
-    marginBottom: 12,
-  },
-  importantCardFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  durationBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(212,175,55,0.25)',
   },
-  durationText: {
+  headerArabicText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#D4AF37',
+  },
+  headerSubRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 14,
+  },
+  headerSub: {
     fontSize: 12,
     fontWeight: '600',
+    color: 'rgba(255,255,255,0.6)',
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+  },
+  goldDash: {
+    flex: 1,
+    height: 1,
+    backgroundColor: 'rgba(212,175,55,0.3)',
   },
 
-  // --- Categories ---
-  categoriesGrid: {
+  // ===== INFO BANNER =====
+  infoBanner: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: CARD_GAP,
+    alignItems: 'flex-start',
+    padding: 14,
+    paddingLeft: 18,
+    borderRadius: 14,
+    borderWidth: 1,
+    overflow: 'hidden',
   },
-  categoryCardWrapper: {
-    width: CARD_WIDTH,
+  infoBannerAccent: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 4,
+    borderTopLeftRadius: 14,
+    borderBottomLeftRadius: 14,
   },
-  categoryCard: {
-    width: '100%',
+  infoText: {
+    flex: 1,
+    fontSize: 13,
+    lineHeight: 19,
+  },
+
+  // ===== SECTION =====
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+  },
+
+  // ===== DUA CARD (premium style matching homeStyles.card) =====
+  duaCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 16,
     borderRadius: 16,
-    alignItems: 'center',
-    minHeight: 130,
+    marginBottom: 12,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    elevation: 3,
   },
-  categoryIcon: {
-    width: 52,
-    height: 52,
+  duaCardIconCircle: {
+    width: 48,
+    height: 48,
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 10,
+    marginRight: 14,
   },
-  categoryName: {
-    fontSize: 13,
-    fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: 2,
+  duaCardContent: {
+    flex: 1,
   },
-  categoryArabicName: {
-    fontSize: 12,
-    fontWeight: '500',
-    textAlign: 'center',
-    marginBottom: 4,
-  },
-  categoryCount: {
-    fontSize: 11,
-    fontWeight: '500',
-  },
-
-  // --- Search results ---
-  searchResultCard: {
+  duaCardNameRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    borderRadius: 16,
-    marginBottom: 10,
-  },
-  searchResultContent: {
-    flex: 1,
-    marginRight: 12,
-  },
-  searchResultArabic: {
-    fontSize: 17,
-    fontWeight: '700',
+    gap: 8,
     marginBottom: 4,
   },
-  searchResultFrench: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 2,
+  duaCardTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    flexShrink: 1,
   },
-  searchResultOccasion: {
+  duaCardAr: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  duaCardSubtitle: {
     fontSize: 13,
+    lineHeight: 18,
   },
-  emptyText: {
-    fontSize: 14,
-    textAlign: 'center',
-    paddingVertical: 32,
+  duaCardChevron: {
+    width: 30,
+    height: 30,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 8,
   },
 
-  // --- Favorites ---
-  favoritesHeader: {
+  // ===== PLAYER SCREEN =====
+  playerContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+    paddingTop: 40,
+  },
+
+  // Icone centrale premium
+  playerIconOuter: {
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    borderWidth: 2.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 28,
+  },
+  playerIconInner: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  // Info
+  playerSubtitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  playerDescBadge: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+    marginBottom: 36,
+  },
+  playerDescription: {
+    fontSize: 13,
+    textAlign: 'center',
+    lineHeight: 18,
+  },
+
+  // ===== PROGRESS BAR =====
+  progressContainer: {
+    width: '100%',
+    marginBottom: 32,
+  },
+  progressBarOuter: {
+    width: '100%',
+    paddingVertical: 10,
+    position: 'relative',
+  },
+  progressBarBg: {
+    width: '100%',
+    height: 5,
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: '100%',
+    borderRadius: 3,
+  },
+  progressDotHalo: {
+    position: 'absolute',
+    top: 1,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    marginLeft: -11,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  progressDot: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    borderWidth: 2,
+    borderColor: '#FFF',
+  },
+  progressTimes: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
+    marginTop: 6,
   },
-  favoritesHeaderLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  favoritesContainer: {
-    gap: 8,
-  },
-  favoriteCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 14,
-    borderRadius: 14,
-  },
-  favoriteCardContent: {
-    flex: 1,
-    marginRight: 12,
-  },
-  favoriteArabic: {
-    fontSize: 15,
+  progressTimeText: {
+    fontSize: 12,
     fontWeight: '600',
-    marginBottom: 2,
-  },
-  favoriteFrench: {
-    fontSize: 13,
+    fontVariant: ['tabular-nums'] as any,
   },
 
-  // --- Bottom ---
-  bottomSpacer: {
-    height: 40,
+  // ===== CONTROLS =====
+  controlsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 24,
+    marginBottom: 32,
+  },
+  controlBtn: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  controlLabel: {
+    fontSize: 10,
+    marginTop: 2,
+    fontWeight: '600',
+  },
+  playBtnOuter: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  playBtnInner: {
+    width: 68,
+    height: 68,
+    borderRadius: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  // ===== ACTIONS =====
+  actionsRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  actionBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 14,
+    borderRadius: 14,
+  },
+  actionBtnText: {
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
 
