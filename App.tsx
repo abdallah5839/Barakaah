@@ -43,7 +43,7 @@ import { PrayerTimes, Coordinates, CalculationMethod, CalculationParameters } fr
 import { DuaProvider, ThemeProvider as DuaThemeProvider } from './src/contexts';
 import { DeviceProvider } from './src/contexts/DeviceContext';
 import { DuaNavigator } from './src/navigation';
-import { QiblaScreen, CalendrierHijriScreen, AboutScreen, DownloadsScreen, TasbihScreen } from './src/screens';
+import { QiblaScreen, CalendrierHijriScreen, AboutScreen, DownloadsScreen, TasbihScreen, OnboardingScreen } from './src/screens';
 import { CircleNavigator } from './src/navigation/CircleNavigator';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -4636,11 +4636,35 @@ const AppContent = () => {
       case 'prieres': return <PrieresScreen />;
       case 'ramadan': return <RamadanScreen />;
       case 'dua': return (
-        <DuaThemeProvider>
-          <View style={{ flex: 1 }}>
-            <DuaNavigator onGoHome={goBack} />
-          </View>
-        </DuaThemeProvider>
+        <View style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
+          {/* Header premium */}
+          <LinearGradient colors={['#166534', '#16a34a']} style={{ paddingTop: 16, paddingBottom: 20 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16 }}>
+              <Pressable onPress={goBack} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.15)', alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="arrow-back" size={22} color="#FFF" />
+              </Pressable>
+              <View style={{ flex: 1, alignItems: 'center', marginRight: 40 }}>
+                <Text style={{ fontSize: 20, fontWeight: '700', color: '#FFF' }}>Duas</Text>
+                <Text style={{ fontSize: 14, color: '#D4AF37', marginTop: 2 }}>الدعاء</Text>
+              </View>
+            </View>
+          </LinearGradient>
+
+          {/* Corps */}
+          <FadeInView style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40 }}>
+            {/* Cercle icone */}
+            <View style={{ width: 100, height: 100, borderRadius: 50, backgroundColor: '#E8F5E9', borderWidth: 2, borderColor: '#D4AF37', alignItems: 'center', justifyContent: 'center', marginBottom: 28 }}>
+              <Ionicons name="hand-left-outline" size={44} color="#16a34a" />
+            </View>
+
+            <Text style={{ fontSize: 24, fontWeight: '700', color: '#166534', marginBottom: 12 }}>
+              Bientot disponible
+            </Text>
+            <Text style={{ fontSize: 15, color: '#6B7280', textAlign: 'center', lineHeight: 22 }}>
+              Les invocations (Duas) seront ajoutees{'\n'}dans une prochaine mise a jour
+            </Text>
+          </FadeInView>
+        </View>
       );
       case 'settings': return <SettingsScreen />;
       case 'qibla': return <QiblaScreen navigation={{ goBack }} isDark={isDark} />;
@@ -4674,6 +4698,37 @@ const AppContent = () => {
 };
 
 export default function App() {
+  const [isReady, setIsReady] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const done = await AsyncStorage.getItem('sakina_onboarding_done');
+        setShowOnboarding(done !== 'true');
+      } catch {
+        setShowOnboarding(false);
+      }
+      setIsReady(true);
+    })();
+  }, []);
+
+  if (!isReady) {
+    return (
+      <View style={{ flex: 1, backgroundColor: '#0F172A', alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color="#16a34a" />
+      </View>
+    );
+  }
+
+  if (showOnboarding) {
+    return (
+      <SafeAreaProvider>
+        <OnboardingScreen onComplete={() => setShowOnboarding(false)} />
+      </SafeAreaProvider>
+    );
+  }
+
   return (
     <SafeAreaProvider>
       <DeviceProvider>

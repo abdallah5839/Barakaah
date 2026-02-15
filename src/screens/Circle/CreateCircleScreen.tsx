@@ -54,7 +54,7 @@ export const CreateCircleScreen: React.FC = () => {
   minDate.setHours(0, 0, 0, 0);
 
   const maxDate = new Date();
-  maxDate.setFullYear(maxDate.getFullYear() + 1); // 1 an maximum
+  maxDate.setDate(maxDate.getDate() + 30); // 30 jours maximum
 
   // Validation du formulaire
   const validateForm = (): boolean => {
@@ -78,7 +78,7 @@ export const CreateCircleScreen: React.FC = () => {
     if (expiresAt < minDate) {
       newErrors.expiresAt = 'La date doit être au moins demain';
     } else if (expiresAt > maxDate) {
-      newErrors.expiresAt = 'La date ne peut pas dépasser 1 an';
+      newErrors.expiresAt = 'La date limite ne peut pas dépasser 30 jours';
     }
 
     setErrors(newErrors);

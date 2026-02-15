@@ -14,3 +14,4 @@ export { CalendrierHijriScreen } from './CalendrierHijriScreen';
 export { AboutScreen } from './AboutScreen';
 export { DownloadsScreen } from './DownloadsScreen';
 export { TasbihScreen } from './TasbihScreen';
+export { OnboardingScreen } from './OnboardingScreen';

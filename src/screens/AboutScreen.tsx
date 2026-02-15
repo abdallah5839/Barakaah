@@ -92,7 +92,7 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({ navigation, isDark = f
           <Image source={require('../../assets/logo.png')} style={styles.logoImage} />
           <Text style={[styles.appName, { color: colors.text }]}>Sakina</Text>
           <Text style={[styles.appTagline, { color: colors.textSecondary }]}>
-            سكينة - Sérénité
+            سكينة - Quiétude
           </Text>
           <View style={[styles.versionBadge, { backgroundColor: colors.surface }]}>
             <Text style={[styles.versionText, { color: colors.textSecondary }]}>
