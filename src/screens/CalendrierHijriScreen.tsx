@@ -19,7 +19,8 @@ import { Spacing, Typography } from '../constants';
 import { getAdjustedHijriMoment, HIJRI_DAY_OFFSET } from '../utils/hijriOffset';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const DAY_SIZE = (SCREEN_WIDTH - Spacing.screenHorizontal * 2 - 6 * Spacing.xs) / 7;
+const CELL_SIZE = 44;
+const GRID_HORIZONTAL_PADDING = 16;
 
 // Couleurs
 const Colors = {
@@ -148,7 +149,7 @@ export const CalendrierHijriScreen: React.FC<CalendrierHijriScreenProps> = ({
         </Pressable>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
         {/* Navigation mois */}
         <View style={[styles.monthNavigation, { backgroundColor: colors.surface }]}>
           <Pressable onPress={goToPreviousMonth} style={styles.navButton}>
@@ -276,36 +277,35 @@ const styles = StyleSheet.create({
   },
   weekdaysRow: {
     flexDirection: 'row',
-    paddingHorizontal: Spacing.screenHorizontal,
-    marginBottom: Spacing.sm,
+    paddingHorizontal: GRID_HORIZONTAL_PADDING,
+    marginBottom: 12,
   },
   weekdayCell: {
-    width: DAY_SIZE,
+    flex: 1,
     alignItems: 'center',
   },
   weekdayText: {
-    fontSize: Typography.sizes.sm,
-    fontWeight: Typography.weights.medium,
+    fontSize: 13,
+    fontWeight: '600',
   },
   calendarGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: Spacing.screenHorizontal,
+    paddingHorizontal: GRID_HORIZONTAL_PADDING,
   },
   dayCell: {
-    width: DAY_SIZE,
-    height: DAY_SIZE,
+    width: (SCREEN_WIDTH - GRID_HORIZONTAL_PADDING * 2) / 7,
+    height: CELL_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: DAY_SIZE / 2,
-    marginBottom: Spacing.xs,
+    marginVertical: 6,
   },
   dayText: {
-    fontSize: Typography.sizes.md,
-    fontWeight: Typography.weights.medium,
+    fontSize: 18,
+    fontWeight: '500',
   },
   dayTextToday: {
-    fontWeight: Typography.weights.bold,
+    fontWeight: '700',
   },
   bottomSpacer: {
     height: Spacing['4xl'],

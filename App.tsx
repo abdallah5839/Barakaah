@@ -43,7 +43,7 @@ import { PrayerTimes, Coordinates, CalculationMethod, CalculationParameters } fr
 import { DuaProvider, ThemeProvider as DuaThemeProvider } from './src/contexts';
 import { DeviceProvider } from './src/contexts/DeviceContext';
 import { DuaNavigator } from './src/navigation';
-import { QiblaScreen, CalendrierHijriScreen, AboutScreen, DownloadsScreen, TasbihScreen, OnboardingScreen } from './src/screens';
+import { QiblaScreen, CalendrierHijriScreen, AboutScreen, DownloadsScreen, TasbihScreen, OnboardingScreen, DuaScreen } from './src/screens';
 import { CircleNavigator } from './src/navigation/CircleNavigator';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -1616,18 +1616,19 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
           </FadeInView>
         )}
 
-        {/* ===== COMPACT PRAYER TIMES ROW ===== */}
-        {homePrayers.length > 0 && (
+        {/* ===== COMPACT PRAYER TIMES ROW (iOS only) ===== */}
+        {Platform.OS === 'ios' && homePrayers.length > 0 && (
           <FadeInView delay={250}>
             <View style={[homeStyles.card, { backgroundColor: colors.surface, paddingVertical: 12, paddingHorizontal: 10 }]}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-start' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
                 {homePrayers.map((p) => (
-                  <View key={p.name} style={{ alignItems: 'center', flex: 1 }}>
+                  <View key={p.name} style={{ flex: 1, alignItems: 'center' }}>
                     <Text style={{
                       fontSize: 10,
                       fontWeight: p.isNext ? '700' : '500',
                       color: p.isSunrise ? colors.secondary : p.isNext ? colors.primary : p.passed ? colors.textMuted : colors.textSecondary,
                       marginBottom: 3,
+                      textAlign: 'center',
                     }}>
                       {p.isSunrise ? '☀️' : p.name}
                     </Text>
@@ -1635,6 +1636,7 @@ const HomeScreen = ({ onNavigate }: { onNavigate: (s: ScreenName) => void }) => 
                       fontSize: 13,
                       fontWeight: p.isNext ? '800' : '600',
                       color: p.isSunrise ? colors.secondary : p.isNext ? colors.primary : p.passed ? colors.textMuted : colors.text,
+                      textAlign: 'center',
                     }}>
                       {p.time}
                     </Text>
@@ -2061,14 +2063,21 @@ const VerseCard = React.memo(({ verse, colors, showArabic, showTranslation, show
 
 // ===== MEMOIZED TOGGLE =====
 const CoranToggle = React.memo(({ label, active, colors, onPress }: { label: string; active: boolean; colors: any; onPress: () => void }) => (
-  <PressableScale onPress={onPress} style={{ width: 105 }}>
-    <LinearGradient
-      colors={active ? [colors.primary, colors.primaryDark] : [colors.surface, colors.surface]}
-      style={[styles.toggleBtn, { borderColor: active ? colors.primary : colors.border, width: '100%' }]}
+  <Pressable onPress={onPress} style={{ flex: 1, marginHorizontal: 4 }}>
+    <View
+      style={{
+        paddingVertical: 10,
+        borderRadius: 8,
+        backgroundColor: active ? colors.primary : colors.surface,
+        borderWidth: 1,
+        borderColor: active ? colors.primary : colors.border,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
-      <Text style={{ color: active ? '#FFF' : colors.text, fontSize: 13, fontWeight: '600', textAlign: 'center' }}>{label}</Text>
-    </LinearGradient>
-  </PressableScale>
+      <Text style={{ color: active ? '#FFF' : colors.text, fontSize: 14, fontWeight: '600', textAlign: 'center' }}>{label}</Text>
+    </View>
+  </Pressable>
 ));
 
 // ===== MEMOIZED SURAH MODAL ITEM =====
@@ -2582,8 +2591,8 @@ const CoranScreen = () => {
       {/* ===== TOGGLE BAR ===== */}
       <View style={[coranStyles.toggleBar, { backgroundColor: colors.surface, borderBottomColor: colors.border + '30' }]}>
         <CoranToggle label="Arabe" active={settings.showArabic} colors={colors} onPress={toggleArabic} />
-        <CoranToggle label="Francais" active={settings.showTranslation} colors={colors} onPress={toggleFrancais} />
-        <CoranToggle label="Phonetique" active={settings.showPhonetic} colors={colors} onPress={togglePhonetic} />
+        <CoranToggle label="Français" active={settings.showTranslation} colors={colors} onPress={toggleFrancais} />
+        <CoranToggle label="Phonét." active={settings.showPhonetic} colors={colors} onPress={togglePhonetic} />
       </View>
 
       {/* ===== VERSES FLATLIST ===== */}
@@ -2752,7 +2761,7 @@ const coranStyles = StyleSheet.create({
   headerVerseCount: { fontSize: 13, color: 'rgba(255,255,255,0.55)', fontWeight: '500' },
   chevronBox: { width: 30, height: 30, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center' },
 
-  toggleBar: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10, paddingVertical: 12, paddingHorizontal: 16, borderBottomWidth: 0.5 },
+  toggleBar: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, paddingHorizontal: 12, borderBottomWidth: 0.5 },
 
   verseCard: { borderRadius: 16, padding: 16, marginBottom: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.04, shadowRadius: 8, elevation: 2 },
   verseHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 },
@@ -2797,7 +2806,9 @@ const PrieresScreen = () => {
 
   // Date du jour formatée
   const todayDate = momentTz().tz(settings.timezone || DEFAULT_TIMEZONE);
-  const formattedDate = todayDate.format('dddd D MMMM YYYY');
+  const JOURS_FR = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  const MOIS_FR = ['Janvier','Fevrier','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre'];
+  const formattedDate = `${JOURS_FR[todayDate.day()]} ${todayDate.date()} ${MOIS_FR[todayDate.month()]} ${todayDate.year()}`;
 
   // Formater countdown
   const fmt = (n: number) => n.toString().padStart(2, '0');
@@ -2961,7 +2972,7 @@ const prieresStyles = StyleSheet.create({
   dateRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 16 },
   hijriBadge: { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: 'rgba(212,175,55,0.15)', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20, borderWidth: 1, borderColor: 'rgba(212,175,55,0.25)' },
   hijriText: { fontSize: 11, fontWeight: '600' },
-  gregorianText: { fontSize: 11, color: 'rgba(255,255,255,0.5)' },
+  gregorianText: { fontSize: 11, color: 'rgba(255,255,255,0.5)', flexShrink: 1 },
 
   nextPrayerCard: { backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 20, borderWidth: 1, borderColor: 'rgba(212,175,55,0.3)', overflow: 'hidden' },
   nextPrayerGoldLine: { height: 3, backgroundColor: '#D4AF37', borderRadius: 2, alignSelf: 'center', width: 50, marginTop: 12 },
@@ -4577,37 +4588,7 @@ const AppContent = () => {
       case 'coran': return <CoranScreen />;
       case 'prieres': return <PrieresScreen />;
       case 'ramadan': return <RamadanScreen />;
-      case 'dua': return (
-        <View style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
-          {/* Header premium */}
-          <LinearGradient colors={['#166534', '#16a34a']} style={{ paddingTop: 16, paddingBottom: 20 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16 }}>
-              <Pressable onPress={goBack} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.15)', alignItems: 'center', justifyContent: 'center' }}>
-                <Ionicons name="arrow-back" size={22} color="#FFF" />
-              </Pressable>
-              <View style={{ flex: 1, alignItems: 'center', marginRight: 40 }}>
-                <Text style={{ fontSize: 20, fontWeight: '700', color: '#FFF' }}>Duas</Text>
-                <Text style={{ fontSize: 14, color: '#D4AF37', marginTop: 2 }}>الدعاء</Text>
-              </View>
-            </View>
-          </LinearGradient>
-
-          {/* Corps */}
-          <FadeInView style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40 }}>
-            {/* Cercle icone */}
-            <View style={{ width: 100, height: 100, borderRadius: 50, backgroundColor: '#E8F5E9', borderWidth: 2, borderColor: '#D4AF37', alignItems: 'center', justifyContent: 'center', marginBottom: 28 }}>
-              <Ionicons name="hand-left-outline" size={44} color="#16a34a" />
-            </View>
-
-            <Text style={{ fontSize: 24, fontWeight: '700', color: '#166534', marginBottom: 12 }}>
-              Bientot disponible
-            </Text>
-            <Text style={{ fontSize: 15, color: '#6B7280', textAlign: 'center', lineHeight: 22 }}>
-              Les invocations (Duas) seront ajoutees{'\n'}dans une prochaine mise a jour
-            </Text>
-          </FadeInView>
-        </View>
-      );
+      case 'dua': return <DuaScreen navigation={{ goBack: () => goBack() }} isDark={isDark} />;
       case 'settings': return <SettingsScreen />;
       case 'qibla': return <QiblaScreen navigation={{ goBack }} isDark={isDark} />;
       case 'calendrier': return <CalendrierHijriScreen navigation={{ goBack }} isDark={isDark} />;

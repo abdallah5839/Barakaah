@@ -351,10 +351,12 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
       const isAvailable = await Magnetometer.isAvailableAsync();
       if (!isAvailable) return false;
 
-      // 8ms = ~120fps sensor updates for ultra-fluid response
-      Magnetometer.setUpdateInterval(8);
+      // Android sensors are noisier — use slower interval + stronger filter
+      const isAndroid = Platform.OS === 'android';
+      Magnetometer.setUpdateInterval(isAndroid ? 16 : 8);
 
       let lastAngle = 0;
+      let emaAngle = -1; // EMA accumulator, -1 = not initialized
 
       headingSubscription.current = Magnetometer.addListener((data) => {
         if (!mounted.current) return;
@@ -362,13 +364,28 @@ export const QiblaScreen: React.FC<QiblaScreenProps> = ({ navigation, isDark = f
         let fieldAngle = Math.atan2(data.x, data.y);
         fieldAngle = (fieldAngle * 180) / Math.PI;
         fieldAngle = (fieldAngle + 360) % 360;
-        const angle = (360 - fieldAngle) % 360;
+        let angle = (360 - fieldAngle) % 360;
 
-        // Light jitter filter: skip changes < 0.3°
+        // EMA (Exponential Moving Average) filter for Android to smooth jitter
+        if (isAndroid) {
+          if (emaAngle < 0) {
+            emaAngle = angle;
+          } else {
+            // Shortest-path delta for EMA
+            let emaDiff = angle - emaAngle;
+            if (emaDiff > 180) emaDiff -= 360;
+            if (emaDiff < -180) emaDiff += 360;
+            emaAngle = ((emaAngle + emaDiff * 0.25) % 360 + 360) % 360;
+          }
+          angle = emaAngle;
+        }
+
+        // Jitter filter: skip small changes (stronger threshold on Android)
+        const threshold = isAndroid ? 1.5 : 0.3;
         let diff = angle - lastAngle;
         if (diff > 180) diff -= 360;
         if (diff < -180) diff += 360;
-        if (Math.abs(diff) < 0.3) return;
+        if (Math.abs(diff) < threshold) return;
         lastAngle = angle;
 
         updateHeading(angle);
