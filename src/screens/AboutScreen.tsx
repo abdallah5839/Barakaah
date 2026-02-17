@@ -184,8 +184,8 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({ navigation, isDark = f
               secondaryColor={colors.textSecondary}
             />
             <CreditItem
-              title="Textes des Duas"
-              value="Sources traditionnelles authentiques"
+              title="Audio des Duas"
+              value="Haj Hassan Ismaïl"
               color={colors.text}
               secondaryColor={colors.textSecondary}
             />
@@ -211,7 +211,7 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({ navigation, isDark = f
 
           <Pressable
             style={[styles.actionButtonOutline, { borderColor: colors.border }]}
-            onPress={() => openLink('mailto:contact@sakina.app')}
+            onPress={() => openLink('mailto:abdallahsabbah21@gmail.com')}
           >
             <Ionicons name="mail" size={20} color={colors.primary} />
             <Text style={[styles.actionButtonOutlineText, { color: colors.text }]}>
