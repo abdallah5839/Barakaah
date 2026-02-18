@@ -29,7 +29,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0F4C35"
       },
-      "package": "com.sakina.app",
+      "package": "com.sakina.spiritual",
       "versionCode": 1,
       "permissions": [
         "ACCESS_COARSE_LOCATION",
